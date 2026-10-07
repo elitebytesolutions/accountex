@@ -1,0 +1,318 @@
+<!-- ===================== v4 · Products (Agent A · prefix pr-) ===================== -->
+
+<!-- 1 · Product Catalogue -->
+<section class="screen pr-screen pr-cat" data-route="app/inventory/items" data-title="Product Catalogue">
+  <div class="pr-head">
+    <span class="pr-cube"><i data-lucide="package"></i></span>
+    <div class="pr-head-t"><h1>All Products</h1><p>Manage your product inventory, pricing, classification and stock levels</p></div>
+    <div class="pr-head-act">
+      <button class="btn secondary" type="button" data-pr-import><i data-lucide="upload"></i>Import</button>
+      <button class="btn secondary" type="button" data-pr-export><i data-lucide="download"></i>Export</button>
+      <button class="btn primary lg" type="button" data-pr-new><i data-lucide="plus"></i>New Product</button>
+    </div>
+  </div>
+
+  <div class="pr-filters" data-pr-filters>
+    <label class="pr-f"><span>Product Scope</span><div class="pr-ctl"><select data-pr-f="scope" aria-label="Product scope"><option value="">All Products</option><option value="Active">Active</option><option value="Draft">Drafts</option><option value="Inactive">Inactive</option><option value="low">Low Stock</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <label class="pr-f"><span>Company</span><div class="pr-ctl"><select data-pr-f="company" aria-label="Company"><option value="">All Companies</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <label class="pr-f"><span>Class</span><div class="pr-ctl"><select data-pr-f="cls" aria-label="Class"><option value="">All Classes</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <div class="pr-f"><span>Stock Range</span><div class="pr-range"><div class="pr-ctl"><input type="number" min="0" placeholder="Min" data-pr-f="min" aria-label="Minimum stock"></div><em>–</em><div class="pr-ctl"><input type="number" min="0" placeholder="Max" data-pr-f="max" aria-label="Maximum stock"></div></div></div>
+    <label class="pr-f"><span>Shelf</span><div class="pr-ctl"><select data-pr-f="shelf" aria-label="Shelf"><option value="">All Shelves</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <label class="pr-f"><span>Special Attributes</span><div class="pr-ctl"><select data-pr-f="attr" aria-label="Special attributes"><option value="">None</option><option value="short">Short Item</option><option value="expiry">Expiry Required</option><option value="precious">Precious</option><option value="controlled">Controlled</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <label class="pr-f pr-f-search"><span>Search by code, name or UPC</span><div class="pr-ctl"><i data-lucide="search"></i><input type="search" placeholder="Code, name or UPC…" data-pr-f="q" aria-label="Search products"><kbd>/</kbd></div></label>
+    <label class="pr-f"><span>Product View</span><div class="pr-ctl"><i data-lucide="list" data-pr-viewic></i><select data-pr-f="view" aria-label="Product view"><option value="detail">Detail</option><option value="compact">Compact</option><option value="grid">Grid</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <label class="pr-f"><span>Sort By</span><div class="pr-ctl"><i data-lucide="arrow-up-down"></i><select data-pr-f="sort" aria-label="Sort by"><option value="name:1">Name A – Z</option><option value="name:-1">Name Z – A</option><option value="sku:1">Product Code</option><option value="stock:1">Stock: Low to High</option><option value="stock:-1">Stock: High to Low</option><option value="price:-1">Retail: High to Low</option><option value="price:1">Retail: Low to High</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+  </div>
+
+  <div class="pr-tabsrow">
+    <div class="pr-scopes" data-pr-scopes role="tablist" aria-label="Catalogue scope"></div>
+    <button class="btn secondary sm" type="button" data-pr-clear><i data-lucide="rotate-ccw"></i>Clear Filters</button>
+  </div>
+
+  <div class="pr-status">
+    <span data-pr-showing>Showing 1 – 15 of 0 products</span>
+    <span class="pr-fchip" data-pr-fchip>Filtered: <b>All Products</b><button type="button" aria-label="Clear filter" data-pr-clear><i data-lucide="x"></i></button></span>
+    <div class="pr-bulk" data-pr-bulk hidden>
+      <b data-pr-selcount>0 selected</b>
+      <button type="button" data-pr-bulkact="activate"><i data-lucide="power"></i>Activate</button>
+      <button type="button" data-pr-bulkact="deactivate"><i data-lucide="power-off"></i>Deactivate</button>
+      <button type="button" class="danger" data-pr-bulkact="delete"><i data-lucide="trash-2"></i>Delete</button>
+      <button type="button" data-pr-bulkact="labels"><i data-lucide="printer"></i>Print labels</button>
+      <button type="button" data-pr-bulkact="price"><i data-lucide="percent"></i>Bulk price update</button>
+      <button type="button" class="pr-bulk-x" data-pr-bulkact="none" aria-label="Clear selection"><i data-lucide="x"></i></button>
+    </div>
+    <span class="pr-hint" data-pr-hint><i data-lucide="mouse-pointer-click"></i>Double-click a price to edit</span>
+  </div>
+
+  <div class="pr-tablecard" data-pr-tablecard>
+    <div class="pr-tablewrap" data-pr-tablewrap>
+      <table class="tbl pr-tbl" data-plain>
+        <thead data-pr-thead></thead>
+        <tbody data-pr-tbody></tbody>
+      </table>
+    </div>
+    <div class="pr-tiles" data-pr-tiles hidden></div>
+  </div>
+  <div class="pr-foot">
+    <label class="pr-per">Rows per page <div class="pr-ctl"><select data-pr-per aria-label="Rows per page"><option>15</option><option>30</option><option>50</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div></label>
+    <div class="pr-pager" data-pr-pager></div>
+  </div>
+
+  <!-- New / Edit product -->
+  <div class="overlay" id="pr-new">
+    <div class="modal pr-modal" role="dialog" aria-labelledby="pr-new-h">
+      <div class="pr-mhead">
+        <span class="pr-cube sm"><i data-lucide="package-plus"></i></span>
+        <div><h2 id="pr-new-h" data-pr-ftitle>New Product</h2><p data-pr-fsub>Add a new product to your inventory</p></div>
+        <button class="x" type="button" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <form class="pr-mbody" data-pr-form novalidate autocomplete="off">
+        <div class="pr-sec open" data-pr-sec>
+          <button type="button" class="pr-sec-h" data-pr-sech aria-expanded="true"><span class="pr-sec-ic"><i data-lucide="file-text"></i></span><span><b>Basic Information</b><small>Enter the essential product details</small></span><i data-lucide="chevron-down"></i></button>
+          <div class="pr-sec-b"><div class="pr-sec-in">
+            <div class="pr-fg c3">
+              <label class="pr-ff"><span>Product Code<em>*</em></span><input name="sku" placeholder="Enter product code" maxlength="12"><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>UPC</span><div class="pr-inbtn"><input name="upc" inputmode="numeric" placeholder="Enter UPC code" maxlength="13"><button type="button" class="pr-gen" data-pr-gen="upc" title="Generate EAN-13"><i data-lucide="wand-sparkles"></i>Generate</button></div><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>Product Name<em>*</em></span><input name="name" placeholder="Enter product name"><small class="pr-err"></small></label>
+            </div>
+            <div class="pr-fg c4">
+              <label class="pr-ff"><span>Pack (CTN size)<em>*</em></span><div class="pr-inaff"><b>CTN</b><input name="ctn" type="number" min="1" placeholder="e.g. 25"></div><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>Loose<em>*</em></span><select name="loose"><option value="">Select loose unit</option><option>Pcs</option><option>Pack</option><option>Box</option><option>Roll</option><option>Btl</option><option>Ream</option><option>Coil</option><option>Kg</option><option>Ltr</option></select><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>Company<em>*</em></span><select name="company" data-pr-cosel><option value="">Select company</option></select><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>Distributor</span><select name="dist" data-pr-distsel><option value="">Select distributor</option></select></label>
+            </div>
+            <div class="pr-fg c3">
+              <label class="pr-ff"><span>Shelf #</span><input name="shelf" placeholder="e.g. A1, PR12" maxlength="5" style="text-transform:uppercase"><small class="pr-err"></small></label>
+              <div class="pr-uom span2" data-pr-uom>
+                <span class="pr-uom-ic"><i data-lucide="layers"></i></span>
+                <div><small>Multi-UoM preview</small><b data-pr-uomline>Enter a pack size and loose unit</b><em data-pr-uomsub>Carton and piece prices are worked out live</em></div>
+              </div>
+            </div>
+            <div class="pr-codes">
+              <div class="pr-codes-h"><b>Barcodes</b><small>Piece and carton codes print on labels and scan at the till</small></div>
+              <div class="pr-coderow"><span class="pr-codetag">Piece</span><span class="pr-bcmini" data-pr-bc="piece"></span><input name="bcPiece" inputmode="numeric" maxlength="13" placeholder="Piece barcode (EAN-13)"><button type="button" class="btn secondary sm" data-pr-gen="piece"><i data-lucide="scan-barcode"></i>Generate</button></div>
+              <div class="pr-coderow"><span class="pr-codetag ctn">Carton</span><span class="pr-bcmini" data-pr-bc="ctn"></span><input name="bcCtn" inputmode="numeric" maxlength="13" placeholder="Carton barcode (ITF / EAN-13)"><button type="button" class="btn secondary sm" data-pr-gen="ctn"><i data-lucide="scan-barcode"></i>Generate</button></div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="pr-sec open" data-pr-sec>
+          <button type="button" class="pr-sec-h" data-pr-sech aria-expanded="true"><span class="pr-sec-ic"><i data-lucide="database"></i></span><span><b>Pricing &amp; Inventory</b><small>Set pricing, stock levels, and other inventory details</small></span><i data-lucide="chevron-down"></i></button>
+          <div class="pr-sec-b"><div class="pr-sec-in">
+            <div class="pr-fg c4">
+              <label class="pr-ff"><span>Purchase Price<em>*</em></span><input name="cost" type="number" min="0" step="0.01" placeholder="Enter purchase price"><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>Retail Price<em>*</em></span><input name="price" type="number" min="0" step="0.01" placeholder="Enter retail price"><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>W. Price</span><input name="wprice" type="number" min="0" step="0.01" placeholder="Enter W price"></label>
+              <label class="pr-ff"><span>Cost / Unit</span><input name="cpu" type="number" min="0" step="0.01" placeholder="Enter cost per unit"></label>
+            </div>
+            <div class="pr-margins" data-pr-margins></div>
+            <div class="pr-fg c3">
+              <label class="pr-ff"><span>High Level</span><input name="high" type="number" min="0" placeholder="Enter high level"></label>
+              <label class="pr-ff"><span>Low Level</span><input name="low" type="number" min="0" placeholder="Enter low level"><small class="pr-err"></small></label>
+              <label class="pr-ff"><span>% Fin Disc.</span><input name="fin" type="number" min="0" max="100" step="0.5" placeholder="Enter discount %"></label>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="pr-sec open" data-pr-sec>
+          <button type="button" class="pr-sec-h" data-pr-sech aria-expanded="true"><span class="pr-sec-ic"><i data-lucide="tag"></i></span><span><b>Classification</b><small>Assign class, shelf and special attributes</small></span><i data-lucide="chevron-down"></i></button>
+          <div class="pr-sec-b"><div class="pr-sec-in">
+            <div class="pr-classrow">
+              <div class="pr-fg c1">
+                <label class="pr-ff"><span>Class<em>*</em></span><select name="cls" data-pr-clssel><option value="">Select class</option></select><small class="pr-err"></small></label>
+                <label class="pr-ff"><span>Sub Type</span><select name="sub" data-pr-subsel disabled><option value="">Select a class first</option></select></label>
+              </div>
+              <fieldset class="pr-attrs">
+                <legend>Special Attributes</legend>
+                <label><input type="checkbox" name="a-short"> Short Item <span>(No discount during sale)</span></label>
+                <label><input type="checkbox" name="a-expiry"> Required Expiry <span>(Expiry date must be entered)</span></label>
+                <div class="pr-attrs-row"><label><input type="checkbox" name="a-controlled"> Controlled Item</label><label><input type="checkbox" name="a-precious"> Precious Item</label></div>
+              </fieldset>
+            </div>
+            <div class="pr-drop" data-pr-drop tabindex="0" role="button" aria-label="Add product image">
+              <input type="file" accept="image/*" hidden data-pr-file>
+              <span class="pr-drop-ic"><i data-lucide="image-plus"></i></span>
+              <div><b>Drop a product image here</b><small>or click to browse · PNG / JPG up to 2 MB</small></div>
+              <img alt="" data-pr-img hidden>
+            </div>
+            <div class="pr-notes">
+              <span class="pr-notes-ic"><i data-lucide="info"></i></span>
+              <div><b>Important Notes</b><ul>
+                <li><b>Short Item:</b> Discount not allowed on short items during sale.</li>
+                <li><b>Required Expiry:</b> Expiry date must be fed in Purchase Voucher.</li>
+                <li><b>Shelf Name:</b> Use first two characters and then numbers up to three digits (e.g. A1, PR12, CN1).</li>
+              </ul></div>
+            </div>
+          </div></div>
+        </div>
+      </form>
+      <div class="pr-mfoot">
+        <button class="btn ghost" type="button" data-pr-fclear><i data-lucide="rotate-ccw"></i>Clear</button>
+        <span class="spacer"></span>
+        <button class="btn secondary" type="button" data-close>Cancel</button>
+        <button class="btn secondary" type="button" data-pr-fsave="draft"><i data-lucide="file-text"></i>Save Draft</button>
+        <button class="btn primary" type="button" data-pr-fsave="save"><i data-lucide="save"></i><span>Save Product</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bulk price update -->
+  <div class="overlay" id="pr-bulkprice">
+    <div class="modal wide pr-bp" role="dialog" aria-labelledby="pr-bp-h">
+      <div class="pr-mhead">
+        <span class="pr-cube sm lime"><i data-lucide="percent"></i></span>
+        <div><h2 id="pr-bp-h">Bulk price update</h2><p>Raise or lower prices for a company, a class or your selection</p></div>
+        <button class="x" type="button" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <div class="pr-bp-body">
+        <div class="pr-bp-ctl">
+          <div class="pr-ff"><span>Apply to</span><div class="seg pr-seg" data-pr-bpby><button type="button" class="active" data-v="company">By company</button><button type="button" data-v="cls">By class</button><button type="button" data-v="sel">Selected</button></div></div>
+          <label class="pr-ff"><span data-pr-bptlabel>Company</span><select data-pr-bpt></select></label>
+          <label class="pr-ff"><span>Price field</span><select data-pr-bpfield><option value="price">Retail price</option><option value="wprice">W. price</option><option value="cost">Purchase price</option><option value="both">Retail + W. price</option></select></label>
+          <div class="pr-ff"><span>Change</span><div class="pr-step"><button type="button" data-pr-bpstep="-1" aria-label="Decrease"><i data-lucide="minus"></i></button><input type="number" step="0.5" value="5" data-pr-bppct aria-label="Percent change"><b>%</b><button type="button" data-pr-bpstep="1" aria-label="Increase"><i data-lucide="plus"></i></button></div></div>
+          <label class="pr-ff"><span>Round to</span><select data-pr-bpround><option value="1">Nearest Rs 1</option><option value="5">Nearest Rs 5</option><option value="10">Nearest Rs 10</option><option value="0">No rounding</option></select></label>
+        </div>
+        <div class="pr-bp-quick"><span>Quick:</span><button type="button" data-pr-bpq="-10">−10%</button><button type="button" data-pr-bpq="-5">−5%</button><button type="button" data-pr-bpq="2.5">+2.5%</button><button type="button" data-pr-bpq="5">+5%</button><button type="button" data-pr-bpq="10">+10%</button><span class="spacer"></span><span class="pr-bp-sum" data-pr-bpsum></span></div>
+        <div class="pr-bp-tblwrap"><table class="tbl pr-bp-tbl" data-plain><thead><tr><th>Code</th><th>Product</th><th class="num">Old</th><th></th><th class="num">New</th><th class="num">Change</th><th class="num">Margin</th></tr></thead><tbody data-pr-bpbody></tbody></table></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" type="button" data-close>Cancel</button><button class="btn primary" type="button" data-pr-bpapply><i data-lucide="check"></i><span>Apply to 0 products</span></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · Product Detail -->
+<section class="screen pr-screen pr-pd" data-route="app/inventory/products/view" data-title="Product Detail">
+  <div class="pr-pd-top">
+    <a class="pr-back" href="#/app/inventory/items"><i data-lucide="arrow-left"></i>Product Catalogue</a>
+    <span class="spacer"></span>
+    <div class="pr-switch">
+      <button class="btn secondary icon sm" type="button" data-pr-pdnav="-1" aria-label="Previous product"><i data-lucide="chevron-left"></i></button>
+      <div class="pr-ctl pr-switch-sel"><i data-lucide="package-search"></i><select data-pr-pdsel aria-label="Switch product"></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+      <button class="btn secondary icon sm" type="button" data-pr-pdnav="1" aria-label="Next product"><i data-lucide="chevron-right"></i></button>
+    </div>
+  </div>
+  <div class="pr-pd-body" data-pr-pdbody></div>
+</section>
+
+<!-- 3 · Companies & Brands -->
+<section class="screen pr-screen pr-co" data-route="app/inventory/companies" data-title="Companies &amp; Brands">
+  <div class="pr-co-layout" data-pr-colayout>
+    <div class="pr-co-main">
+      <div class="pr-head">
+        <span class="pr-cube"><i data-lucide="building-2"></i></span>
+        <div class="pr-head-t"><h1>Product Companies</h1><p>Manage product manufacturing companies and brands used in your business.</p></div>
+      </div>
+      <div class="pr-co-kpis" data-pr-cokpis></div>
+      <div class="pr-co-tool">
+        <label class="pr-ctl pr-co-search"><i data-lucide="search"></i><input type="search" placeholder="Search companies by code, name or city…" data-pr-coq aria-label="Search companies"></label>
+        <button class="btn secondary" type="button" data-pr-coimport><i data-lucide="download"></i>Import Companies</button>
+        <button class="btn primary" type="button" data-pr-conew><i data-lucide="plus"></i>New Company</button>
+      </div>
+      <div class="pr-co-filters">
+        <div class="pr-ctl"><select data-pr-cocity aria-label="City"><option value="">All Cities</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+        <div class="pr-ctl"><select data-pr-coprod aria-label="Products"><option value="">All Companies</option><option value="with">With products</option><option value="none">No products yet</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+        <div class="pr-ctl"><i data-lucide="arrow-up-down"></i><select data-pr-cosort aria-label="Sort"><option value="name">Sort by: Company Name</option><option value="code">Sort by: Code</option><option value="products">Sort by: Most Products</option><option value="updated">Sort by: Recently Updated</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+        <span class="spacer"></span>
+        <div class="seg pr-seg" data-pr-costatus><button type="button" class="active" data-v="">All</button><button type="button" data-v="Active">Active</button><button type="button" data-v="Inactive">Inactive</button></div>
+      </div>
+      <div class="pr-co-grid" data-pr-cogrid></div>
+      <div class="pr-co-foot"><span data-pr-coshowing></span><div class="pr-pager" data-pr-copager></div></div>
+    </div>
+
+    <aside class="pr-co-panel" data-pr-copanel aria-label="Create new company">
+      <div class="pr-co-ph"><div><h2>Create New Company</h2><p>Add a new product company to your system.</p></div><button class="x" type="button" data-pr-coclose aria-label="Close panel"><i data-lucide="x"></i></button></div>
+      <form class="pr-co-form" data-pr-coform novalidate autocomplete="off">
+        <label class="pr-ff"><span>Company Code<em>*</em></span><div class="pr-in"><input name="code" placeholder="e.g. CO-13" maxlength="8" style="text-transform:uppercase"><button type="button" class="pr-in-cell" data-pr-cogen title="Generate next code" aria-label="Generate next code"><i data-lucide="barcode"></i></button></div><small class="pr-err"></small></label>
+        <label class="pr-ff"><span>Company Name<em>*</em></span><div class="pr-in"><input name="name" placeholder="Enter company name"></div><small class="pr-err"></small></label>
+        <div class="pr-ff"><span>Status</span><div class="pr-radios" data-pr-costat><button type="button" class="on" data-v="Active"><i></i>Active</button><button type="button" data-v="Inactive"><i></i>Inactive</button></div></div>
+        <label class="pr-ff"><span>Address <small>(Optional)</small></span><div class="pr-in"><input name="address" placeholder="e.g. Gulberg, Lahore"></div></label>
+        <div class="pr-fg c2">
+          <label class="pr-ff"><span>City</span><div class="pr-in"><input name="city" placeholder="e.g. Lahore" list="pr-cities"></div></label>
+          <label class="pr-ff"><span>Brand colour</span><div class="pr-swatches" data-pr-coswatch></div></label>
+        </div>
+        <datalist id="pr-cities"><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option><option>Sialkot</option><option>Multan</option><option>Peshawar</option></datalist>
+        <label class="pr-ff"><span>Country <small>(Optional)</small></span><div class="pr-in lead"><i class="pr-flag" title="🇵🇰 Pakistan" aria-hidden="true"><i data-lucide="moon-star"></i></i><select name="country"><option>Pakistan</option><option>United Arab Emirates</option><option>China</option><option>Turkey</option><option>Saudi Arabia</option></select></div></label>
+        <label class="pr-ff"><span>Phone <small>(Optional)</small></span><div class="pr-in lead"><i><i data-lucide="phone"></i></i><input name="phone" placeholder="e.g. 021-1234567"></div><small class="pr-err"></small></label>
+        <label class="pr-ff"><span>Email <small>(Optional)</small></span><div class="pr-in lead"><i><i data-lucide="mail"></i></i><input name="email" type="email" placeholder="e.g. info@company.com"></div><small class="pr-err"></small></label>
+        <label class="pr-ff"><span>Website <small>(Optional)</small></span><div class="pr-in lead"><i><i data-lucide="link"></i></i><input name="web" placeholder="e.g. www.company.com"></div><small class="pr-err"></small></label>
+        <label class="pr-ff"><span>Notes <small>(Optional)</small></span><div class="pr-in"><textarea name="notes" rows="2" placeholder="Add any additional notes…"></textarea></div></label>
+        <div class="pr-co-preview" data-pr-coprev></div>
+      </form>
+      <div class="pr-co-pfoot"><button class="btn secondary" type="button" data-pr-coclose>Cancel</button><button class="btn primary" type="button" data-pr-cosave><i data-lucide="save"></i><span>Save Company</span></button></div>
+    </aside>
+  </div>
+</section>
+
+<!-- 4 · Product Classes -->
+<section class="screen pr-screen pr-cl" data-route="app/inventory/classes" data-title="Product Classes">
+  <div class="pr-head">
+    <span class="pr-cube"><i data-lucide="tag"></i></span>
+    <div class="pr-head-t"><h1>Product Classes</h1><p>Manage main classes and their sub types. Drag sub types to reorder.</p></div>
+    <div class="pr-head-act">
+      <button class="btn secondary pr-soft" type="button" data-pr-cladd="main"><i data-lucide="plus"></i>Add Main Class</button>
+      <button class="btn primary" type="button" data-pr-cladd="sub"><i data-lucide="plus"></i>Add Sub Type</button>
+    </div>
+  </div>
+  <div class="pr-cl-filters">
+    <label class="pr-ctl"><i data-lucide="search"></i><input type="search" placeholder="Search class name, ID…" data-pr-clq aria-label="Search classes"></label>
+    <div class="pr-ctl"><i data-lucide="tag"></i><select data-pr-clmain aria-label="Main ID"><option value="">Main ID</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+    <div class="pr-ctl"><i data-lucide="eye"></i><select data-pr-clvis aria-label="Visibility"><option value="">All Visibility</option><option value="1">Visible</option><option value="0">Hidden</option></select><i data-lucide="chevron-down" class="pr-chev"></i></div>
+    <button class="btn secondary pr-soft" type="button" data-pr-clreset><i data-lucide="refresh-cw"></i>Reset</button>
+  </div>
+  <div class="pr-cl-sum" data-pr-clsum></div>
+  <div class="pr-cl-list" data-pr-cllist></div>
+
+  <div class="overlay" id="pr-clmodal">
+    <div class="modal pr-clm" role="dialog" aria-labelledby="pr-clm-h">
+      <div class="modal-head"><div><h2 id="pr-clm-h" data-pr-clmh>Add Main Class</h2><p data-pr-clmp>IDs are generated automatically</p></div><button class="x" type="button" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="pr-clm-body" data-pr-clmbody></div>
+      <div class="modal-foot"><button class="btn secondary" type="button" data-close>Cancel</button><button class="btn primary" type="button" data-pr-clmsave><i data-lucide="check"></i>Save</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · Kits & Bundles -->
+<section class="screen pr-screen pr-kit" data-route="app/inventory/kits" data-title="Kits &amp; Bundles">
+  <div class="pr-head">
+    <span class="pr-cube"><i data-lucide="package-plus"></i></span>
+    <div class="pr-head-t"><h1>Kits &amp; Bundles</h1><p>Bundle products into gift hampers and starter packs, cost them live and assemble from stock.</p></div>
+    <div class="pr-head-act"><span class="tagline pr-tag">Bundle more, sell more</span><button class="btn primary" type="button" data-pr-kitnew><i data-lucide="plus"></i>New Kit</button></div>
+  </div>
+  <div class="pr-kit-layout">
+    <div class="pr-kit-list" data-pr-kitlist></div>
+    <div class="pr-kit-builder" data-pr-kitb></div>
+  </div>
+</section>
+
+<!-- 6 · Barcode Labels -->
+<section class="screen pr-screen pr-lb" data-route="app/inventory/labels" data-title="Barcode Labels">
+  <div class="pr-head">
+    <span class="pr-cube"><i data-lucide="scan-barcode"></i></span>
+    <div class="pr-head-t"><h1>Barcode Labels</h1><p>Pick products, choose a template and print shelf or carton labels.</p></div>
+    <div class="pr-head-act"><span class="pr-lb-count" data-pr-lbcount>0 labels</span><button class="btn primary" type="button" data-pr-lbprint><i data-lucide="printer"></i>Print labels</button></div>
+  </div>
+  <div class="pr-lb-layout">
+    <div class="pr-lb-side">
+      <div class="pr-card">
+        <div class="pr-card-h"><span class="pr-ptile"><i data-lucide="package-search"></i></span><div><b>Products</b><small>Tick products and set copies</small></div><span class="spacer"></span><button class="pr-link" type="button" data-pr-lbnone>Clear</button></div>
+        <label class="pr-ctl pr-lb-q"><i data-lucide="search"></i><input type="search" placeholder="Search code, name or UPC…" data-pr-lbq aria-label="Search products"></label>
+        <div class="pr-lb-picks" data-pr-lbpicks></div>
+      </div>
+      <div class="pr-card">
+        <div class="pr-card-h"><span class="pr-ptile"><i data-lucide="sliders-horizontal"></i></span><div><b>Template &amp; options</b><small>What goes on each label</small></div></div>
+        <div class="seg pr-seg pr-lb-tpl" data-pr-lbtpl><button type="button" class="active" data-v="thermal">Thermal 2×1"</button><button type="button" data-v="small">38×25mm</button><button type="button" data-v="a4">A4 sheet of 40</button></div>
+        <div class="pr-lb-opts">
+          <label class="switch"><input type="checkbox" checked data-pr-lbo="price"><i></i><span>Show price</span></label>
+          <label class="switch"><input type="checkbox" data-pr-lbo="urdu"><i></i><span>Urdu name</span></label>
+          <label class="switch"><input type="checkbox" data-pr-lbo="batch"><i></i><span>Batch / expiry</span></label>
+          <label class="switch"><input type="checkbox" checked data-pr-lbo="company"><i></i><span>Company</span></label>
+          <label class="switch"><input type="checkbox" data-pr-lbo="ctn"><i></i><span>Carton barcode</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="pr-card pr-lb-main">
+      <div class="pr-card-h"><span class="pr-ptile"><i data-lucide="eye"></i></span><div><b>Live preview</b><small data-pr-lbsub>Thermal roll · 2 × 1 inch</small></div><span class="spacer"></span><span class="pill" data-pr-lbpages><i data-lucide="file"></i>1 page</span></div>
+      <div class="pr-lb-stage"><div class="pr-lb-sheet" data-pr-lbsheet></div></div>
+    </div>
+  </div>
+</section>

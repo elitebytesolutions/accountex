@@ -1,0 +1,2871 @@
+// Mapped from the existing accountex database - the database is the source of truth.
+// Do NOT run `prisma migrate`: change the database with SQL (prisma/sql/*.sql, applied with
+// `npx prisma db execute --file <file>`), then copy the model from `prisma db pull` output.
+// Only tables the code uses are mapped here; add more as features need them.
+// No enums: fixed lists live in Lookups.Lookups (validated by the Lookups.validateLookups trigger).
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/server/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+  previewFeatures     = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["Accounting", "BankCash", "Company", "Distribution", "FixedAssets", "HumanResources", "Inventory", "Lookups", "Platform", "Purchases", "Sales", "Tax"]
+}
+
+model Permissions {
+  code            String            @id
+  module          String
+  resource        String
+  resourceLabel   String
+  action          String
+  description     String?
+  sortOrder       Int               @default(0)
+  createdAt       DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy       String?           @db.Uuid
+  updatedAt       DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy       String?           @db.Uuid
+  rowVersion      Int               @default(0)
+  RolePermissions RolePermissions[]
+
+  @@unique([resource, action])
+  @@index([module, sortOrder], map: "permissionModuleIdx")
+  @@schema("Company")
+}
+
+model RolePermissions {
+  id             String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String      @db.Uuid
+  roleId         String      @db.Uuid
+  permissionCode String
+  createdAt      DateTime    @default(now()) @db.Timestamptz(6)
+  createdBy      String?     @db.Uuid
+  updatedAt      DateTime    @default(now()) @db.Timestamptz(6)
+  updatedBy      String?     @db.Uuid
+  rowVersion     Int         @default(0)
+  Permissions    Permissions @relation(fields: [permissionCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  Tenants        Tenants     @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Roles          Roles       @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, roleId, permissionCode])
+  @@index([tenantId, permissionCode], map: "rolePermissionPermIdx")
+  @@schema("Company")
+}
+
+model Roles {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String            @db.Uuid
+  name             String            @db.Citext
+  systemKey        String?
+  description      String?
+  icon             String?
+  tone             String?
+  isSystem         Boolean           @default(false)
+  branchRestricted Boolean           @default(true)
+  copiedFromRoleId String?           @db.Uuid
+  createdAt        DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy        String?           @db.Uuid
+  updatedAt        DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy        String?           @db.Uuid
+  rowVersion       Int               @default(0)
+  deletedAt        DateTime?         @db.Timestamptz(6)
+  RolePermissions  RolePermissions[]
+  Roles            Roles?            @relation("RolesToRoles", fields: [tenantId, copiedFromRoleId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+  other_Roles      Roles[]           @relation("RolesToRoles")
+  Tenants          Tenants           @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  UserRoles        UserRoles[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, name])
+  @@unique([tenantId, systemKey])
+  @@schema("Company")
+}
+
+model UserRoles {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  userId     String   @db.Uuid
+  roleId     String   @db.Uuid
+  isPrimary  Boolean  @default(true)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+  Tenants    Tenants  @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Roles      Roles    @relation(fields: [tenantId, roleId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+  Users      Users    @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, userId, roleId])
+  @@unique([tenantId, userId], map: "userRoleOnePrimaryIdx", where: raw("\"isPrimary\""))
+  @@index([tenantId, roleId], map: "userRoleRoleIdx")
+  @@schema("Company")
+}
+
+model Users {
+  id                 String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String                 @db.Uuid
+  email              String                 @db.Citext
+  passwordHash       String?
+  mustChangePassword Boolean                @default(false)
+  passwordChangedAt  DateTime?              @db.Timestamptz(6)
+  firstName          String?
+  lastName           String?
+  fullName           String
+  jobTitle           String?
+  department         String?
+  phone              String?
+  avatarAttachmentId String?                @db.Uuid
+  emailSignature     String?
+  isExternal         Boolean                @default(false)
+  externalOrg        String?
+  status             String                 @default("INVITED")
+  defaultBranchId    String?                @db.Uuid
+  dataScope          String                 @default("BRANCH")
+  moduleAccess       String[]               @default([])
+  approvalLimit      Decimal                @default(0) @db.Decimal(18, 2)
+  mfaEnabled         Boolean                @default(false)
+  mfaMethod          String?
+  mfaSecretEnc       Bytes?
+  mfaRecoveryCodes   String[]
+  ipRestricted       Boolean                @default(false)
+  ipAllowlist        Unsupported("_cidr")[]
+  sessionTimeoutMin  Int                    @default(60) @db.SmallInt
+  loginHours         String                 @default("ANY")
+  loginFrom          DateTime?              @db.Time(6)
+  loginTo            DateTime?              @db.Time(6)
+  ssoProvider        String?
+  ssoSubject         String?
+  failedLoginCount   Int                    @default(0) @db.SmallInt
+  lockedUntil        DateTime?              @db.Timestamptz(6)
+  invitedByUserId    String?                @db.Uuid
+  invitedAt          DateTime?              @db.Timestamptz(6)
+  activatedAt        DateTime?              @db.Timestamptz(6)
+  suspendedAt        DateTime?              @db.Timestamptz(6)
+  lastLoginAt        DateTime?              @db.Timestamptz(6)
+  lastLoginIp        String?                @db.Inet
+  lastActiveAt       DateTime?              @db.Timestamptz(6)
+  employeeId         String?                @db.Uuid
+  createdAt          DateTime               @default(now()) @db.Timestamptz(6)
+  createdBy          String?                @db.Uuid
+  updatedAt          DateTime               @default(now()) @db.Timestamptz(6)
+  updatedBy          String?                @db.Uuid
+  rowVersion         Int                    @default(0)
+  deletedAt          DateTime?              @db.Timestamptz(6)
+  UserRoles          UserRoles[]
+  Tenants            Tenants                @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Users              Users?                 @relation("UsersToUsers", fields: [tenantId, invitedByUserId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+  other_Users        Users[]                @relation("UsersToUsers")
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, email], map: "appUserEmailUidx", where: raw("(status <> 'REMOVED'::text)"))
+  @@unique([tenantId, employeeId], map: "appUserEmployeeUidx", where: raw("((\"employeeId\" IS NOT NULL) AND (status <> 'REMOVED'::text))"))
+  @@unique([tenantId, ssoProvider, ssoSubject], map: "appUserSsoUidx", where: raw("(\"ssoProvider\" IS NOT NULL)"))
+  @@index([fullName(ops: raw("gin_trgm_ops"))], map: "appUserNameTrgmIdx", type: Gin)
+  @@index([tenantId, status], map: "appUserTenantStatusIdx")
+  @@schema("Company")
+}
+
+model Lookups {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lookupType  String
+  code        String
+  label       String
+  labelUrdu   String?
+  description String?
+  tone        String   @default("neutral")
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  isSystem    Boolean  @default(false)
+  parentCodes String[]
+  tenantId    String?  @db.Uuid
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdBy   String?  @db.Uuid
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy   String?  @db.Uuid
+  rowVersion  Int      @default(0)
+  Tenants     Tenants? @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([lookupType, code, tenantId], map: "lookupsTypeCodeTenantKey")
+  @@index([tenantId, lookupType], map: "lookupsTenantIdx", where: raw("(\"tenantId\" IS NOT NULL)"))
+  @@index([lookupType, sortOrder], map: "lookupsTypeIdx")
+  @@schema("Lookups")
+}
+
+model PlatformAdmin {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  singleton    Boolean   @unique @default(true)
+  email        String    @unique @db.Citext
+  fullName     String
+  passwordHash String
+  lastLoginAt  DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@schema("Platform")
+}
+
+model Tenants {
+  id                   String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String            @unique @db.Citext
+  subdomain            String            @unique @db.Citext
+  displayName          String
+  legalName            String
+  ntn                  String?
+  strn                 String?
+  secpRegNo            String?
+  industry             String?
+  country              String            @default("PK") @db.Char(2)
+  city                 String?
+  province             String?
+  address              String?
+  phone                String?
+  email                String?           @db.Citext
+  fiscalYearStartMonth Int               @default(7) @db.SmallInt
+  baseCurrency         String            @default("PKR") @db.Char(3)
+  timezone             String            @default("Asia/Karachi")
+  numberFormat         String            @default("SOUTH_ASIAN")
+  dateFormat           String            @default("DD MMM YYYY")
+  dataResidency        String            @default("PK_LAHORE")
+  coaTemplateId        String?           @db.Uuid
+  requireMfa           Boolean           @default(false)
+  allowSso             Boolean           @default(false)
+  defaultLanguage      String            @default("EN")
+  status               String            @default("PROVISIONING")
+  /// The default user: holds every role, cannot be deactivated (Platform.provisionTenant, 006-tenant-provisioning.sql).
+  defaultUserId        String?           @db.Uuid
+  healthScore          Int?              @db.SmallInt
+  trialEndsOn          DateTime?         @db.Date
+  activatedAt          DateTime?         @db.Timestamptz(6)
+  lastActiveAt         DateTime?         @db.Timestamptz(6)
+  accountOwnerStaffId  String?           @db.Uuid
+  appVersion           String?
+  platforms            String[]          @default(["WEB"])
+  isBeta               Boolean           @default(false)
+  isInternal           Boolean           @default(false)
+  salesTaxRegistered   Boolean?          @default(dbgenerated("(strn IS NOT NULL)"))
+  healthFactors        Json?
+  healthUpdatedAt      DateTime?         @db.Timestamptz(6)
+  suspendedAt          DateTime?         @db.Timestamptz(6)
+  suspensionReason     String?
+  churnedAt            DateTime?         @db.Timestamptz(6)
+  churnReason          String?
+  createdAt            DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy            String?           @db.Uuid
+  updatedAt            DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy            String?           @db.Uuid
+  rowVersion           Int               @default(0)
+  RolePermissions      RolePermissions[]
+  Roles                Roles[]
+  UserRoles            UserRoles[]
+  Users                Users[]
+  Lookups              Lookups[]
+
+  @@index([churnedAt], map: "tenantChurnedAtIdx", where: raw("(\"churnedAt\" IS NOT NULL)"))
+  @@index([displayName(ops: raw("gin_trgm_ops"))], map: "tenantNameTrgmIdx", type: Gin)
+  @@index([province, city], map: "tenantProvinceCityIdx")
+  @@index([status], map: "tenantStatusIdx")
+  @@schema("Platform")
+}
+
+// ---- Phase 1: Company core (copied from prisma db pull; relations to models outside this file removed) ----
+
+model Branches {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String            @unique(map: "branchOneDefaultIdx", where: raw("(\"isDefault\" AND (\"deletedAt\" IS NULL))")) @db.Uuid
+  code              String
+  name              String
+  description       String?
+  isHeadOffice      Boolean           @default(false)
+  isDefault         Boolean           @default(false)
+  managerUserId     String?           @db.Uuid
+  address           String?
+  city              String?
+  province          String?
+  salesTaxAuthority String?
+  phone             String?
+  email             String?           @db.Citext
+  openingDate       DateTime?         @db.Date
+  status            String            @default("ACTIVE")
+  managerEmployeeId String?           @db.Uuid
+  latitude          Decimal?          @db.Decimal(9, 6)
+  longitude         Decimal?          @db.Decimal(9, 6)
+  geofenceRadiusM   Int?
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy         String?           @db.Uuid
+  updatedAt         DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy         String?           @db.Uuid
+  rowVersion        Int               @default(0)
+  deletedAt         DateTime?         @db.Timestamptz(6)
+  NumberingSeries   NumberingSeries[]
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, id])
+  @@index([tenantId, status], map: "branchTenantStatusIdx", where: raw("(\"deletedAt\" IS NULL)"))
+  @@schema("Company")
+}
+
+model CompanySettings {
+  id                               String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                         String     @unique @db.Uuid
+  legalName                        String
+  tradingName                      String?
+  secpRegNo                        String?
+  ntn                              String
+  strn                             String?
+  registeredAddress                String?
+  city                             String?
+  province                         String?
+  phone                            String?
+  email                            String?    @db.Citext
+  website                          String?
+  industry                         String?
+  timezone                         String     @default("Asia/Karachi")
+  legalStructure                   String?
+  logoAttachmentId                 String?    @db.Uuid
+  fyStartMonth                     Int        @default(7) @db.SmallInt
+  baseCurrencyCode                 String     @default("PKR") @db.Char(3)
+  amountDecimals                   Int        @default(2) @db.SmallInt
+  numberFormat                     String     @default("WESTERN")
+  booksLockDate                    DateTime?  @db.Date
+  fxRateSource                     String     @default("SBP_DAILY")
+  allowMultiCurrency               Boolean    @default(false)
+  requireCostCentreOnExpense       Boolean    @default(false)
+  allowFuturePeriodPosting         Boolean    @default(false)
+  defaultCustomerTermsDays         Int        @default(30) @db.SmallInt
+  quotationValidityDays            Int        @default(15) @db.SmallInt
+  defaultSalesTaxCodeId            String?    @db.Uuid
+  invoiceTerms                     String?
+  creditLimitAction                String     @default("BLOCK_OVERRIDE")
+  overdueToleranceDays             Int        @default(15) @db.SmallInt
+  blockOverdueOver90               Boolean    @default(true)
+  defaultVendorTermsDays           Int        @default(45) @db.SmallInt
+  threeWayMatchTolerancePct        Decimal    @default(2) @db.Decimal(7, 4)
+  billApprovalThreshold            Decimal?   @db.Decimal(18, 2)
+  requireApprovedPoForBill         Boolean    @default(true)
+  autoDeductWht153                 Boolean    @default(true)
+  allowPartialGrn                  Boolean    @default(false)
+  warnDuplicateVendorInvoice       Boolean    @default(true)
+  stockAdjustmentApprovalThreshold Decimal    @default(25000) @db.Decimal(18, 2)
+  gstRegistered                    Boolean    @default(true)
+  salesTaxReturnPeriod             String     @default("MONTHLY")
+  standardGstRatePct               Decimal    @default(18) @db.Decimal(7, 4)
+  furtherTaxRatePct                Decimal    @default(4) @db.Decimal(7, 4)
+  provincialTaxAuthority           String?
+  provincialServicesRatePct        Decimal?   @db.Decimal(7, 4)
+  atlStatus                        String     @default("UNKNOWN")
+  atlVerifiedAt                    DateTime?  @db.Timestamptz(6)
+  brandPrimaryColour               String     @default("#15803D")
+  brandAccentColour                String     @default("#EFBC61")
+  documentFont                     String     @default("INTER")
+  paperSize                        String     @default("A4")
+  emailFooter                      String?
+  showPoweredBy                    Boolean    @default(true)
+  fbrRealtimeReporting             Boolean    @default(false)
+  printFbrQr                       Boolean    @default(false)
+  payDayRule                       String     @default("LAST_WORKING_DAY")
+  payrollCutoff                    String     @default("DAY_25")
+  workingDaysBasis                 String     @default("CALENDAR_DAYS")
+  eobiEmployerAmount               Decimal?   @db.Decimal(18, 2)
+  pfRatePct                        Decimal?   @db.Decimal(7, 4)
+  autoDeductSalaryTax              Boolean    @default(true)
+  publishPayslipsToEss             Boolean    @default(true)
+  workingWeek                      String     @default("MON_SAT_HALF_SAT")
+  graceMinutes                     Int        @default(15) @db.SmallInt
+  lateMarksPerLeave                Int        @default(3) @db.SmallInt
+  halfDayBelowHours                Decimal    @default(5) @db.Decimal(4, 2)
+  overtimeMultiplier               Decimal    @default(2) @db.Decimal(4, 2)
+  attendanceSource                 String     @default("BIOMETRIC_AND_ESS")
+  geofenceEssPunch                 Boolean    @default(true)
+  allowOffsitePersonalPunch        Boolean    @default(false)
+  createdAt                        DateTime   @default(now()) @db.Timestamptz(6)
+  createdBy                        String?    @db.Uuid
+  updatedAt                        DateTime   @default(now()) @db.Timestamptz(6)
+  updatedBy                        String?    @db.Uuid
+  rowVersion                       Int        @default(0)
+  Currencies                       Currencies @relation(fields: [baseCurrencyCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, id])
+  @@schema("Company")
+}
+
+model Currencies {
+  code            String            @id @db.Char(3)
+  name            String
+  symbol          String
+  minorUnits      Int               @default(2) @db.SmallInt
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy       String?           @db.Uuid
+  updatedAt       DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy       String?           @db.Uuid
+  rowVersion      Int               @default(0)
+  CompanySettings CompanySettings[]
+  ExchangeRates   ExchangeRates[]
+
+  @@schema("Company")
+}
+
+model DocumentTypes {
+  code               String            @id
+  name               String
+  module             String
+  tableName          String?
+  defaultPrefix      String
+  defaultPattern     String            @default("{PREFIX}-{YYYY}-{SEQ6}")
+  defaultPadding     Int               @default(6) @db.SmallInt
+  defaultResetPolicy String            @default("YEARLY")
+  isPostingDoc       Boolean           @default(false)
+  isMaster           Boolean           @default(false)
+  supportsApproval   Boolean           @default(false)
+  sortOrder          Int               @default(0)
+  isActive           Boolean           @default(true)
+  createdAt          DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy          String?           @db.Uuid
+  updatedAt          DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy          String?           @db.Uuid
+  rowVersion         Int               @default(0)
+  NumberingSeries    NumberingSeries[]
+
+  @@index([module, sortOrder], map: "docTypeModuleIdx")
+  @@schema("Company")
+}
+
+model ExchangeRates {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String     @db.Uuid
+  currencyCode String     @db.Char(3)
+  rateDate     DateTime   @db.Date
+  rate         Decimal    @db.Decimal(18, 6)
+  source       String     @default("SBP")
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  createdBy    String?    @db.Uuid
+  updatedAt    DateTime   @default(now()) @db.Timestamptz(6)
+  updatedBy    String?    @db.Uuid
+  rowVersion   Int        @default(0)
+  Currencies   Currencies @relation(fields: [currencyCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, currencyCode, rateDate])
+  @@unique([tenantId, id])
+  @@schema("Company")
+}
+
+model NumberingSeries {
+  id                      String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                String                    @db.Uuid
+  docType                 String
+  branchId                String?                   @db.Uuid
+  prefix                  String
+  pattern                 String                    @default("{PREFIX}-{YYYY}-{SEQ6}")
+  padding                 Int                       @default(6)
+  startValue              BigInt                    @default(1)
+  resetPolicy             String                    @default("YEARLY")
+  isActive                Boolean                   @default(true)
+  createdAt               DateTime                  @default(now()) @db.Timestamptz(6)
+  createdBy               String?                   @db.Uuid
+  updatedAt               DateTime                  @default(now()) @db.Timestamptz(6)
+  updatedBy               String?                   @db.Uuid
+  rowVersion              Int                       @default(0)
+  DocumentTypes           DocumentTypes             @relation(fields: [docType], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  Branches                Branches?                 @relation(fields: [tenantId, branchId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+  NumberingSeriesCounters NumberingSeriesCounters[]
+
+  @@unique([tenantId, docType, branchId])
+  @@unique([tenantId, id])
+  @@schema("Company")
+}
+
+model NumberingSeriesCounters {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String          @db.Uuid
+  sequenceId      String          @db.Uuid
+  periodKey       String
+  nextValue       BigInt
+  createdAt       DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime        @default(now()) @db.Timestamptz(6)
+  NumberingSeries NumberingSeries @relation(fields: [tenantId, sequenceId], references: [tenantId, id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, sequenceId, periodKey])
+  @@schema("Company")
+}
+
+model SetupGuideSteps {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  stepKey      String
+  isDone       Boolean   @default(false)
+  doneAt       DateTime? @db.Timestamptz(6)
+  doneByUserId String?   @db.Uuid
+  autoDetected Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, stepKey])
+  @@schema("Company")
+}
+
+// ---- Phase 2: Access & security (copied from prisma db pull; relations to models outside this file removed) ----
+
+model UserBranches {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  userId     String   @db.Uuid
+  branchId   String   @db.Uuid
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, userId, branchId])
+  @@index([tenantId, branchId], map: "userBranchBranchIdx")
+  @@schema("Company")
+}
+
+model RoleLimits {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @db.Uuid
+  roleId           String   @db.Uuid
+  maxVoucherAmount Decimal  @default(0) @db.Decimal(18, 2)
+  maxDiscountPct   Decimal  @default(0) @db.Decimal(7, 4)
+  backdateDays     Int      @default(0) @db.SmallInt
+  salaryVisibility String   @default("HIDDEN")
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdBy        String?  @db.Uuid
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy        String?  @db.Uuid
+  rowVersion       Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, roleId])
+  @@schema("Company")
+}
+
+model ApprovalWorkflows {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  name              String
+  subject           String
+  description       String?
+  status            String    @default("DRAFT")
+  version           Int       @default(1)
+  priority          Int       @default(100)
+  onComplete        String    @default("AUTO_POST")
+  onReject          String    @default("RETURN_TO_PREPARER")
+  notifyPreparer    Boolean   @default(true)
+  notifyInApp       Boolean   @default(true)
+  notifyEmail       Boolean   @default(true)
+  notifyWhatsapp    Boolean   @default(false)
+  publishedAt       DateTime? @db.Timestamptz(6)
+  publishedByUserId String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+  deletedAt         DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, name])
+  @@index([tenantId, subject, priority], map: "approvalWorkflowSubjectIdx", where: raw("((status = 'ACTIVE'::text) AND (\"deletedAt\" IS NULL))"))
+  @@schema("Company")
+}
+
+model ApprovalWorkflowSteps {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @db.Uuid
+  workflowId         String   @db.Uuid
+  stepNo             Int      @db.SmallInt
+  name               String
+  approverType       String
+  approverRoleId     String?  @db.Uuid
+  approverUserId     String?  @db.Uuid
+  appliesAboveAmount Decimal? @db.Decimal(18, 2)
+  slaHours           Decimal  @default(8) @db.Decimal(6, 2)
+  onSlaBreach        String   @default("ESCALATE")
+  approvalMode       String   @default("ANY")
+  blockSelfApproval  Boolean  @default(true)
+  allowDelegation    Boolean  @default(true)
+  requireComment     Boolean  @default(false)
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  createdBy          String?  @db.Uuid
+  updatedAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy          String?  @db.Uuid
+  rowVersion         Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, workflowId, stepNo])
+  @@schema("Company")
+}
+
+model ApprovalWorkflowConditions {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  workflowId String   @db.Uuid
+  seq        Int      @db.SmallInt
+  field      String
+  operator   String
+  value      Json
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, workflowId, seq])
+  @@schema("Company")
+}
+
+model ApprovalDelegations {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  fromUserId String   @db.Uuid
+  toUserId   String   @db.Uuid
+  subject    String?
+  startsOn   DateTime @db.Date
+  endsOn     DateTime @db.Date
+  reason     String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@index([tenantId, toUserId, startsOn, endsOn], map: "approvalDelegationToIdx", where: raw("\"isActive\""))
+  @@schema("Company")
+}
+
+model DocumentTemplates {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  name              String
+  category          String
+  docType           String?
+  letterKind        String?
+  paper             String    @default("A4_PORTRAIT")
+  headerLayout      String    @default("LOGO_LEFT")
+  language          String    @default("EN")
+  showNtnStrn       Boolean   @default(true)
+  showFbrQr         Boolean   @default(true)
+  showHsCodes       Boolean   @default(true)
+  showItemImages    Boolean   @default(false)
+  showAmountInWords Boolean   @default(true)
+  showBankDetails   Boolean   @default(true)
+  bodyHtml          String?
+  version           Int       @default(1)
+  isDefault         Boolean   @default(false)
+  status            String    @default("DRAFT")
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+  deletedAt         DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, name])
+  @@unique([tenantId, category, docType, letterKind], map: "docTemplateOneDefaultIdx", where: raw("(\"isDefault\" AND (\"deletedAt\" IS NULL))"))
+  @@schema("Company")
+}
+
+model UserSessions {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  userId            String    @db.Uuid
+  tokenHash         Bytes     @unique
+  clientType        String    @default("WEB")
+  deviceLabel       String?
+  userAgent         String?
+  ipAddress         String?   @db.Inet
+  locationLabel     String?
+  isUnusualLocation Boolean   @default(false)
+  authMethod        String    @default("PASSWORD")
+  mfaVerifiedAt     DateTime? @db.Timestamptz(6)
+  rememberMe        Boolean   @default(false)
+  trustedUntil      DateTime? @db.Timestamptz(6)
+  signedInAt        DateTime  @default(now()) @db.Timestamptz(6)
+  lastActiveAt      DateTime  @default(now()) @db.Timestamptz(6)
+  expiresAt         DateTime  @db.Timestamptz(6)
+  revokedAt         DateTime? @db.Timestamptz(6)
+  revokedByUserId   String?   @db.Uuid
+  revokeReason      String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@index([tenantId, userId, lastActiveAt(sort: Desc)], map: "userSessionActiveIdx", where: raw("(\"revokedAt\" IS NULL)"))
+  @@schema("Company")
+}
+
+model UserPreferences {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                String   @db.Uuid
+  userId                  String   @db.Uuid
+  language                String   @default("EN")
+  dateFormat              String   @default("DD MMM YYYY")
+  numberFormat            String   @default("WESTERN")
+  startRoute              String   @default("app/dashboard")
+  theme                   String   @default("SYSTEM")
+  compactTables           Boolean  @default(true)
+  showAccountCodes        Boolean  @default(false)
+  notifyInApp             Boolean  @default(true)
+  notifyEmailDigest       Boolean  @default(true)
+  emailDigestTime         DateTime @default(dbgenerated("'08:00:00'::time without time zone")) @db.Time(6)
+  notifySmsApprovalsAbove Decimal? @db.Decimal(18, 2)
+  notifyWhatsapp          Boolean  @default(false)
+  notifyEvents            String[] @default(["APPROVAL_ASSIGNED", "DOC_REJECTED", "BANK_ALERT", "CREDIT_BREACH", "TAX_DUE"])
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
+  createdBy               String?  @db.Uuid
+  updatedAt               DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy               String?  @db.Uuid
+  rowVersion              Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, userId])
+  @@schema("Company")
+}
+
+// ---- Phase 3: Finance structure (copied from prisma db pull; relations to models outside this file removed) ----
+
+model FiscalYears {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String    @db.Uuid
+  code                  String
+  startDate             DateTime  @db.Date
+  endDate               DateTime  @db.Date
+  status                String    @default("OPEN")
+  isLocked              Boolean   @default(false)
+  hasAdjustmentPeriod   Boolean   @default(false)
+  closedAt              DateTime? @db.Timestamptz(6)
+  closedByUserId        String?   @db.Uuid
+  closingJournalEntryId String?   @db.Uuid
+  netProfitTransferred  Decimal?  @db.Decimal(18, 2)
+  auditorName           String?
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy             String?   @db.Uuid
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy             String?   @db.Uuid
+  rowVersion            Int       @default(0)
+
+  @@unique([tenantId, code], map: "fiscalYearCodeUk")
+  @@unique([tenantId, id], map: "fiscalYearTenantIdUk")
+  @@schema("Accounting")
+}
+
+model FiscalPeriods {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  fiscalYearId    String    @db.Uuid
+  periodNo        Int       @db.SmallInt
+  code            String
+  startDate       DateTime  @db.Date
+  endDate         DateTime  @db.Date
+  isAdjustment    Boolean   @default(false)
+  status          String    @default("OPEN")
+  closeTargetDate DateTime? @db.Date
+  closedAt        DateTime? @db.Timestamptz(6)
+  closedByUserId  String?   @db.Uuid
+  lockedAt        DateTime? @db.Timestamptz(6)
+  lockedByUserId  String?   @db.Uuid
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, code], map: "fiscalPeriodCodeUk")
+  @@unique([tenantId, fiscalYearId, periodNo], map: "fiscalPeriodNoUk")
+  @@unique([tenantId, id], map: "fiscalPeriodTenantIdUk")
+  @@index([tenantId, startDate, endDate], map: "fiscalPeriodDatesIdx")
+  @@index([tenantId, fiscalYearId, periodNo], map: "fiscalPeriodYearIdx")
+  @@schema("Accounting")
+}
+
+model PeriodModuleLocks {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  fiscalPeriodId String    @db.Uuid
+  moduleCode     String
+  status         String    @default("OPEN")
+  closedAt       DateTime? @db.Timestamptz(6)
+  closedByUserId String?   @db.Uuid
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, id], map: "periodModuleLockTenantIdUk")
+  @@unique([tenantId, fiscalPeriodId, moduleCode], map: "periodModuleLockUk")
+  @@schema("Accounting")
+}
+
+model ChartOfAccounts {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  code            String
+  name            String
+  description     String?
+  icon            String?
+  parentAccountId String?   @db.Uuid
+  level           Int       @db.SmallInt
+  accountClass    Int       @db.SmallInt
+  nature          String    @db.Char(2)
+  kind            String
+  subType         String?
+  branchId        String?   @db.Uuid
+  currencyCode    String    @default("PKR") @db.Char(3)
+  openingBalance  Decimal   @default(0) @db.Decimal(18, 2)
+  openingAsOf     DateTime? @db.Date
+  status          String    @default("ACTIVE")
+  deletedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, code], map: "accountCodeUk")
+  @@unique([tenantId, id], map: "accountTenantIdUk")
+  @@index([tenantId, accountClass, code], map: "accountClassCodeIdx", where: raw("(\"deletedAt\" IS NULL)"))
+  @@index([tenantId, kind, status], map: "accountKindStatusIdx", where: raw("(\"deletedAt\" IS NULL)"))
+  @@index([name(ops: raw("gin_trgm_ops"))], map: "accountNameTrgmIdx", type: Gin)
+  @@index([tenantId, parentAccountId], map: "accountParentIdx")
+  @@index([tenantId, subType], map: "accountSubTypeIdx", where: raw("(\"subType\" IS NOT NULL)"))
+  @@schema("Accounting")
+}
+
+model AccountBranches {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  accountId  String   @db.Uuid
+  branchId   String   @db.Uuid
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id], map: "accountBranchTenantIdUk")
+  @@unique([tenantId, accountId, branchId], map: "accountBranchUk")
+  @@index([tenantId, branchId], map: "accountBranchBranchIdx")
+  @@schema("Accounting")
+}
+
+model SavedLedgerViews {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @db.Uuid
+  userId     String    @db.Uuid
+  name       String
+  accountId  String?   @db.Uuid
+  rangeLabel String?
+  dateFrom   DateTime? @db.Date
+  dateTo     DateTime? @db.Date
+  filters    Json      @default("{}")
+  isShared   Boolean   @default(false)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy  String?   @db.Uuid
+  updatedAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy  String?   @db.Uuid
+  rowVersion Int       @default(0)
+
+  @@unique([tenantId, userId, name], map: "savedLedgerViewNameUk")
+  @@unique([tenantId, id], map: "savedLedgerViewTenantIdUk")
+  @@schema("Accounting")
+}
+
+model CostCentres {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  code               String
+  name               String
+  parentCostCentreId String?   @db.Uuid
+  branchId           String?   @db.Uuid
+  status             String    @default("ACTIVE")
+  centreType         String    @default("DEPARTMENT")
+  ownerEmployeeId    String?   @db.Uuid
+  annualBudget       Decimal?  @db.Decimal(18, 2)
+  icon               String?
+  tags               String[]  @default([])
+  deletedAt          DateTime? @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, code], map: "costCentreCodeUk")
+  @@unique([tenantId, id], map: "costCentreTenantIdUk")
+  @@index([tenantId, branchId], map: "costCentreBranchIdx", where: raw("(\"deletedAt\" IS NULL)"))
+  @@index([tenantId, parentCostCentreId], map: "costCentreParentIdx")
+  @@schema("Accounting")
+}
+
+model Projects {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  code            String
+  name            String
+  ownerEmployeeId String?   @db.Uuid
+  budgetAmount    Decimal   @default(0) @db.Decimal(18, 2)
+  expectedRevenue Decimal   @default(0) @db.Decimal(18, 2)
+  startDate       DateTime? @db.Date
+  endDate         DateTime? @db.Date
+  colour          String    @default("blue")
+  status          String    @default("PLANNING")
+  deletedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, code], map: "projectCodeUk")
+  @@unique([tenantId, id], map: "projectTenantIdUk")
+  @@index([tenantId, status], map: "projectStatusIdx", where: raw("(\"deletedAt\" IS NULL)"))
+  @@schema("Accounting")
+}
+
+model ProjectTags {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  projectId  String   @db.Uuid
+  tag        String
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id], map: "projectTagTenantIdUk")
+  @@unique([tenantId, projectId, tag], map: "projectTagUk")
+  @@index([tenantId, tag], map: "projectTagTagIdx")
+  @@schema("Accounting")
+}
+
+model CostAllocationRules {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  name       String
+  accountId  String   @db.Uuid
+  basis      String
+  tags       String[] @default([])
+  status     String   @default("ACTIVE")
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, name], map: "allocationRuleNameUk")
+  @@unique([tenantId, id], map: "allocationRuleTenantIdUk")
+  @@index([tenantId, accountId], map: "allocationRuleAccountIdx", where: raw("(status = 'ACTIVE'::text)"))
+  @@schema("Accounting")
+}
+
+model CostAllocationSplits {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @db.Uuid
+  allocationRuleId String   @db.Uuid
+  costCentreId     String   @db.Uuid
+  percent          Decimal  @db.Decimal(7, 4)
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdBy        String?  @db.Uuid
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy        String?  @db.Uuid
+  rowVersion       Int      @default(0)
+
+  @@unique([tenantId, id], map: "allocationSplitTenantIdUk")
+  @@unique([tenantId, allocationRuleId, costCentreId], map: "allocationSplitUk")
+  @@schema("Accounting")
+}
+
+model DefaultAccountMappings {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @db.Uuid
+  role          String
+  accountId     String   @db.Uuid
+  bankAccountId String?  @db.Uuid
+  remarks       String?
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  createdBy     String?  @db.Uuid
+  updatedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy     String?  @db.Uuid
+  rowVersion    Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, role])
+  @@index([tenantId, accountId], map: "defaultAccountMapAccountIdx")
+  @@schema("Company")
+}
+
+model PostingRoles {
+  code             String   @id
+  name             String
+  roleGroup        String
+  normalBalance    String   @db.Char(2)
+  onSettingsScreen Boolean  @default(false)
+  sortOrder        Int      @default(0)
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdBy        String?  @db.Uuid
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy        String?  @db.Uuid
+  rowVersion       Int      @default(0)
+
+  @@schema("Company")
+}
+
+model ChartOfAccountsTemplates {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique
+  name        String
+  industry    String?
+  version     String
+  status      String   @default("DRAFT")
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdBy   String?  @db.Uuid
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy   String?  @db.Uuid
+  rowVersion  Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model ChartOfAccountsTemplateAccounts {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  templateId   String   @db.Uuid
+  code         String
+  name         String
+  parentCode   String?
+  level        Int      @db.SmallInt
+  accountClass Int      @db.SmallInt
+  nature       String   @db.Char(2)
+  subType      String?
+  isPostable   Boolean  @default(false)
+  defaultRole  String?
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@unique([templateId, code])
+  @@schema("Platform")
+}
+
+// ---- Phase 4: tax & treasury masters (mapped without relations; the database enforces the FKs) ----
+
+model BankAccounts {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String    @db.Uuid
+  bankId                 String    @db.Uuid
+  branchId               String    @db.Uuid
+  accountType            String    @default("CURRENT")
+  accountTitle           String
+  accountNo              String
+  accountLast4           String?
+  iban                   String?
+  bankBranch             String?
+  accountId              String    @db.Uuid
+  currencyCode           String    @default("PKR") @db.Char(3)
+  openingBalance         Decimal   @default(0) @db.Decimal
+  openingBalanceDate     DateTime? @db.Date
+  creditLimit            Decimal?  @db.Decimal
+  markupTerms            String?
+  purpose                String    @default("GENERAL")
+  statementImportEnabled Boolean   @default(true)
+  statementFormat        String?
+  useForPayroll          Boolean   @default(false)
+  reconciledTo           DateTime? @db.Date
+  lastStatementBalance   Decimal?  @db.Decimal
+  lastStatementDate      DateTime? @db.Date
+  status                 String    @default("ACTIVE")
+  closedOn               DateTime? @db.Date
+  createdAt              DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy              String?   @db.Uuid
+  updatedAt              DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy              String?   @db.Uuid
+  rowVersion             Int       @default(0)
+  deletedAt              DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, accountId])
+  @@unique([tenantId, bankId, accountNo])
+  @@schema("BankCash")
+}
+
+model Banks {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  code         String
+  name         String
+  shortName    String?
+  swiftBic     String?
+  ibanBankCode String?   @db.Char(4)
+  isIslamic    Boolean   @default(false)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+  deletedAt    DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@schema("BankCash")
+}
+
+model CashAccounts {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  code               String
+  name               String
+  shortName          String?
+  kind               String    @default("DRAWER")
+  branchId           String    @db.Uuid
+  custodianUserId    String?   @db.Uuid
+  accountId          String    @db.Uuid
+  openingBalance     Decimal   @default(0) @db.Decimal
+  openingBalanceDate DateTime? @db.Date
+  imprestAmount      Decimal?  @db.Decimal
+  varianceTolerance  Decimal   @default(1000) @db.Decimal
+  isActive           Boolean   @default(true)
+  approvalThreshold  Decimal   @default(50000) @db.Decimal
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+  deletedAt          DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, accountId])
+  @@schema("BankCash")
+}
+
+model CashCategories {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  code             String
+  name             String
+  direction        String
+  voucherType      String
+  defaultAccountId String?   @db.Uuid
+  partyKind        String    @default("NONE")
+  icon             String?
+  colorToken       String?
+  sortOrder        Int       @default(0)
+  isSystem         Boolean   @default(false)
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+  deletedAt        DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@schema("BankCash")
+}
+
+model ChequeBooks {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  bankAccountId  String    @db.Uuid
+  bookRef        String?
+  firstLeafNo    BigInt
+  lastLeafNo     BigInt
+  nextLeafNo     BigInt
+  leafDigits     Int       @default(8) @db.SmallInt
+  leaves         Int?
+  crossedAcPayee Boolean   @default(true)
+  receivedOn     DateTime? @db.Date
+  status         String    @default("ACTIVE")
+  remarks        String?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, bankAccountId, firstLeafNo])
+  @@schema("BankCash")
+}
+
+model ExpenseCategories {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  code                String
+  name                String
+  appliesTo           String    @default("BOTH")
+  accountId           String    @db.Uuid
+  limitAmount         Decimal?  @db.Decimal
+  limitPeriod         String?
+  requiresPreApproval Boolean   @default(false)
+  receiptRequired     Boolean   @default(true)
+  submitWithinDays    Int?      @db.SmallInt
+  icon                String?
+  sortOrder           Int       @default(0)
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+  deletedAt           DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@schema("BankCash")
+}
+
+model TaxCodeRates {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String    @db.Uuid
+  taxCodeId     String    @db.Uuid
+  effectiveFrom DateTime  @db.Date
+  effectiveTo   DateTime? @db.Date
+  rate          Decimal?  @db.Decimal
+  nonAtlRate    Decimal?  @db.Decimal
+  financeAct    String?
+  remarks       String?
+  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy     String?   @db.Uuid
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy     String?   @db.Uuid
+  rowVersion    Int       @default(0)
+
+  @@unique([tenantId, taxCodeId, effectiveFrom])
+  @@schema("Tax")
+}
+
+model TaxCodes {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  code               String
+  description        String
+  taxType            String
+  appliesTo          String
+  rateBasis          String    @default("PERCENT")
+  salesTaxKind       String?
+  whtSection         String?
+  whtNature          String?
+  accountId          String?   @db.Uuid
+  inputAccountId     String?   @db.Uuid
+  fbrReference       String?
+  calcOnExclSalesTax Boolean   @default(true)
+  checkAtl           Boolean   @default(false)
+  isSystem           Boolean   @default(false)
+  isActive           Boolean   @default(true)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+  deletedAt          DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@schema("Tax")
+}
+
+// ---- Phase 5: treasury rules & compliance masters (mapped without relations; the database enforces the FKs) ----
+
+model BankRuleConditions {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  bankRuleId String   @db.Uuid
+  seq        Int      @db.SmallInt
+  field      String
+  operator   String
+  value      String
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, bankRuleId, seq])
+  @@schema("BankCash")
+}
+
+model BankRules {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String    @db.Uuid
+  code          String
+  name          String
+  priority      Int       @default(100)
+  matchMode     String    @default("ALL")
+  bankAccountId String?   @db.Uuid
+  accountId     String    @db.Uuid
+  costCentreId  String?   @db.Uuid
+  autoPost      Boolean   @default(true)
+  isEnabled     Boolean   @default(true)
+  hitCount      Int       @default(0)
+  lastHitAt     DateTime? @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy     String?   @db.Uuid
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy     String?   @db.Uuid
+  rowVersion    Int       @default(0)
+  deletedAt     DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, code])
+  @@schema("BankCash")
+}
+
+model PettyCashFunds {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  name                String
+  branchId            String    @db.Uuid
+  cashAccountId       String    @db.Uuid
+  custodianEmployeeId String?   @db.Uuid
+  custodianUserId     String?   @db.Uuid
+  imprestAmount       Decimal   @db.Decimal
+  lowPct              Decimal   @default(25) @db.Decimal
+  criticalPct         Decimal   @default(10) @db.Decimal
+  cycleStartedOn      DateTime? @db.Date
+  status              String    @default("HEALTHY")
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+  deletedAt           DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, cashAccountId])
+  @@schema("BankCash")
+}
+
+model SegregationOfDutiesRules {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String   @db.Uuid
+  code        String
+  name        String
+  kind        String
+  permissionA String
+  permissionB String
+  description String?
+  severity    String   @default("WARN")
+  ownerExempt Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdBy   String?  @db.Uuid
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy   String?  @db.Uuid
+  rowVersion  Int      @default(0)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, permissionA, permissionB])
+  @@schema("Company")
+}
+
+model TenantSecrets {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  purpose    String
+  ciphertext String
+  iv         String
+  authTag    String
+  keyVersion Int      @default(1) @db.SmallInt
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, purpose])
+  @@schema("Company")
+}
+
+model FixedAssetCategories {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  code                String
+  name                String
+  defaultMethod       String    @default("WDV")
+  defaultRatePct      Decimal?  @db.Decimal
+  costAccountId       String    @db.Uuid
+  accumDepAccountId   String?   @db.Uuid
+  depExpenseAccountId String?   @db.Uuid
+  tagPrefix           String?
+  status              String    @default("ACTIVE")
+  deletedAt           DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, name])
+  @@schema("FixedAssets")
+}
+
+model FbrBranchMappings {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String   @db.Uuid
+  fbrConfigId String   @db.Uuid
+  branchId    String?  @db.Uuid
+  posId       String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdBy   String?  @db.Uuid
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy   String?  @db.Uuid
+  rowVersion  Int      @default(0)
+
+  @@schema("Tax")
+}
+
+model FbrSettings {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  authority           String    @default("FBR")
+  environment         String    @default("SANDBOX")
+  posId               String
+  ntn                 String
+  strn                String?
+  apiTokenSecretRef   String?
+  apiTokenHint        String?
+  tokenExpiresOn      DateTime? @db.Date
+  reportOnPosting     Boolean   @default(true)
+  printQr             Boolean   @default(true)
+  blockIfUnreachable  Boolean   @default(false)
+  syncIntervalMinutes Int       @default(5) @db.SmallInt
+  connectionStatus    String    @default("NOT_CONFIGURED")
+  lastHealthCheckAt   DateTime? @db.Timestamptz(6)
+  lastLatencyMs       Int?
+  lastSyncAt          DateTime? @db.Timestamptz(6)
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, authority])
+  @@schema("Tax")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 6: product setup (Inventory schema). No relations: stores join by id.
+// ---------------------------------------------------------------------------
+model UnitsOfMeasure {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  code       String
+  name       String
+  nameUrdu   String?
+  kind       String   @default("COUNT")
+  decimals   Int      @default(0) @db.SmallInt
+  isSystem   Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, code], map: "uomCodeUk")
+  @@schema("Inventory")
+}
+
+model ProductCompanies {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  code        String
+  name        String
+  shortName   String?
+  status      String    @default("ACTIVE")
+  address     String?
+  city        String?
+  country     String    @default("Pakistan")
+  phone       String?
+  email       String?   @db.Citext
+  website     String?
+  brandColour String    @default("#1F5F45")
+  notes       String?
+  deletedAt   DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+
+  @@unique([tenantId, code], map: "manufacturerCodeUk")
+  @@schema("Inventory")
+}
+
+model ProductClasses {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @db.Uuid
+  code       String
+  name       String
+  nameUrdu   String?
+  icon       String    @default("package")
+  isVisible  Boolean   @default(true)
+  sortOrder  Int       @default(0)
+  deletedAt  DateTime? @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy  String?   @db.Uuid
+  updatedAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy  String?   @db.Uuid
+  rowVersion Int       @default(0)
+
+  @@unique([tenantId, code], map: "productClassCodeUk")
+  @@schema("Inventory")
+}
+
+model ProductSubclasses {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  productClassId String    @db.Uuid
+  code           String
+  name           String
+  isVisible      Boolean   @default(true)
+  sortOrder      Int       @default(0)
+  deletedAt      DateTime? @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, code], map: "productSubclassCodeUk")
+  @@schema("Inventory")
+}
+
+model Warehouses {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  code               String
+  name               String
+  description        String?
+  type               String    @default("WAREHOUSE")
+  branchId           String?   @db.Uuid
+  managerUserId      String?   @db.Uuid
+  address            String?
+  city               String?
+  capacityPallets    Int?
+  inventoryAccountId String?   @db.Uuid
+  blockNegativeStock Boolean   @default(true)
+  isPrimary          Boolean   @default(false)
+  status             String    @default("ACTIVE")
+  vehicleId          String?   @db.Uuid
+  deletedAt          DateTime? @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, code], map: "warehouseCodeUk")
+  @@schema("Inventory")
+}
+
+model WarehouseBins {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  warehouseId String    @db.Uuid
+  code        String
+  rack        String?
+  shelfRow    String?
+  position    String?
+  zone        String?
+  isActive    Boolean   @default(true)
+  deletedAt   DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+
+  @@unique([tenantId, warehouseId, code], map: "binCodeUk")
+  @@schema("Inventory")
+}
+
+model StockMovementReasons {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @db.Uuid
+  direction          String
+  code               String
+  label              String
+  hint               String?
+  icon               String?
+  ledgerMovementType String
+  expenseAccountId   String?  @db.Uuid
+  isSystem           Boolean  @default(false)
+  sortOrder          Int      @default(0)
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  createdBy          String?  @db.Uuid
+  updatedAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy          String?  @db.Uuid
+  rowVersion         Int      @default(0)
+
+  @@unique([tenantId, direction, code], map: "movementReasonCodeUk")
+  @@schema("Inventory")
+}
+
+/// Read-only here (stock value / SKUs per warehouse, "has stock" check). Written by the stock phases.
+model StockBalances {
+  id          String  @id @db.Uuid
+  tenantId    String  @db.Uuid
+  itemId      String  @db.Uuid
+  warehouseId String  @db.Uuid
+  binId       String? @db.Uuid
+  batchId     String? @db.Uuid
+  qtyOnHand   Decimal @db.Decimal
+  value       Decimal @db.Decimal
+
+  @@schema("Inventory")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 7: parties (Sales / Purchases schemas). No relations: stores join by id.
+// ---------------------------------------------------------------------------
+model CustomerGroups {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  code        String
+  name        String
+  priceListId String?   @db.Uuid
+  isActive    Boolean   @default(true)
+  remarks     String?
+  deletedAt   DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Sales")
+}
+
+model Customers {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String    @db.Uuid
+  code                  String
+  name                  String
+  displayName           String?
+  customerType          String    @default("COMPANY")
+  customerGroupId       String?   @db.Uuid
+  salesRepUserId        String?   @db.Uuid
+  branchId              String?   @db.Uuid
+  customerSince         DateTime? @db.Date
+  ntn                   String?
+  cnic                  String?
+  strn                  String?
+  atlStatus             String    @default("NOT_ON_ATL")
+  isSalesTaxRegistered  Boolean   @default(false)
+  applyFurtherTax       Boolean   @default(false)
+  deductsWht            Boolean   @default(false)
+  whtSection            String?
+  whtRate               Decimal?  @db.Decimal
+  isGstExempt           Boolean   @default(false)
+  contactPerson         String?
+  mobile                String?
+  phone                 String?
+  email                 String?   @db.Citext
+  billingAddress        String?
+  area                  String?
+  city                  String?
+  province              String?
+  shippingSameAsBilling Boolean   @default(true)
+  shippingAddress       String?
+  creditLimit           Decimal   @default(0) @db.Decimal
+  paymentTerms          String    @default("NET_30")
+  creditDays            Int       @default(30)
+  receivableAccountId   String?   @db.Uuid
+  priceListId           String?   @db.Uuid
+  openingBalance        Decimal   @default(0) @db.Decimal
+  openingBalanceAsOf    DateTime? @db.Date
+  blockOverLimit        Boolean   @default(true)
+  autoReminders         Boolean   @default(true)
+  guarantorName         String?
+  guarantorFatherName   String?
+  guarantorCnic         String?
+  guarantorPhone        String?
+  guarantorAddress      String?
+  status                String    @default("ACTIVE")
+  holdReason            String?
+  onHoldSince           DateTime? @db.Timestamptz(6)
+  customerChannel       String    @default("STANDARD")
+  priceTier             String?
+  priceTierFactor       Decimal   @default(1) @db.Decimal
+  deletedAt             DateTime? @db.Timestamptz(6)
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy             String?   @db.Uuid
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy             String?   @db.Uuid
+  rowVersion            Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Sales")
+}
+
+model CustomerContacts {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  customerId       String    @db.Uuid
+  fullName         String
+  designation      String?
+  isPrimary        Boolean   @default(false)
+  mobile           String?
+  phone            String?
+  email            String?   @db.Citext
+  receivesInvoices Boolean   @default(false)
+  deletedAt        DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@schema("Sales")
+}
+
+model CustomerAddresses {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  customerId   String    @db.Uuid
+  addressType  String    @default("SHIPPING")
+  label        String
+  addressLine  String
+  area         String?
+  city         String?
+  province     String?
+  contactName  String?
+  contactPhone String?
+  isDefault    Boolean   @default(false)
+  deletedAt    DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@schema("Sales")
+}
+
+model CustomerNotes {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @db.Uuid
+  customerId   String   @db.Uuid
+  authorUserId String?  @db.Uuid
+  note         String
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@schema("Sales")
+}
+
+model VendorCategories {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @db.Uuid
+  name       String
+  sortOrder  Int       @default(0)
+  isActive   Boolean   @default(true)
+  deletedAt  DateTime? @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy  String?   @db.Uuid
+  updatedAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy  String?   @db.Uuid
+  rowVersion Int       @default(0)
+
+  @@schema("Purchases")
+}
+
+model Vendors {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  code              String
+  name              String
+  legalName         String?
+  categoryId        String?   @db.Uuid
+  ntn               String?
+  cnic              String?
+  strn              String?
+  atlStatus         String    @default("UNVERIFIED")
+  atlVerifiedAt     DateTime? @db.Timestamptz(6)
+  defaultWhtSection String    @default("153_1_A")
+  defaultAccountId  String?   @db.Uuid
+  payableAccountId  String?   @db.Uuid
+  paymentTerms      String    @default("NET_30")
+  creditDays        Int       @default(30) @db.SmallInt
+  currencyCode      String    @default("PKR") @db.Char(3)
+  phone             String?
+  email             String?   @db.Citext
+  address           String?
+  city              String?
+  bankName          String?
+  iban              String?
+  vendorSince       DateTime? @db.Date
+  status            String    @default("ACTIVE")
+  remarks           String?
+  countryCode       String    @default("PK") @db.Char(2)
+  deletedAt         DateTime? @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, code], map: "vendorCodeUk")
+  @@schema("Purchases")
+}
+
+model VendorContacts {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  vendorId    String    @db.Uuid
+  fullName    String
+  designation String?
+  phone       String?
+  mobile      String?
+  email       String?   @db.Citext
+  isPrimary   Boolean   @default(false)
+  deletedAt   DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+
+  @@schema("Purchases")
+}
+
+model VendorBankAccounts {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  vendorId     String    @db.Uuid
+  bankName     String
+  branchName   String?
+  accountTitle String?
+  accountNo    String?
+  iban         String?
+  swiftCode    String?
+  currencyCode String    @default("PKR") @db.Char(3)
+  isPrimary    Boolean   @default(false)
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@schema("Purchases")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 8: products, kits, barcode labels, reorder rules (Inventory schema). No relations: stores join by id.
+// ---------------------------------------------------------------------------
+model Products {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  sku                 String
+  upc                 String?
+  name                String
+  nameUrdu            String?
+  description         String?
+  imageUrl            String?
+  status              String    @default("ACTIVE")
+  manufacturerId      String?   @db.Uuid
+  distributorVendorId String?   @db.Uuid
+  productClassId      String?   @db.Uuid
+  productSubclassId   String?   @db.Uuid
+  uomId               String    @db.Uuid
+  ctn                 Int       @default(1)
+  defaultShelf        String?
+  cost                Decimal   @default(0) @db.Decimal
+  avgCost             Decimal   @default(0) @db.Decimal
+  costPerUnit         Decimal?  @db.Decimal
+  price               Decimal   @default(0) @db.Decimal
+  wprice              Decimal?  @db.Decimal
+  gstRate             Decimal   @default(18) @db.Decimal
+  taxCodeId           String?   @db.Uuid
+  finDiscPct          Decimal   @default(0) @db.Decimal
+  lowLevel            Decimal   @default(0) @db.Decimal
+  highLevel           Decimal   @default(0) @db.Decimal
+  isShort             Boolean   @default(false)
+  trackExpiry         Boolean   @default(false)
+  isControlled        Boolean   @default(false)
+  isPrecious          Boolean   @default(false)
+  hsCode              String?
+  weightKg            Decimal?  @db.Decimal
+  abcClass            String?   @db.Char(1)
+  avgDailySales       Decimal?  @db.Decimal
+  lastSaleDate        DateTime? @db.Date
+  leadDays            Int?
+  deletedAt           DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, sku])
+  @@schema("Inventory")
+}
+
+model ProductUnits {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String   @db.Uuid
+  itemId            String   @db.Uuid
+  uomId             String   @db.Uuid
+  factor            Decimal  @db.Decimal
+  isBase            Boolean  @default(false)
+  isPurchaseDefault Boolean  @default(false)
+  isSalesDefault    Boolean  @default(false)
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  createdBy         String?  @db.Uuid
+  updatedAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy         String?  @db.Uuid
+  rowVersion        Int      @default(0)
+
+  @@unique([tenantId, itemId, uomId])
+  @@schema("Inventory")
+}
+
+model ProductBarcodes {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  itemId     String   @db.Uuid
+  barcode    String
+  kind       String
+  qtyPerScan Decimal  @default(1) @db.Decimal
+  isPrimary  Boolean  @default(false)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, barcode])
+  @@schema("Inventory")
+}
+
+model ProductSuppliers {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  itemId           String    @db.Uuid
+  vendorId         String    @db.Uuid
+  vendorItemCode   String?
+  lastPrice        Decimal?  @db.Decimal
+  lastPurchaseDate DateTime? @db.Date
+  leadDays         Int?
+  sharePct         Decimal?  @db.Decimal
+  isPreferred      Boolean   @default(false)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, itemId, vendorId])
+  @@schema("Inventory")
+}
+
+model ProductBatches {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  itemId              String    @db.Uuid
+  batchNo             String
+  expiryDate          DateTime? @db.Date
+  mfgDate             DateTime? @db.Date
+  unitCost            Decimal?  @db.Decimal
+  disposition         String    @default("SALEABLE")
+  dispositionAt       DateTime? @db.Timestamptz(6)
+  dispositionByUserId String?   @db.Uuid
+  sourceDocType       String?
+  sourceDocId         String?   @db.Uuid
+  notes               String?
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, itemId, batchNo])
+  @@schema("Inventory")
+}
+
+model ProductPriceLogs {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @db.Uuid
+  itemId             String   @db.Uuid
+  priceField         String
+  oldValue           Decimal? @db.Decimal
+  newValue           Decimal  @db.Decimal
+  changedAt          DateTime @default(now()) @db.Timestamptz(6)
+  changedByUserId    String?  @db.Uuid
+  source             String
+  priceChangeBatchId String?  @db.Uuid
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  createdBy          String?  @db.Uuid
+  updatedAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy          String?  @db.Uuid
+  rowVersion         Int      @default(0)
+
+  @@schema("Inventory")
+}
+
+model KitsAndBundles {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  code            String
+  name            String
+  icon            String    @default("package-plus")
+  tone            String    @default("green")
+  kitItemId       String    @db.Uuid
+  sellingPrice    Decimal   @default(0) @db.Decimal
+  targetMarginPct Decimal   @default(25) @db.Decimal
+  status          String    @default("ACTIVE")
+  deletedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Inventory")
+}
+
+model KitComponents {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  kitId      String   @db.Uuid
+  itemId     String   @db.Uuid
+  qtyPerKit  Decimal  @db.Decimal
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, kitId, itemId])
+  @@schema("Inventory")
+}
+
+model BarcodeLabelTemplates {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  code           String
+  name           String
+  media          String
+  widthMm        Decimal  @db.Decimal
+  heightMm       Decimal  @db.Decimal
+  labelsPerSheet Int?     @db.SmallInt
+  sheetColumns   Int?     @db.SmallInt
+  sheetRows      Int?     @db.SmallInt
+  isSystem       Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Inventory")
+}
+
+model BarcodeLabelJobs {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  templateId       String    @db.Uuid
+  showPrice        Boolean   @default(true)
+  showUrduName     Boolean   @default(false)
+  showBatchExpiry  Boolean   @default(false)
+  showCompany      Boolean   @default(true)
+  useCartonBarcode Boolean   @default(false)
+  productCount     Int       @default(0)
+  totalLabels      Int       @default(0)
+  pageCount        Int?
+  source           String    @default("LABELS")
+  status           String    @default("QUEUED")
+  printedAt        DateTime? @db.Timestamptz(6)
+  printedByUserId  String?   @db.Uuid
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@schema("Inventory")
+}
+
+model BarcodeLabelJobLines {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @db.Uuid
+  jobId        String   @db.Uuid
+  itemId       String   @db.Uuid
+  copies       Int      @default(1)
+  barcode      String?
+  batchId      String?  @db.Uuid
+  printedPrice Decimal? @db.Decimal
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@unique([tenantId, jobId, itemId])
+  @@schema("Inventory")
+}
+
+model ReorderRules {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  itemId         String   @db.Uuid
+  warehouseId    String?  @db.Uuid
+  lowLevel       Decimal  @db.Decimal
+  highLevel      Decimal  @db.Decimal
+  leadDays       Int      @default(14)
+  safetyDays     Int      @default(14)
+  coverAlertDays Int      @default(21)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@schema("Inventory")
+}
+
+// ---------------------------------------------------------------- Phase 9: pricing & collections setup
+model PriceLists {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  code         String
+  name         String
+  markupPct    Decimal?  @db.Decimal(7, 4)
+  roundingTo   Decimal   @default(1) @db.Decimal(18, 2)
+  isDefault    Boolean   @default(false)
+  currencyCode String    @default("PKR") @db.Char(3)
+  validFrom    DateTime? @db.Date
+  validTo      DateTime? @db.Date
+  status       String    @default("ACTIVE")
+  remarks      String?
+  deletedAt    DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Sales")
+}
+
+model PriceListItems {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @db.Uuid
+  priceListId   String   @db.Uuid
+  itemId        String   @db.Uuid
+  price         Decimal  @db.Decimal(18, 4)
+  effectiveFrom DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  createdBy     String?  @db.Uuid
+  updatedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy     String?  @db.Uuid
+  rowVersion    Int      @default(0)
+
+  @@unique([tenantId, priceListId, itemId, effectiveFrom])
+  @@schema("Sales")
+}
+
+model PriceListQuantityBreaks {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String   @db.Uuid
+  priceListId String?  @db.Uuid
+  itemId      String   @db.Uuid
+  tierNo      Int      @db.SmallInt
+  minQty      Decimal  @db.Decimal(18, 3)
+  maxQty      Decimal? @db.Decimal(18, 3)
+  unitPrice   Decimal  @db.Decimal(18, 4)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdBy   String?  @db.Uuid
+  updatedAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy   String?  @db.Uuid
+  rowVersion  Int      @default(0)
+
+  @@schema("Sales")
+}
+
+model SalesSchemes {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  code               String
+  name               String
+  description        String?
+  schemeType         String
+  validFrom          DateTime  @db.Date
+  validTo            DateTime  @db.Date
+  isActive           Boolean   @default(true)
+  buyQty             Decimal?  @db.Decimal(18, 3)
+  freeQty            Decimal?  @db.Decimal(18, 3)
+  discountPct        Decimal?  @db.Decimal(7, 4)
+  discountAmount     Decimal?  @db.Decimal(18, 2)
+  minInvoiceAmount   Decimal?  @db.Decimal(18, 2)
+  minLineQty         Decimal?  @db.Decimal(18, 3)
+  bundlePrice        Decimal?  @db.Decimal(18, 2)
+  settlementDays     Int?      @db.SmallInt
+  appliesToAll       Boolean   @default(false)
+  budgetCap          Decimal?  @db.Decimal(18, 2)
+  maxUsesPerCustomer Int?
+  usedCount          Int       @default(0)
+  valueGiven         Decimal   @default(0) @db.Decimal(18, 2)
+  deletedAt          DateTime? @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Sales")
+}
+
+model SalesSchemeItems {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  schemeId   String   @db.Uuid
+  itemId     String   @db.Uuid
+  itemRole   String
+  qty        Decimal? @db.Decimal(18, 3)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@schema("Sales")
+}
+
+model SalesSchemeEligibilities {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String   @db.Uuid
+  schemeId        String   @db.Uuid
+  customerGroupId String?  @db.Uuid
+  customerId      String?  @db.Uuid
+  priceTier       String?
+  isExcluded      Boolean  @default(false)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@schema("Sales")
+}
+
+model PaymentReminderTemplates {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  code         String
+  name         String
+  emailSubject String?
+  bodyEn       String
+  bodyUr       String?
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Sales")
+}
+
+model PaymentReminderRules {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @db.Uuid
+  name             String
+  offsetDays       Int
+  dunningLevel     String
+  sendWhatsapp     Boolean  @default(false)
+  sendSms          Boolean  @default(false)
+  sendEmail        Boolean  @default(true)
+  templateId       String   @db.Uuid
+  action           String   @default("MESSAGE")
+  attachStatement  Boolean  @default(false)
+  escalate         Boolean  @default(false)
+  escalateToUserId String?  @db.Uuid
+  applyCreditHold  Boolean  @default(false)
+  runTime          DateTime @default(dbgenerated("'09:00:00'::time without time zone")) @db.Time(6)
+  isActive         Boolean  @default(true)
+  sentCount        Int      @default(0)
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdBy        String?  @db.Uuid
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy        String?  @db.Uuid
+  rowVersion       Int      @default(0)
+
+  @@unique([tenantId, offsetDays])
+  @@schema("Sales")
+}
+
+model PriceTiers {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  code           String
+  name           String
+  rateFactor     Decimal   @db.Decimal(7, 4)
+  allocationRank Int       @db.SmallInt
+  isActive       Boolean   @default(true)
+  deletedAt      DateTime? @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("Distribution")
+}
+
+// ---------------------------------------------------------------- Phase 10: organisation
+model Departments {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  code           String
+  name           String
+  description    String?
+  parentId       String?   @db.Uuid
+  division       String?
+  headEmployeeId String?   @db.Uuid
+  costCentreId   String?   @db.Uuid
+  annualBudget   Decimal?  @db.Decimal(18, 2)
+  isActive       Boolean   @default(true)
+  deletedAt      DateTime? @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("HumanResources")
+}
+
+model Designations {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String    @db.Uuid
+  title                  String
+  departmentId           String    @db.Uuid
+  gradeId                String?   @db.Uuid
+  approvedPositions      Int       @default(1)
+  reportsToDesignationId String?   @db.Uuid
+  isActive               Boolean   @default(true)
+  deletedAt              DateTime? @db.Timestamptz(6)
+  createdAt              DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy              String?   @db.Uuid
+  updatedAt              DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy              String?   @db.Uuid
+  rowVersion             Int       @default(0)
+
+  @@schema("HumanResources")
+}
+
+model Grades {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String    @db.Uuid
+  code       String
+  levelRank  Int       @db.SmallInt
+  levelName  String
+  minSalary  Decimal   @db.Decimal(18, 2)
+  midSalary  Decimal   @db.Decimal(18, 2)
+  maxSalary  Decimal   @db.Decimal(18, 2)
+  isActive   Boolean   @default(true)
+  deletedAt  DateTime? @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy  String?   @db.Uuid
+  updatedAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy  String?   @db.Uuid
+  rowVersion Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("HumanResources")
+}
+
+model WorkShifts {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String    @db.Uuid
+  code                 String
+  name                 String
+  description          String?
+  colour               String    @default("TEAL")
+  startTime            DateTime  @db.Time(6)
+  endTime              DateTime  @db.Time(6)
+  crossesMidnight      Boolean   @default(false)
+  scheduledHours       Decimal?  @default(dbgenerated()) @db.Decimal(5, 2)
+  graceMinutes         Int       @default(15) @db.SmallInt
+  breakStart           DateTime? @db.Time(6)
+  breakEnd             DateTime? @db.Time(6)
+  fridayExtendedBreak  Boolean   @default(false)
+  fridayBreakEnd       DateTime? @db.Time(6)
+  prayerBreakNote      String?
+  halfDayBelowHours    Decimal?  @db.Decimal(4, 2)
+  lateMarksPerHalfDay  Int?      @db.SmallInt
+  overtimeAfterMinutes Int       @default(30) @db.SmallInt
+  weeklyOff            String    @default("SUNDAY")
+  isDefault            Boolean   @default(false)
+  isSeasonal           Boolean   @default(false)
+  season               String?
+  validFrom            DateTime? @db.Date
+  validTo              DateTime? @db.Date
+  status               String    @default("ACTIVE")
+  deletedAt            DateTime? @db.Timestamptz(6)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy            String?   @db.Uuid
+  updatedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy            String?   @db.Uuid
+  rowVersion           Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@schema("HumanResources")
+}
+
+model Holidays {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String    @db.Uuid
+  name                 String
+  fromDate             DateTime  @db.Date
+  toDate               DateTime  @db.Date
+  days                 Int?      @default(dbgenerated())
+  holidayType          String
+  isMoonDependent      Boolean   @default(false)
+  hijriNote            String?
+  eligibilityNote      String?
+  appliesToAllBranches Boolean   @default(true)
+  status               String    @default("UPCOMING")
+  source               String    @default("MANUAL")
+  notifyEss            Boolean   @default(true)
+  deletedAt            DateTime? @db.Timestamptz(6)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy            String?   @db.Uuid
+  updatedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy            String?   @db.Uuid
+  rowVersion           Int       @default(0)
+
+  @@schema("HumanResources")
+}
+
+model HolidayBranches {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  holidayId  String   @db.Uuid
+  branchId   String   @db.Uuid
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, holidayId, branchId])
+  @@schema("HumanResources")
+}
+
+// Phase 11: HR policies & people
+model LeaveTypes {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  code                String
+  name                String
+  seedLeaveTypeId     String?   @db.Uuid
+  category            String
+  colour              String    @default("GREEN")
+  isPaid              Boolean   @default(true)
+  daysPerYear         Decimal   @default(0) @db.Decimal(6, 2)
+  unit                String    @default("DAYS")
+  description         String?
+  statuteNote         String?
+  accrualMethod       String    @default("UPFRONT")
+  accrualAmount       Decimal?  @db.Decimal(6, 2)
+  prorateNewJoiners   Boolean   @default(true)
+  carryForwardMode    String    @default("NONE")
+  carryForwardMax     Decimal?  @db.Decimal(6, 2)
+  accumulationCap     Decimal?  @db.Decimal(6, 2)
+  carryExpiryMonths   Int?      @db.SmallInt
+  encashmentMode      String    @default("NOT_ALLOWED")
+  encashMaxDays       Decimal?  @db.Decimal(6, 2)
+  encashBasis         String?
+  deductionBasis      String?
+  sandwichRule        Boolean   @default(false)
+  allowHalfDay        Boolean   @default(true)
+  allowNegative       Boolean   @default(false)
+  blockInPayrollLock  Boolean   @default(false)
+  attachmentRequired  Boolean   @default(false)
+  attachmentAfterDays Decimal?  @db.Decimal(5, 1)
+  backdateDays        Int?      @db.SmallInt
+  minNoticeDays       Int?      @db.SmallInt
+  maxConsecutiveDays  Decimal?  @db.Decimal(6, 2)
+  maxPerMonth         Decimal?  @db.Decimal(6, 2)
+  maxTimesInService   Int?      @db.SmallInt
+  applyWindowDays     Int?      @db.SmallInt
+  compOffExpiryDays   Int?      @db.SmallInt
+  gender              String    @default("ALL")
+  employmentTypes     String[]  @default(["PERMANENT", "CONTRACT"])
+  availableAfter      String    @default("JOINING")
+  probationRule       String    @default("ALLOWED")
+  approvalWorkflow    String    @default("MANAGER_HR")
+  hrApprovalAboveDays Decimal?  @db.Decimal(5, 1)
+  sortOrder           Int       @default(0) @db.SmallInt
+  status              String    @default("ACTIVE")
+  deletedAt           DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model LeaveEligibilityRules {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @db.Uuid
+  leaveTypeId  String   @db.Uuid
+  scope        String
+  branchId     String?  @db.Uuid
+  gradeId      String?  @db.Uuid
+  isIncluded   Boolean  @default(true)
+  daysOverride Decimal? @db.Decimal(6, 2)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, leaveTypeId, scope, branchId, gradeId])
+  @@schema("HumanResources")
+}
+
+model OvertimePolicies {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @unique(map: "overtimePolicyOneActive", where: raw("(\"isActive\" AND (\"deletedAt\" IS NULL))")) @db.Uuid
+  name                String    @default("Standard")
+  statuteNote         String?
+  weekdayMultiplier   Decimal   @default(1.50) @db.Decimal(4, 2)
+  weeklyOffMultiplier Decimal   @default(2.00) @db.Decimal(4, 2)
+  holidayMultiplier   Decimal   @default(2.00) @db.Decimal(4, 2)
+  hourlyRateBasis     String    @default("GROSS_26_8")
+  minMinutes          Int       @default(30) @db.SmallInt
+  dailyCapHours       Decimal?  @db.Decimal(4, 2)
+  monthlyCapHours     Decimal?  @db.Decimal(6, 2)
+  rounding            String    @default("NEAREST_30")
+  eligibleUpToGradeId String?   @db.Uuid
+  requiresPreApproval Boolean   @default(true)
+  allowCompOff        Boolean   @default(true)
+  effectiveFrom       DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  isActive            Boolean   @default(true)
+  deletedAt           DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model BiometricDevices {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  code            String
+  locationLabel   String?
+  brand           String    @default("ZKTECO")
+  model           String
+  serialNo        String
+  branchId        String    @db.Uuid
+  connectionType  String    @default("ADMS_PUSH")
+  ipAddress       String?   @db.Inet
+  port            Int       @default(4370)
+  commKeySecret   String?
+  timezone        String    @default("Asia/Karachi")
+  punchDirection  String    @default("AUTO")
+  syncIntervalMin Int       @default(5) @db.SmallInt
+  firmwareVersion String?
+  status          String    @default("OFFLINE")
+  lastHeartbeatAt DateTime? @db.Timestamptz(6)
+  lastSyncAt      DateTime? @db.Timestamptz(6)
+  usersEnrolled   Int       @default(0)
+  facesEnrolled   Int       @default(0)
+  fingersEnrolled Int       @default(0)
+  isActive        Boolean   @default(true)
+  deletedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, code])
+  @@unique([tenantId, id])
+  @@unique([tenantId, serialNo])
+  @@schema("HumanResources")
+}
+
+model DeviceSyncLogs {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  deviceId   String?  @db.Uuid
+  occurredAt DateTime @default(now()) @db.Timestamptz(6)
+  operation  String
+  records    Int?
+  durationMs Int?
+  result     String
+  message    String?
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model Employees {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String    @db.Uuid
+  code                 String
+  firstName            String
+  lastName             String
+  displayName          String?   @default(dbgenerated())
+  legalName            String?
+  guardianName         String
+  guardianRelation     String    @default("FATHER")
+  cnic                 String
+  cnicIssueDate        DateTime? @db.Date
+  cnicExpiryDate       DateTime? @db.Date
+  dateOfBirth          DateTime  @db.Date
+  gender               String
+  maritalStatus        String?
+  childrenCount        Int?      @db.SmallInt
+  religion             String?
+  bloodGroup           String?
+  nationality          String    @default("PAKISTANI")
+  photoAttachmentId    String?   @db.Uuid
+  mobile               String
+  personalEmail        String?   @db.Citext
+  workEmail            String?   @db.Citext
+  currentAddress       String?
+  permanentAddress     String?
+  city                 String?
+  emergencyContactName String?
+  emergencyRelation    String?
+  emergencyPhone       String?
+  emergencyAltName     String?
+  emergencyAltRelation String?
+  emergencyAltPhone    String?
+  departmentId         String    @db.Uuid
+  designationId        String    @db.Uuid
+  gradeId              String?   @db.Uuid
+  reportingManagerId   String?   @db.Uuid
+  costCentreId         String?   @db.Uuid
+  branchId             String    @db.Uuid
+  shiftId              String?   @db.Uuid
+  weeklyOff            String    @default("SUNDAY")
+  payGroup             String    @default("STAFF")
+  employmentType       String
+  workPattern          String    @default("FULL_TIME")
+  joiningDate          DateTime  @db.Date
+  probationMonths      Int       @default(3) @db.SmallInt
+  confirmationDueOn    DateTime? @db.Date
+  confirmedOn          DateTime? @db.Date
+  contractEndDate      DateTime? @db.Date
+  noticeDays           Int       @default(30) @db.SmallInt
+  biometricId          String?
+  isBooker             Boolean   @default(false)
+  isSalesman           Boolean   @default(false)
+  isDeliveryman        Boolean   @default(false)
+  isSupervisor         Boolean   @default(false)
+  status               String    @default("PROBATION")
+  exitDate             DateTime? @db.Date
+  exitType             String?
+  appUserId            String?   @db.Uuid
+  deletedAt            DateTime? @db.Timestamptz(6)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy            String?   @db.Uuid
+  updatedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy            String?   @db.Uuid
+  rowVersion           Int       @default(0)
+
+  @@unique([tenantId, appUserId])
+  @@unique([tenantId, biometricId])
+  @@unique([tenantId, cnic])
+  @@unique([tenantId, code])
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model EmployeeStatutoryDetails {
+  id                       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                 String    @db.Uuid
+  employeeId               String    @db.Uuid
+  eobiApplicable           Boolean   @default(true)
+  eobiNo                   String?
+  eobiRegisteredOn         DateTime? @db.Date
+  socialSecurityApplicable Boolean   @default(true)
+  socialSecurityScheme     String?
+  socialSecurityNo         String?
+  ntn                      String?
+  atlStatus                String    @default("NON_FILER")
+  pfApplicable             Boolean   @default(false)
+  pfFromDate               DateTime? @db.Date
+  groupInsurance           Boolean   @default(false)
+  overtimeEligible         Boolean   @default(false)
+  createdAt                DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy                String?   @db.Uuid
+  updatedAt                DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy                String?   @db.Uuid
+  rowVersion               Int       @default(0)
+
+  @@unique([tenantId, employeeId])
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model EmployeeBankAccounts {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @db.Uuid
+  employeeId    String   @db.Uuid
+  paymentMode   String   @default("BANK")
+  bankId        String?  @db.Uuid
+  bankName      String?
+  branchName    String?
+  accountTitle  String?
+  iban          String?
+  isPrimary     Boolean  @default(true)
+  effectiveFrom DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  createdBy     String?  @db.Uuid
+  updatedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy     String?  @db.Uuid
+  rowVersion    Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model EmployeeDocuments {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  employeeId       String    @db.Uuid
+  category         String
+  title            String
+  attachmentId     String?   @db.Uuid
+  hrLetterId       String?   @db.Uuid
+  issuedOn         DateTime? @db.Date
+  expiresOn        DateTime? @db.Date
+  isRequired       Boolean   @default(false)
+  renewalFrequency String?
+  dueOn            DateTime? @db.Date
+  status           String    @default("UPLOADED")
+  verifiedByUserId String?   @db.Uuid
+  verifiedAt       DateTime? @db.Timestamptz(6)
+  remarks          String?
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model EmployeePositionHistory {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String   @db.Uuid
+  employeeId          String   @db.Uuid
+  effectiveDate       DateTime @db.Date
+  eventType           String
+  fromDepartmentId    String?  @db.Uuid
+  toDepartmentId      String?  @db.Uuid
+  fromDesignationId   String?  @db.Uuid
+  toDesignationId     String?  @db.Uuid
+  fromGradeId         String?  @db.Uuid
+  toGradeId           String?  @db.Uuid
+  fromBranchId        String?  @db.Uuid
+  toBranchId          String?  @db.Uuid
+  fromManagerId       String?  @db.Uuid
+  toManagerId         String?  @db.Uuid
+  fromEmploymentType  String?
+  toEmploymentType    String?
+  fromStatus          String?
+  toStatus            String?
+  incrementPct        Decimal? @db.Decimal(7, 4)
+  appraisalReference  String?
+  performanceReviewId String?  @db.Uuid
+  hrLetterId          String?  @db.Uuid
+  reason              String?
+  createdAt           DateTime @default(now()) @db.Timestamptz(6)
+  createdBy           String?  @db.Uuid
+  updatedAt           DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy           String?  @db.Uuid
+  rowVersion          Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}
+
+model BranchHrSettings {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String   @db.Uuid
+  branchId             String   @db.Uuid
+  socialSecurityScheme String   @default("NONE")
+  managerEmployeeId    String?  @db.Uuid
+  defaultShiftId       String?  @db.Uuid
+  geofenceLat          Decimal? @db.Decimal(9, 6)
+  geofenceLng          Decimal? @db.Decimal(9, 6)
+  geofenceRadiusM      Int?
+  createdAt            DateTime @default(now()) @db.Timestamptz(6)
+  createdBy            String?  @db.Uuid
+  updatedAt            DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy            String?  @db.Uuid
+  rowVersion           Int      @default(0)
+
+  @@unique([tenantId, branchId])
+  @@unique([tenantId, id])
+  @@schema("HumanResources")
+}

@@ -1,0 +1,56 @@
+/*
+ * Tailwind without Preflight: the template was designed on browser defaults plus its own reset (finsoft.css BASE),
+ * e.g. bold headings and paragraph margins. Preflight would strip those and change the look.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+/* The template's design system (tokens + reset + components). Tailwind utilities still win over it for layout tweaks. */
+@import "./styles/finsoft.css" layer(components);
+@import "./styles/finsoft-polish.css" layer(components);
+@import "./styles/finsoft-company.css" layer(components);
+@import "./styles/finsoft-users.css" layer(components);
+@import "./styles/finsoft-coa.css" layer(components);
+@import "./styles/finsoft-cost-centres.css" layer(components);
+@import "./styles/finsoft-bank-rules.css" layer(components);
+@import "./styles/finsoft-products.css" layer(components);
+@import "./styles/finsoft-stock-ops.css" layer(components);
+
+/* `dark:` follows the app's theme toggle (html[data-theme=dark], as in the template), not the OS setting. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* The template's .list-item is a flex row, but Tailwind also has a "list-item" utility (display: list-item) in the
+   higher utilities layer. This unlayered rule restores the template's layout. */
+.list-item {
+  display: flex;
+}
+
+/* Self-hosted Plus Jakarta Sans and Caveat (next/font) replace the template's Google Fonts link. */
+:root {
+  --font: var(--font-jakarta), Inter, "Segoe UI", system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Segoe Script", cursive;
+}
+
+/* Template tokens as Tailwind theme values, so utilities like bg-surface / text-muted / border-line follow the theme. */
+@theme inline {
+  --font-sans: var(--font);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-lime: var(--lime);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --radius-card: var(--r-card);
+  --radius-input: var(--r-input);
+}

@@ -1,0 +1,162 @@
+/* =====================================================================
+   15-polish.css: screen-specific v2 polish for legacy partials (Agent E)
+   Tokens only. Scoped to .screen[data-route] where possible.
+   ===================================================================== */
+
+/* ---- auth: icon tile sits on its own line under the back link ---- */
+.auth-main .icon-well.lg{display:grid;margin-bottom:2px}
+
+/* ---- plan cards: price is a hero figure ---- */
+.plan-card strong.price{display:block;font-size:30px;font-weight:800;letter-spacing:-.04em;color:var(--ink);line-height:1.1}
+.plan-card strong.price small{font-size:12.5px;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:2px}
+
+/* ---- tables on legacy screens: tighten cell padding as their wrap narrows ----
+   (list = every route owned by 30/40/41/42/50/51/60 partials) */
+.screen:is([data-route="admin/tenants"],[data-route="admin/tenants/new"],[data-route="admin/tenants/view"],[data-route="admin/plans"],[data-route="admin/subscriptions"],[data-route="admin/invoices"],[data-route="admin/features"],[data-route="admin/templates"],[data-route="admin/support"],[data-route="admin/announcements"],[data-route="admin/system"],[data-route="admin/audit"],[data-route="admin/staff"],[data-route="app/today"],[data-route="app/notifications"],[data-route="app/accounting/opening"],[data-route="app/accounting/vouchers"],[data-route="app/accounting/vouchers/new"],[data-route="app/accounting/vouchers/view"],[data-route="app/accounting/recurring"],[data-route="app/bank/accounts"],[data-route="app/bank/transactions"],[data-route="app/bank/cheques"],[data-route="app/bank/cheque-register"],[data-route="app/bank/reconciliation"],[data-route="app/cash/petty"],[data-route="app/cash/expenses"],[data-route="app/sales/quotations"],[data-route="app/sales/orders"],[data-route="app/sales/invoices"],[data-route="app/sales/invoices/new"],[data-route="app/sales/invoices/view"],[data-route="app/sales/credit-notes"],[data-route="app/customers"],[data-route="app/customers/view"],[data-route="app/receivables/receipts"],[data-route="app/receivables/credit"],[data-route="app/purchases/orders"],[data-route="app/purchases/bills"],[data-route="app/purchases/bills/new"],[data-route="app/purchases/debit-notes"],[data-route="app/vendors"],[data-route="app/vendors/view"],[data-route="app/payables/payments"],[data-route="app/inventory/items"],[data-route="app/inventory/adjustments"],[data-route="app/inventory/warehouses"],[data-route="app/assets"],[data-route="app/assets/view"],[data-route="app/assets/depreciation"],[data-route="app/assets/disposals"],[data-route="app/budgets"],[data-route="app/budgets/variance"],[data-route="app/tax/codes"],[data-route="app/tax/sales-tax"],[data-route="app/tax/wht"],[data-route="app/tax/fbr"],[data-route="app/periods"],[data-route="app/periods/close"],[data-route="app/reports/studio"],[data-route="app/hr/employees"],[data-route="app/hr/employees/view"],[data-route="app/hr/employees/new"],[data-route="app/hr/org"],[data-route="app/hr/departments"],[data-route="app/hr/attendance"],[data-route="app/hr/attendance/register"],[data-route="app/hr/attendance/requests"],[data-route="app/hr/shifts"],[data-route="app/hr/holidays"],[data-route="app/hr/overtime"],[data-route="app/hr/devices"],[data-route="app/hr/leave"],[data-route="app/hr/leave/requests"],[data-route="app/hr/leave/balances"],[data-route="app/hr/leave/policies"],[data-route="app/hr/payroll/run"],[data-route="app/hr/payroll/structures"],[data-route="app/hr/payroll/payslips"],[data-route="app/hr/payroll/payslip"],[data-route="app/hr/loans"],[data-route="app/hr/settlement"],[data-route="app/hr/recruitment"],[data-route="app/hr/onboarding"],[data-route="app/hr/offboarding"],[data-route="app/hr/performance"],[data-route="app/hr/training"],[data-route="app/settings"],[data-route="app/settings/users"],[data-route="app/settings/roles"],[data-route="app/settings/approvals"],[data-route="app/settings/templates"],[data-route="app/settings/integrations"],[data-route="app/settings/audit"],[data-route="app/settings/backup"],[data-route="app/profile/security"],[data-route="app/profile/attendance"],[data-route="app/profile/leave"],[data-route="app/profile/payslips"],[data-route="app/profile/loans"],[data-route="app/profile/expenses"],[data-route="app/profile/details"],[data-route="app/profile/directory"],[data-route="app/404"],[data-route="app/unauthorized"],[data-route="app/states"]){
+  & .table-wrap{container-type:inline-size;
+    /* scroll hint: soft edge shadow on the right while more columns are hidden */
+    background:linear-gradient(to left,var(--surface),var(--surface)) right/28px 100% no-repeat local,
+      radial-gradient(farthest-side at 100% 50%,color-mix(in srgb,var(--ink) 16%,transparent),transparent) right/14px 100% no-repeat scroll}
+  /* bleed tables to the card edge inside padded panels (foundation max-width:100% clipped the bleed) */
+  & .panel:not(.flush)>.table-wrap{max-width:none}
+  /* foundation's generic input rule (0,4,1) out-ranks .toolbar input; restore compact toolbar inputs */
+  & .toolbar :is(input[type=date],input[type=month],input[type=number]){width:auto;flex:0 0 auto;min-width:150px;height:40px}
+  /* title + caption pairs inside rows stack like list items */
+  & .row>div>b+small{display:block;margin-top:2px;font-size:12px}
+  /* toolbars sitting directly in a flush card need their own inset */
+  & .panel.flush>.toolbar{padding:14px 16px 0;margin-bottom:14px}
+  /* status badge next to an h1 must not inherit the heading's tight tracking */
+  & .page-head h1 .badge{letter-spacing:0;font-size:12px;vertical-align:middle;margin-left:6px}
+  @container (max-width:1260px){
+    & .tbl th,& .tbl td{padding-left:11px;padding-right:11px}
+    & .tbl th:first-child,& .tbl td:first-child{padding-left:18px}
+    & .tbl th:last-child,& .tbl td:last-child{padding-right:18px}
+  }
+  @container (max-width:860px){
+    & .tbl th,& .tbl td{padding-left:9px;padding-right:9px}
+    & .tbl td{font-size:12.5px}
+  }
+  @container (max-width:420px){
+    & .tbl th,& .tbl td{padding-left:7px;padding-right:7px}
+    & .tbl td{font-size:12px}
+    & .tbl th:first-child,& .tbl td:first-child{padding-left:14px}
+    & .tbl th:last-child,& .tbl td:last-child{padding-right:14px}
+  }
+}
+
+/* ---- wide registers: let the text-heavy column wrap instead of clipping ---- */
+.screen:is([data-route="admin/invoices"]) .tbl td:nth-child(4),
+.screen[data-route="app/accounting/vouchers"] .tbl td:nth-child(5),
+.screen[data-route="app/accounting/vouchers/view"] .tbl td:nth-child(3),
+.screen[data-route="app/bank/accounts"] .tbl td:nth-child(2),
+.screen[data-route="app/bank/transactions"] .tbl td:nth-child(4),
+.screen[data-route="app/bank/reconciliation"] .tbl td:nth-child(3),
+.screen[data-route="app/cash/petty"] .tbl td:is(:nth-child(4),:nth-child(6)),
+.screen[data-route="app/cash/expenses"] .tbl td:nth-child(2),
+.screen[data-route="app/sales/orders"] .tbl td:nth-child(9),
+.screen[data-route="app/sales/invoices"] .tbl td:nth-child(9),
+.screen[data-route="app/sales/credit-notes"] .tbl td:nth-child(5),
+.screen[data-route="app/purchases/bills"] .tbl td:nth-child(10),
+.screen[data-route="app/purchases/debit-notes"] .tbl td:nth-child(5),
+.screen[data-route="app/inventory/adjustments"] .tbl td:nth-child(4),
+.screen[data-route="app/assets"] .tbl td:nth-child(3),
+.screen[data-route="app/assets/disposals"] .tbl td:is(:nth-child(2),:nth-child(5)),
+.screen[data-route="app/budgets"] .tbl td:nth-child(1),
+.screen[data-route="app/tax/codes"] .tbl td:is(:nth-child(2),:nth-child(6),:nth-child(7)),
+.screen[data-route="app/tax/sales-tax"] .tbl td:nth-child(1),
+.screen[data-route="app/hr/attendance/requests"] .tbl td:nth-child(7),
+.screen[data-route="app/hr/leave/requests"] .tbl td:nth-child(7),
+.screen[data-route="app/hr/shifts"] .tbl td:nth-child(6),
+.screen[data-route="app/settings/integrations"] .tbl td:nth-child(1){white-space:normal;min-width:150px;line-height:1.4}
+.screen[data-route="app/settings/integrations"] .tbl td:nth-child(1){word-break:break-all}
+
+/* reconciliation: give the two matching tables more room */
+.screen[data-route="app/bank/reconciliation"] .split{grid-template-columns:minmax(0,1fr) 300px}
+/* matching tables: compact status badges so they never clip */
+.screen[data-route="app/bank/reconciliation"] .grid-2 .tbl :is(th,td){padding-left:8px;padding-right:8px}
+.screen[data-route="app/bank/reconciliation"] .grid-2 .tbl td:last-child .badge{font-size:11px;padding:2px 7px}
+.screen[data-route="app/bank/reconciliation"] .grid-2 .tbl td:nth-child(2){white-space:nowrap}
+@media (max-width:1600px){.screen[data-route="app/bank/reconciliation"]>.split{grid-template-columns:minmax(0,1fr)}.screen[data-route="app/bank/reconciliation"]>.split>:last-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}.screen[data-route="app/bank/reconciliation"]>.split>:last-child>*{margin:0}}
+
+/* ---- printable documents (.paper): title block stays top-right, tighter lines table ---- */
+.paper-head>div:first-child{flex:1 1 320px;min-width:0}
+.paper-head>.right{flex:none;text-align:right;margin-left:auto}
+.paper-head>.right h2{color:var(--primary);font-size:19px}
+.paper .tbl th,.paper .tbl td{padding-left:10px;padding-right:10px}
+
+/* ---- document editors: line grid gets the full width; side cards line up underneath ---- */
+.screen:is([data-route="app/sales/invoices/new"],[data-route="app/purchases/bills/new"])>.split{grid-template-columns:minmax(0,1fr)}
+.screen:is([data-route="app/sales/invoices/new"],[data-route="app/purchases/bills/new"])>.split>.stack:last-child{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+.screen:is([data-route="app/sales/invoices/new"],[data-route="app/purchases/bills/new"])>.split>.stack:last-child>*{margin:0}
+
+/* ---- registers too wide for a side rail: stack the rail underneath as a 2-up row ---- */
+.screen:is([data-route="app/assets"],[data-route="app/cash/petty"],[data-route="app/hr/overtime"])>.split{grid-template-columns:minmax(0,1fr)}
+.screen:is([data-route="app/assets"],[data-route="app/cash/petty"],[data-route="app/hr/overtime"])>.split>.stack:last-child{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.screen:is([data-route="app/assets"],[data-route="app/cash/petty"],[data-route="app/hr/overtime"])>.split>.stack:last-child>*{margin:0}
+
+/* ---- HR: employee cards contact lines, org chart scrolls from its left edge ---- */
+.screen[data-route="app/hr/employees"] .card .small svg{width:14px;height:14px;vertical-align:-2px;margin-right:6px;color:var(--muted-2)}
+.screen[data-route="app/hr/org"] .org{overflow:visible;width:max-content;min-width:100%}
+
+/* ---- hero figures inside panels: big number, muted decimals ---- */
+.dl b.dl-hero{font-size:22px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.panel-head .num-big{font-size:30px;white-space:nowrap}
+
+.screen[data-route="app/hr/training"] .card .progress{margin:12px 0 6px}
+
+/* =====================================================================
+   v3 polish (Agent H, prefix po-): wired interactions & consistency
+   ===================================================================== */
+/* two-mode modals (post / reverse): only the active mode's copy is shown */
+[data-mode="post"] .po-m-rev,[data-mode="reverse"] .po-m-post{display:none !important}
+/* bulk-pay list + allocation summaries */
+.po-paylist{max-height:240px;overflow:auto;padding-right:4px}
+.po-paylist>div{animation:fadeUp .35s var(--ease) both}
+.po-total-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line-2);color:var(--ink-2);font-weight:600}
+.po-total-row .num-big{font-size:28px}
+.po-alloc-sum{padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2)}
+.po-alloc-sum .progress{margin-bottom:10px}
+.po-alloc-sum .dl>div:last-child{border-bottom:0}
+[data-po-alloc] [data-al],[data-po-alloc] [data-un]{font-variant-numeric:tabular-nums;transition:color .25s var(--ease)}
+.po-chq-note{font-size:12px;color:var(--muted);white-space:nowrap}
+/* line editors inside modals */
+.modal .tbl.lines select.cell-input{min-width:170px;width:100%}
+#po-adj-new .tbl.lines td:first-child{width:44%}
+.modal .tbl.lines td:last-child{width:40px}
+/* brand swatches (settings): tokens can't express a tenant's chosen colour, so these are fixed */
+.po-sw{width:34px;height:34px;border-radius:10px;border:2px solid transparent;padding:0;cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.po-sw:hover{transform:translateY(-2px)}
+.po-sw.on{box-shadow:var(--ring);transform:scale(1.06)}
+.po-sw.g{background:#15803D}.po-sw.n{background:#1E3A5F}.po-sw.t{background:#0F766E}.po-sw.i{background:#4338CA}.po-sw.m{background:#9F1239}.po-sw.a{background:#B45309}.po-sw.s{background:#334155}
+/* department filter on budget variance */
+.screen[data-route="app/budgets/variance"] [data-dept]{transition:opacity .3s var(--ease)}
+.screen[data-route="app/budgets/variance"] .kpi-grid[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.po-paylist>div{animation:none}}
+/* line tables with tick boxes (allocation, payment run): tick stays a 16px checkbox, amount inputs keep room */
+.tbl.lines input[type=checkbox]{width:16px;height:16px;min-width:0;padding:0;border:0;background:none;box-shadow:none}
+.tbl.lines td:has(>input[type=checkbox]),.tbl.lines th:empty:first-child{width:44px}
+[data-po-alloc] .tbl.lines .cell-input{min-width:128px}
+/* auth: OTP boxes span the form width and glow when complete */
+.screen[data-route="login/mfa"] .otp{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.screen[data-route="login/mfa"] .otp input{width:100%!important;transition:border-color .2s var(--ease),box-shadow .2s var(--ease),background-color .2s}
+.screen[data-route="login/mfa"] .otp.po-otp-done input{border-color:var(--primary);background:var(--primary-soft);box-shadow:var(--ring)}
+/* admin/invoices: keep the two row actions in view at 1536 */
+.screen[data-route="admin/invoices"] .tbl td:nth-child(4){min-width:110px}
+.screen[data-route="admin/invoices"] .tbl td.actions{white-space:nowrap;width:1%}
+/* ---- wide registers at laptop widths: tighter cells so every column (and the row actions) stays visible ---- */
+@media (max-width:1700px){
+  .screen:is([data-route="app/sales/orders"],[data-route="app/sales/invoices"],[data-route="app/sales/credit-notes"],[data-route="app/purchases/bills"],[data-route="app/assets/disposals"],[data-route="app/hr/shifts"],[data-route="app/tax/sales-tax"]) .tbl:not(.lines) :is(th,td){padding-left:7px;padding-right:7px}
+  .screen:is([data-route="app/sales/orders"],[data-route="app/sales/invoices"],[data-route="app/sales/credit-notes"],[data-route="app/purchases/bills"],[data-route="app/assets/disposals"],[data-route="app/hr/shifts"],[data-route="app/tax/sales-tax"]) .tbl:not(.lines) td{font-size:12.5px}
+  .screen:is([data-route="app/sales/orders"],[data-route="app/sales/invoices"],[data-route="app/sales/credit-notes"],[data-route="app/purchases/bills"],[data-route="app/assets/disposals"],[data-route="app/hr/shifts"]) .tbl:not(.lines) td .badge{white-space:nowrap}
+  .screen[data-route="app/purchases/bills"] .tbl td:nth-child(10),.screen[data-route="app/assets/disposals"] .tbl td:is(:nth-child(2),:nth-child(5)){min-width:120px}
+  .screen[data-route="app/sales/orders"] .tbl th:nth-child(7){width:130px!important}
+  .screen[data-route="app/purchases/bills"] .tbl td:nth-child(9) .badge{white-space:normal;text-align:left;line-height:1.25}
+  .screen[data-route="app/hr/shifts"] .tbl td:nth-child(6){min-width:110px}
+  /* list + side editor screens: the editor drops below the register so the table gets the full width */
+  .screen:is([data-route="app/cash/expenses"],[data-route="app/receivables/receipts"])>.split{grid-template-columns:minmax(0,1fr)}
+  .screen[data-route="app/receivables/receipts"] .po-rc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:start}
+  .screen[data-route="app/receivables/receipts"] .po-rc-r>h4{margin-top:0}
+}
+
+@media (max-width:1100px){.screen[data-route="app/receivables/receipts"] .po-rc{grid-template-columns:minmax(0,1fr)}}
+.screen[data-route="app/assets"] .tbl td:nth-child(3){min-width:190px}

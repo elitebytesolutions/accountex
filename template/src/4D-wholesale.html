@@ -1,0 +1,321 @@
+<!-- ===================== 4D-wholesale.html (Agent C1) =====================
+     Wholesale bulk entry: Quick Wholesale Entry · Bulk Invoicing · Order Bookings · Back-orders
+     Dynamic parts are rendered by 9H-wholesale.js; styles live in 1H-wholesale.css (.ws2-*) -->
+
+<!-- ============================ QUICK WHOLESALE ENTRY ============================ -->
+<section class="screen ws2-screen ws2-entry" data-route="app/wholesale/entry" data-title="Quick Wholesale Entry">
+  <div class="ws2-head">
+    <span class="ws2-head-ic"><i data-lucide="zap"></i></span>
+    <div class="ws2-head-t">
+      <div class="eyebrow">Wholesale / Bulk entry</div>
+      <h1>Quick Wholesale Entry <span class="badge info"><i data-lucide="keyboard"></i>Keyboard-first</span></h1>
+      <p>Carton + piece entry with tier pricing, live schemes and credit control. Built for 40-line bills in under a minute.</p>
+    </div>
+    <div class="ws2-head-btns">
+      <button class="btn secondary" id="ws2-e-wa"><i data-lucide="message-circle"></i>WhatsApp</button>
+      <button class="btn secondary ws2-progress-btn" id="ws2-e-saveprint"><i data-lucide="printer"></i><span>Save &amp; Print</span><em></em></button>
+      <button class="btn primary ws2-progress-btn" id="ws2-e-save"><i data-lucide="check"></i><span>Save</span><kbd class="ws2-kbd-in">Alt S</kbd><em></em></button>
+    </div>
+  </div>
+
+  <div class="ws2-refs" id="ws2-e-refs">
+    <div class="ws2-ref"><span><i data-lucide="file-text"></i></span><div><small>Invoice No</small><b id="ws2-e-no">WS-2026-000231</b></div></div>
+    <div class="ws2-ref"><span><i data-lucide="calendar-days"></i></span><div><small>Date</small><input type="date" class="cell-input ws2-ref-in" value="2026-10-01" aria-label="Invoice date"></div></div>
+    <div class="ws2-ref"><span><i data-lucide="route"></i></span><div><small>Route</small><select class="cell-input ws2-ref-in" id="ws2-e-route" aria-label="Route"></select></div></div>
+    <div class="ws2-ref"><span><i data-lucide="user-round"></i></span><div><small>Salesman / Booker</small><select class="cell-input ws2-ref-in" id="ws2-e-sman" aria-label="Salesman"></select></div></div>
+    <div class="ws2-ref"><span><i data-lucide="warehouse"></i></span><div><small>Warehouse</small><select class="cell-input ws2-ref-in" id="ws2-e-wh" aria-label="Warehouse"></select></div></div>
+  </div>
+
+  <div class="panel ws2-cust" id="ws2-e-cust">
+    <div class="ws2-cust-l">
+      <label class="ws2-find ws2-shopfind"><i data-lucide="store"></i><input class="cell-input" id="ws2-e-shopq" placeholder="Search shop by name, code or area…" autocomplete="off" aria-label="Search shop"><kbd class="kbd">F3</kbd></label>
+      <div class="ws2-shopcard" id="ws2-e-shopcard"></div>
+    </div>
+    <div class="ws2-credit" id="ws2-e-credit">
+      <div class="ws2-credit-top">
+        <div class="ws2-cm"><small>Credit limit</small><b data-c="limit">0</b></div>
+        <div class="ws2-cm"><small>Outstanding</small><b data-c="bal">0</b></div>
+        <div class="ws2-cm"><small>This bill</small><b data-c="bill">0</b></div>
+        <div class="ws2-cm ws2-cm-av"><small>Available</small><b data-c="avail">0</b></div>
+        <div class="ws2-cm"><small>Overdue</small><b data-c="od">0</b></div>
+      </div>
+      <div class="ws2-cbar"><i class="ws2-cb-bal"></i><i class="ws2-cb-bill"></i><em class="ws2-cb-lim"></em></div>
+      <div class="ws2-credit-foot"><span class="ws2-cstate" id="ws2-e-cstate"></span><small id="ws2-e-cnote"></small></div>
+    </div>
+  </div>
+
+  <div class="panel ws2-gridcard" id="ws2-e-gridcard">
+    <div class="ws2-gc-head">
+      <span class="ws2-card-ic"><i data-lucide="boxes"></i></span>
+      <div class="ws2-gc-t"><h3>Bill lines</h3><p>CTN × pack + PCS = total pieces. Schemes add free lines automatically.</p></div>
+      <div class="ws2-tools" id="ws2-e-tools">
+        <button class="btn secondary sm" id="ws2-e-many"><i data-lucide="list-checks"></i>Add many</button>
+        <button class="btn secondary sm" id="ws2-e-paste"><i data-lucide="clipboard-paste"></i>Paste from Excel</button>
+        <button class="btn secondary sm ws2-scan-tg" id="ws2-e-scan" aria-pressed="false"><i data-lucide="scan-barcode"></i>Scan mode</button>
+        <button class="btn secondary sm" id="ws2-e-repeat"><i data-lucide="history"></i>Repeat last</button>
+        <button class="btn secondary sm" id="ws2-e-tpl"><i data-lucide="layout-template"></i>Templates<i data-lucide="chevron-down"></i></button>
+        <span class="ws2-vsep"></span>
+        <button class="btn ghost sm" id="ws2-e-hold"><i data-lucide="pause"></i>Hold</button>
+        <button class="btn ghost sm" id="ws2-e-recall"><i data-lucide="inbox"></i>Recall <em class="ws2-count" id="ws2-e-heldn">1</em></button>
+      </div>
+    </div>
+    <div class="ws2-scanbar" id="ws2-e-scanbar" hidden>
+      <span class="ws2-scan-ic"><i data-lucide="scan-line"></i></span>
+      <input id="ws2-e-scanin" class="cell-input" placeholder="Scan or type a barcode, then Enter…" autocomplete="off" aria-label="Barcode">
+      <span class="ws2-scan-last" id="ws2-e-scanlast"><i data-lucide="barcode"></i>Waiting for first scan</span>
+      <div class="ws2-scan-demo" id="ws2-e-scandemo"></div>
+    </div>
+    <div class="ws2-gwrap">
+      <table class="tbl ws2-grid" data-plain id="ws2-e-grid">
+        <thead><tr>
+          <th class="ws2-c-idx">#</th>
+          <th class="ws2-c-prod">SKU / Product <i class="ws2-req">*</i></th>
+          <th class="num ws2-c-q">CTN</th>
+          <th class="num ws2-c-q">PCS</th>
+          <th class="num ws2-c-tp">Total Pcs</th>
+          <th class="num ws2-c-rate"><div class="ws2-rate-h"><span>Rate</span><span class="ws2-mini-seg" id="ws2-e-ratemode"><button data-m="ctn">CTN</button><button data-m="pcs" class="on">PCS</button></span></div></th>
+          <th class="ws2-c-sch">Scheme</th>
+          <th class="num ws2-c-d">Disc %</th>
+          <th class="num ws2-c-d">GST %</th>
+          <th class="num ws2-c-amt">Amount</th>
+          <th class="ws2-c-del"></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="ws2-gfoot">
+      <button class="btn secondary sm ws2-addrow" id="ws2-e-addrow"><i data-lucide="plus"></i>Add row</button>
+      <button class="ws2-linkbtn" id="ws2-e-clear"><i data-lucide="trash-2"></i>Clear all</button>
+      <span class="spacer"></span>
+      <span class="ws2-keys"><kbd class="kbd">Enter</kbd> next <kbd class="kbd">F2</kbd> search <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">D</kbd> duplicate <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">Del</kbd> delete <kbd class="kbd">Alt</kbd>+<kbd class="kbd">S</kbd> save</span>
+    </div>
+  </div>
+
+  <div class="ws2-totbar" id="ws2-e-tot">
+    <div><small>Items</small><b data-t="items">0</b></div>
+    <div><small>CTN</small><b data-t="ctn">0</b></div>
+    <div><small>PCS</small><b data-t="pcs">0</b></div>
+    <div><small>Gross</small><b data-t="gross">0</b></div>
+    <div class="ws2-t-sch"><small><i data-lucide="gift"></i>Scheme value</small><b data-t="sch">0</b></div>
+    <div><small>Discount</small><b data-t="disc">0</b></div>
+    <div><small>GST</small><b data-t="gst">0</b></div>
+    <div class="ws2-net"><small>Net payable</small><b data-t="net">Rs 0</b></div>
+  </div>
+
+  <!-- Add many -->
+  <div class="overlay" id="ws2-m-many">
+    <div class="modal wide ws2-many">
+      <div class="modal-head"><div><h2>Add many products</h2><p>Tick products and type CTN / PCS. Typing a quantity ticks the row.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="ws2-many-bar">
+        <label class="ws2-find"><i data-lucide="search"></i><input class="cell-input" id="ws2-many-q" placeholder="Filter by name, SKU, brand or category…" autocomplete="off"></label>
+        <div class="chips" id="ws2-many-cats"></div>
+      </div>
+      <div class="ws2-many-list" id="ws2-many-list"></div>
+      <div class="modal-foot"><span class="ws2-many-sum" id="ws2-many-sum">Nothing selected</span><span class="spacer"></span><button class="btn secondary" data-close>Cancel</button><button class="btn primary" id="ws2-many-go" disabled><i data-lucide="plus"></i><span>Add items</span></button></div>
+    </div>
+  </div>
+
+  <!-- Paste from Excel -->
+  <div class="overlay" id="ws2-m-paste">
+    <div class="modal xl ws2-paste">
+      <div class="modal-head"><div><h2>Paste from Excel</h2><p>Columns: SKU or barcode · CTN · PCS · Rate (optional). Tab or comma separated.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="ws2-paste-grid">
+        <div class="ws2-paste-l">
+          <textarea id="ws2-paste-ta" spellcheck="false" placeholder="FD-5001&#9;2&#9;0&#9;135&#10;8964005500026&#9;3&#9;6&#10;…"></textarea>
+          <div class="ws2-paste-acts"><button class="btn secondary sm" id="ws2-paste-sample"><i data-lucide="file-spreadsheet"></i>Load sample</button><button class="ws2-linkbtn" id="ws2-paste-clear"><i data-lucide="eraser"></i>Clear</button></div>
+        </div>
+        <div class="ws2-paste-r">
+          <div class="ws2-paste-stats" id="ws2-paste-stats"></div>
+          <div class="ws2-paste-prev" id="ws2-paste-prev"></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" id="ws2-paste-go" disabled><i data-lucide="arrow-down-to-line"></i><span>Insert lines</span></button></div>
+    </div>
+  </div>
+
+  <!-- Credit block / PIN override -->
+  <div class="overlay" id="ws2-m-credit">
+    <div class="modal ws2-crmodal">
+      <div class="ws2-cr-hero">
+        <span class="ws2-cr-ic"><i data-lucide="shield-alert"></i></span>
+        <div><h2>Credit limit exceeded</h2><p id="ws2-cr-sub">This bill takes the shop over its limit.</p></div>
+        <button class="x" data-close aria-label="Close"><i data-lucide="x"></i></button>
+      </div>
+      <div class="ws2-cr-dl" id="ws2-cr-dl"></div>
+      <div class="ws2-cr-pin">
+        <label for="ws2-cr-pin"><i data-lucide="key-round"></i>Manager PIN to override</label>
+        <div class="ws2-pinbox"><input id="ws2-cr-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Manager PIN"><span class="ws2-pindots"><i></i><i></i><i></i><i></i></span></div>
+        <small id="ws2-cr-hint">Ask Faisal Qureshi (Operations Head) · demo PIN 1234</small>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" id="ws2-cr-hold"><i data-lucide="pause"></i>Hold bill</button><button class="btn secondary" data-close>Back to bill</button><button class="btn primary" id="ws2-cr-ok"><i data-lucide="unlock"></i>Override</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BULK INVOICING ============================ -->
+<section class="screen ws2-screen ws2-bulk" data-route="app/wholesale/bulk" data-title="Bulk Invoicing">
+  <div class="ws2-head">
+    <span class="ws2-head-ic"><i data-lucide="grid-3x3"></i></span>
+    <div class="ws2-head-t">
+      <div class="eyebrow">Wholesale / Bulk invoicing</div>
+      <h1>Bulk Invoicing</h1>
+      <p>Bill a whole route in one pass: fill a shops × products matrix or push the same items to many shops.</p>
+    </div>
+    <div class="ws2-head-btns">
+      <span class="tagline">a whole route, one go</span>
+    </div>
+  </div>
+
+  <div class="panel ws2-bk-bar">
+    <label class="ws2-fld"><span>Route</span><select id="ws2-b-route"></select></label>
+    <label class="ws2-fld"><span>Invoice date</span><input type="date" id="ws2-b-date" value="2026-10-01"></label>
+    <div class="ws2-bk-route" id="ws2-b-rinfo"></div>
+    <span class="spacer"></span>
+    <div class="seg" id="ws2-b-mode"><button class="active" data-m="matrix"><i data-lucide="grid-3x3"></i>Matrix</button><button data-m="same"><i data-lucide="copy"></i>Same items to many shops</button></div>
+  </div>
+
+  <div class="panel flush ws2-bk-main" id="ws2-b-matrix">
+    <div class="ws2-bk-head">
+      <div><h3>Shops × products <small>(CTN)</small></h3><p>Arrow keys move, Enter goes down, type to overwrite. Cells tint with quantity.</p></div>
+      <span class="spacer"></span>
+      <button class="btn secondary sm" id="ws2-b-suggest"><i data-lucide="sparkles"></i>Fill from last orders</button>
+      <button class="btn ghost sm" id="ws2-b-clear"><i data-lucide="eraser"></i>Clear</button>
+    </div>
+    <div class="ws2-mx-wrap"><table class="ws2-mx" id="ws2-b-mx"></table></div>
+  </div>
+
+  <div class="ws2-same" id="ws2-b-same" hidden>
+    <div class="panel ws2-same-items">
+      <div class="ws2-bk-head ws2-nopad"><div><h3>1 · Items &amp; quantity</h3><p>CTN per shop. Leave blank to skip.</p></div></div>
+      <div class="ws2-same-list" id="ws2-b-sitems"></div>
+    </div>
+    <div class="panel ws2-same-shops">
+      <div class="ws2-bk-head ws2-nopad"><div><h3>2 · Shops on route</h3><p id="ws2-b-shopsub">Tick the shops to bill.</p></div><span class="spacer"></span><label class="ws2-chk"><input type="checkbox" id="ws2-b-all"><span>Select all</span></label></div>
+      <div class="ws2-same-shoplist" id="ws2-b-sshops"></div>
+    </div>
+    <div class="panel ws2-same-prev">
+      <div class="ws2-bk-head ws2-nopad"><div><h3>3 · Preview</h3><p>Per-shop totals with tier pricing and GST.</p></div></div>
+      <div id="ws2-b-sprev"></div>
+    </div>
+  </div>
+
+  <div class="ws2-genbar" id="ws2-b-genbar">
+    <div><small>Shops billed</small><b id="ws2-b-gn">0</b></div>
+    <div><small>Cartons</small><b id="ws2-b-gc">0</b></div>
+    <div><small>Credit warnings</small><b id="ws2-b-gw">0</b></div>
+    <div class="ws2-genbar-v"><small>Total value</small><b id="ws2-b-gv">Rs 0</b></div>
+    <button class="btn lime lg" id="ws2-b-gen"><i data-lucide="files"></i><span>Generate 0 invoices</span></button>
+  </div>
+
+  <div class="overlay" id="ws2-m-gen">
+    <div class="modal wide ws2-genmodal">
+      <div class="modal-head"><div><h2 id="ws2-gen-title">Generating invoices…</h2><p id="ws2-gen-sub">Posting each invoice with stock and credit checks.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="ws2-gen-prog"><i id="ws2-gen-fill"></i></div>
+      <div class="ws2-gen-list" id="ws2-gen-list"></div>
+      <div class="ws2-gen-sum" id="ws2-gen-sum" hidden></div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Close</button><a class="btn primary" href="#/app/wholesale/load-sheet" id="ws2-gen-load" data-close><i data-lucide="clipboard-list"></i>Build load sheet</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ORDER BOOKINGS ============================ -->
+<section class="screen ws2-screen ws2-book" data-route="app/wholesale/bookings" data-title="Order Bookings">
+  <div class="ws2-head">
+    <span class="ws2-head-ic"><i data-lucide="smartphone"></i></span>
+    <div class="ws2-head-t">
+      <div class="eyebrow">Wholesale / Bookings</div>
+      <h1>Order Bookings <span class="badge good"><span class="ws2-live"></span>Live from booker app</span></h1>
+      <p>Orders taken in the field by bookers. Check stock, then convert to invoices in bulk. Shortages become back-orders.</p>
+    </div>
+    <div class="ws2-head-btns">
+      <a class="btn secondary" href="#/app/wholesale/backorders"><i data-lucide="hourglass"></i>Back-orders</a>
+      <button class="btn secondary" id="ws2-o-sync"><i data-lucide="refresh-cw"></i>Sync app</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid c4" id="ws2-o-kpis"></div>
+
+  <div class="panel flush ws2-o-panel">
+    <div class="ws2-o-filters">
+      <div class="chips" id="ws2-o-status"></div>
+      <span class="spacer"></span>
+      <select id="ws2-o-booker" aria-label="Booker"></select>
+      <select id="ws2-o-route" aria-label="Route"></select>
+      <select id="ws2-o-date" aria-label="Date"><option value="">All dates</option><option value="2026-10-01">Today · 01 Oct</option><option value="2026-09-30">Yesterday · 30 Sep</option></select>
+    </div>
+    <div class="ws2-o-actbar" id="ws2-o-act">
+      <label class="ws2-chk"><input type="checkbox" id="ws2-o-all"><span id="ws2-o-selt">Select all</span></label>
+      <span class="spacer"></span>
+      <label class="switch ws2-sw"><input type="checkbox" id="ws2-o-partial" checked><i></i><span>Allow partial</span></label>
+      <button class="btn secondary sm ws2-progress-btn" id="ws2-o-check" disabled><i data-lucide="package-search"></i><span>Check stock</span><em></em></button>
+      <button class="btn primary sm ws2-progress-btn" id="ws2-o-conv" disabled><i data-lucide="file-check-2"></i><span>Convert to invoices</span><em></em></button>
+    </div>
+    <div class="ws2-o-wrap">
+      <table class="tbl ws2-o-tbl" data-plain id="ws2-o-tbl">
+        <thead><tr><th class="ws2-c-cb"></th><th>Order</th><th>Booker</th><th>Shop</th><th>Route</th><th class="num">Lines</th><th class="num">Amount</th><th>Location</th><th>Stock</th><th>Status</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BACK-ORDERS ============================ -->
+<section class="screen ws2-screen ws2-bo" data-route="app/wholesale/backorders" data-title="Back-orders">
+  <div class="ws2-head">
+    <span class="ws2-head-ic"><i data-lucide="hourglass"></i></span>
+    <div class="ws2-head-t">
+      <div class="eyebrow">Wholesale / Back-orders</div>
+      <h1>Back-orders</h1>
+      <p>Pending quantities from partial deliveries. Allocate as stock arrives, then invoice in one go.</p>
+    </div>
+    <div class="ws2-head-btns">
+      <a class="btn secondary" href="#/app/wholesale/bookings"><i data-lucide="smartphone"></i>Order bookings</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid c5" id="ws2-r-kpis"></div>
+
+  <div class="ws2-bo-grid">
+    <div class="panel flush ws2-bo-main">
+      <div class="ws2-o-filters">
+        <div class="seg" id="ws2-r-view"><button class="active" data-v="item"><i data-lucide="package"></i>By item</button><button data-v="cust"><i data-lucide="store"></i>By customer</button></div>
+        <span class="spacer"></span>
+        <button class="ws2-linkbtn" id="ws2-r-expand"><i data-lucide="chevrons-up-down"></i>Expand all</button>
+      </div>
+      <div class="ws2-o-actbar" id="ws2-r-act">
+        <span class="ws2-r-selt" id="ws2-r-selt">Select lines to invoice or cancel</span>
+        <span class="spacer"></span>
+        <button class="btn ghost sm" id="ws2-r-cancel" disabled><i data-lucide="ban"></i>Cancel lines</button>
+        <button class="btn primary sm ws2-progress-btn" id="ws2-r-conv" disabled><i data-lucide="file-check-2"></i><span>Convert to invoices</span><em></em></button>
+      </div>
+      <div class="ws2-bo-list" id="ws2-r-list"></div>
+    </div>
+    <div class="panel ws2-feed">
+      <div class="ws2-bk-head ws2-nopad"><div><h3>Incoming stock</h3><p>GRN arrivals today</p></div><span class="spacer"></span><span class="badge good"><span class="ws2-live"></span>Live</span></div>
+      <div id="ws2-r-feed"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ws2-m-alloc">
+    <div class="modal wide ws2-allocm">
+      <div class="modal-head"><div><h2 id="ws2-al-title">Allocate arrival</h2><p id="ws2-al-sub">Preview how the stock is shared out.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="ws2-al-bar"><span class="ws2-al-lbl">Policy</span><div class="seg" id="ws2-al-pol"><button class="active" data-p="fefo"><i data-lucide="calendar-clock"></i>FEFO + oldest</button><button data-p="prio"><i data-lucide="crown"></i>Priority tier</button><button data-p="fair"><i data-lucide="scale"></i>Pro-rata</button></div></div>
+      <div id="ws2-al-prev"></div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary ws2-progress-btn" id="ws2-al-go"><i data-lucide="split"></i><span>Allocate</span><em></em></button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ws2-m-cancel">
+    <div class="modal ws2-cancelm">
+      <div class="modal-head"><div><h2>Cancel back-order lines</h2><p id="ws2-cn-sub">The customer will not receive these quantities.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="ws2-cn-reasons" id="ws2-cn-reasons">
+        <label class="ws2-radio"><input type="radio" name="ws2-cn" value="Customer no longer needs it" checked><span>Customer no longer needs it</span></label>
+        <label class="ws2-radio"><input type="radio" name="ws2-cn" value="Product discontinued"><span>Product discontinued</span></label>
+        <label class="ws2-radio"><input type="radio" name="ws2-cn" value="Supplied by another distributor"><span>Supplied by another distributor</span></label>
+        <label class="ws2-radio"><input type="radio" name="ws2-cn" value="Price disagreement"><span>Price disagreement</span></label>
+      </div>
+      <label class="ws2-fld ws2-full"><span>Note (optional)</span><input id="ws2-cn-note" placeholder="e.g. Shopkeeper confirmed on call"></label>
+      <div class="modal-foot"><button class="btn secondary" data-close>Keep lines</button><button class="btn danger solid" id="ws2-cn-go"><i data-lucide="ban"></i>Cancel lines</button></div>
+    </div>
+  </div>
+</section>

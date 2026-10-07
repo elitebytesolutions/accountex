@@ -1,0 +1,22 @@
+<!-- 46-coa.html: engine-rendered shells (src/97-coa.js mounts into them) -->
+<section class="screen" data-route="app/accounting/coa" data-title="Chart of Accounts">
+  <div class="coa" data-coa></div>
+  <div class="overlay" id="coa-mdl-add">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2 data-coa-add-title>Add account</h2><p data-coa-add-sub>Create a ledger account anywhere in the hierarchy</p></div><button class="x" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="modal-body" data-coa-add-body></div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-coa-add-save><i data-lucide="check"></i>Create account</button></div>
+    </div>
+  </div>
+  <div class="overlay" id="coa-mdl-del">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Delete account?</h2><p data-coa-del-sub>This cannot be undone after the undo window.</p></div><button class="x" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="modal-body" data-coa-del-body></div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-coa-del-go><i data-lucide="trash-2"></i>Delete account</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" data-route="app/accounting/ledger" data-title="Account Ledger">
+  <div class="al" data-al></div>
+</section>

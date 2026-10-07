@@ -1,0 +1,375 @@
+<!-- ===================== 43-sales-docs.html (Agent A) =====================
+     Sales Voucher · Sales Returns · Delivery Challans · POS / Counter Sale
+     Dynamic parts are rendered by 93-sales-docs.js; styles live in 13-sales-docs.css (.sd-*) -->
+
+<!-- ============================ SALES VOUCHER ============================ -->
+<section class="screen sd-screen sd-sv" data-route="app/sales/voucher" data-title="Sales Voucher">
+  <div class="sd-head">
+    <span class="sd-head-ic"><i data-lucide="file-text"></i></span>
+    <div class="sd-head-t">
+      <h1>Sales Voucher</h1>
+      <p>Create and record a sales invoice with customer, order and item details.</p>
+    </div>
+    <div class="sd-head-btns">
+      <button class="btn secondary" id="sd-sv-draft"><i data-lucide="file-pen-line"></i>Save Draft</button>
+      <button class="btn primary sd-progress-btn" id="sd-sv-post"><i data-lucide="check"></i><span>Save &amp; Post</span><em></em></button>
+      <button class="btn secondary" id="sd-sv-print"><i data-lucide="printer"></i>Print</button>
+      <button class="btn secondary" id="sd-sv-estimate"><i data-lucide="calculator"></i>Estimate</button>
+      <button class="btn secondary" id="sd-sv-more"><i data-lucide="ellipsis"></i>More<i data-lucide="chevron-down"></i></button>
+    </div>
+  </div>
+
+  <div class="sd-refs">
+    <div class="sd-ref"><span><i data-lucide="file-text"></i></span><div><small>Sale No</small><b id="sd-sv-no">SV-2026-000123</b></div></div>
+    <div class="sd-ref"><span><i data-lucide="calendar-days"></i></span><div><small>Sale Date</small><input type="date" class="cell-input sd-ref-in" value="2026-10-01" aria-label="Sale date"></div></div>
+    <div class="sd-ref"><span><i data-lucide="clipboard-list"></i></span><div><small>Customer PO No</small><input class="cell-input sd-ref-in" value="PO-78956" aria-label="Customer PO number"></div></div>
+    <div class="sd-ref"><span><i data-lucide="calendar-check"></i></span><div><small>PO Date</small><input type="date" class="cell-input sd-ref-in" value="2026-09-29" aria-label="PO date"></div></div>
+    <div class="sd-ref"><span><i data-lucide="receipt-text"></i></span><div><small>Invoice No</small><b id="sd-sv-inv">INV-2026-000147</b></div></div>
+    <div class="sd-ref"><span><i data-lucide="book-open"></i></span><div><small>Bill Book No</small><b>BB-01</b></div></div>
+  </div>
+
+  <div class="sd-sv-cards">
+    <div class="panel sd-card">
+      <div class="sd-card-head">
+        <span class="sd-card-ic"><i data-lucide="user-round"></i></span>
+        <h3>Order &amp; Customer Information</h3>
+        <span class="sd-hint"><i data-lucide="info"></i>Select a customer to auto-fill customer details.</span>
+      </div>
+      <div class="sd-form sd-two">
+        <label><span>Customer / Party <i>*</i></span><select id="sd-sv-cust"></select></label>
+        <label><span>Customer Name</span><input id="sd-sv-cname" readonly></label>
+      </div>
+      <div class="sd-addr" id="sd-sv-addr">
+        <span class="sd-addr-pin"><i data-lucide="map-pin"></i></span>
+        <div class="sd-addr-body">
+          <b>Address</b>
+          <p id="sd-sv-addr-t">—</p>
+          <small id="sd-sv-addr-m">—</small>
+        </div>
+        <div class="sd-credit" id="sd-sv-credit">
+          <div class="sd-credit-top"><span>Credit used</span><b id="sd-sv-credit-pct">0%</b></div>
+          <div class="sd-gauge"><i class="sd-g-bal"></i><i class="sd-g-bill"></i></div>
+          <small id="sd-sv-credit-t">—</small>
+        </div>
+      </div>
+      <div class="sd-form sd-two-eq">
+        <label><span>Area</span><select id="sd-sv-area"></select></label>
+        <label><span>City</span><select id="sd-sv-city"><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select></label>
+      </div>
+    </div>
+
+    <div class="panel sd-card">
+      <div class="sd-card-head">
+        <span class="sd-card-ic"><i data-lucide="truck"></i></span>
+        <h3>Fulfillment &amp; Sales Team</h3>
+        <span class="sd-hint plain"><i data-lucide="users"></i>Commission follows the salesman</span>
+      </div>
+      <div class="sd-form sd-three" id="sd-sv-team">
+        <label><span>Booker Name</span><select data-team="bookers"></select></label>
+        <label><span>Deliveryman</span><select data-team="deliverymen"></select></label>
+        <label><span>Salesman</span><select data-team="salesmen"></select></label>
+        <label><span>Supervisor</span><select data-team="supervisors"></select></label>
+        <label><span>Sale Type</span><select id="sd-sv-type"><option>Regular</option><option>Wholesale</option><option>Retail</option><option>Distributor</option></select></label>
+        <label><span>Payment Terms</span><select><option>Net 30</option><option>Net 15</option><option>Cash on delivery</option><option>Advance</option></select></label>
+        <label><span>Place / Warehouse</span><select id="sd-sv-wh"></select></label>
+        <label class="sd-span2"><span>Remarks</span><input value="Deliver before 2 PM — loading bay 3."></label>
+      </div>
+      <div class="sd-ful-foot">
+        <div><small>Delivery slot</small><div class="seg sd-seg-sm"><button class="active">Morning</button><button>Afternoon</button><button>Evening</button></div></div>
+        <div class="sd-ful-pills"><span class="pill"><i data-lucide="truck"></i>LES-4471</span><span class="pill"><i data-lucide="route"></i>Route <b>LHR-Central 03</b></span><span class="pill"><i data-lucide="clock"></i>ETA <b>2 Oct, 11:00</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel sd-card sd-items">
+    <div class="sd-card-head">
+      <span class="sd-card-ic"><i data-lucide="package"></i></span>
+      <h3>Item Entry</h3>
+      <p class="sd-sub">Select a product to auto-fill pack, batch, rate and tax details.</p>
+      <div class="sd-tools">
+        <label class="sd-find"><i data-lucide="search"></i><input class="cell-input" id="sd-sv-search" placeholder="Search product by name, SKU or barcode…" autocomplete="off"><kbd class="kbd">F2</kbd></label>
+        <button class="btn primary sm" id="sd-sv-findbtn"><i data-lucide="search"></i>Find Product</button>
+        <button class="btn secondary sm" id="sd-sv-addprod"><i data-lucide="plus"></i>Add Product</button>
+        <button class="btn secondary sm" id="sd-sv-change"><i data-lucide="refresh-cw"></i>Product Change</button>
+        <button class="btn secondary sm" id="sd-sv-newprod"><i data-lucide="plus"></i>New Product</button>
+      </div>
+    </div>
+    <div class="table-wrap sd-grid-wrap">
+      <table class="tbl lines sd-grid" data-plain id="sd-sv-grid">
+        <thead><tr>
+          <th class="sd-c-idx">#</th><th>Product Name <i class="sd-req">*</i></th><th>Pack</th><th>Batch / Expiry</th>
+          <th class="num">Qty</th><th class="num">Bonus</th><th class="num">Sale Rate</th><th class="num">Gross</th>
+          <th class="num">Disc %</th><th class="num">GST %</th><th class="num">Net Rate</th><th class="num">Net Amount</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="sd-grid-foot">
+      <button class="btn secondary sm sd-addrow" id="sd-sv-addrow"><i data-lucide="plus"></i>Add Row</button>
+      <button class="sd-linkbtn" id="sd-sv-clear"><i data-lucide="trash-2"></i>Clear All Items</button>
+      <span class="sd-vsep"></span>
+      <button class="btn ghost sm" id="sd-sv-hold"><i data-lucide="pause"></i>Hold</button>
+      <button class="btn ghost sm" id="sd-sv-recall"><i data-lucide="history"></i>Held <em class="sd-count" id="sd-sv-heldn">1</em></button>
+      <span class="spacer"></span>
+      <span class="sd-keys"><kbd class="kbd">Enter</kbd> next cell <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">Enter</kbd> add row <kbd class="kbd">F2</kbd> search</span>
+    </div>
+  </div>
+
+  <div class="sd-totbar" id="sd-sv-tot">
+    <div><span><i data-lucide="box"></i></span><div><small>Total Items</small><b data-t="items">0</b></div></div>
+    <div><span><i data-lucide="layers"></i></span><div><small>Total Qty</small><b data-t="qty">0</b></div></div>
+    <div><span><i data-lucide="calculator"></i></span><div><small>Gross Amount</small><b data-t="gross">0.00</b></div></div>
+    <div><span><i data-lucide="tag"></i></span><div><small>Discount</small><b data-t="disc">0.00</b></div></div>
+    <div><span><i data-lucide="percent"></i></span><div><small>GST Amount</small><b data-t="gst">0.00</b></div></div>
+    <div class="sd-net">
+      <span><i data-lucide="wallet"></i></span>
+      <div><small>Net Amount</small><b data-t="net">0.00</b></div>
+      <button class="btn sm sd-pay-btn sd-progress-btn" id="sd-sv-paybtn"><i data-lucide="hand-coins"></i><span>Receive</span><em></em></button>
+    </div>
+  </div>
+
+  <!-- Receive Payment modal -->
+  <div class="overlay" id="sd-sv-pay">
+    <div class="modal wide sd-paymodal">
+      <div class="modal-head"><div><h2>Receive Payment</h2><p>Split the bill across tenders. Remaining updates as you type.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="sd-pay-sum">
+        <div><small>Net payable</small><b id="sd-pay-net">Rs 0</b></div>
+        <div><small>Received</small><b id="sd-pay-paid">Rs 0</b></div>
+        <div class="sd-pay-rem"><small>Remaining</small><b id="sd-pay-rem">Rs 0</b></div>
+      </div>
+      <div class="sd-pay-bar"><i id="sd-pay-fill"></i></div>
+      <div class="sd-pay-rows" id="sd-pay-rows"></div>
+      <div class="sd-pay-cash">
+        <label><span>Cash tendered by customer</span><input id="sd-pay-tender" class="cell-input num" inputmode="decimal" placeholder="0"></label>
+        <div class="sd-change"><small>Change due</small><b id="sd-pay-change">Rs 0</b></div>
+      </div>
+      <div class="banner warn sd-pay-warn" id="sd-pay-warn" hidden><i data-lucide="triangle-alert"></i><div><b>Credit limit</b><p id="sd-pay-warn-t"></p></div></div>
+      <div class="modal-foot">
+        <button class="btn secondary" data-close>Cancel</button>
+        <button class="btn primary" id="sd-pay-ok"><i data-lucide="check"></i>Confirm &amp; Post</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SALES RETURNS ============================ -->
+<section class="screen sd-screen sd-sr" data-route="app/sales/returns" data-title="Sales Returns">
+  <div class="sd-head">
+    <span class="sd-head-ic"><i data-lucide="undo-2"></i></span>
+    <div class="sd-head-t">
+      <h1><span id="sd-sr-title">Sales Return - SR-000012</span> <span class="badge warn dot" id="sd-sr-state">Draft</span></h1>
+      <p>Create a sales return against an invoice.</p>
+    </div>
+    <div class="sd-head-btns">
+      <button class="btn secondary" id="sd-sr-cancel"><i data-lucide="x"></i>Cancel</button>
+      <button class="btn secondary" id="sd-sr-apply"><i data-lucide="file-input"></i>Apply From Invoice</button>
+      <button class="btn secondary" id="sd-sr-clear"><i data-lucide="eraser"></i>Clear Rows</button>
+      <button class="btn primary sd-progress-btn" id="sd-sr-save"><i data-lucide="check"></i><span>Save Return</span><em></em></button>
+      <button class="btn secondary icon" id="sd-sr-more" aria-label="More"><i data-lucide="ellipsis-vertical"></i></button>
+    </div>
+  </div>
+
+  <div class="panel sd-card sd-sr-search" id="sd-sr-strip">
+    <div class="sd-sr-sh">
+      <span class="sd-card-ic soft"><i data-lucide="file-search"></i></span>
+      <div><b>Search Invoice</b><p>Load customer and items from an invoice. Try INV-2026-000146 or INV-2026-000139.</p></div>
+    </div>
+    <label class="sd-sr-inv"><small>Invoice Number</small><input class="cell-input" id="sd-sr-inv" list="sd-sr-invlist" value="INV-2026-000146" autocomplete="off"><button class="sd-x" id="sd-sr-invx" aria-label="Clear"><i data-lucide="x"></i></button></label>
+    <datalist id="sd-sr-invlist"><option value="INV-2026-000146"><option value="INV-2026-000139"><option value="INV-2026-000121"></datalist>
+    <div class="sd-sr-tile"><i data-lucide="calendar-days"></i><div><small>Invoice Date</small><b data-inv="date">—</b></div></div>
+    <div class="sd-sr-tile"><i data-lucide="user-round"></i><div><small>Customer</small><b data-inv="cust">—</b></div></div>
+    <div class="sd-sr-tile"><i data-lucide="receipt-text"></i><div><small>Invoice Amount</small><b data-inv="amt">—</b></div></div>
+    <a class="btn secondary sd-sr-view" href="#/app/sales/invoices/view"><span>View Invoice</span><i data-lucide="external-link"></i></a>
+  </div>
+
+  <div class="sd-sr-cards" id="sd-sr-cards">
+    <div class="panel sd-card">
+      <div class="sd-card-head"><span class="sd-card-ic soft"><i data-lucide="clipboard-list"></i></span><div><h3>Return Information</h3><p class="sd-sub">Basic details for this sales return</p></div></div>
+      <div class="sd-form sd-two-eq">
+        <label><span>Return Date</span><input type="date" value="2026-10-01"></label>
+        <label><span>Return Type</span><select><option>Against invoice</option><option>Without invoice</option><option>Replacement</option></select></label>
+        <label><span>Return #</span><input id="sd-sr-no" value="SR-000012" readonly></label>
+        <label><span>Invoice #</span><input id="sd-sr-invno" value="—" readonly></label>
+        <label class="sd-span3 sd-remarks"><span>Remarks</span><textarea id="sd-sr-rem" rows="2" maxlength="500">Expired and damaged items returned by customer.</textarea><small id="sd-sr-remn">0/500</small></label>
+      </div>
+    </div>
+    <div class="panel sd-card">
+      <div class="sd-card-head"><span class="sd-card-ic soft"><i data-lucide="user-round"></i></span><h3>Customer Details</h3><a class="btn secondary sm sd-ml" href="#/app/customers/view">View Customer<i data-lucide="external-link"></i></a></div>
+      <div class="sd-cust" id="sd-sr-cust">
+        <span class="sd-cust-av"><i data-lucide="store"></i></span>
+        <div><b data-c="name">—</b><p><i data-lucide="map-pin"></i><span data-c="addr">—</span></p><p><i data-lucide="phone"></i><span data-c="phone">—</span></p><p><i data-lucide="mail"></i><span data-c="mail">—</span></p></div>
+      </div>
+      <div class="sd-form sd-two-eq sd-cust-team">
+        <label><span><i data-lucide="user-check"></i>Booker</span><select id="sd-sr-booker"></select></label>
+        <label><span><i data-lucide="truck"></i>Deliveryman</span><select id="sd-sr-dman"></select></label>
+      </div>
+    </div>
+    <div class="panel sd-card">
+      <div class="sd-card-head"><span class="sd-card-ic soft"><i data-lucide="chart-pie"></i></span><h3>Summary</h3></div>
+      <div class="sd-sr-mini">
+        <div><i data-lucide="box"></i><b data-s="items">0</b><small>Total Items</small></div>
+        <div><i data-lucide="layers"></i><b data-s="qty">0</b><small>Total Quantity</small></div>
+        <div><i data-lucide="tag"></i><b data-s="disc">Rs 0</b><small>Total Discount</small></div>
+      </div>
+      <div class="sd-sr-total"><span><i data-lucide="coins"></i></span><div><b>Total Amount</b><small>Net return amount (incl. GST)</small></div><strong data-s="total">Rs 0</strong></div>
+    </div>
+  </div>
+
+  <div class="panel sd-card sd-items">
+    <div class="sd-card-head"><span class="sd-card-ic soft"><i data-lucide="package"></i></span><div><h3>Return Items</h3><p class="sd-sub">Select items to return from the invoice. Quantity cannot exceed the quantity sold.</p></div>
+      <div class="sd-tools"><span class="pill" id="sd-sr-errs" hidden><i data-lucide="circle-alert"></i><b>0</b> line needs attention</span></div>
+    </div>
+    <div class="table-wrap sd-grid-wrap" id="sd-sr-gridwrap">
+      <table class="tbl lines sd-grid sd-srgrid" data-plain id="sd-sr-grid">
+        <thead><tr>
+          <th class="sd-c-idx">#</th><th>Product Name</th><th>Pack</th><th>Batch / Expiry</th><th class="num">Rate</th><th class="num">Sold</th><th class="num">Return Qty</th>
+          <th class="num">% Disc</th><th class="num">Discount</th><th class="num">Amount</th><th>Reason</th><th>Disposition</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+        <tfoot><tr><td colspan="6" class="right">Total Quantity</td><td class="num" data-f="qty">0</td><td class="right">Discount</td><td class="num" data-f="disc">0.00</td><td class="num" data-f="amt">0.00</td><td colspan="3"></td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel flush sd-card">
+    <div class="panel-head">
+      <div class="sd-card-head sd-nomb"><span class="sd-card-ic soft"><i data-lucide="history"></i></span><div><h3>Previous Sales Returns</h3><p class="sd-sub">View and manage all sales return documents</p></div></div>
+      <div class="panel-actions">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search return #, invoice # or customer…"></label>
+        <span class="pill"><i data-lucide="calendar-range"></i>01 Sep – 30 Sep 2026</span>
+        <select aria-label="Status"><option>All Status</option><option>Draft</option><option>Posted</option><option>Cancelled</option></select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="tbl" id="sd-sr-prev">
+        <thead><tr><th>#</th><th>Return #</th><th>Invoice #</th><th>Date</th><th>Customer</th><th>Booker</th><th>Deliveryman</th><th class="num">Items</th><th class="num">Amount (Rs)</th><th>Status</th><th data-nosort></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ DELIVERY CHALLANS ============================ -->
+<section class="screen sd-screen sd-dc" data-route="app/sales/challans" data-title="Delivery Challans">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="truck"></i>Sales / Fulfilment</div>
+      <h1>Delivery Challans</h1>
+      <p>Dispatch goods against sales orders, track them to the customer's door and convert delivered challans into invoices.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">on the road, on time</span>
+      <button class="btn secondary"><i data-lucide="printer"></i>Print run sheet</button>
+      <button class="btn primary" id="sd-dc-new"><i data-lucide="plus"></i>New Challan</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid" id="sd-dc-kpis"></div>
+
+  <div class="sd-flow" id="sd-dc-flow"></div>
+
+  <div class="panel flush">
+    <div class="panel-head">
+      <div><h3>Challans</h3><p>Click a status in the flow above to filter. Actions advance the challan one step.</p></div>
+      <div class="panel-actions">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search challan, SO, customer, vehicle…"></label>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="tbl" id="sd-dc-tbl">
+        <thead><tr><th>Challan #</th><th>Sales Order</th><th>Customer</th><th class="num">Qty</th><th>Vehicle · Driver</th><th data-nosort>Progress</th><th>Status</th><th data-nosort></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ POS / COUNTER SALE ============================ -->
+<section class="screen sd-screen sd-pos" data-route="app/sales/pos" data-title="POS / Counter Sale">
+  <div class="sd-pos-top">
+    <span class="sd-head-ic sm"><i data-lucide="monitor-smartphone"></i></span>
+    <div class="sd-pos-title"><h1>Counter Sale</h1><p>Lahore HQ · Cashier Sana Javed</p></div>
+    <button class="sd-shift" id="sd-pos-shift"><i class="sd-live"></i><span>Shift open since 09:00 · Counter 1</span><i data-lucide="chevron-down"></i></button>
+    <span class="spacer"></span>
+    <span class="sd-keys sd-pos-keys"><kbd class="kbd">/</kbd> search <kbd class="kbd">F4</kbd> pay <kbd class="kbd">F8</kbd> hold</span>
+    <button class="btn secondary sm" id="sd-pos-recall"><i data-lucide="history"></i>Held <em class="sd-count" id="sd-pos-heldn">0</em></button>
+  </div>
+
+  <div class="sd-pos-body">
+    <div class="sd-pos-left">
+      <div class="sd-pos-bar">
+        <label class="sd-find sd-grow"><i data-lucide="search"></i><input class="cell-input" id="sd-pos-q" placeholder="Search products…" autocomplete="off"><kbd class="kbd">/</kbd></label>
+        <label class="sd-find sd-scan"><i data-lucide="scan-barcode"></i><input class="cell-input" id="sd-pos-scan" placeholder="Scan or type barcode + Enter" inputmode="numeric" autocomplete="off"></label>
+      </div>
+      <div class="sd-cats" id="sd-pos-cats"></div>
+      <div class="sd-tiles" id="sd-pos-tiles"></div>
+    </div>
+
+    <aside class="sd-pos-cart" id="sd-pos-cart">
+      <div class="sd-cart-head">
+        <div class="sd-cart-t"><span class="sd-cart-ic" id="sd-pos-carticon"><i data-lucide="shopping-cart"></i><em id="sd-pos-cartn">0</em></span><div><b>Current sale</b><small id="sd-pos-invno">POS-2026-004812</small></div></div>
+        <button class="btn ghost sm" id="sd-pos-clear"><i data-lucide="trash-2"></i>Clear</button>
+      </div>
+      <label class="sd-cust-pick"><i data-lucide="user-round"></i><select id="sd-pos-cust" aria-label="Customer"></select></label>
+      <div class="sd-cart-lines" id="sd-pos-lines"></div>
+      <div class="sd-cart-tot">
+        <div><span>Subtotal</span><b data-p="sub">Rs 0.00</b></div>
+        <div><span>Line discounts</span><b data-p="disc">Rs 0.00</b></div>
+        <div><span>GST 18%</span><b data-p="gst">Rs 0.00</b></div>
+        <div class="sd-cart-fee"><span>FBR POS service fee</span><b>Rs 1<span class="dec">.00</span></b></div>
+        <div class="sd-cart-grand"><span>Total</span><b data-p="total">Rs 0.00</b></div>
+      </div>
+      <div class="sd-cart-acts">
+        <button class="btn secondary" id="sd-pos-hold"><i data-lucide="pause"></i>Hold <kbd class="kbd">F8</kbd></button>
+        <button class="btn lime lg sd-paybig" id="sd-pos-pay"><i data-lucide="banknote"></i><span>Pay <b data-p="paylbl">Rs 0</b></span><kbd class="kbd">F4</kbd></button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Tender pad -->
+  <div class="overlay" id="sd-pos-tender">
+    <div class="modal sd-tender">
+      <div class="modal-head"><div><h2>Take payment</h2><p>Choose a tender and key in the amount received.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="sd-tmethods" id="sd-pos-methods">
+        <button class="active" data-m="Cash"><i data-lucide="banknote"></i>Cash</button>
+        <button data-m="Card"><i data-lucide="credit-card"></i>Card</button>
+        <button data-m="JazzCash"><i data-lucide="smartphone"></i>JazzCash</button>
+        <button data-m="Easypaisa"><i data-lucide="wallet"></i>Easypaisa</button>
+      </div>
+      <div class="sd-tscreen">
+        <div><small>Total due</small><b id="sd-pos-due">Rs 0</b></div>
+        <div class="sd-tamt"><small>Received</small><b id="sd-pos-amt">0</b></div>
+      </div>
+      <div class="sd-tquick" id="sd-pos-quick">
+        <button data-q="exact">Exact</button><button data-q="500">Rs 500</button><button data-q="1000">Rs 1,000</button><button data-q="5000">Rs 5,000</button>
+      </div>
+      <div class="sd-keypad" id="sd-pos-keypad">
+        <button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><button>00</button><button>0</button><button data-k="back" aria-label="Backspace"><i data-lucide="delete"></i></button>
+      </div>
+      <div class="sd-tchange" id="sd-pos-changebox"><span>Change due</span><b id="sd-pos-change">Rs 0</b></div>
+      <div class="modal-foot">
+        <button class="btn secondary" data-close>Back to cart</button>
+        <button class="btn primary lg" id="sd-pos-complete"><i data-lucide="check"></i>Complete sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Close shift -->
+  <div class="overlay" id="sd-pos-closeshift">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Close shift · Counter 1</h2><p>Count the drawer. Opened 09:00 by Sana Javed with a Rs 10,000 float.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="sd-shift-grid">
+        <div class="table-wrap"><table class="tbl compact" data-plain id="sd-pos-denoms"><thead><tr><th>Denomination</th><th class="num">Count</th><th class="num">Amount</th></tr></thead><tbody></tbody></table></div>
+        <div class="sd-shift-sum">
+          <div><small>Opening float</small><b>Rs 10,000</b></div>
+          <div><small>Cash sales (this shift)</small><b id="sd-shift-sales">Rs 0</b></div>
+          <div><small>Expected in drawer</small><b id="sd-shift-exp">Rs 0</b></div>
+          <div><small>Counted</small><b id="sd-shift-cnt">Rs 0</b></div>
+          <div class="sd-os" id="sd-shift-osbox"><small>Over / Short</small><b id="sd-shift-os">Rs 0</b></div>
+          <div class="sd-mini-list"><span>Card <b id="sd-shift-card">Rs 0</b></span><span>Wallets <b id="sd-shift-wal">Rs 0</b></span><span>Bills <b id="sd-shift-bills">0</b></span></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Keep shift open</button><button class="btn primary" id="sd-shift-ok"><i data-lucide="lock"></i>Close shift &amp; print Z-report</button></div>
+    </div>
+  </div>
+</section>

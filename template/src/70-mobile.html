@@ -1,0 +1,159 @@
+<!-- =====================================================================
+     70-mobile.html — Finsoft Mobile design reference (route: mobile)
+     Live phones + gallery are rendered by 9D-mobile.js. Prefix: mo-
+     ===================================================================== -->
+<section class="screen mo-root" data-route="mobile" data-title="Mobile Apps">
+  <header class="mo-top">
+    <a class="mo-brand" href="#/chooser" aria-label="Finsoft home"><span class="brandmark"><i data-lucide="activity"></i></span><b>Finsoft</b><span class="mo-top-tag">Mobile</span></a>
+    <span class="mo-top-sp"></span>
+    <a class="mo-backlink" href="#/chooser"><i data-lucide="arrow-left"></i><span>Back to portals</span></a>
+    <button class="round-btn theme-btn" data-theme-toggle aria-label="Toggle theme"><i class="ic-sun" data-lucide="sun"></i><i class="ic-moon" data-lucide="moon"></i></button>
+  </header>
+
+  <div class="mo-hero">
+    <div class="mo-hero-l">
+      <span class="mo-kicker"><i></i>Design reference · companion apps</span>
+      <h1>Finsoft <span>Mobile</span></h1>
+      <p>Two native-feeling apps on one ledger. <b>Employees</b> check in, apply for leave, scan receipts and read payslips. <b>Owners</b> see cash, approve with a swipe and chase receivables on WhatsApp.</p>
+      <div class="mo-plat">
+        <span><i data-lucide="apple"></i>iOS 17+</span><span><i data-lucide="smartphone"></i>Android 10+</span><span><i data-lucide="wifi-off"></i>Works offline</span><span><i data-lucide="languages"></i>English · <span lang="ur">اردو</span></span>
+      </div>
+    </div>
+    <div class="mo-hero-r">
+      <div class="mo-mode" id="mo-mode" role="group" aria-label="Choose which app to preview" style="--x:2">
+        <i class="mo-mode-thumb"></i>
+        <button data-mode="emp" aria-pressed="false"><i data-lucide="circle-user"></i>Employee app</button>
+        <button data-mode="own" aria-pressed="false"><i data-lucide="briefcase-business"></i>Owner app</button>
+        <button data-mode="both" class="on" aria-pressed="true"><i data-lucide="columns-2"></i>Both</button>
+      </div>
+      <span class="mo-tagline">your office, in your pocket — even offline</span>
+    </div>
+  </div>
+
+  <div class="mo-stage" id="mo-stage" data-mode="both">
+    <div class="mo-dev" data-dev="emp">
+      <div class="mo-dev-label"><i class="emp"></i><b>Employee app</b><span>Bilal Khan · Sales Executive</span></div>
+      <div class="mo-dev-in"></div>
+      <div class="mo-notes" aria-hidden="true"></div>
+    </div>
+    <div class="mo-dev" data-dev="own">
+      <div class="mo-dev-label"><i class="own"></i><b>Owner app</b><span>Ahmed Raza · CEO</span></div>
+      <div class="mo-dev-in"></div>
+      <div class="mo-notes" aria-hidden="true"></div>
+    </div>
+    <p class="mo-stage-tip"><i data-lucide="mouse-pointer-click"></i>Everything is live: tap, drag the approval cards, swipe inbox rows, pull to refresh.</p>
+  </div>
+
+  <div class="mo-block">
+    <div class="mo-block-h">
+      <div><span class="mo-kicker"><i></i>Screens gallery</span><h2>Twelve key screens</h2><p>Rendered from the same components as the live phones. Click any screen to open it there.</p></div>
+      <span class="mo-legend"><span><i class="emp"></i>Employee</span><span><i class="own"></i>Owner</span></span>
+    </div>
+    <div class="mo-gallery" id="mo-gallery"></div>
+  </div>
+
+  <div class="mo-block">
+    <div class="mo-block-h">
+      <div><span class="mo-kicker"><i></i>Mobile design spec</span><h2>The system behind the apps</h2><p>Same tokens as the web app, tuned for thumbs: bigger type, 44 px targets and spring motion.</p></div>
+    </div>
+    <div class="mo-spec">
+      <section class="mo-sp-card mo-sp-type">
+        <header><span class="mo-sp-ic"><i data-lucide="type"></i></span><b>Type scale</b><small>Plus Jakarta Sans · tabular numbers</small></header>
+        <div class="mo-ts"><span class="t1">Large title</span><code>28 / 34 · 800</code></div>
+        <div class="mo-ts"><span class="t2">Title</span><code>22 / 28 · 800</code></div>
+        <div class="mo-ts"><span class="t3">Headline</span><code>17 / 22 · 700</code></div>
+        <div class="mo-ts"><span class="t4">Body text for reading</span><code>15 / 21 · 500</code></div>
+        <div class="mo-ts"><span class="t5">Callout and list meta</span><code>13.5 / 19 · 500</code></div>
+        <div class="mo-ts"><span class="t6">CAPTION · TAB LABEL</span><code>11.5 / 14 · 700</code></div>
+        <div class="mo-ts num"><span class="t7">Rs 48,215,300<span class="dec">.00</span></span><code>34 · tnum · muted decimals</code></div>
+      </section>
+
+      <section class="mo-sp-card">
+        <header><span class="mo-sp-ic"><i data-lucide="ruler"></i></span><b>Spacing · 4 / 8 grid</b><small>Screen gutter 18 · card padding 14–18</small></header>
+        <div class="mo-spc">
+          <div><i style="width:4px"></i><span>4</span><small>Icon to label</small></div>
+          <div><i style="width:8px"></i><span>8</span><small>Chip gap</small></div>
+          <div><i style="width:12px"></i><span>12</span><small>Tile gap</small></div>
+          <div><i style="width:16px"></i><span>16</span><small>Card padding</small></div>
+          <div><i style="width:24px"></i><span>24</span><small>Section gap</small></div>
+          <div><i style="width:32px"></i><span>32</span><small>Hero spacing</small></div>
+        </div>
+      </section>
+
+      <section class="mo-sp-card">
+        <header><span class="mo-sp-ic"><i data-lucide="pointer"></i></span><b>Tap targets</b><small>≥ 44 × 44 pt iOS · 48 dp Android</small></header>
+        <div class="mo-tt">
+          <div class="mo-tt-demo"><span class="mo-tt-hit"><span class="mo-tt-ic"><i data-lucide="bell"></i></span></span><small>44 hit area<br>24 icon</small></div>
+          <ul>
+            <li><i data-lucide="check"></i>Primary buttons 50 px tall, full width in sheets</li>
+            <li><i data-lucide="check"></i>Tab bar items 71 × 56 px</li>
+            <li><i data-lucide="check"></i>8 px minimum between adjacent targets</li>
+            <li><i data-lucide="check"></i>Pressed state: scale .97 in 120 ms</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mo-sp-card">
+        <header><span class="mo-sp-ic"><i data-lucide="squircle"></i></span><b>Radii</b><small>Concentric with the device corner</small></header>
+        <div class="mo-radii">
+          <div><i style="border-radius:999px"></i><b>Pill</b><small>chips, tags</small></div>
+          <div><i style="border-radius:14px"></i><b>14</b><small>inputs</small></div>
+          <div><i style="border-radius:20px"></i><b>20</b><small>cards, tiles</small></div>
+          <div><i style="border-radius:28px"></i><b>28</b><small>hero, sheets</small></div>
+          <div><i style="border-radius:46px"></i><b>46</b><small>screen</small></div>
+        </div>
+      </section>
+
+      <section class="mo-sp-card">
+        <header><span class="mo-sp-ic"><i data-lucide="route"></i></span><b>Navigation patterns</b><small>Thumb-first, one level of hierarchy</small></header>
+        <ul class="mo-pat">
+          <li><span class="mo-pat-ic"><i data-lucide="panel-bottom"></i></span><div><b>Tab bar · 4 + FAB</b><small>Morphing active pill; FAB opens quick actions</small></div></li>
+          <li><span class="mo-pat-ic"><i data-lucide="arrow-right-left"></i></span><div><b>Push / pop</b><small>iOS slide with parallax and dimmed parent</small></div></li>
+          <li><span class="mo-pat-ic"><i data-lucide="panel-bottom-open"></i></span><div><b>Bottom sheets</b><small>All forms; drag the grabber to dismiss</small></div></li>
+          <li><span class="mo-pat-ic"><i data-lucide="hand"></i></span><div><b>Gestures</b><small>Swipe cards, swipe rows, pull to refresh</small></div></li>
+        </ul>
+      </section>
+
+      <section class="mo-sp-card mo-sp-wide">
+        <header><span class="mo-sp-ic"><i data-lucide="palette"></i></span><b>Colour tokens</b><small>One accent at a time · both themes from the same names</small></header>
+        <div class="mo-sw">
+          <div><i style="background:var(--primary)"></i><b>Forest</b><code>--primary</code><small>Actions, active tab</small></div>
+          <div><i style="background:var(--lime)"></i><b>Lime</b><code>--lime</code><small>FAB, check-in, highlights</small></div>
+          <div><i style="background:var(--mint)"></i><b>Mint</b><code>--mint</code><small>Success, dark-mode primary</small></div>
+          <div><i style="background:var(--ink)"></i><b>Ink</b><code>--ink</code><small>Text, figures</small></div>
+          <div><i style="background:var(--night)"></i><b>Night</b><code>--night</code><small>Hero cards, camera</small></div>
+          <div><i style="background:var(--surface);box-shadow:inset 0 0 0 1px var(--line-2)"></i><b>Surface</b><code>--surface</code><small>Cards, sheets</small></div>
+          <div><i style="background:var(--danger)"></i><b>Danger</b><code>--danger</code><small>Reject, overdue</small></div>
+          <div><i style="background:var(--warn)"></i><b>Warn</b><code>--warn</code><small>Pending, low stock</small></div>
+        </div>
+      </section>
+
+      <section class="mo-sp-card">
+        <header><span class="mo-sp-ic"><i data-lucide="timer"></i></span><b>Motion</b><small>Transform and opacity only</small></header>
+        <div class="mo-mot">
+          <div><span>Tap feedback</span><i style="--w:12%"></i><code>120 ms</code></div>
+          <div><span>Tab change</span><i style="--w:26%"></i><code>260 ms</code></div>
+          <div><span>Skeleton</span><i style="--w:40%"></i><code>400 ms</code></div>
+          <div><span>Tab pill morph</span><i style="--w:42%"></i><code>420 ms</code></div>
+          <div><span>Push / pop</span><i style="--w:46%"></i><code>460 ms</code></div>
+          <div><span>Sheet spring</span><i style="--w:52%"></i><code>520 ms</code></div>
+          <div><span>Snackbar</span><i style="--w:100%"></i><code>4.2 s</code></div>
+        </div>
+      </section>
+
+      <section class="mo-sp-card mo-sp-full">
+        <header><span class="mo-sp-ic"><i data-lucide="accessibility"></i></span><b>Accessibility</b><small>Built in, not bolted on</small></header>
+        <ul class="mo-a11y">
+          <li><b>AA contrast</b> 4.5 : 1 for text in light and dark</li>
+          <li><b>Dynamic Type</b> layouts reflow up to 200%</li>
+          <li><b>Gesture twins</b> every swipe has a button</li>
+          <li><b>Reduced motion</b> swaps slides for crossfades</li>
+          <li><b>اردو RTL</b> strings, Nastaliq-safe line height</li>
+          <li><b>Haptics</b> never the only signal</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <footer class="mo-foot"><span>Finsoft Mobile · design reference for Al-Noor Enterprises (Pvt) Ltd</span><a href="#/chooser"><i data-lucide="arrow-left"></i>Back to portals</a></footer>
+</section>

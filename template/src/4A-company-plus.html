@@ -1,0 +1,156 @@
+<!-- ================= 4A company-plus (Agent D, prefix cp-) =================
+     Bodies are rendered by src/9A-company-plus.js on first enter. -->
+
+<!-- 1. Approvals Inbox -->
+<section class="screen cp-screen" data-route="app/approvals" data-title="Approvals Inbox">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="inbox"></i>Workspace / Approvals</div>
+      <h1>Approvals Inbox</h1>
+      <p>Everything waiting on your sign-off, across vouchers, purchasing, payments, HR and credit control. Oldest and riskiest first.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">clear the deck!</span>
+      <div class="seg" id="cp-ap-view"><button class="active" data-v="cards"><i data-lucide="layout-grid"></i>Cards</button><button data-v="list"><i data-lucide="list"></i>List</button></div>
+      <a class="btn secondary" href="#/app/settings/approvals"><i data-lucide="git-branch"></i>Approval rules</a>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Setup Guide -->
+<section class="screen cp-screen" data-route="app/setup" data-title="Setup Guide">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="rocket"></i>Workspace / Setup Guide</div>
+      <h1>Setup Guide</h1>
+      <p>Nine short steps to get Al-Noor Enterprises fully live on Finsoft: books, bank, tax, team and payroll.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">almost there…</span>
+      <button class="btn secondary" id="cp-su-reset"><i data-lucide="rotate-ccw"></i>Reset demo</button>
+      <a class="btn primary" href="#/app/dashboard"><i data-lucide="layout-dashboard"></i>Go to dashboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Data Import -->
+<section class="screen cp-screen" data-route="app/import" data-title="Data Import">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="file-up"></i>Settings / Data Import</div>
+      <h1>Data Import</h1>
+      <p>Bring customers, vendors, items, balances, employees and your chart of accounts in from Excel, Tally, QuickBooks or Peachtree exports.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" id="cp-im-history"><i data-lucide="history"></i>Import history</button>
+      <button class="btn secondary" id="cp-im-tpl"><i data-lucide="download"></i>Download templates</button>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Recurring Invoices -->
+<section class="screen cp-screen" data-route="app/sales/recurring" data-title="Recurring Invoices">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="repeat"></i>Sales / Recurring Invoices</div>
+      <h1>Recurring Invoices</h1>
+      <p>Retainers, AMCs, rentals and standing orders that raise themselves on schedule and go out by email or WhatsApp.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">set it &amp; forget it</span>
+      <a class="btn secondary" href="#/app/sales/invoices"><i data-lucide="receipt-text"></i>Generated invoices</a>
+      <button class="btn primary" id="cp-ri-new"><i data-lucide="plus"></i>New profile</button>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Price Lists & Schemes -->
+<section class="screen cp-screen" data-route="app/sales/price-lists" data-title="Price Lists &amp; Schemes">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="tags"></i>Sales / Price Lists &amp; Schemes</div>
+      <h1>Price Lists &amp; Schemes</h1>
+      <p>Channel pricing for retail, wholesale, distributors and corporates, trade schemes and quantity-break slabs, all with live margin checks.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" id="cp-pl-export"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" id="cp-pl-new"><i data-lucide="plus"></i>New scheme</button>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Payment Reminders -->
+<section class="screen cp-screen" data-route="app/receivables/reminders" data-title="Payment Reminders">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="bell-ring"></i>Receivables / Payment Reminders</div>
+      <h1>Payment Reminders</h1>
+      <p>Polite, persistent and automatic. Nudge customers on WhatsApp, SMS and email before and after the due date, in English or Urdu.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">get paid faster</span>
+      <a class="btn secondary" href="#/app/receivables/ageing"><i data-lucide="hourglass"></i>AR ageing</a>
+      <button class="btn primary" id="cp-rm-runall"><i data-lucide="send"></i>Send due reminders</button>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Cost Centres & Projects -->
+<section class="screen cp-screen" data-route="app/accounting/cost-centres" data-title="Cost Centres &amp; Projects">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="folder-kanban"></i>Accounting / Cost Centres &amp; Projects</div>
+      <h1>Cost Centres &amp; Projects</h1>
+      <p>Track spend by branch and department, run project P&amp;Ls, and let allocation rules split shared costs automatically.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/budgets/variance"><i data-lucide="chart-column"></i>Budget variance</a>
+      <button class="btn primary" id="cp-cc-new"><i data-lucide="plus"></i>New centre / project</button>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Landed Cost -->
+<section class="screen cp-screen" data-route="app/purchases/landed-cost" data-title="Landed Cost">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="ship"></i>Purchases / Landed Cost</div>
+      <h1>Landed Cost</h1>
+      <p>Spread customs duty, freight, clearing and insurance across imported items so stock carries its true cost. Import sales tax and Section 148 tax stay claimable.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/purchases/grn"><i data-lucide="package-check"></i>GRNs</a>
+      <button class="btn primary" id="cp-lc-post"><i data-lucide="stamp"></i>Post landed cost</button>
+    </div>
+  </div>
+</section>
+
+<!-- 9. Bank Rules & Import -->
+<section class="screen cp-screen" data-route="app/bank/rules" data-title="Bank Rules &amp; Import">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="wand-sparkles"></i>Bank / Rules &amp; Import</div>
+      <h1>Bank Rules &amp; Import</h1>
+      <p>Import statements, let rules categorise the routine lines, and match Raast and IBFT credits to open invoices by reference.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/bank/reconciliation"><i data-lucide="git-compare-arrows"></i>Reconciliation</a>
+      <button class="btn primary" id="cp-br-new"><i data-lucide="plus"></i>New rule</button>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Activity Feed -->
+<section class="screen cp-screen" data-route="app/activity" data-title="Activity Feed">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><i data-lucide="messages-square"></i>Workspace / Activity</div>
+      <h1>Activity Feed</h1>
+      <p>What's happening across Al-Noor: documents, approvals and conversations, with @mentions that land in the right inbox.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">the team, live</span>
+      <a class="btn secondary" href="#/app/notifications"><i data-lucide="bell"></i>Notifications</a>
+    </div>
+  </div>
+</section>

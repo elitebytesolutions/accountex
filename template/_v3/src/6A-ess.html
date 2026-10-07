@@ -1,0 +1,241 @@
+<!-- ===================== 6A-ess.html (Agent F): Employee Self-Service screens ===================== -->
+<!-- ESS · My Attendance -->
+<section class="screen" data-route="ess/attendance" data-title="My Attendance">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Work / Attendance</div>
+      <h1>My Attendance</h1>
+      <p>General shift 09:00 – 18:00 · selfie + geofence check-in · corrections go to Zainab Raza.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="export"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" type="button" data-act="correct"><i data-lucide="calendar-clock"></i>Request correction</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · My Leave -->
+<section class="screen" data-route="ess/leave" data-title="My Leave">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Work / Leave</div>
+      <h1>My Leave</h1>
+      <p>Balances for 2026 · approvals go to Zainab Raza, then HR (Ayesha Noor) for requests over 3 days.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="policy"><i data-lucide="book-open"></i>Leave policy</button>
+      <button class="btn primary" type="button" data-act="apply" id="es-lv-apply"><i data-lucide="plane"></i>Apply leave</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Payslips -->
+<section class="screen" data-route="ess/payslips" data-title="My Payslips">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Payslips</div>
+      <h1>My Payslips</h1>
+      <p>Monthly payslips, year-to-date earnings and income tax certificates u/s 149.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="cert"><i data-lucide="file-badge"></i>Tax certificate</button>
+      <button class="btn primary" type="button" data-act="pdf"><i data-lucide="download"></i>Download PDF</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Tax declarations -->
+<section class="screen" data-route="ess/tax" data-title="Tax Declarations">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Tax</div>
+      <h1>Tax Declarations</h1>
+      <p>FY 2026-27 projection under the FBR salaried slabs. Declare Zakat, pension and donations to cut your monthly withholding.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/payslips"><i data-lucide="file-text"></i>Payslips</a>
+      <button class="btn primary" type="button" data-act="add"><i data-lucide="plus"></i>Add declaration</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Loans & advances -->
+<section class="screen" data-route="ess/loans" data-title="Loans & Advances">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Loans &amp; Advances</div>
+      <h1>Loans &amp; Advances</h1>
+      <p>Interest-free staff loans and salary advances, recovered through monthly payroll.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="policy"><i data-lucide="book-open"></i>Loan policy</button>
+      <button class="btn primary" type="button" data-act="request"><i data-lucide="hand-coins"></i>Request advance</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Expense claims -->
+<section class="screen" data-route="ess/expenses" data-title="Expense Claims">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Expenses</div>
+      <h1>Expense Claims</h1>
+      <p>Snap a receipt and we read it for you. Approved claims are reimbursed with payroll or by IBFT.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="policy"><i data-lucide="book-open"></i>Policy limits</button>
+      <button class="btn primary" type="button" data-act="new"><i data-lucide="scan-line"></i>New claim</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · My Profile -->
+<section class="screen" data-route="ess/profile" data-title="My Profile">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / My Profile</div>
+      <h1>My Profile</h1>
+      <p>Your personal, job and payroll details. Changes go to HR for approval before they take effect.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/requests"><i data-lucide="file-badge"></i>Request a letter</a>
+      <button class="btn primary" type="button" data-act="change-any"><i data-lucide="pencil-line"></i>Request change</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Directory -->
+<section class="screen" data-route="ess/company" data-title="Directory">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Directory</div>
+      <h1>People Directory</h1>
+      <p>Find colleagues across Lahore HQ, Karachi, Islamabad and Faisalabad. Tap to call, WhatsApp or email.</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg" id="es-dr-view" role="tablist" aria-label="View">
+        <button type="button" class="active" data-act="view" data-v="grid"><i data-lucide="layout-grid"></i>People</button>
+        <button type="button" data-act="view" data-v="org"><i data-lucide="network"></i>Org chart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · My Team (manager view) -->
+<section class="screen" data-route="ess/team" data-title="My Team">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / My Team</div>
+      <h1>My Team</h1>
+      <p>4 field staff report to you · Lahore HQ sales territory. Swipe right to approve, left to reject (or use ← →).</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/shifts"><i data-lucide="calendar-clock"></i>Team roster</a>
+      <button class="btn primary" type="button" data-act="bulk" id="es-tm-bulk"><i data-lucide="check-check"></i>Approve all</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Letters & Requests -->
+<section class="screen" data-route="ess/requests" data-title="Letters & Requests">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Letters &amp; Requests</div>
+      <h1>Letters &amp; Requests</h1>
+      <p>Self-serve HR letters on company letterhead. Most are signed within one working day and verifiable by QR.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/helpdesk"><i data-lucide="life-buoy"></i>Ask HR</a>
+      <button class="btn primary" type="button" data-act="new" data-t="salary"><i data-lucide="plus"></i>New request</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Helpdesk -->
+<section class="screen" data-route="ess/helpdesk" data-title="Helpdesk">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Helpdesk</div>
+      <h1>Helpdesk</h1>
+      <p>Ask HR, Payroll, IT or Admin. Every ticket has a response SLA, and you can follow it live.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/requests"><i data-lucide="file-badge"></i>Letters &amp; requests</a>
+      <button class="btn primary" type="button" data-act="new"><i data-lucide="plus"></i>New ticket</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Goals & Reviews -->
+<section class="screen" data-route="ess/goals" data-title="Goals &amp; Reviews">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Growth</div>
+      <h1>Goals &amp; Reviews</h1>
+      <p>FY 2026-27 H1 objectives, your self-assessment and 1:1 notes with Zainab Raza.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="checkin"><i data-lucide="message-square-plus"></i>Add 1:1 note</button>
+      <button class="btn primary" type="button" data-act="toreview"><i data-lucide="clipboard-pen"></i>Self-assessment</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Kudos & Pulse -->
+<section class="screen" data-route="ess/kudos" data-title="Kudos &amp; Pulse">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Culture</div>
+      <h1>Kudos &amp; Pulse</h1>
+      <p>Recognise great work, tell us how your week went, and vote in company polls.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn primary" type="button" data-act="give"><i data-lucide="heart-handshake"></i>Give kudos</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Shifts & Swaps -->
+<section class="screen" data-route="ess/shifts" data-title="Shifts &amp; Swaps">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Work / Shifts &amp; Swaps</div>
+      <h1>Shifts &amp; Swaps</h1>
+      <p>Your roster and your field team’s. Tap one of your shifts to swap it, or pick up an open shift for extra allowance.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="export"><i data-lucide="calendar-plus"></i>Add to calendar</button>
+      <button class="btn primary" type="button" data-act="swap"><i data-lucide="arrow-left-right"></i>Request swap</button>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Onboarding -->
+<section class="screen" data-route="ess/onboarding" data-title="Onboarding">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Onboarding</div>
+      <h1>Your team-lead onboarding</h1>
+      <p>New role, new tools: finish these steps to unlock manager approvals in Finsoft ESS.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/helpdesk"><i data-lucide="life-buoy"></i>Need help?</a>
+    </div>
+  </div>
+</section>
+
+<!-- ESS · Notifications -->
+<section class="screen" data-route="ess/notifications" data-title="Notifications">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Self-Service / Notifications</div>
+      <h1>Notifications</h1>
+      <p>Approvals, payroll, leave and team updates in one place. Swipe left to dismiss on mobile.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" type="button" data-act="prefs"><i data-lucide="sliders-horizontal"></i>Preferences</button>
+      <button class="btn primary" type="button" data-act="readall" id="es-nt-readall"><i data-lucide="check-check"></i>Mark all read</button>
+    </div>
+  </div>
+</section>
+

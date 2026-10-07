@@ -1,0 +1,783 @@
+<!-- ===================== 44-purchase-docs: Purchase Voucher · GRN · Purchase Returns · Stock Vouchers · Cheque Voucher · New Voucher
+     Engines in 94-purchase-docs.js, styles in 14-purchase-docs.css (prefix pd-) ===================== -->
+
+<!-- ============================== 1. PURCHASE VOUCHER ============================== -->
+<section class="screen pd-scr pd-pv" data-route="app/purchases/voucher" data-title="Purchase Voucher">
+  <div class="page-head pd-head">
+    <div class="pd-head-l">
+      <span class="pd-head-ic"><i data-lucide="shopping-basket"></i></span>
+      <div>
+        <nav class="pd-crumb"><a href="#/app/purchases/bills">Purchases</a><i data-lucide="chevron-right"></i><a href="#/app/purchases/bills">Purchase Voucher</a><i data-lucide="chevron-right"></i><b>New</b></nav>
+        <h1>Create Purchase Voucher</h1>
+        <p>Record the purchase, update inventory and settle the supplier in one flow.</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-pv-act="draft"><i data-lucide="file-pen-line"></i>Save as Draft</button>
+      <button class="btn primary" data-pv-act="post"><i data-lucide="check"></i><span>Save &amp; Post</span></button>
+      <button class="btn secondary" data-pv-act="print"><i data-lucide="printer"></i>Print</button>
+      <a class="btn ghost" href="#/app/purchases/bills"><i data-lucide="x"></i>Close</a>
+    </div>
+  </div>
+
+  <div class="pd-pv-grid">
+    <div class="pd-pv-main">
+      <ol class="pd-stepper" id="pd-pv-steps">
+        <li class="active" data-step="0"><button type="button"><b>1</b><span><strong>Voucher Details</strong><small>Basic information</small></span></button><i class="pd-conn"><em></em></i></li>
+        <li data-step="1"><button type="button"><b>2</b><span><strong>Items</strong><small>Products to purchase</small></span></button><i class="pd-conn"><em></em></i></li>
+        <li data-step="2"><button type="button"><b>3</b><span><strong>Payments &amp; Tax</strong><small>Settle &amp; withhold</small></span></button><i class="pd-conn"><em></em></i></li>
+        <li data-step="3"><button type="button"><b>4</b><span><strong>Review &amp; Post</strong><small>Verify and post</small></span></button></li>
+      </ol>
+
+      <!-- Step 1 -->
+      <div class="panel pd-card pd-collapsible" id="pd-pv-s1" data-spy="0">
+        <button type="button" class="pd-sec-h pd-toggle" aria-expanded="true">
+          <span class="icon-tile"><i data-lucide="package"></i></span>
+          <span class="pd-sec-t"><b>Voucher Information</b><small>Reference, supplier and terms</small></span>
+          <i data-lucide="chevron-up" class="pd-chev"></i>
+        </button>
+        <div class="pd-collapse"><div class="pd-collapse-in">
+          <div class="pd-fgrid pd-pv-f1">
+            <label class="pd-f"><span>Ref. No. <em>*</em></span>
+              <div class="pd-inp-btn"><input id="pd-pv-ref" value="PV-2026-000318" readonly><button type="button" class="btn secondary icon" id="pd-pv-gear" aria-label="Numbering settings"><i data-lucide="settings"></i></button></div>
+            </label>
+            <div class="pd-f"><span>Purchase Type <em>*</em></span>
+              <div class="pd-radio-pills" id="pd-pv-ptype">
+                <label class="on"><input type="radio" name="pd-pv-ptype" value="Shop" checked><i></i><span><i data-lucide="store"></i>Shop</span></label>
+                <label><input type="radio" name="pd-pv-ptype" value="Warehouse"><i></i><span><i data-lucide="warehouse"></i>Warehouse</span></label>
+              </div>
+            </div>
+            <label class="pd-f"><span>Product Purchase on Retail Price</span>
+              <div class="pd-inp-ic r"><input id="pd-pv-retail" type="number" value="0" min="0"><i data-lucide="info" title="Enter a retail-price discount % if the supplier invoices at MRP"></i></div>
+            </label>
+            <label class="pd-f"><span>Deal on Supply</span><input id="pd-pv-deal" placeholder="Enter deal or remarks (optional)…"></label>
+            <label class="pd-f"><span>Supplier <em>*</em></span>
+              <div class="pd-inp-btn"><div class="pd-inp-ic"><i data-lucide="user-round"></i><select id="pd-pv-sup"></select></div><button type="button" class="btn secondary icon pd-plus" id="pd-pv-addsup" aria-label="Add supplier"><i data-lucide="plus"></i></button></div>
+            </label>
+            <label class="pd-f"><span>Supplier Bill # <em>*</em></span><input id="pd-pv-bill" value="HP-INV-45872"></label>
+            <label class="pd-f"><span>Salesman Code</span><select id="pd-pv-sm"><option>SM-001 · Usman Ali</option><option>SM-002 · Kashif Ali</option><option>SM-003 · Faisal Qureshi</option></select></label>
+            <label class="pd-f"><span>Due Date</span><div class="pd-inp-ic"><i data-lucide="calendar"></i><input id="pd-pv-due" type="date" value="2026-10-31"></div></label>
+            <div class="pd-f pd-credit"><span>If Credit</span>
+              <label class="switch"><input type="checkbox" id="pd-pv-credit" checked><i></i><span>Yes — this is a credit purchase</span></label>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="panel pd-card flushx" id="pd-pv-s2" data-spy="1">
+        <div class="pd-sec-h">
+          <span class="icon-tile"><i data-lucide="boxes"></i></span>
+          <span class="pd-sec-t"><b>Purchase Items</b><small>Search by product name, UPC or scan a barcode — press Enter to add.</small></span>
+          <div class="pd-sec-act">
+            <label class="pd-scan" id="pd-pv-scanbox"><i data-lucide="search"></i><input id="pd-pv-scan" placeholder="Search product by name, UPC or scan barcode…" autocomplete="off"><span class="pd-laser"></span></label>
+            <button type="button" class="btn secondary icon" id="pd-pv-scanbtn" aria-label="Simulate scanner" title="Simulate a scan"><i data-lucide="scan-barcode"></i></button>
+            <button type="button" class="btn secondary" id="pd-pv-import"><i data-lucide="upload"></i>Import</button>
+            <button type="button" class="btn primary" id="pd-pv-addrow"><i data-lucide="plus"></i>Add Row</button>
+          </div>
+        </div>
+        <div class="table-wrap pd-gridwrap"><table class="tbl lines pd-lines pd-pv-lines" data-plain>
+          <thead><tr><th class="pd-ck"><input type="checkbox" id="pd-pv-all" aria-label="Select all"></th><th>#</th><th>UPC</th><th class="pd-prod">Product Name <em>*</em></th><th class="num">LS</th><th class="num">Shelf</th><th class="num">S/W</th><th class="num">Pur. Price</th><th class="num">Sale Price</th><th class="num">Ps-Qty</th><th class="num">Bonus</th><th class="num">Brk</th><th class="num">T-Qty</th><th class="num">%GST</th><th class="num">%Disc</th><th class="num">Cost</th><th class="num">Amount</th><th></th></tr></thead>
+          <tbody id="pd-pv-body"></tbody>
+        </table></div>
+        <div class="pd-grid-foot">
+          <span class="pill"><i data-lucide="layers"></i>Total Items: <b id="pd-pv-cnt">0</b></span>
+          <span class="spacer"></span>
+          <button type="button" class="btn secondary sm" id="pd-pv-clear"><i data-lucide="trash"></i>Clear All</button>
+          <button type="button" class="btn danger sm" id="pd-pv-remsel" disabled><i data-lucide="trash-2"></i>Remove Selected</button>
+        </div>
+        <div class="pd-markup">
+          <i data-lucide="trending-up"></i><span>Sale Price is</span>
+          <input id="pd-pv-markup" type="number" value="0.00" step="0.5" min="0"><span>% greater than Purchase Price</span>
+          <i data-lucide="info" class="pd-mu-i" title="Type a markup — every sale price recomputes live"></i>
+          <span class="spacer"></span><small id="pd-pv-mu-note">Live — type to reprice every line</small>
+        </div>
+      </div>
+
+      <div class="panel pd-card" id="pd-pv-more" data-spy="1">
+        <div class="pd-sec-h">
+          <span class="icon-tile lime"><i data-lucide="zap"></i></span>
+          <span class="pd-sec-t"><b>More Information &amp; Actions</b><small>Sales history, stock across locations and quick actions for this purchase.</small></span>
+        </div>
+        <div class="pd-more-grid">
+          <div class="pd-mini">
+            <div class="pd-mini-h"><span class="icon-well"><i data-lucide="chart-column"></i></span><div><b>Previous Sale</b><small>Latest sale price per product</small></div><a class="btn ghost sm" href="#/app/sales/invoices">View all</a></div>
+            <table class="pd-mt"><thead><tr><th>Date</th><th>Product</th><th class="num">Sale Price</th></tr></thead><tbody id="pd-pv-prev"></tbody></table>
+          </div>
+          <div class="pd-mini">
+            <div class="pd-mini-h"><span class="icon-well blue"><i data-lucide="history"></i></span><div><b>History</b><small>Purchases from <span id="pd-pv-hsup">supplier</span></small></div><a class="btn ghost sm" href="#/app/vendors/view">View all</a></div>
+            <table class="pd-mt"><thead><tr><th>Date</th><th>Invoice #</th><th class="num">Amount</th></tr></thead><tbody id="pd-pv-hist"></tbody></table>
+          </div>
+          <div class="pd-mini">
+            <div class="pd-mini-h"><span class="icon-well teal"><i data-lucide="warehouse"></i></span><div><b>Available Stock</b><small id="pd-pv-stk-for">Select a line to inspect</small></div></div>
+            <table class="pd-mt"><thead><tr><th>Location</th><th class="num">Stock</th><th class="num">Reserved</th><th class="num">Avail.</th></tr></thead><tbody id="pd-pv-stk"></tbody></table>
+          </div>
+          <div class="pd-mini">
+            <div class="pd-mini-h"><span class="icon-well yellow"><i data-lucide="zap"></i></span><div><b>Quick Actions</b><small>Common tasks and shortcuts</small></div></div>
+            <div class="pd-qa">
+              <button type="button" data-qa="receipt"><i data-lucide="receipt"></i>First Receipt</button>
+              <a href="#/app/inventory/items"><i data-lucide="plus"></i>New Product</a>
+              <a href="#/app/payables/payments"><i data-lucide="wallet-cards"></i>Bulk Payment</a>
+              <a href="#/app/cash/book"><i data-lucide="banknote"></i>Cash Payment</a>
+              <button type="button" data-qa="compare"><i data-lucide="chart-no-axes-column"></i>Price Comparison</button>
+              <a href="#/app/purchases/orders"><i data-lucide="clock"></i>Pending PO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="panel pd-card" id="pd-pv-s3" data-spy="2">
+        <div class="pd-sec-h">
+          <span class="icon-tile blue"><i data-lucide="hand-coins"></i></span>
+          <span class="pd-sec-t"><b>Payments &amp; Tax</b><small>Pay now or keep on credit — withholding u/s 153 is deducted automatically.</small></span>
+          <span class="badge info dot" id="pd-pv-filer">Filer · ATL active</span>
+        </div>
+        <div class="pd-pay">
+          <div class="pd-pay-l">
+            <div class="pd-f"><span>Payment Mode</span>
+              <div class="pd-mode" id="pd-pv-mode">
+                <button type="button" data-m="credit" class="on"><i data-lucide="clock-3"></i><b>On Credit</b><small>Pay later</small></button>
+                <button type="button" data-m="cash"><i data-lucide="banknote"></i><b>Cash</b><small>From drawer</small></button>
+                <button type="button" data-m="bank"><i data-lucide="landmark"></i><b>Bank Transfer</b><small>IBFT / online</small></button>
+                <button type="button" data-m="cheque"><i data-lucide="scroll-text"></i><b>Cheque</b><small>Issue cheque</small></button>
+              </div>
+            </div>
+            <div class="pd-fgrid c2">
+              <label class="pd-f"><span id="pd-pv-acc-l">Bank / Cash Account</span><select id="pd-pv-acc" disabled></select></label>
+              <label class="pd-f pd-chqno"><span>Cheque No.</span><input id="pd-pv-chq" placeholder="e.g. 00458921"></label>
+              <label class="pd-f"><span>WHT u/s 153(1)(a) deduction %</span>
+                <div class="pd-inp-ic r"><input id="pd-pv-wht" type="number" value="5.5" step="0.5" min="0" max="20"><b class="pd-suf">%</b></div>
+                <small class="pd-hint" id="pd-pv-wht-h">Goods · company filer rate</small>
+              </label>
+              <label class="pd-f"><span>Amount paid now</span>
+                <div class="input-group"><span>Rs</span><input id="pd-pv-paid" type="number" value="0" min="0" disabled></div>
+                <div class="pd-quick" id="pd-pv-quick"><button type="button" data-q="1">Full</button><button type="button" data-q=".5">50%</button><button type="button" data-q="0">None</button></div>
+              </label>
+            </div>
+          </div>
+          <div class="pd-pay-r">
+            <div class="pd-settle">
+              <div class="pd-settle-h"><span>Settlement</span><b id="pd-pv-gross-net">Rs 0</b></div>
+              <div class="pd-settle-bar"><i class="p" id="pd-pv-bar-p"></i><i class="w" id="pd-pv-bar-w"></i><i class="b" id="pd-pv-bar-b"></i></div>
+              <ul class="pd-settle-l">
+                <li><i class="p"></i>Paid now<b id="pd-pv-s-paid">Rs 0</b></li>
+                <li><i class="w"></i>WHT withheld<b id="pd-pv-s-wht">Rs 0</b></li>
+                <li><i class="b"></i>Balance payable<b id="pd-pv-s-bal">Rs 0</b></li>
+              </ul>
+              <div class="pd-bal"><span>Balance payable to supplier</span><b class="num-big" id="pd-pv-bal">Rs 0</b><small id="pd-pv-bal-due">Due 31 Oct 2026 · 30 days</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="panel pd-card" id="pd-pv-s4" data-spy="3">
+        <div class="pd-sec-h">
+          <span class="icon-tile"><i data-lucide="clipboard-check"></i></span>
+          <span class="pd-sec-t"><b>Review &amp; Post</b><small>Everything green? Post to update stock, the supplier ledger and the GL.</small></span>
+        </div>
+        <div class="pd-review">
+          <ul class="pd-checks" id="pd-pv-checks"></ul>
+          <div class="pd-jv">
+            <div class="pd-jv-h"><b>Journal preview</b><span class="badge good dot" id="pd-pv-jv-bal">Balanced</span></div>
+            <table class="pd-mt pd-jv-t"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody id="pd-pv-jv"></tbody></table>
+          </div>
+        </div>
+        <div class="pd-review-foot">
+          <span class="muted small"><i data-lucide="shield-check"></i> Posting locks this voucher; corrections go through a Purchase Return.</span>
+          <span class="spacer"></span>
+          <button type="button" class="btn secondary" data-pv-act="draft"><i data-lucide="file-pen-line"></i>Save as Draft</button>
+          <button type="button" class="btn primary lg" data-pv-act="post"><i data-lucide="send"></i><span>Save &amp; Post</span></button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="pd-pv-rail">
+      <div class="pd-ticket" id="pd-pv-ticket">
+        <div class="pd-tk-top">
+          <span class="pd-tk-ic"><i data-lucide="file-text"></i></span><b>PURCHASE VOUCHER</b>
+          <span class="pd-state" id="pd-pv-state"><i></i><span>DRAFT</span></span>
+        </div>
+        <div class="pd-tk-ref"><strong id="pd-pv-tk-ref">PV-2026-000318</strong><span class="qr pd-qr"></span></div>
+        <dl class="pd-tk-dl">
+          <div><dt>Supplier</dt><dd id="pd-pv-tk-sup">—</dd></div>
+          <div><dt>Supplier Bill #</dt><dd id="pd-pv-tk-bill">—</dd></div>
+          <div><dt>Date</dt><dd>01 Oct 2026</dd></div>
+          <div><dt>Due Date</dt><dd id="pd-pv-tk-due">31 Oct 2026</dd></div>
+          <div><dt>Purchase Type</dt><dd id="pd-pv-tk-type"><i data-lucide="store"></i>Shop</dd></div>
+        </dl>
+        <div class="pd-tk-total"><span>Total Amount</span><b id="pd-pv-tk-total">Rs 0</b></div>
+        <div class="pd-stamp" id="pd-pv-stamp">POSTED</div>
+      </div>
+
+      <div class="panel pd-rcard">
+        <div class="pd-rc-h"><span class="icon-well"><i data-lucide="chart-pie"></i></span><b>Totals &amp; Summary</b></div>
+        <dl class="pd-sum">
+          <div><dt>Total Items</dt><dd id="pd-pv-t-items">0</dd></div>
+          <div><dt>Total Quantity</dt><dd id="pd-pv-t-qty">0</dd></div>
+          <div><dt>Stock After Posting</dt><dd id="pd-pv-t-stock">0 units</dd></div>
+          <hr>
+          <div><dt>Gross Amount</dt><dd id="pd-pv-t-gross">Rs 0</dd></div>
+          <div><dt>Total Discount</dt><dd id="pd-pv-t-disc">Rs 0</dd></div>
+          <div><dt>Sales Tax (GST)</dt><dd id="pd-pv-t-gst">Rs 0</dd></div>
+          <div class="pd-adv"><dt>Advance Tax <small>u/s 236G</small></dt><dd><input id="pd-pv-adv" type="number" value="0" min="0" aria-label="Advance tax"></dd></div>
+        </dl>
+        <div class="pd-net"><span>Net Amount</span><b id="pd-pv-net">Rs 0</b></div>
+      </div>
+
+      <div class="panel pd-rcard">
+        <div class="pd-rc-h"><span class="icon-well violet"><i data-lucide="percent"></i></span><b>Tax Summary</b></div>
+        <dl class="pd-sum">
+          <div><dt>Taxable Amount</dt><dd id="pd-pv-x-taxable">Rs 0</dd></div>
+          <div><dt>Input Sales Tax (18%)</dt><dd id="pd-pv-x-gst">Rs 0</dd></div>
+          <div><dt>Advance Tax 236G</dt><dd id="pd-pv-x-adv">Rs 0</dd></div>
+          <div><dt>WHT 153 withheld</dt><dd id="pd-pv-x-wht">Rs 0</dd></div>
+          <hr>
+          <div class="pd-strong"><dt>Total Tax</dt><dd id="pd-pv-x-total">Rs 0</dd></div>
+        </dl>
+      </div>
+
+      <div class="panel pd-rcard">
+        <div class="pd-rc-h"><span class="icon-well yellow"><i data-lucide="notebook-pen"></i></span><b>Notes <small class="muted">(optional)</small></b></div>
+        <textarea id="pd-pv-notes" rows="3" maxlength="300" placeholder="Add notes or remarks…"></textarea>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================== 2. GOODS RECEIVED (GRN) ============================== -->
+<section class="screen pd-scr pd-grn" data-route="app/purchases/grn" data-title="Goods Received (GRN)">
+  <div class="page-head pd-head">
+    <div class="pd-head-l">
+      <span class="pd-head-ic"><i data-lucide="package-check"></i></span>
+      <div>
+        <nav class="pd-crumb"><a href="#/app/purchases/orders">Purchases</a><i data-lucide="chevron-right"></i><b>Goods Received</b></nav>
+        <h1>Goods Received (GRN)</h1>
+        <p>Receive against purchase orders, record QC results and keep PO ↔ GRN ↔ Bill in step.</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">count twice, post once</span>
+      <a class="btn secondary" href="#/app/purchases/orders"><i data-lucide="clipboard-list"></i>Purchase Orders</a>
+      <button class="btn primary" id="pd-grn-new"><i data-lucide="package-plus"></i>Receive Goods</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>GRNs this month</span><span class="icon-well"><i data-lucide="package-check"></i></span></div><strong data-count id="pd-grn-k1">18</strong><small class="up">▲ 4 vs Sep</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Open PO lines</span><span class="icon-well blue"><i data-lucide="clipboard-list"></i></span></div><strong data-count>27</strong><small>Across 9 purchase orders</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>QC rejection rate</span><span class="icon-well yellow"><i data-lucide="shield-alert"></i></span></div><strong>2.4%</strong><small class="down">▲ 0.6 pts · cartons</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Received, not billed</span><span class="icon-well violet"><i data-lucide="receipt"></i></span></div><strong>Rs 18,42,600</strong><small>5 GRNs awaiting vendor bill</small></div>
+  </div>
+
+  <div class="panel pd-card" id="pd-grn-recv">
+    <div class="pd-sec-h">
+      <span class="icon-tile"><i data-lucide="truck"></i></span>
+      <span class="pd-sec-t"><b>Receive against PO</b><small>Pick an open purchase order, count what arrived and pass it through QC.</small></span>
+      <div class="pd-sec-act">
+        <div class="pd-inp-ic pd-po-sel"><i data-lucide="clipboard-list"></i><select id="pd-grn-po"></select></div>
+        <button type="button" class="btn secondary" id="pd-grn-all"><i data-lucide="list-checks"></i>Receive all remaining</button>
+      </div>
+    </div>
+    <div class="pd-po-meta" id="pd-grn-meta"></div>
+    <div class="pd-grn-body">
+      <div class="pd-grn-lines">
+        <div class="table-wrap pd-gridwrap"><table class="tbl lines pd-lines pd-grn-t" data-plain>
+          <thead><tr><th>Item</th><th class="num">Ordered</th><th class="num">Prev. recv.</th><th class="num">Received now</th><th class="num">Accepted</th><th class="num">Rejected</th><th>Reason</th><th>Progress</th></tr></thead>
+          <tbody id="pd-grn-body"></tbody>
+        </table></div>
+        <label class="pd-f pd-qc"><span><i data-lucide="clipboard-pen"></i>QC note</span><textarea id="pd-grn-qc" rows="2" maxlength="300" placeholder="e.g. 2 cartons crushed in transit — photographed and logged with TCS."></textarea></label>
+      </div>
+      <div class="pd-match-card">
+        <div class="pd-match" id="pd-grn-match">
+          <div class="pd-mnode" data-n="po"><span><i data-lucide="clipboard-list"></i></span><b>PO</b><small id="pd-grn-m-po">—</small></div>
+          <i class="pd-mlink"></i>
+          <div class="pd-mnode" data-n="grn"><span><i data-lucide="package-check"></i></span><b>GRN</b><small id="pd-grn-m-grn">—</small></div>
+          <i class="pd-mlink"></i>
+          <div class="pd-mnode" data-n="bill"><span><i data-lucide="receipt"></i></span><b>Bill</b><small id="pd-grn-m-bill">—</small></div>
+        </div>
+        <div class="pd-match-badge" id="pd-grn-badge"><i data-lucide="triangle-alert"></i><span>3-way match pending</span></div>
+        <p class="pd-match-note" id="pd-grn-mnote"></p>
+        <dl class="pd-sum">
+          <div><dt>Units received now</dt><dd id="pd-grn-u">0</dd></div>
+          <div><dt>Accepted value</dt><dd id="pd-grn-v">Rs 0</dd></div>
+          <div><dt>Rejected (debit note)</dt><dd id="pd-grn-r">Rs 0</dd></div>
+        </dl>
+        <label class="pd-f"><span>Receive into</span><select id="pd-grn-wh"></select></label>
+        <button type="button" class="btn primary lg block" id="pd-grn-post"><i data-lucide="package-check"></i><span>Post GRN</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>GRN Register</h3><p>Goods received this quarter</p></div>
+      <div class="panel-actions"><label class="search-field"><i data-lucide="search"></i><input placeholder="Search GRN, PO, vendor…"></label><button class="btn secondary sm" data-toast="GRN register exported"><i data-lucide="download"></i>Export</button></div>
+    </div>
+    <div class="table-wrap"><table class="tbl" id="pd-grn-list">
+      <thead><tr><th>GRN #</th><th>Date</th><th>Purchase Order</th><th>Vendor</th><th>Warehouse</th><th class="num">Units</th><th class="num">Value</th><th>QC</th><th>Bill</th></tr></thead>
+      <tbody id="pd-grn-reg"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================== 3. PURCHASE RETURNS ============================== -->
+<section class="screen pd-scr pd-pr" data-route="app/purchases/returns" data-title="Purchase Returns">
+  <div class="page-head pd-head">
+    <div class="pd-head-l">
+      <span class="pd-head-ic"><i data-lucide="package-x"></i></span>
+      <div>
+        <nav class="pd-crumb"><a href="#/app/purchases/bills">Purchases</a><i data-lucide="chevron-right"></i><b>Purchase Returns</b></nav>
+        <h1>Purchase Returns</h1>
+        <p>View and manage everything sent back to suppliers — with its stock, payable and GST effect.</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Purchase returns exported to Excel"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" id="pd-pr-newbtn"><i data-lucide="plus"></i>New Purchase Return</button>
+    </div>
+  </div>
+
+  <div class="panel pd-card flushx">
+    <div class="pd-pr-filters">
+      <label class="search-field pd-pr-q"><i data-lucide="search"></i><input id="pd-pr-q" placeholder="Search by return #, supplier, reference, bill #…"></label>
+      <label class="pd-f"><span>From Date</span><input type="date" id="pd-pr-from" value="2026-09-01"></label>
+      <label class="pd-f"><span>To Date</span><input type="date" id="pd-pr-to" value="2026-10-01"></label>
+      <label class="pd-f"><span>Supplier</span><select id="pd-pr-fsup"><option value="">All Suppliers</option></select></label>
+      <label class="pd-f"><span>Payment Type</span><select id="pd-pr-fpay"><option value="">All</option><option>Cash</option><option>Credit</option></select></label>
+      <div class="pd-pr-fbtn"><button class="btn primary" id="pd-pr-search"><i data-lucide="search"></i>Search</button><button class="btn secondary" id="pd-pr-clear">Clear</button></div>
+    </div>
+    <div class="pd-pr-chiprow"><div class="chips" id="pd-pr-chips"></div><span class="spacer"></span><span class="muted small" id="pd-pr-sum"></span></div>
+    <div class="table-wrap"><table class="tbl pd-pr-t" data-plain>
+      <thead><tr><th class="pd-xc"></th><th>#</th><th>Return #</th><th>Date</th><th>Supplier</th><th>Reference #</th><th>Supplier Bill #</th><th class="num">Items</th><th class="num">Amount</th><th>Status</th><th>Payment</th><th class="pd-act-h">Actions</th></tr></thead>
+      <tbody id="pd-pr-body"></tbody>
+    </table></div>
+    <div class="table-foot"><span id="pd-pr-showing"></span><div class="pager" id="pd-pr-pager"></div></div>
+  </div>
+
+  <div class="panel pd-card pd-pr-editor" id="pd-pr-editor">
+    <div class="pd-ed-h">
+      <span class="icon-tile orange"><i data-lucide="undo-2"></i></span>
+      <div><h2>New Purchase Return</h2><p>Create a return against a posted purchase — stock, payable and input tax reverse automatically.</p></div>
+      <span class="spacer"></span>
+      <div class="head-actions">
+        <button class="btn secondary" data-pr-act="draft"><i data-lucide="save"></i>Save as Draft</button>
+        <button class="btn secondary" data-pr-act="print"><i data-lucide="printer"></i>Save &amp; Print</button>
+        <button class="btn primary" data-pr-act="post"><i data-lucide="check"></i><span>Save &amp; Post</span></button>
+      </div>
+    </div>
+    <div class="pd-pr-top">
+      <div class="pd-fgrid c2 pd-pr-form">
+        <label class="pd-f"><span>Supplier <em>*</em></span><div class="pd-inp-ic"><i data-lucide="user-round"></i><select id="pd-pr-sup"><option value="">Search and select supplier</option></select></div><small class="pd-err-m">Select a supplier</small></label>
+        <label class="pd-f"><span>Return Date <em>*</em></span><div class="pd-inp-ic"><i data-lucide="calendar"></i><input type="date" id="pd-pr-date" value="2026-10-01"></div></label>
+        <label class="pd-f"><span>Reference Purchase</span><div class="pd-inp-ic"><i data-lucide="file-search"></i><select id="pd-pr-ref" disabled><option value="">Select supplier first</option></select></div></label>
+        <label class="pd-f"><span>Supplier Bill #</span><input id="pd-pr-bill" placeholder="Enter supplier bill number"></label>
+        <label class="pd-f"><span>Remarks</span><textarea id="pd-pr-rem" rows="2" placeholder="Enter remarks…"></textarea></label>
+        <div class="pd-f"><span>Payment Type</span>
+          <div class="pd-radio-pills sm" id="pd-pr-pay">
+            <label class="on"><input type="radio" name="pd-pr-pay" value="Credit" checked><i></i><span>Credit</span></label>
+            <label><input type="radio" name="pd-pr-pay" value="Cash"><i></i><span>Cash refund</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="pd-pr-side">
+        <div class="pd-prno">
+          <span class="pd-prno-ic"><i data-lucide="package-open"></i></span>
+          <div><small>Purchase Return #</small><div class="pd-inp-btn"><input id="pd-pr-no" value="PR-000013" readonly><button type="button" class="btn secondary" id="pd-pr-gen"><i data-lucide="refresh-cw"></i>Generate</button></div></div>
+        </div>
+        <div class="pd-pr-cards">
+          <div><span class="icon-well"><i data-lucide="package"></i></span><small>Total Items</small><b id="pd-pr-c-items">0</b></div>
+          <div><span class="icon-well blue"><i data-lucide="coins"></i></span><small>Total Amount</small><b id="pd-pr-c-amt">0.00</b></div>
+          <div><span class="pd-dotst"></span><small>Status</small><b id="pd-pr-c-st">Draft</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pd-pr-bar">
+      <div class="seg" id="pd-pr-tabs"><button class="active" data-pt="items"><i data-lucide="list"></i>Return Items</button><button data-pt="effect"><i data-lucide="git-compare-arrows"></i>Effect</button><button data-pt="info"><i data-lucide="info"></i>Additional Information</button></div>
+      <span class="spacer"></span>
+      <button class="btn secondary sm" id="pd-pr-additem"><i data-lucide="circle-plus"></i>Add Item</button>
+    </div>
+    <div class="pd-pr-pane on" data-pp="items">
+      <div class="table-wrap pd-gridwrap" id="pd-pr-linewrap"><table class="tbl lines pd-lines pd-pr-lines" data-plain>
+        <thead><tr><th>#</th><th class="pd-prod">Product Name <em>*</em></th><th>Pack</th><th>Batch No.</th><th class="num">Rate</th><th class="num">Ret. Qty</th><th class="num">Bonus</th><th class="num">Disc %</th><th class="num">Disc.</th><th class="num">% GST</th><th class="num">GST</th><th class="num">Amount</th><th></th></tr></thead>
+        <tbody id="pd-pr-lbody"></tbody>
+      </table></div>
+    </div>
+    <div class="pd-pr-pane" data-pp="effect">
+      <div class="pd-effect" id="pd-pr-effect"></div>
+    </div>
+    <div class="pd-pr-pane" data-pp="info">
+      <div class="pd-fgrid c3">
+        <label class="pd-f"><span>Return reason</span><select><option>Expired / near expiry</option><option>Damaged in transit</option><option>Wrong item supplied</option><option>Quality rejected (QC)</option></select></label>
+        <label class="pd-f"><span>Gate pass #</span><input placeholder="GP-2026-…"></label>
+        <label class="pd-f"><span>Transporter</span><select><option>TCS Logistics</option><option>Supplier vehicle</option><option>Own fleet</option></select></label>
+        <label class="pd-f full"><span>Debit note narration</span><input value="Goods returned against supplier bill — please issue credit note."></label>
+      </div>
+    </div>
+    <div class="pd-pr-totals">
+      <div><small>Total Items</small><b id="pd-pr-t-items">0</b></div>
+      <div><small>Sub Total</small><b id="pd-pr-t-sub">0.00</b></div>
+      <div><small>Total Discount</small><b id="pd-pr-t-disc">0.00</b></div>
+      <div><small>Total GST</small><b id="pd-pr-t-gst">0.00</b></div>
+      <div class="net"><small>Net Amount</small><b id="pd-pr-t-net">0.00</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 4. STOCK VOUCHERS ============================== -->
+<section class="screen pd-scr pd-sv" data-route="app/inventory/stock-vouchers" data-title="Stock Vouchers">
+  <div class="page-head pd-head">
+    <div class="pd-head-l">
+      <span class="pd-head-ic"><i data-lucide="gift"></i></span>
+      <div>
+        <nav class="pd-crumb"><a href="#/app/inventory/stock">Inventory</a><i data-lucide="chevron-right"></i><b>Stock Vouchers</b></nav>
+        <h1>Stock Vouchers</h1>
+        <p>Record breakage, gifts, samples and internal consumption — stock and the GL update on posting.</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <span class="pill"><i data-lucide="calendar"></i>Thu, 01 Oct 2026</span>
+      <a class="btn primary" href="#/app/inventory/stock"><i data-lucide="boxes"></i>View Stock</a>
+    </div>
+  </div>
+
+  <div class="pd-folder" id="pd-sv-tabs" role="tablist">
+    <button class="on" data-svt="BRK" role="tab"><i data-lucide="package-x"></i>Breakage<span>Voucher</span></button>
+    <button data-svt="GFT" role="tab"><i data-lucide="gift"></i>Gift<span>Voucher</span></button>
+    <button data-svt="SMP" role="tab"><i data-lucide="flask-conical"></i>Sample<span>Voucher</span></button>
+    <button data-svt="INT" role="tab"><i data-lucide="building-2"></i>Internal Use<span>Voucher</span></button>
+  </div>
+  <div class="panel pd-folder-body" id="pd-sv-body">
+    <div class="pd-sv-top">
+      <div class="pd-sv-details">
+        <div class="pd-sec-h nob">
+          <span class="icon-tile" id="pd-sv-dic"><i data-lucide="pencil-line"></i></span>
+          <span class="pd-sec-t"><b>Voucher Details</b><small id="pd-sv-dsub">Enter voucher information and add items.</small></span>
+        </div>
+        <div class="pd-fgrid c3 pd-sv-fields" id="pd-sv-fields"></div>
+      </div>
+      <div class="pd-sv-side">
+        <div class="pd-typecard" id="pd-sv-type"></div>
+      </div>
+    </div>
+
+    <div class="pd-sv-items">
+      <div class="pd-sec-h nob">
+        <span class="icon-tile"><i data-lucide="shopping-cart"></i></span>
+        <span class="pd-sec-t"><b>Items</b><small id="pd-sv-isub">Products leaving stock on this voucher.</small></span>
+        <div class="pd-sec-act">
+          <button type="button" class="btn secondary" id="pd-sv-add"><i data-lucide="circle-plus"></i>Add Item</button>
+          <button type="button" class="btn secondary" id="pd-sv-scanbtn"><i data-lucide="scan-barcode"></i>Scan Barcode</button>
+          <button type="button" class="btn ghost" id="pd-sv-clear"><i data-lucide="trash-2"></i>Clear All</button>
+        </div>
+      </div>
+      <div class="table-wrap pd-gridwrap"><table class="tbl lines pd-lines pd-sv-lines" data-plain>
+        <thead><tr><th class="pd-ck"><input type="checkbox" id="pd-sv-all" aria-label="Select all"></th><th>#</th><th class="pd-prod">Product <em>*</em></th><th>Batch / Lot</th><th>Expiry</th><th>UOM</th><th class="num">Qty <em>*</em></th><th class="num">Rate</th><th class="num">Amount</th><th class="num">Stock after</th><th>Remark</th><th></th></tr></thead>
+        <tbody id="pd-sv-lbody"></tbody>
+      </table></div>
+      <div class="pd-sv-under">
+        <div class="row"><button type="button" class="btn primary sm" id="pd-sv-addrow"><i data-lucide="plus"></i>Add Row</button><button type="button" class="btn danger sm" id="pd-sv-remsel" disabled><i data-lucide="trash-2"></i>Remove Selected</button></div>
+        <div class="pd-sv-totals">
+          <div><span>Total Quantity</span><b id="pd-sv-tq">0</b></div>
+          <div><span>Total Amount</span><b id="pd-sv-ta">Rs 0</b></div>
+          <div class="after"><span><i data-lucide="boxes"></i>Stock After Voucher</span><b id="pd-sv-after">—</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pd-sv-foot">
+      <div class="pd-attach"><b>Attachments</b><label class="btn secondary sm"><i data-lucide="paperclip"></i>Attach File<input type="file" id="pd-sv-file" multiple hidden></label><span class="muted small" id="pd-sv-files">No file selected</span></div>
+      <span class="spacer"></span>
+      <button type="button" class="btn secondary" id="pd-sv-reset"><i data-lucide="rotate-ccw"></i>Reset</button>
+      <button type="button" class="btn secondary" id="pd-sv-draft"><i data-lucide="save"></i>Save as Draft</button>
+      <button type="button" class="btn primary" id="pd-sv-post"><i data-lucide="circle-check"></i><span>Save &amp; Post</span></button>
+    </div>
+  </div>
+
+  <div class="panel pd-card flushx">
+    <div class="pd-sec-h">
+      <span class="icon-tile"><i data-lucide="history"></i></span>
+      <span class="pd-sec-t"><b>Previous Vouchers</b><small>View and search all stock vouchers.</small></span>
+      <div class="pd-sec-act pd-sv-filt">
+        <div class="pd-range"><i data-lucide="calendar"></i><span>01-Sep-2026</span><i data-lucide="arrow-right"></i><span>01-Oct-2026</span></div>
+        <select id="pd-sv-ftype"><option value="">All voucher types</option><option value="BRK">Breakage</option><option value="GFT">Gift</option><option value="SMP">Sample</option><option value="INT">Internal Use</option></select>
+        <select id="pd-sv-fst"><option value="">All status</option><option>Posted</option><option>Draft</option></select>
+        <label class="search-field"><i data-lucide="search"></i><input id="pd-sv-fq" placeholder="Search voucher no, person, product…"></label>
+      </div>
+    </div>
+    <div class="table-wrap"><table class="tbl pd-sv-prev" data-plain>
+      <thead><tr><th>Date</th><th>Voucher No</th><th>Type</th><th>Reference</th><th>Person / Party</th><th class="num">Items</th><th class="num">Amount</th><th>Status</th><th>Remarks</th><th>Created By</th><th></th></tr></thead>
+      <tbody id="pd-sv-prev"></tbody>
+    </table></div>
+    <div class="table-foot"><span id="pd-sv-showing"></span><div class="pager"><button>‹</button><button class="active">1</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay" id="pd-sv-scanner">
+    <div class="modal pd-scanmodal">
+      <div class="modal-head"><div><h2>Scan barcode</h2><p>Hold the product barcode inside the frame.</p></div><button class="x" data-close aria-label="Close"><i data-lucide="x"></i></button></div>
+      <div class="pd-vf" id="pd-sv-vf">
+        <div class="pd-vf-code"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span>
+        <span class="pd-vf-laser"></span>
+        <div class="pd-vf-hit"><i data-lucide="check"></i></div>
+        <span class="pd-vf-live"><i></i>LIVE · Rear camera</span>
+      </div>
+      <div class="pd-scan-res" id="pd-sv-res"><span class="pd-spin"></span><span>Searching for a barcode…</span></div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Done</button><button class="btn primary" id="pd-sv-again"><i data-lucide="scan-line"></i>Scan another</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 5. CHEQUE VOUCHER ============================== -->
+<section class="screen pd-scr pd-cq" data-route="app/bank/cheque-voucher" data-title="Cheque Voucher">
+  <div class="page-head pd-head">
+    <div class="pd-head-l">
+      <span class="pd-head-ic"><i data-lucide="scroll-text"></i></span>
+      <div>
+        <nav class="pd-crumb"><a href="#/app/bank/accounts">Bank</a><i data-lucide="chevron-right"></i><b>Cheque Voucher</b></nav>
+        <h1>Cheque Voucher</h1>
+        <p id="pd-cq-sub">Create a single cheque voucher for receipt or issuance.</p>
+      </div>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Cheque voucher sent to printer"><i data-lucide="printer"></i>Print</button>
+      <button class="btn secondary" id="pd-cq-new"><i data-lucide="file-plus"></i>New</button>
+      <a class="btn ghost" href="#/app/bank/cheque-register"><i data-lucide="x"></i>Exit</a>
+    </div>
+  </div>
+
+  <div class="pd-bigtabs" id="pd-cq-tabs">
+    <button class="on" data-cqt="single"><i data-lucide="pen-line"></i>Single Entry</button>
+    <button data-cqt="bulk"><i data-lucide="sheet"></i>Bulk Sheet Entry</button>
+  </div>
+
+  <!-- Single -->
+  <div class="pd-cq-pane on" data-cqp="single">
+    <div class="panel pd-card pd-cq-type">
+      <div class="pd-sec-h nob">
+        <span class="icon-tile"><i data-lucide="arrow-left-right"></i></span>
+        <span class="pd-sec-t"><b>Voucher Type</b><small>Receiving a cheque from a customer, or issuing one to a vendor?</small></span>
+      </div>
+      <div class="pd-typecards" id="pd-cq-stype">
+        <button type="button" class="on" data-ct="R"><span class="ic"><i data-lucide="arrow-down-to-line"></i></span><span><b>Receive Cheque</b><small>Incoming cheque from customer</small></span><i class="pd-radio"></i></button>
+        <button type="button" data-ct="I"><span class="ic"><i data-lucide="arrow-up-from-line"></i></span><span><b>Issue Cheque</b><small>Outgoing cheque to vendor</small></span><i class="pd-radio"></i></button>
+      </div>
+    </div>
+    <div class="panel pd-card">
+      <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="file-text"></i></span><span class="pd-sec-t"><b>Voucher Information</b><small>Numbering and date</small></span></div>
+      <div class="pd-fgrid c3">
+        <label class="pd-f"><span>Old No.</span><input id="pd-cq-old" placeholder="Auto if new"></label>
+        <label class="pd-f"><span>Voucher No.</span><input id="pd-cq-no" value="R-CHQ-0001" readonly></label>
+        <label class="pd-f"><span>Voucher Date</span><div class="pd-inp-ic"><i data-lucide="calendar"></i><input type="date" id="pd-cq-vdate" value="2026-10-01"></div></label>
+      </div>
+    </div>
+    <div class="pd-cq-2">
+      <div class="panel pd-card" id="pd-cq-form">
+        <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="scroll-text"></i></span><span class="pd-sec-t"><b>Cheque Details</b><small id="pd-cq-dsub">Enter the cheque received from the customer.</small></span></div>
+        <div class="pd-hform">
+          <label class="pd-f" data-req="party"><span>Party / Account <em>*</em></span><div class="pd-inp-ic"><i data-lucide="search"></i><select id="pd-cq-party"></select></div><small class="pd-err-m">Select the party</small></label>
+          <label class="pd-f" data-req="chq"><span>Cheque No. <em>*</em></span><input id="pd-cq-chq" placeholder="Enter 6–8 digit cheque number" inputmode="numeric"><small class="pd-err-m">Enter a 6–8 digit cheque number</small></label>
+          <label class="pd-f" data-req="cdate"><span>Cheque Date <em>*</em></span><input type="date" id="pd-cq-cdate"><small class="pd-err-m">Cheque date is required</small></label>
+          <label class="pd-f" data-req="due"><span>Due Date</span><input type="date" id="pd-cq-due"><small class="pd-err-m">Due date cannot be before the cheque date</small></label>
+          <label class="pd-f" data-req="amt"><span>Amount <em>*</em></span><div class="input-group"><span>Rs</span><input id="pd-cq-amt" type="number" placeholder="0.00" min="0"></div><small class="pd-err-m">Amount must be greater than zero</small><small class="pd-words" id="pd-cq-words"></small></label>
+          <label class="pd-f"><span>Remarks</span><textarea id="pd-cq-rem" rows="2" maxlength="500" placeholder="e.g. invoice reference, payment notes…"></textarea><small class="pd-count"><span id="pd-cq-remc">0</span>/500</small></label>
+        </div>
+      </div>
+      <div class="panel pd-card">
+        <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="landmark"></i></span><span class="pd-sec-t"><b>Bank &amp; Posting Information</b><small>Select the bank and preview the posting.</small></span></div>
+        <div class="banner good pd-cq-mode" id="pd-cq-mode"><i data-lucide="info"></i><div><b>Receive mode: Deposit in bank</b><p>The cheque is debited to the bank and credited to the customer.</p></div></div>
+        <div class="pd-hform">
+          <label class="pd-f" data-req="bank"><span>Bank Account <em>*</em></span><select id="pd-cq-bank"><option value="">Select bank account</option></select><small class="pd-err-m">Choose a bank account</small></label>
+        </div>
+        <div class="pd-post-box">
+          <div class="pd-post-h">Posting information</div>
+          <div class="pd-post-r"><span id="pd-cq-l1">Dr · Bank</span><b id="pd-cq-p1">Rs 0.00</b></div>
+          <div class="pd-post-r"><span id="pd-cq-l2">Cr · Customer</span><b id="pd-cq-p2">Rs 0.00</b></div>
+        </div>
+        <div class="pd-cheque" id="pd-cq-preview">
+          <div class="pd-ch-top"><b id="pd-cq-pbank">BANK</b><span>Date <i id="pd-cq-pdate">— — —</i></span></div>
+          <div class="pd-ch-pay">Pay <i id="pd-cq-pparty">________________</i></div>
+          <div class="pd-ch-words"><i id="pd-cq-pwords">Rupees ____________________</i><b id="pd-cq-pamt">Rs —</b></div>
+          <div class="pd-ch-foot"><span id="pd-cq-pno">⑈000000⑈</span><span class="pd-ch-sign">Authorised signatory</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel pd-card">
+      <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="notebook-pen"></i></span><span class="pd-sec-t"><b>Additional Notes</b><small>Any additional narration (optional).</small></span></div>
+      <input id="pd-cq-notes" maxlength="500" placeholder="Enter additional notes, if any…" class="pd-wide">
+      <div class="pd-cq-foot"><span class="spacer"></span><button class="btn secondary" id="pd-cq-cancel"><i data-lucide="x"></i>Clear</button><button class="btn primary" id="pd-cq-save"><i data-lucide="save"></i><span>Save voucher</span></button></div>
+    </div>
+  </div>
+
+  <!-- Bulk -->
+  <div class="pd-cq-pane" data-cqp="bulk">
+    <div class="pd-bstrip">
+      <div class="pd-bstep on" id="pd-cq-bs1"><b>1</b><span><strong>Voucher Fields</strong><small>Set common fields for all vouchers</small></span></div>
+      <i class="pd-bstrip-ar"><i data-lucide="chevron-right"></i></i>
+      <div class="pd-bstep" id="pd-cq-bs2"><b>2</b><span><strong>Sheet Population <em>(optional)</em></strong><small>Use Excel to populate rows</small></span></div>
+      <div class="banner good pd-bstrip-info"><i data-lucide="info"></i><div><p>Enter rows below or populate them from the Excel template — each row creates one voucher.</p></div></div>
+    </div>
+
+    <div class="panel pd-card">
+      <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="settings-2"></i></span><span class="pd-sec-t"><b>Bulk Voucher Setup</b><small>Applied to every row unless overridden in the row itself.</small></span></div>
+      <div class="pd-bsetup">
+        <div class="pd-f"><span>Voucher Type <em>*</em></span>
+          <div class="pd-minicards" id="pd-cq-btype">
+            <button type="button" class="on" data-ct="R"><i class="pd-radio"></i><span><b>Receive Cheque</b><small>From customers</small></span></button>
+            <button type="button" data-ct="I"><i class="pd-radio"></i><span><b>Issue Cheque</b><small>To vendors</small></span></button>
+          </div>
+        </div>
+        <label class="pd-f"><span>Voucher Date <em>*</em></span><div class="pd-inp-ic"><i data-lucide="calendar"></i><input type="date" id="pd-cq-bdate" value="2026-10-01"></div></label>
+        <label class="pd-f"><span>Bank Account <em>*</em></span><div class="pd-inp-ic"><i data-lucide="landmark"></i><select id="pd-cq-bbank"></select></div></label>
+        <label class="pd-f"><span>Posting Mode</span><select id="pd-cq-bmode"><option>Deposit in Bank</option><option>Hold as PDC</option><option>Clear on deposit</option></select></label>
+        <label class="pd-f"><span>Old No. Rule</span><select><option>Auto if new</option><option>Keep from sheet</option><option>Blank</option></select><small class="pd-hint">How old voucher numbers are assigned</small></label>
+        <label class="pd-f"><span>Default Remarks Prefix</span><input id="pd-cq-bpre" value="R-Chq # -"><small class="pd-hint">Prefixed to every row's remarks</small></label>
+      </div>
+    </div>
+
+    <div class="panel pd-card flushx">
+      <div class="pd-sec-h">
+        <span class="icon-tile"><i data-lucide="table-2"></i></span>
+        <span class="pd-sec-t"><b>Bulk Entry Rows</b><small>Each row will create one voucher.</small></span>
+        <div class="pd-sec-act">
+          <span class="pd-rows-pill">Total Rows: <b id="pd-cq-rcount">0</b></span>
+          <button type="button" class="btn secondary sm" id="pd-cq-badd"><i data-lucide="plus"></i>Add Row</button>
+          <button type="button" class="btn secondary sm" id="pd-cq-bdup"><i data-lucide="copy"></i>Duplicate Selected</button>
+          <button type="button" class="btn danger sm" id="pd-cq-bdel"><i data-lucide="trash-2"></i>Delete Selected</button>
+        </div>
+      </div>
+      <div id="pd-cq-vbanner"></div>
+      <div class="table-wrap pd-gridwrap pd-cq-bwrap"><table class="tbl lines pd-lines pd-cq-bt" data-plain>
+        <thead><tr><th class="pd-ck"><input type="checkbox" id="pd-cq-ball" aria-label="Select all"></th><th>#</th><th>Party Code <em>*</em></th><th>Party Name <em>*</em></th><th>Cheque No. <em>*</em></th><th>Cheque Date <em>*</em></th><th>Due Date</th><th class="num">Amount <em>*</em></th><th>Remarks</th><th>Old No.</th><th class="pd-act-h">Actions</th></tr></thead>
+        <tbody id="pd-cq-bbody"></tbody>
+      </table>
+      <div class="pd-genbar" id="pd-cq-gen"><div><b id="pd-cq-gen-t">Generating vouchers…</b><span id="pd-cq-gen-n">0 / 0</span></div><div class="progress lg"><i id="pd-cq-gen-p" style="width:0"></i></div></div>
+      </div>
+    </div>
+
+    <div class="panel pd-card pd-sheet">
+      <div class="pd-sheet-l">
+        <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="file-spreadsheet"></i></span><span class="pd-sec-t"><b>Sheet Population <small class="muted">(optional)</small></b><small>Populate rows faster from Excel — or keep typing on screen.</small></span></div>
+        <div class="row">
+          <button type="button" class="btn primary" id="pd-cq-tpl"><i data-lucide="download"></i>Download Excel Template</button>
+          <button type="button" class="btn secondary" id="pd-cq-upl"><i data-lucide="upload"></i><span>Upload Populated Sheet</span></button>
+          <button type="button" class="btn ghost" id="pd-cq-prev" disabled><i data-lucide="eye"></i>Preview Import</button>
+        </div>
+      </div>
+      <div class="pd-how">
+        <b><i data-lucide="info"></i>How it works</b>
+        <ol><li>Download the Excel template</li><li>Fill in your data and upload the file</li><li>Preview and import to populate the rows above</li></ol>
+      </div>
+      <div class="pd-fmt"><i data-lucide="file-text"></i><span>Supported: .xlsx, .xls, .csv<br>Maximum 1,000 records per file</span></div>
+    </div>
+
+    <div class="pd-cq-bfoot">
+      <span class="muted small" id="pd-cq-btot"></span>
+      <span class="spacer"></span>
+      <button type="button" class="btn secondary" id="pd-cq-bcancel">Cancel</button>
+      <button type="button" class="btn secondary" id="pd-cq-validate"><i data-lucide="circle-check"></i>Validate Rows</button>
+      <button type="button" class="btn primary" id="pd-cq-generate"><i data-lucide="send"></i><span>Generate Vouchers</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 6. NEW VOUCHER ============================== -->
+<section class="screen pd-scr pd-vn" data-route="app/accounting/vouchers/new" data-title="New Voucher">
+  <div class="pd-vn-head">
+    <a class="pd-back" href="#/app/accounting/vouchers" aria-label="Back to register"><i data-lucide="arrow-left"></i></a>
+    <div class="pd-vn-title">
+      <nav class="pd-crumb"><a href="#/app/accounting/vouchers">Vouchers</a><i data-lucide="chevron-right"></i><b>New</b></nav>
+      <h1>New Voucher</h1>
+      <p id="pd-vn-sub">Enter a balanced voucher — every debit has a matching credit.</p>
+    </div>
+    <div class="pd-vtiles" id="pd-vn-tiles">
+      <button type="button" class="on" data-vt="JV"><i data-lucide="notebook-pen"></i><b>Journal</b><small>General entry</small></button>
+      <button type="button" data-vt="CPV"><i data-lucide="wallet"></i><b>Cash Payment</b><small>Cash out</small></button>
+      <button type="button" data-vt="CRV"><i data-lucide="hand-coins"></i><b>Cash Receipt</b><small>Cash in</small></button>
+      <button type="button" data-vt="BPV"><i data-lucide="landmark"></i><b>Bank Payment</b><small>From bank</small></button>
+      <button type="button" data-vt="BRV"><i data-lucide="piggy-bank"></i><b>Bank Receipt</b><small>To bank</small></button>
+      <button type="button" data-vt="MORE" id="pd-vn-more"><i data-lucide="ellipsis"></i><b>More</b><small id="pd-vn-more-s">Contra, Opening</small></button>
+    </div>
+  </div>
+
+  <div class="panel pd-card">
+    <div class="pd-sec-h">
+      <span class="icon-tile"><i data-lucide="file-pen-line"></i></span>
+      <span class="pd-sec-t"><b>Voucher Details</b><small>Basic information about this voucher</small></span>
+      <span class="pd-autono">Auto number: <b id="pd-vn-no">JV-2026-000046</b><button type="button" id="pd-vn-gear" aria-label="Numbering"><i data-lucide="settings"></i></button></span>
+    </div>
+    <div class="pd-fgrid c4">
+      <label class="pd-f"><span>Voucher Date <em>*</em></span><div class="pd-inp-ic"><i data-lucide="calendar"></i><input type="date" id="pd-vn-date" value="2026-10-01"></div></label>
+      <label class="pd-f"><span>Posting Date <em>*</em></span><div class="pd-inp-ic"><i data-lucide="calendar-check"></i><input type="date" value="2026-10-01"></div></label>
+      <label class="pd-f"><span>Voucher Type <em>*</em></span><div class="pd-inp-ic"><i data-lucide="shapes"></i><select id="pd-vn-type"><option value="JV">Journal Voucher</option><option value="CPV">Cash Payment Voucher</option><option value="CRV">Cash Receipt Voucher</option><option value="BPV">Bank Payment Voucher</option><option value="BRV">Bank Receipt Voucher</option><option value="CV">Contra Voucher</option><option value="OB">Opening Balance</option></select></div></label>
+      <label class="pd-f"><span>Reference No.</span><div class="pd-inp-ic"><i data-lucide="hash"></i><input id="pd-vn-ref" placeholder="e.g. INV-1024"></div></label>
+      <label class="pd-f"><span>Branch <em>*</em></span><div class="pd-inp-ic"><i data-lucide="building-2"></i><select id="pd-vn-branch"></select></div></label>
+      <label class="pd-f"><span>Department</span><div class="pd-inp-ic"><i data-lucide="users"></i><select><option>Finance</option><option>Administration</option><option>Sales</option><option>Procurement</option><option>Operations</option><option>Warehouse</option></select></div></label>
+      <label class="pd-f"><span>Prepared By</span><div class="pd-inp-ic"><i data-lucide="user-round"></i><select><option>Sana Javed</option><option>Hira Ali</option></select></div></label>
+      <label class="pd-f"><span>Approved By</span><div class="pd-inp-ic"><i data-lucide="user-check"></i><select><option value="">Select approver</option><option>Ahmed Raza</option><option>Sana Javed</option></select></div></label>
+    </div>
+    <div class="pd-morph" id="pd-vn-morph"><div class="pd-morph-in" id="pd-vn-morph-in"></div></div>
+    <label class="pd-f pd-narr"><span>Narration <em>*</em></span>
+      <div class="pd-inp-ic top"><i data-lucide="align-left"></i><textarea id="pd-vn-narr" rows="2" maxlength="300" placeholder="Briefly describe this voucher…"></textarea></div>
+      <small class="pd-count"><span id="pd-vn-narrc">0</span>/300</small>
+    </label>
+  </div>
+
+  <div class="panel pd-card flushx">
+    <div class="pd-sec-h">
+      <span class="icon-tile"><i data-lucide="list-ordered"></i></span>
+      <span class="pd-sec-t"><b>Voucher Entries</b><small id="pd-vn-esub">Add debit and credit lines. The voucher must be balanced.</small></span>
+      <div class="pd-sec-act">
+        <button type="button" class="btn secondary" id="pd-vn-tpl"><i data-lucide="layout-template"></i>Import from template<i data-lucide="chevron-down"></i></button>
+        <button type="button" class="btn secondary" id="pd-vn-addm"><i data-lucide="list-plus"></i>Add multiple lines</button>
+        <button type="button" class="btn primary" id="pd-vn-add"><i data-lucide="plus"></i>Add line</button>
+      </div>
+    </div>
+    <div class="table-wrap pd-gridwrap"><table class="tbl lines pd-lines pd-vn-t" data-plain id="pd-vn-table">
+      <thead id="pd-vn-thead"></thead>
+      <tbody id="pd-vn-body"></tbody>
+      <tbody id="pd-vn-contra"></tbody>
+    </table></div>
+    <div class="pd-vn-under">
+      <button type="button" class="btn ghost sm" id="pd-vn-add2"><i data-lucide="plus"></i>Add another line</button>
+      <span class="spacer"></span>
+      <div class="pd-totbar" id="pd-vn-totbar">
+        <div><small>Total Debit</small><b id="pd-vn-tdr">Rs 0.00</b></div>
+        <div><small>Total Credit</small><b id="pd-vn-tcr">Rs 0.00</b></div>
+        <div class="pd-balance" id="pd-vn-bal"><span class="pd-bal-ic"><i data-lucide="check"></i><i data-lucide="scale"></i></span><div><b id="pd-vn-bal-t">Unbalanced</b><small id="pd-vn-bal-s">Add lines to begin</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pd-vn-2">
+    <div class="panel pd-card">
+      <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="paperclip"></i></span><span class="pd-sec-t"><b>Attachments</b><small>Bills, receipts and approvals</small></span></div>
+      <label class="pd-drop" id="pd-vn-drop">
+        <input type="file" id="pd-vn-file" multiple hidden>
+        <span class="pd-drop-ic"><i data-lucide="cloud-upload"></i></span>
+        <b>Drag &amp; drop files here, or click to upload</b>
+        <small>PDF, Excel, JPG up to 10MB each</small>
+      </label>
+      <ul class="pd-files" id="pd-vn-files"></ul>
+    </div>
+    <div class="panel pd-card">
+      <div class="pd-sec-h nob"><span class="icon-tile"><i data-lucide="info"></i></span><span class="pd-sec-t"><b>Additional Information</b><small>Tags and internal comments</small></span></div>
+      <div class="pd-fgrid c2">
+        <div class="pd-f"><span>Tags</span><div class="pd-tags" id="pd-vn-tags"><input id="pd-vn-tagin" placeholder="Add tag and press Enter"></div></div>
+        <label class="pd-f"><span>Comments</span><textarea rows="3" placeholder="Any additional notes…"></textarea></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="pd-actbar">
+    <label class="switch"><input type="checkbox" id="pd-vn-tplsw"><i></i><span>Save as template<small>Reuse this voucher format later</small></span></label>
+    <span class="spacer"></span>
+    <a class="btn ghost" href="#/app/accounting/vouchers">Cancel</a>
+    <button type="button" class="btn secondary" id="pd-vn-draft"><i data-lucide="save"></i>Save Draft</button>
+    <div class="pd-split">
+      <button type="button" class="btn primary" id="pd-vn-post" disabled><i data-lucide="circle-check"></i><span>Save &amp; Post</span></button>
+      <button type="button" class="btn primary icon" id="pd-vn-postmenu" aria-label="More save options" disabled><i data-lucide="chevron-down"></i></button>
+    </div>
+  </div>
+</section>

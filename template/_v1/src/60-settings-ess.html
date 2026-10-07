@@ -1,0 +1,1876 @@
+<!-- ============================================================
+     60-settings-ess.html — Tenant Settings, My Profile, ESS portal, shared states
+     ============================================================ -->
+
+<!-- ===================== COMPANY SETTINGS ===================== -->
+<section class="screen" data-route="app/settings" data-title="Company Settings">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Company</div>
+      <h1>Company Settings</h1>
+      <p>Legal profile, branches, finance defaults, tax registration and document numbering for Al-Noor Enterprises.</p>
+    </div>
+    <div class="head-actions">
+      <span class="badge neutral">Tenant code ALNOOR</span>
+      <button class="btn secondary"><i data-lucide="rotate-ccw"></i>Discard</button>
+      <button class="btn primary" data-toast="Company settings saved"><i data-lucide="check"></i>Save changes</button>
+    </div>
+  </div>
+
+  <div data-tabs class="split-l">
+    <div class="panel vnav tabs">
+      <button class="active" data-tab="set-profile"><i data-lucide="building-2"></i>Company Profile</button>
+      <button data-tab="set-branches"><i data-lucide="map-pin"></i>Branches</button>
+      <button data-tab="set-finance"><i data-lucide="landmark"></i>Finance</button>
+      <button data-tab="set-sales"><i data-lucide="shopping-cart"></i>Sales &amp; Purchases</button>
+      <button data-tab="set-hr"><i data-lucide="users"></i>HR &amp; Payroll</button>
+      <button data-tab="set-tax"><i data-lucide="percent"></i>Tax</button>
+      <button data-tab="set-numbering"><i data-lucide="hash"></i>Numbering Series</button>
+      <button data-tab="set-branding"><i data-lucide="palette"></i>Branding</button>
+    </div>
+
+    <div>
+      <!-- Company profile -->
+      <div class="tab-pane active" data-pane="set-profile">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Company Profile</h3><p>Appears on invoices, payslips and statutory returns</p></div></div>
+          <div class="row mb">
+            <span class="avatar xl">AN</span>
+            <div>
+              <b>Company logo</b>
+              <p class="small muted">PNG or SVG, at least 400×400 px, max 2 MB. Used on printed documents and the sidebar.</p>
+              <div class="row mt"><button class="btn secondary sm"><i data-lucide="upload"></i>Upload new</button><button class="btn ghost sm">Remove</button></div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <label class="full"><span>Legal name *</span><input value="Al-Noor Enterprises (Pvt) Ltd"></label>
+            <label><span>Trading name</span><input value="Al-Noor Enterprises"></label>
+            <label><span>Company registration (SECP)</span><input value="0098234"></label>
+            <label><span>NTN *</span><input value="4271839-6"></label>
+            <label><span>STRN</span><input value="32-77-8761-234-55"></label>
+            <label class="full"><span>Registered address</span><textarea rows="2">Plot 14-B, Block H, Gulberg III, Main Boulevard, Lahore 54660</textarea></label>
+            <label><span>City</span><select><option>Lahore</option><option>Karachi</option><option>Islamabad</option></select></label>
+            <label><span>Province</span><select><option>Punjab</option><option>Sindh</option><option>Islamabad Capital Territory</option><option>Khyber Pakhtunkhwa</option><option>Balochistan</option></select></label>
+            <label><span>Phone</span><input value="+92 42 3578 1200"></label>
+            <label><span>Email</span><input value="accounts@alnoor.com.pk"></label>
+            <label><span>Website</span><input value="www.alnoor.com.pk"></label>
+            <label><span>Industry</span><select><option>Trading &amp; Distribution</option><option>Manufacturing</option><option>Services</option><option>Retail</option><option>Construction</option></select></label>
+            <label><span>Time zone</span><select><option>(GMT+05:00) Asia/Karachi</option></select></label>
+            <label><span>Legal structure</span><select><option>Private Limited Company</option><option>Public Limited Company</option><option>AOP / Partnership</option><option>Sole Proprietor</option></select></label>
+          </div>
+          <div class="form-actions"><button class="btn secondary">Cancel</button><button class="btn primary" data-toast="Company profile updated">Save profile</button></div>
+        </div>
+      </div>
+
+      <!-- Branches -->
+      <div class="tab-pane" data-pane="set-branches">
+        <div class="panel flush">
+          <div class="panel-head" style="padding:16px 18px 0">
+            <div><h3>Branches</h3><p>4 active locations · used for branch-wise reporting and user access</p></div>
+            <div class="panel-actions"><button class="btn primary sm"><i data-lucide="plus"></i>Add branch</button></div>
+          </div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Code</th><th>Branch</th><th>Manager</th><th>Address</th><th>Sales tax authority</th><th class="num">Employees</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>LHR</b></td><td><b>Lahore HQ</b><small>Head office · default</small></td><td>Ahmed Raza</td><td>Gulberg III, Lahore</td><td>Punjab (PRA)</td><td class="num">68</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>KHI</b></td><td><b>Karachi</b><small>Sales &amp; warehouse</small></td><td>Faisal Qureshi</td><td>SITE Area, Karachi</td><td>Sindh (SRB)</td><td class="num">31</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>ISB</b></td><td><b>Islamabad</b><small>Regional sales</small></td><td>Mehwish Tariq</td><td>Blue Area, Islamabad</td><td>ICT</td><td class="num">17</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>FSD</b></td><td><b>Faisalabad</b><small>Warehouse</small></td><td>Kashif Ali</td><td>Sargodha Road, Faisalabad</td><td>Punjab (PRA)</td><td class="num">12</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>MUL</b></td><td><b>Multan</b><small>Planned Q4</small></td><td class="muted">—</td><td>Bosan Road, Multan</td><td>Punjab (PRA)</td><td class="num zero">—</td><td><span class="badge neutral">Inactive</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- Finance -->
+      <div class="tab-pane" data-pane="set-finance">
+        <div class="panel mb">
+          <div class="panel-head"><div><h3>Fiscal &amp; currency</h3><p>Fiscal year July–June · FY 2026-27 is open</p></div></div>
+          <div class="form-grid c3">
+            <label><span>Fiscal year starts</span><select><option>1 July</option><option>1 January</option><option>1 April</option></select></label>
+            <label><span>Base currency</span><select><option>PKR — Pakistani Rupee</option></select></label>
+            <label><span>Amount decimal places</span><select><option>2</option><option>0</option><option>3</option></select></label>
+            <label><span>Number format</span><select><option>1,245,000.00 (Western)</option><option>12,45,000.00 (South Asian)</option></select></label>
+            <label><span>Lock date (no posting before)</span><input type="date" value="2026-08-31"></label>
+            <label><span>Exchange rate source</span><select><option>State Bank of Pakistan (daily)</option><option>Manual</option></select></label>
+          </div>
+          <div class="stack mt">
+            <label class="switch"><input type="checkbox" checked><i></i><span>Allow multi-currency transactions (USD, AED, EUR)</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Require cost centre on expense lines</span></label>
+            <label class="switch"><input type="checkbox"><i></i><span>Allow posting to future periods</span></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Default account mapping</h3><p>Used when vouchers are generated automatically by sub-ledgers</p></div></div>
+          <div class="form-grid">
+            <label><span>Accounts receivable control</span><select><option>1131 — Trade Debtors</option></select></label>
+            <label><span>Accounts payable control</span><select><option>2111 — Trade Creditors</option></select></label>
+            <label><span>Sales revenue</span><select><option>4110 — Sales — Local</option></select></label>
+            <label><span>Sales returns</span><select><option>4150 — Sales Returns</option></select></label>
+            <label><span>Output GST</span><select><option>2151 — Sales Tax Payable</option></select></label>
+            <label><span>Input GST</span><select><option>1161 — Sales Tax Refundable</option></select></label>
+            <label><span>WHT payable</span><select><option>2155 — Income Tax Withheld</option></select></label>
+            <label><span>Salaries payable</span><select><option>2131 — Salaries Payable</option></select></label>
+            <label><span>Default bank</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>UBL — 2294</option><option>Bank Alfalah — 5510</option></select></label>
+            <label><span>Retained earnings</span><select><option>3210 — Retained Earnings</option></select></label>
+            <label><span>Rounding difference</span><select><option>5990 — Rounding Off</option></select></label>
+            <label><span>Exchange gain / loss</span><select><option>5810 — Exchange Gain / Loss</option></select></label>
+          </div>
+          <div class="form-actions"><button class="btn secondary">Reset to template</button><button class="btn primary" data-toast="Finance settings saved">Save finance settings</button></div>
+        </div>
+      </div>
+
+      <!-- Sales & Purchases -->
+      <div class="tab-pane" data-pane="set-sales">
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Sales</h3><p>Defaults for quotations, orders and invoices</p></div></div>
+            <div class="form-grid">
+              <label><span>Default payment terms</span><select><option>Net 30</option><option>Net 15</option><option>Net 45</option><option>Due on receipt</option></select></label>
+              <label><span>Invoice prefix</span><input value="INV-{YYYY}-"></label>
+              <label><span>Quotation validity (days)</span><input type="number" value="15"></label>
+              <label><span>Default sales tax</span><select><option>GST 18%</option><option>GST 0%</option><option>Exempt</option></select></label>
+              <label class="full"><span>Invoice terms &amp; conditions</span><textarea rows="3">Goods once sold will not be taken back. Payment via crossed cheque or bank transfer in favour of Al-Noor Enterprises (Pvt) Ltd.</textarea></label>
+            </div>
+            <div class="form-section mt"><h4>Credit control</h4><p>Applied when a sales order or invoice exceeds limits</p></div>
+            <div class="form-grid">
+              <label><span>On credit limit breach</span><select><option>Block &amp; request override</option><option>Warn only</option><option>Allow</option></select></label>
+              <label><span>Overdue tolerance (days)</span><input type="number" value="15"></label>
+              <label class="check full"><input type="checkbox" checked> Block customers with invoices overdue more than 90 days</label>
+            </div>
+            <a class="link small" href="#/app/receivables/credit">Open Credit Control →</a>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>Purchases</h3><p>Defaults for POs and vendor bills</p></div></div>
+            <div class="form-grid">
+              <label><span>Default vendor terms</span><select><option>Net 45</option><option>Net 30</option><option>Net 60</option></select></label>
+              <label><span>PO prefix</span><input value="PO-{YYYY}-"></label>
+              <label><span>3-way match tolerance</span><input value="2%"></label>
+              <label><span>Bill approval above</span><input value="Rs 250,000"></label>
+            </div>
+            <div class="stack mt">
+              <label class="switch"><input type="checkbox" checked><i></i><span>Require approved PO before vendor bill</span></label>
+              <label class="switch"><input type="checkbox" checked><i></i><span>Auto-deduct WHT u/s 153 on vendor payments</span></label>
+              <label class="switch"><input type="checkbox"><i></i><span>Allow partial goods receipt</span></label>
+              <label class="switch"><input type="checkbox" checked><i></i><span>Warn on duplicate vendor invoice number</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HR & Payroll -->
+      <div class="tab-pane" data-pane="set-hr">
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Payroll</h3><p>Monthly cycle · PR-2026-09 posted</p></div></div>
+            <div class="form-grid">
+              <label><span>Pay day</span><select><option>Last working day</option><option>1st of next month</option><option>25th</option></select></label>
+              <label><span>Payroll cut-off</span><select><option>25th of month</option><option>Month end</option></select></label>
+              <label><span>Working days basis</span><select><option>Actual calendar days</option><option>Fixed 30 days</option><option>Working days only</option></select></label>
+              <label><span>Salary disbursement bank</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option></select></label>
+              <label><span>EOBI employer share</span><input value="Rs 1,850 / month"></label>
+              <label><span>Provident fund</span><input value="8.33% of basic"></label>
+            </div>
+            <div class="stack mt">
+              <label class="switch"><input type="checkbox" checked><i></i><span>Deduct income tax u/s 149 automatically</span></label>
+              <label class="switch"><input type="checkbox" checked><i></i><span>Publish payslips to ESS on payroll post</span></label>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>Attendance &amp; late policy</h3><p>Default General shift 09:00–18:00</p></div></div>
+            <div class="form-grid">
+              <label><span>Working week</span><select><option>Monday – Saturday (half Sat)</option><option>Monday – Friday</option></select></label>
+              <label><span>Grace period</span><input value="15 minutes"></label>
+              <label><span>Late marks = 1 leave</span><input type="number" value="3"></label>
+              <label><span>Half day if hours below</span><input value="5 hours"></label>
+              <label><span>Overtime rate</span><select><option>2× hourly (Factories Act)</option><option>1.5× hourly</option></select></label>
+              <label><span>Attendance source</span><select><option>ZKTeco biometric + ESS punch</option><option>Biometric only</option></select></label>
+            </div>
+            <div class="stack mt">
+              <label class="switch"><input type="checkbox" checked><i></i><span>Geo-fence ESS punches to branch location (200 m)</span></label>
+              <label class="switch"><input type="checkbox"><i></i><span>Allow punches from personal devices off-site</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tax -->
+      <div class="tab-pane" data-pane="set-tax">
+        <div class="banner good mb"><i data-lucide="circle-check"></i><div><b>Active taxpayer — FBR ATL</b><p>Last verified 28 Sep 2026. NTN 4271839-6 appears on the Active Taxpayers List.</p></div><a class="btn sm secondary" href="#/app/tax/fbr">FBR Integration</a></div>
+        <div class="panel mb">
+          <div class="panel-head"><div><h3>Sales tax registration</h3></div></div>
+          <div class="form-grid c3">
+            <label><span>GST registered</span><select><option>Yes — Federal (FBR)</option><option>No</option></select></label>
+            <label><span>STRN</span><input value="32-77-8761-234-55"></label>
+            <label><span>Return period</span><select><option>Monthly</option></select></label>
+            <label><span>Standard rate</span><input value="18%"></label>
+            <label><span>Further tax (unregistered buyers)</span><input value="4%"></label>
+            <label><span>Provincial services tax</span><select><option>PRA 16% (Punjab)</option><option>SRB 15% (Sindh)</option></select></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>FBR POS &amp; withholding defaults</h3></div></div>
+          <div class="stack mb">
+            <label class="switch"><input type="checkbox" checked><i></i><span>Report invoices to FBR POS / Digital Invoicing in real time</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Print FBR invoice number &amp; QR on sales invoices</span></label>
+          </div>
+          <div class="form-grid">
+            <label><span>WHT on goods — 153(1)(a)</span><input value="4.5% (filer) / 9% (non-filer)"></label>
+            <label><span>WHT on services — 153(1)(b)</span><input value="11% (filer) / 22% (non-filer)"></label>
+            <label><span>WHT on contracts — 153(1)(c)</span><input value="7.5% (filer) / 15% (non-filer)"></label>
+            <label><span>Default WHT payable account</span><select><option>2155 — Income Tax Withheld</option></select></label>
+          </div>
+          <div class="form-actions"><a class="btn secondary" href="#/app/tax/codes">Manage tax codes</a><button class="btn primary" data-toast="Tax settings saved">Save tax settings</button></div>
+        </div>
+      </div>
+
+      <!-- Numbering -->
+      <div class="tab-pane" data-pane="set-numbering">
+        <div class="panel flush">
+          <div class="panel-head" style="padding:16px 18px 0"><div><h3>Numbering Series</h3><p>Tokens: {YYYY} year, {FY} fiscal year, {BR} branch code</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="plus"></i>Add series</button></div></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Document type</th><th>Prefix</th><th class="num">Padding</th><th class="num">Next number</th><th>Preview</th><th>Reset yearly</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>Journal Voucher</b></td><td><input class="cell-input" value="JV-{YYYY}-"></td><td class="num">6</td><td class="num">46</td><td><code>JV-2026-000046</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Cash Payment Voucher</b></td><td><input class="cell-input" value="CPV-{YYYY}-"></td><td class="num">6</td><td class="num">219</td><td><code>CPV-2026-000219</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Bank Payment Voucher</b></td><td><input class="cell-input" value="BPV-{YYYY}-"></td><td class="num">6</td><td class="num">388</td><td><code>BPV-2026-000388</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Bank Receipt Voucher</b></td><td><input class="cell-input" value="BRV-{YYYY}-"></td><td class="num">6</td><td class="num">302</td><td><code>BRV-2026-000302</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Sales Invoice</b></td><td><input class="cell-input" value="INV-{YYYY}-"></td><td class="num">6</td><td class="num">124</td><td><code>INV-2026-000124</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Quotation</b></td><td><input class="cell-input" value="QT-{YYYY}-"></td><td class="num">5</td><td class="num">87</td><td><code>QT-2026-00087</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Credit Note</b></td><td><input class="cell-input" value="CN-{YYYY}-"></td><td class="num">5</td><td class="num">14</td><td><code>CN-2026-00014</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Purchase Order</b></td><td><input class="cell-input" value="PO-{YYYY}-"></td><td class="num">5</td><td class="num">156</td><td><code>PO-2026-00156</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Vendor Bill</b></td><td><input class="cell-input" value="BILL-{YYYY}-"></td><td class="num">5</td><td class="num">402</td><td><code>BILL-2026-00402</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Payroll Run</b></td><td><input class="cell-input" value="PR-{YYYY}-"></td><td class="num">2</td><td class="num">10</td><td><code>PR-2026-10</code></td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Employee</b></td><td><input class="cell-input" value="EMP-"></td><td class="num">4</td><td class="num">129</td><td><code>EMP-0129</code></td><td><label class="switch"><input type="checkbox"><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+              <tr><td><b>Fixed Asset</b></td><td><input class="cell-input" value="FA-"></td><td class="num">4</td><td class="num">58</td><td><code>FA-0058</code></td><td><label class="switch"><input type="checkbox"><i></i></label></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="pencil"></i></button></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- Branding -->
+      <div class="tab-pane" data-pane="set-branding">
+        <div class="split-doc">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Brand colours</h3><p>Applied to printed documents, emails and the ESS portal</p></div></div>
+            <div class="row mb">
+              <button class="btn icon" title="Al-Noor Green" style="background:#15803d;border-color:#15803d;box-shadow:0 0 0 3px #bbf7d0"></button>
+              <button class="btn icon" title="Navy" style="background:#1e3a5f;border-color:#1e3a5f"></button>
+              <button class="btn icon" title="Teal" style="background:#0f766e;border-color:#0f766e"></button>
+              <button class="btn icon" title="Indigo" style="background:#4338ca;border-color:#4338ca"></button>
+              <button class="btn icon" title="Maroon" style="background:#9f1239;border-color:#9f1239"></button>
+              <button class="btn icon" title="Amber" style="background:#b45309;border-color:#b45309"></button>
+              <button class="btn icon" title="Slate" style="background:#334155;border-color:#334155"></button>
+            </div>
+            <div class="form-grid">
+              <label><span>Primary colour</span><input value="#15803D"></label>
+              <label><span>Accent colour</span><input value="#EFBC61"></label>
+              <label><span>Document font</span><select><option>Inter</option><option>Noto Nastaliq Urdu (bilingual)</option></select></label>
+              <label><span>Paper size</span><select><option>A4</option><option>Letter</option></select></label>
+              <label class="full"><span>Email footer</span><textarea rows="4">Al-Noor Enterprises (Pvt) Ltd · Plot 14-B, Gulberg III, Lahore
+NTN 4271839-6 · STRN 32-77-8761-234-55 · +92 42 3578 1200
+This is a system-generated email from Finsoft. Please do not reply.</textarea></label>
+              <label class="check full"><input type="checkbox" checked> Show "Powered by Finsoft" in email footer</label>
+            </div>
+            <div class="form-actions"><a class="btn secondary" href="#/app/settings/templates">Document templates</a><button class="btn primary" data-toast="Branding saved">Save branding</button></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>Preview</h3><p>Sales invoice header</p></div></div>
+            <div class="paper">
+              <div class="paper-head"><div class="row"><span class="avatar">AN</span><div><b>Al-Noor Enterprises (Pvt) Ltd</b><br><small class="muted">NTN 4271839-6</small></div></div><div class="right"><b style="color:#15803d">SALES TAX INVOICE</b><br><small class="muted">INV-2026-000124</small></div></div>
+              <div class="paper-meta"><div><span class="muted small">Bill to</span><br><b>Shifa International</b></div><div class="right"><span class="muted small">Date</span><br><b>01 Oct 2026</b></div></div>
+              <div class="paper-totals"><div><span>Total incl. GST</span><b>Rs 1,245,000</b></div></div>
+              <div class="paper-foot small muted">Thank you for your business.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== USERS ===================== -->
+<section class="screen" data-route="app/settings/users" data-title="Users">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Users</div>
+      <h1>Users</h1>
+      <p>People who can sign in to Al-Noor Enterprises on Finsoft. 18 of 25 seats used on the Business plan.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-open="set-invite-user"><i data-lucide="user-plus"></i>Invite user</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Active users</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>18</strong><small>7 seats available</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>MFA enabled</span><span class="icon-well"><i data-lucide="shield-check"></i></span></div><strong>15 / 18</strong><small class="up">83% coverage</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Pending invites</span><span class="icon-well"><i data-lucide="mail"></i></span></div><strong>3</strong><small>1 expires today</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Suspended</span><span class="icon-well"><i data-lucide="user-x"></i></span></div><strong>1</strong><small>Inactive &gt; 90 days</small></div>
+  </div>
+
+  <div class="toolbar mt">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search name or email…"></label>
+    <select><option>All roles</option><option>Owner</option><option>Finance Manager</option><option>Accountant</option><option>HR Manager</option></select>
+    <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+    <div class="chips"><button class="active">All <i>19</i></button><button>Active <i>18</i></button><button>No MFA <i>3</i></button><button>Suspended <i>1</i></button></div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>User</th><th>Email</th><th>Role</th><th>Branch access</th><th>MFA</th><th>Last login</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>CEO</small></div></div></td><td>ahmed.raza@alnoor.com.pk</td><td><span class="badge violet">Owner</span></td><td>All branches</td><td><span class="badge good">On</span></td><td>Today 08:41<small>Lahore · Chrome</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>Finance Manager</small></div></div></td><td>sana.javed@alnoor.com.pk</td><td><span class="badge info">Finance Manager</span></td><td>All branches</td><td><span class="badge good">On</span></td><td>Today 09:02<small>Lahore · Edge</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Accountant</small></div></div></td><td>hira.ali@alnoor.com.pk</td><td><span class="badge info">Accountant</span></td><td>Lahore HQ, Faisalabad</td><td><span class="badge good">On</span></td><td>Today 08:55<small>Lahore · Chrome</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">AN</span><div><b>Ayesha Noor</b><small>HR Manager</small></div></div></td><td>ayesha.noor@alnoor.com.pk</td><td><span class="badge good">HR Manager</span></td><td>All branches</td><td><span class="badge good">On</span></td><td>30 Sep 2026 17:20<small>Lahore · Safari</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>Payroll Officer</small></div></div></td><td>zainab.raza@alnoor.com.pk</td><td><span class="badge good">Payroll Officer</span></td><td>All branches</td><td><span class="badge good">On</span></td><td>30 Sep 2026 19:48<small>Lahore · Chrome</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales Executive</small></div></div></td><td>bilal.khan@alnoor.com.pk</td><td><span class="badge neutral">Sales Executive</span></td><td>Lahore HQ</td><td><span class="badge warn">Off</span></td><td>Today 09:04<small>Lahore · Android app</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td>usman.ali@alnoor.com.pk</td><td><span class="badge info">Accountant</span></td><td>Lahore HQ, Karachi</td><td><span class="badge good">On</span></td><td>29 Sep 2026 11:12<small>Karachi · Chrome</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>Branch Manager</small></div></div></td><td>faisal.q@alnoor.com.pk</td><td><span class="badge neutral">Sales Executive</span></td><td>Karachi</td><td><span class="badge warn">Off</span></td><td>27 Sep 2026 14:30<small>Karachi · iOS app</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">KA</span><div><b>Kamran Akhtar</b><small>External auditor</small></div></div></td><td>k.akhtar@auditpartners.pk</td><td><span class="badge neutral">Auditor (read-only)</span></td><td>All branches</td><td><span class="badge good">On</span></td><td>15 Sep 2026 10:05<small>Islamabad · Chrome</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Nida Shah</b><small>Former accountant</small></div></div></td><td>nida.shah@alnoor.com.pk</td><td><span class="badge neutral">Accountant</span></td><td>Islamabad</td><td><span class="badge warn">Off</span></td><td>18 Jun 2026 16:44<small>Islamabad · Chrome</small></td><td><span class="badge danger dot">Suspended</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–10 of 19</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>Pending invites</h3><p>Invitations expire after 7 days</p></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Email</th><th>Role</th><th>Branch access</th><th>Invited by</th><th>Sent</th><th>Expires</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>rabia.saeed@alnoor.com.pk</td><td><span class="badge info">Accountant</span></td><td>Karachi</td><td>Sana Javed</td><td>24 Sep 2026</td><td><span class="badge danger">Today</span></td><td class="actions"><button class="btn ghost sm" data-toast="Invite resent to rabia.saeed@alnoor.com.pk">Resend</button><button class="icon-btn-sm" data-toast="Invite revoked"><i data-lucide="x"></i></button></td></tr>
+        <tr><td>ali.haider@alnoor.com.pk</td><td><span class="badge neutral">Sales Executive</span></td><td>Islamabad</td><td>Ahmed Raza</td><td>28 Sep 2026</td><td><span class="badge warn">4 Oct 2026</span></td><td class="actions"><button class="btn ghost sm" data-toast="Invite resent">Resend</button><button class="icon-btn-sm" data-toast="Invite revoked"><i data-lucide="x"></i></button></td></tr>
+        <tr><td>hamza.butt@alnoor.com.pk</td><td><span class="badge good">Payroll Officer</span></td><td>Lahore HQ</td><td>Ayesha Noor</td><td>30 Sep 2026</td><td><span class="badge neutral">7 Oct 2026</span></td><td class="actions"><button class="btn ghost sm" data-toast="Invite resent">Resend</button><button class="icon-btn-sm" data-toast="Invite revoked"><i data-lucide="x"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="set-invite-user">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Invite user</h2><p>They'll receive an email to set a password and enrol MFA.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Full name *</span><input placeholder="e.g. Rabia Saeed"></label>
+          <label><span>Work email *</span><input placeholder="name@alnoor.com.pk"></label>
+          <label><span>Role *</span><select><option>Accountant</option><option>Finance Manager</option><option>HR Manager</option><option>Payroll Officer</option><option>Sales Executive</option><option>Auditor (read-only)</option><option>Owner</option></select></label>
+          <label><span>Link to employee</span><select><option>— none —</option><option>Rabia Saeed (EMP-0118)</option><option>Ali Haider (EMP-0097)</option></select></label>
+        </div>
+        <div class="form-section mt"><h4>Branch access</h4><p>User only sees transactions for selected branches</p></div>
+        <div class="row">
+          <label class="check"><input type="checkbox" checked> Lahore HQ</label>
+          <label class="check"><input type="checkbox"> Karachi</label>
+          <label class="check"><input type="checkbox"> Islamabad</label>
+          <label class="check"><input type="checkbox"> Faisalabad</label>
+        </div>
+        <div class="stack mt">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Require MFA at first sign-in</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>Restrict sign-in to office IP range (203.99.48.0/24)</span></label>
+        </div>
+        <div class="banner info mt"><i data-lucide="info"></i><div><b>7 seats remaining</b><p>Adding this user will use 19 of 25 seats on the Business plan.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Invitation sent"><i data-lucide="send"></i>Send invite</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROLES ===================== -->
+<section class="screen" data-route="app/settings/roles" data-title="Roles &amp; Permissions">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Roles &amp; Permissions</div>
+      <h1>Roles &amp; Permissions</h1>
+      <p>Control what each role can view, create, approve and post across modules.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="copy"></i>Duplicate role</button>
+      <button class="btn primary"><i data-lucide="plus"></i>New role</button>
+    </div>
+  </div>
+
+  <div class="split-l">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Roles</h3><p>8 roles · 2 system</p></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well violet"><i data-lucide="crown"></i></span><div><b>Owner</b><small>Full access · system</small></div><span class="spacer"></span><span class="badge neutral">1</span></div>
+        <div class="list-item" style="outline:2px solid #15803d;border-radius:10px"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Finance Manager</b><small>Approve &amp; post finance</small></div><span class="spacer"></span><span class="badge neutral">1</span></div>
+        <div class="list-item"><span class="icon-well blue"><i data-lucide="calculator"></i></span><div><b>Accountant</b><small>Create vouchers &amp; bills</small></div><span class="spacer"></span><span class="badge neutral">4</span></div>
+        <div class="list-item"><span class="icon-well teal"><i data-lucide="users"></i></span><div><b>HR Manager</b><small>People, leave, attendance</small></div><span class="spacer"></span><span class="badge neutral">1</span></div>
+        <div class="list-item"><span class="icon-well teal"><i data-lucide="wallet-cards"></i></span><div><b>Payroll Officer</b><small>Run payroll, loans</small></div><span class="spacer"></span><span class="badge neutral">2</span></div>
+        <div class="list-item"><span class="icon-well yellow"><i data-lucide="shopping-cart"></i></span><div><b>Sales Executive</b><small>Quotes, orders, customers</small></div><span class="spacer"></span><span class="badge neutral">5</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="eye"></i></span><div><b>Auditor (read-only)</b><small>View &amp; export only</small></div><span class="spacer"></span><span class="badge neutral">1</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="circle-user"></i></span><div><b>Employee</b><small>ESS portal · system</small></div><span class="spacer"></span><span class="badge neutral">128</span></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="row">
+          <span class="icon-well lg"><i data-lucide="landmark"></i></span>
+          <div><h3 style="margin:0">Finance Manager</h3><p class="muted small">Approves vouchers, posts journals, closes periods. Assigned to Sana Javed.</p></div>
+          <span class="spacer"></span>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Branch-restricted</span></label>
+        </div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head" style="padding:16px 18px 0"><div><h3>Permission matrix</h3><p>Tick to grant. Post and Approve are segregated from Create by default.</p></div><div class="panel-actions"><div class="seg"><button class="active">Finance</button><button>Sales</button><button>HR</button><button>System</button></div></div></div>
+        <div class="table-wrap"><table class="tbl matrix">
+          <thead><tr><th>Module</th><th>View</th><th>Create</th><th>Edit</th><th>Approve</th><th>Post</th><th>Delete</th><th>Export</th></tr></thead>
+          <tbody>
+            <tr><td><b>Chart of Accounts</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Vouchers</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Bank &amp; Cheques</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Bank Reconciliation</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Fixed Assets</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Budgets</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Tax &amp; Compliance</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Period Close</b></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Sales Invoices</b></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Vendor Bills &amp; Payments</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Payroll</b></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Financial Reports</b></td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td><td><input type="checkbox" disabled></td><td><input type="checkbox" disabled></td><td><input type="checkbox" disabled></td><td><input type="checkbox" disabled></td><td><input type="checkbox" checked></td></tr>
+            <tr><td><b>Settings &amp; Users</b></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-foot"><span class="muted small">Last changed by Ahmed Raza · 12 Sep 2026 15:22</span><div class="row"><button class="btn secondary sm">Reset</button><button class="btn primary sm" data-toast="Permissions for Finance Manager saved">Save permissions</button></div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Data limits</h3></div></div>
+          <div class="dl">
+            <div><span>Max voucher approval</span><b>Rs 5,000,000</b></div>
+            <div><span>Branches</span><b>All branches</b></div>
+            <div><span>Back-dated posting</span><b>Up to 30 days</b></div>
+            <div><span>Salary visibility</span><b>Masked (except own)</b></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Segregation of duties</h3></div></div>
+          <div class="banner warn"><i data-lucide="alert-triangle"></i><div><b>1 conflict</b><p>Role can both create and post vouchers. Consider a second approver above Rs 500,000.</p></div><a class="btn sm secondary" href="#/app/settings/approvals">Workflows</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== APPROVAL WORKFLOWS ===================== -->
+<section class="screen" data-route="app/settings/approvals" data-title="Approval Workflows">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Approval Workflows</div>
+      <h1>Approval Workflows</h1>
+      <p>Multi-level approval chains with amount thresholds, escalation and delegation.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="history"></i>Approval log</button>
+      <button class="btn primary"><i data-lucide="plus"></i>New workflow</button>
+    </div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card" style="outline:2px solid #15803d">
+      <div class="row"><span class="icon-well"><i data-lucide="receipt-text"></i></span><div><b>Vouchers &gt; Rs 500,000</b><small class="muted"> JV, CPV, BPV</small></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <p class="small muted mt">3 steps · Finance Manager → CFO → CEO</p>
+      <div class="row small mt"><span class="badge neutral">7 pending</span><span class="muted">Avg. 4.2 h to approve</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well blue"><i data-lucide="send"></i></span><div><b>Vendor payments</b></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <p class="small muted mt">2 steps · Finance Manager → CEO above Rs 1,000,000</p>
+      <div class="row small mt"><span class="badge neutral">3 pending</span><span class="muted">Avg. 6.0 h</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well teal"><i data-lucide="plane"></i></span><div><b>Leave requests</b></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <p class="small muted mt">2 steps · Line manager → HR Manager (&gt; 3 days)</p>
+      <div class="row small mt"><span class="badge neutral">9 pending</span><span class="muted">Avg. 11 h</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well violet"><i data-lucide="wallet-cards"></i></span><div><b>Payroll run</b></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <p class="small muted mt">3 steps · Payroll Officer → HR Manager → Finance Manager</p>
+      <div class="row small mt"><span class="badge neutral">0 pending</span><span class="muted">PR-2026-09 approved</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well red"><i data-lucide="shield-alert"></i></span><div><b>Credit override</b></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <p class="small muted mt">1 step · Finance Manager (any breach)</p>
+      <div class="row small mt"><span class="badge neutral">2 pending</span><span class="muted">Avg. 1.5 h</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well yellow"><i data-lucide="clipboard-list"></i></span><div><b>Purchase orders</b></div><span class="spacer"></span><span class="badge neutral">Draft</span></div>
+      <p class="small muted mt">2 steps · Procurement head → Finance Manager</p>
+      <div class="row small mt"><span class="badge neutral">Not published</span></div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Workflow builder — Vouchers &gt; Rs 500,000</h3><p>Steps run in sequence. Any rejection returns the voucher to the preparer.</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="plus"></i>Add step</button></div></div>
+      <div class="row" style="flex-wrap:wrap;gap:12px;align-items:stretch">
+        <div class="card" style="min-width:150px;flex:1">
+          <span class="badge neutral">Trigger</span>
+          <div class="row mt"><span class="icon-well"><i data-lucide="file-plus"></i></span><div><b>Voucher submitted</b><small class="muted">Amount &gt; Rs 500,000</small></div></div>
+        </div>
+        <div class="row muted"><i data-lucide="arrow-right"></i></div>
+        <div class="card" style="min-width:150px;flex:1">
+          <span class="badge info">Step 1</span>
+          <div class="row mt"><span class="avatar sm">SJ</span><div><b>Finance Manager</b><small class="muted">Sana Javed · SLA 8 h</small></div></div>
+        </div>
+        <div class="row muted"><i data-lucide="arrow-right"></i></div>
+        <div class="card" style="min-width:150px;flex:1">
+          <span class="badge info">Step 2</span>
+          <div class="row mt"><span class="avatar sm">FQ</span><div><b>CFO</b><small class="muted">if &gt; Rs 2,000,000</small></div></div>
+        </div>
+        <div class="row muted"><i data-lucide="arrow-right"></i></div>
+        <div class="card" style="min-width:150px;flex:1">
+          <span class="badge violet">Step 3</span>
+          <div class="row mt"><span class="avatar sm">AR</span><div><b>CEO</b><small class="muted">Ahmed Raza · if &gt; Rs 5,000,000</small></div></div>
+        </div>
+        <div class="row muted"><i data-lucide="arrow-right"></i></div>
+        <div class="card" style="min-width:150px;flex:1">
+          <span class="badge good">Outcome</span>
+          <div class="row mt"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Auto-post</b><small class="muted">Notify preparer</small></div></div>
+        </div>
+      </div>
+
+      <div class="form-section mt"><h4>Conditions</h4><p>All conditions must be true for this workflow to apply</p></div>
+      <div class="table-wrap"><table class="tbl lines">
+        <thead><tr><th>Field</th><th>Operator</th><th>Value</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><select class="cell-input"><option>Voucher total</option></select></td><td><select class="cell-input"><option>greater than</option></select></td><td><input class="cell-input" value="500,000"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+          <tr><td><select class="cell-input"><option>Voucher type</option></select></td><td><select class="cell-input"><option>is any of</option></select></td><td><input class="cell-input" value="JV, CPV, BPV"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+          <tr><td><select class="cell-input"><option>Branch</option></select></td><td><select class="cell-input"><option>is any of</option></select></td><td><input class="cell-input" value="All branches"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        </tbody>
+      </table></div>
+      <button class="btn ghost sm mt"><i data-lucide="plus"></i>Add condition</button>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Step 1 settings</h3><p>Finance Manager</p></div></div>
+        <div class="form-grid">
+          <label class="full"><span>Approver</span><select><option>Role: Finance Manager</option><option>Specific user</option><option>Preparer's line manager</option></select></label>
+          <label><span>SLA</span><input value="8 hours"></label>
+          <label><span>On SLA breach</span><select><option>Escalate to next step</option><option>Remind only</option></select></label>
+          <label class="full"><span>Approval mode</span><select><option>Any one approver</option><option>All approvers</option></select></label>
+        </div>
+        <div class="stack mt">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Preparer cannot approve own voucher</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Allow delegation when on leave</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>Require comment on approval</span></label>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Notifications</h3></div></div>
+        <div class="stack">
+          <label class="check"><input type="checkbox" checked> In-app notification</label>
+          <label class="check"><input type="checkbox" checked> Email</label>
+          <label class="check"><input type="checkbox" checked> WhatsApp Business</label>
+        </div>
+        <div class="form-actions"><button class="btn secondary">Discard</button><button class="btn primary" data-toast="Workflow published">Publish workflow</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DOCUMENT TEMPLATES ===================== -->
+<section class="screen" data-route="app/settings/templates" data-title="Document Templates">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Document Templates</div>
+      <h1>Document Templates</h1>
+      <p>Print and PDF layouts for invoices, vouchers, payslips and HR letters.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="upload"></i>Import</button>
+      <button class="btn primary"><i data-lucide="plus"></i>New template</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search templates…"></label>
+    <div class="chips"><button class="active">All <i>6</i></button><button>Finance <i>2</i></button><button>Payroll <i>1</i></button><button>HR letters <i>3</i></button></div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card" style="outline:2px solid #15803d">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <div class="paper-head"><b>AL-NOOR</b><b style="color:#15803d">TAX INVOICE</b></div>
+        <div class="skeleton" style="height:6px;width:70%;margin:6px 0"></div><div class="skeleton" style="height:6px;width:45%"></div>
+        <div class="skeleton" style="height:40px;margin-top:10px"></div>
+      </div>
+      <div class="row mt"><div><b>Sales Invoice</b><small class="muted"> Standard GST · A4</small></div><span class="spacer"></span><span class="badge good">Default</span></div>
+    </div>
+    <div class="card">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <div class="paper-head"><b>AL-NOOR</b><b>PAYMENT VOUCHER</b></div>
+        <div class="skeleton" style="height:6px;width:60%;margin:6px 0"></div>
+        <div class="skeleton" style="height:50px;margin-top:10px"></div>
+      </div>
+      <div class="row mt"><div><b>Payment Voucher</b><small class="muted"> BPV / CPV</small></div><span class="spacer"></span><span class="badge good">Default</span></div>
+    </div>
+    <div class="card">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <div class="paper-head"><b>AL-NOOR</b><b>PAYSLIP</b></div>
+        <div class="grid-2"><div class="skeleton" style="height:50px"></div><div class="skeleton" style="height:50px"></div></div>
+      </div>
+      <div class="row mt"><div><b>Payslip</b><small class="muted"> Monthly · bilingual</small></div><span class="spacer"></span><span class="badge good">Default</span></div>
+    </div>
+    <div class="card">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <b>Offer of Employment</b>
+        <div class="skeleton" style="height:6px;margin:8px 0"></div><div class="skeleton" style="height:6px;width:90%"></div><div class="skeleton" style="height:6px;width:80%;margin-top:4px"></div><div class="skeleton" style="height:6px;width:60%;margin-top:4px"></div>
+      </div>
+      <div class="row mt"><div><b>Offer Letter</b><small class="muted"> HR letter</small></div><span class="spacer"></span><span class="badge neutral">v3</span></div>
+    </div>
+    <div class="card">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <b>Experience Certificate</b>
+        <div class="skeleton" style="height:6px;margin:8px 0"></div><div class="skeleton" style="height:6px;width:85%"></div><div class="skeleton" style="height:6px;width:70%;margin-top:4px"></div>
+      </div>
+      <div class="row mt"><div><b>Experience Letter</b><small class="muted"> HR letter</small></div><span class="spacer"></span><span class="badge neutral">v1</span></div>
+    </div>
+    <div class="card">
+      <div class="paper" style="height:150px;overflow:hidden;font-size:9px;padding:12px">
+        <b>To Whom It May Concern</b>
+        <div class="skeleton" style="height:6px;margin:8px 0"></div><div class="skeleton" style="height:6px;width:75%"></div><div class="skeleton" style="height:20px;width:50%;margin-top:6px"></div>
+      </div>
+      <div class="row mt"><div><b>Salary Certificate</b><small class="muted"> HR letter · bank use</small></div><span class="spacer"></span><span class="badge neutral">v2</span></div>
+    </div>
+  </div>
+
+  <div class="split-doc">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Editor — Sales Invoice</h3><p>Drag merge fields into the layout</p></div><div class="panel-actions"><div class="seg"><button class="active">Layout</button><button>Fields</button><button>HTML</button></div></div></div>
+      <div class="form-grid">
+        <label><span>Template name</span><input value="Sales Invoice — Standard GST"></label>
+        <label><span>Paper</span><select><option>A4 portrait</option><option>A5</option><option>Thermal 80mm</option></select></label>
+        <label><span>Header</span><select><option>Logo left, title right</option><option>Centered letterhead</option></select></label>
+        <label><span>Language</span><select><option>English</option><option>English + Urdu</option></select></label>
+      </div>
+      <div class="form-section mt"><h4>Show on document</h4></div>
+      <div class="grid-2">
+        <label class="check"><input type="checkbox" checked> NTN &amp; STRN</label>
+        <label class="check"><input type="checkbox" checked> FBR invoice no. &amp; QR</label>
+        <label class="check"><input type="checkbox" checked> Item HS codes</label>
+        <label class="check"><input type="checkbox"> Item images</label>
+        <label class="check"><input type="checkbox" checked> Amount in words</label>
+        <label class="check"><input type="checkbox" checked> Bank details</label>
+      </div>
+      <div class="form-section mt"><h4>Merge fields</h4></div>
+      <div class="row" style="flex-wrap:wrap">
+        <span class="badge neutral">{{customer.name}}</span><span class="badge neutral">{{invoice.number}}</span><span class="badge neutral">{{invoice.date}}</span><span class="badge neutral">{{invoice.total}}</span><span class="badge neutral">{{gst.amount}}</span><span class="badge neutral">{{fbr.irn}}</span><span class="badge neutral">{{company.ntn}}</span>
+      </div>
+      <div class="form-actions"><button class="btn secondary">Reset</button><button class="btn primary" data-toast="Template saved">Save template</button></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Live preview</h3></div><div class="panel-actions"><button class="btn ghost sm"><i data-lucide="printer"></i>Test print</button></div></div>
+      <div class="paper">
+        <div class="paper-head"><div><b>Al-Noor Enterprises (Pvt) Ltd</b><br><small class="muted">NTN 4271839-6 · STRN 32-77-8761-234-55</small></div><div class="right"><b style="color:#15803d">SALES TAX INVOICE</b><br><small>INV-2026-000123</small></div></div>
+        <div class="paper-meta"><div><span class="small muted">Bill to</span><br><b>Shifa International</b><br><small class="muted">H-8/4, Islamabad</small></div><div class="right"><span class="small muted">Date / Due</span><br><b>28 Sep 2026</b><br><small class="muted">28 Oct 2026</small></div></div>
+        <table class="tbl"><thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>Surgical gloves (box of 100)</td><td class="num">500</td><td class="num">1,450.00</td><td class="num">725,000.00</td></tr>
+            <tr><td>Face masks 3-ply (carton)</td><td class="num">120</td><td class="num">2,900.00</td><td class="num">348,000.00</td></tr>
+          </tbody></table>
+        <div class="paper-totals"><div><span>Subtotal</span><b>1,073,000.00</b></div><div><span>GST 18%</span><b>193,140.00</b></div><div><span>Total</span><b>Rs 1,266,140</b></div></div>
+        <div class="paper-foot small muted">FBR Invoice # 4271839-6-2609-000123 · Thank you for your business.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INTEGRATIONS ===================== -->
+<section class="screen" data-route="app/settings/integrations" data-title="Integrations">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Integrations</div>
+      <h1>Integrations</h1>
+      <p>Connect FBR, banks, biometric devices, SSO and e-commerce channels.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="book-open"></i>API docs</button>
+      <button class="btn primary" data-open="set-new-key"><i data-lucide="key-round"></i>Create API key</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search integrations…"></label>
+    <div class="chips"><button class="active">All <i>11</i></button><button>Connected <i>6</i></button><button>Tax</button><button>Banking</button><button>HR</button><button>Commerce</button></div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>FBR IRIS / POS</b><small class="muted"> Digital invoicing</small></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">1,284 invoices reported this FY. Last sync 08:55 today.</p><div class="row mt"><a class="btn secondary sm" href="#/app/tax/fbr">Configure</a><button class="btn ghost sm" data-toast="FBR sync started">Sync now</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="building-2"></i></span><div><b>HBL Bank Feed</b><small class="muted"> A/c 8721</small></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">Daily statement via HBL Corporate API. 42 lines imported yesterday.</p><div class="row mt"><a class="btn secondary sm" href="#/app/bank/reconciliation">Reconcile</a><button class="btn ghost sm">Settings</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="building-2"></i></span><div><b>Meezan Bank Feed</b><small class="muted"> A/c 0123</small></div><span class="spacer"></span><span class="badge warn dot">Re-auth needed</span></div><p class="small muted mt">Token expired 29 Sep 2026. Feeds paused.</p><div class="row mt"><button class="btn primary sm" data-toast="Redirecting to Meezan Bank…">Reconnect</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well teal"><i data-lucide="fingerprint"></i></span><div><b>ZKTeco Biometric</b><small class="muted"> 6 devices</small></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">5 online · 1 offline (Faisalabad gate). 312 punches today.</p><div class="row mt"><a class="btn secondary sm" href="#/app/hr/devices">Devices</a></div></div>
+    <div class="card"><div class="row"><span class="icon-well blue"><i data-lucide="log-in"></i></span><div><b>Google Workspace SSO</b></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">Domain alnoor.com.pk · SAML 2.0 · enforced for all staff.</p><div class="row mt"><button class="btn secondary sm">Configure</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well blue"><i data-lucide="mail"></i></span><div><b>Microsoft 365</b><small class="muted"> Outlook &amp; Entra ID</small></div><span class="spacer"></span><span class="badge neutral">Not connected</span></div><p class="small muted mt">Sync calendars and use Entra ID for sign-in.</p><div class="row mt"><button class="btn secondary sm" data-toast="Opening Microsoft consent…">Connect</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="message-circle"></i></span><div><b>WhatsApp Business</b></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">+92 300 842 1100 · invoices, payslips &amp; approval alerts.</p><div class="row mt"><button class="btn secondary sm">Message templates</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well violet"><i data-lucide="send"></i></span><div><b>SMTP Email</b></div><span class="spacer"></span><span class="badge good dot">Connected</span></div><p class="small muted mt">smtp.alnoor.com.pk:587 · TLS · from no-reply@alnoor.com.pk</p><div class="row mt"><button class="btn secondary sm" data-toast="Test email sent">Send test</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well yellow"><i data-lucide="shopping-bag"></i></span><div><b>Daraz Seller Center</b></div><span class="spacer"></span><span class="badge neutral">Not connected</span></div><p class="small muted mt">Import Daraz orders as sales invoices and settle commissions.</p><div class="row mt"><button class="btn secondary sm">Connect</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="store"></i></span><div><b>Shopify</b></div><span class="spacer"></span><span class="badge neutral">Not connected</span></div><p class="small muted mt">Sync products, stock levels and online orders.</p><div class="row mt"><button class="btn secondary sm">Connect</button></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="key-round"></i></span><div><b>REST API &amp; Keys</b></div><span class="spacer"></span><span class="badge info">3 keys</span></div><p class="small muted mt">Build custom integrations with scoped API keys and webhooks.</p><div class="row mt"><button class="btn secondary sm" data-open="set-new-key">New key</button></div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>API keys</h3><p>Keys are shown once at creation</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Name</th><th>Key</th><th>Scopes</th><th>Last used</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>Power BI connector</b><small>Ahmed Raza</small></td><td><code>fs_live_…9c2a</code></td><td><span class="badge neutral">reports:read</span></td><td>Today 07:00</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+          <tr><td><b>Warehouse scanner</b><small>Usman Ali</small></td><td><code>fs_live_…41de</code></td><td><span class="badge neutral">inventory:write</span></td><td>30 Sep 2026</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+          <tr><td><b>Website orders</b><small>Sana Javed</small></td><td><code>fs_live_…07b1</code></td><td><span class="badge neutral">sales:write</span></td><td>12 Aug 2026</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>Webhooks</h3><p>Signed with HMAC-SHA256</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="plus"></i>Add endpoint</button></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Endpoint</th><th>Events</th><th>Success</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><code>https://erp-hooks.alnoor.com.pk/invoice</code></td><td>invoice.posted</td><td>99.8%</td><td><span class="badge good dot">Healthy</span></td></tr>
+          <tr><td><code>https://hooks.zapier.com/…/3381</code></td><td>employee.created</td><td>100%</td><td><span class="badge good dot">Healthy</span></td></tr>
+          <tr><td><code>https://crm.alnoor.com.pk/api/pay</code></td><td>payment.received</td><td>82.4%</td><td><span class="badge danger dot">Failing</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="set-new-key">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Create API key</h2><p>Grant the minimum scopes required.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Key name *</span><input placeholder="e.g. Power BI connector"></label>
+          <label><span>Expires</span><select><option>90 days</option><option>1 year</option><option>Never</option></select></label>
+          <label><span>IP allow-list</span><input placeholder="203.99.48.0/24"></label>
+        </div>
+        <div class="form-section mt"><h4>Scopes</h4></div>
+        <div class="grid-2">
+          <label class="check"><input type="checkbox" checked> reports:read</label>
+          <label class="check"><input type="checkbox"> accounting:write</label>
+          <label class="check"><input type="checkbox"> sales:write</label>
+          <label class="check"><input type="checkbox"> inventory:write</label>
+          <label class="check"><input type="checkbox"> hr:read</label>
+          <label class="check"><input type="checkbox"> payroll:read</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="API key created — copy it now">Create key</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AUDIT TRAIL ===================== -->
+<section class="screen" data-route="app/settings/audit" data-title="Audit Trail">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Audit Trail</div>
+      <h1>Audit Trail</h1>
+      <p>Immutable, hash-chained log of every create, edit, approve, post and delete.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Hash chain re-verified — 0 breaks"><i data-lucide="shield-check"></i>Verify chain</button>
+      <button class="btn secondary"><i data-lucide="download"></i>Export CSV</button>
+    </div>
+  </div>
+
+  <div class="banner good mb"><i data-lucide="shield-check"></i><div><b>Hash chain verified</b><p>1,482,906 entries since 01 Jul 2024 · last block #1482906 · SHA-256 verified 01 Oct 2026 06:00. No tampering detected.</p></div></div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search record, user or IP…"></label>
+    <select><option>All modules</option><option>Vouchers</option><option>Sales</option><option>Payroll</option><option>Settings</option><option>Users</option></select>
+    <select><option>All users</option><option>Sana Javed</option><option>Hira Ali</option><option>Ayesha Noor</option></select>
+    <select><option>Last 7 days</option><option>Today</option><option>This month</option><option>Custom…</option></select>
+    <div class="chips"><button class="active">All</button><button>Create</button><button>Edit</button><button>Post</button><button>Delete</button><button>Login</button></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Timestamp</th><th>User</th><th>Module</th><th>Action</th><th>Record</th><th>IP address</th><th>Change</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>01 Oct 2026 09:02:14</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>Finance Manager</small></div></div></td><td>Vouchers</td><td><span class="badge good">Post</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000045</a></td><td>203.99.48.12</td><td class="small">Status: Approved → Posted</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>01 Oct 2026 08:57:40</td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Accountant</small></div></div></td><td>Sales</td><td><span class="badge info">Edit</span></td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000123</a></td><td>203.99.48.17</td><td class="small">Due date 21 Oct → 28 Oct</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>01 Oct 2026 08:41:03</td><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>Owner</small></div></div></td><td>Auth</td><td><span class="badge neutral">Login</span></td><td>Session</td><td>39.42.118.6</td><td class="small">MFA · Chrome / Windows</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 19:48:22</td><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>Payroll Officer</small></div></div></td><td>Payroll</td><td><span class="badge good">Post</span></td><td><a class="link" href="#/app/hr/payroll/run">PR-2026-09</a></td><td>203.99.48.21</td><td class="small">128 payslips · Rs 14,862,400</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 17:20:09</td><td><div class="cell-user"><span class="avatar sm">AN</span><div><b>Ayesha Noor</b><small>HR Manager</small></div></div></td><td>Employees</td><td><span class="badge info">Edit</span></td><td><a class="link" href="#/app/hr/employees/view">EMP-0042</a></td><td>203.99.48.30</td><td class="small">Basic salary 85,000 → 92,000</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 16:05:51</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>Finance Manager</small></div></div></td><td>Settings</td><td><span class="badge info">Edit</span></td><td><a class="link" href="#/app/settings">Lock date</a></td><td>203.99.48.12</td><td class="small">31 Jul 2026 → 31 Aug 2026</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 15:33:18</td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Accountant</small></div></div></td><td>Purchases</td><td><span class="badge violet">Create</span></td><td><a class="link" href="#/app/purchases/orders">PO-2026-00155</a></td><td>182.185.9.40</td><td class="small">Siemens Pakistan · Rs 2,340,000</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 12:10:44</td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Accountant</small></div></div></td><td>Vouchers</td><td><span class="badge danger">Delete</span></td><td>CPV-2026-000214 <small>Draft</small></td><td>203.99.48.17</td><td class="small">Draft discarded</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>30 Sep 2026 10:02:37</td><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>Owner</small></div></div></td><td>Users</td><td><span class="badge warn">Permission</span></td><td><a class="link" href="#/app/settings/roles">Finance Manager</a></td><td>39.42.118.6</td><td class="small">+ Post on Payroll</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td>29 Sep 2026 23:14:02</td><td><div class="cell-user"><span class="avatar sm">??</span><div><b>Unknown</b><small>nida.shah@alnoor.com.pk</small></div></div></td><td>Auth</td><td><span class="badge danger">Failed login</span></td><td>Session</td><td>110.93.201.77</td><td class="small">Account suspended</td><td class="actions"><button class="icon-btn-sm" data-open="set-audit-diff"><i data-lucide="eye"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–10 of 3,418 this week</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay drawer-overlay" id="set-audit-diff">
+    <aside class="drawer">
+      <div class="modal-head"><div><h2>Change detail</h2><p>JV-2026-000045 · Post · 01 Oct 2026 09:02:14</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl mb">
+          <div><span>User</span><b>Sana Javed (Finance Manager)</b></div>
+          <div><span>IP / device</span><b>203.99.48.12 · Edge / Windows 11</b></div>
+          <div><span>Session</span><b>sess_8f21…a90c</b></div>
+          <div><span>Entry hash</span><b><code>a3f9…7e21</code></b></div>
+          <div><span>Previous hash</span><b><code>51c0…d4b8</code></b></div>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Field</th><th>Before</th><th>After</th></tr></thead>
+          <tbody>
+            <tr><td>status</td><td class="neg">Approved</td><td class="dr">Posted</td></tr>
+            <tr><td>posted_by</td><td class="zero">—</td><td class="dr">sana.javed</td></tr>
+            <tr><td>posted_at</td><td class="zero">—</td><td class="dr">2026-10-01 09:02:14</td></tr>
+            <tr><td>gl_batch</td><td class="zero">—</td><td class="dr">GLB-2026-10-0001</td></tr>
+            <tr><td>total_debit</td><td>1,250,000.00</td><td>1,250,000.00</td></tr>
+          </tbody>
+        </table></div>
+        <div class="banner good mt"><i data-lucide="link"></i><div><b>Chain intact</b><p>This entry's hash matches the recomputed value.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Close</button><a class="btn primary" href="#/app/accounting/vouchers/view">Open voucher</a></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===================== BACKUP & RESTORE ===================== -->
+<section class="screen" data-route="app/settings/backup" data-title="Backup &amp; Restore">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Settings / Backup &amp; Restore</div>
+      <h1>Backup &amp; Restore</h1>
+      <p>Encrypted snapshots of your tenant data, scheduled exports and point-in-time restore.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn danger" data-open="set-restore"><i data-lucide="rotate-ccw"></i>Restore…</button>
+      <button class="btn primary" data-toast="Backup started — you'll be notified when complete"><i data-lucide="database-backup"></i>Back up now</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Last backup</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>Today 02:00</strong><small class="up">Successful · 4m 12s</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Backup size</span><span class="icon-well"><i data-lucide="hard-drive"></i></span></div><strong>3.84 GB</strong><small>Incl. 1.2 GB attachments</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Retention</span><span class="icon-well"><i data-lucide="archive"></i></span></div><strong>35 days</strong><small>+ 12 monthly snapshots</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Next scheduled</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>02 Oct 02:00</strong><small>Daily · Asia/Karachi</small></div>
+  </div>
+
+  <div class="split mt">
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>Backups</h3><p>AES-256 encrypted · stored in Karachi &amp; Singapore regions</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Snapshot</th><th>Type</th><th>Started</th><th class="num">Size</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>snap-20261001-0200</b></td><td>Scheduled</td><td>01 Oct 2026 02:00</td><td class="num">3.84 GB</td><td><span class="badge good dot">Completed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260930-1950</b><small>Before PR-2026-09 post</small></td><td>Manual</td><td>30 Sep 2026 19:50</td><td class="num">3.82 GB</td><td><span class="badge good dot">Completed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260930-0200</b></td><td>Scheduled</td><td>30 Sep 2026 02:00</td><td class="num">3.81 GB</td><td><span class="badge good dot">Completed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260929-0200</b></td><td>Scheduled</td><td>29 Sep 2026 02:00</td><td class="num">3.79 GB</td><td><span class="badge warn dot">Partial</span><small>Attachments retry OK</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260928-0200</b></td><td>Scheduled</td><td>28 Sep 2026 02:00</td><td class="num">3.78 GB</td><td><span class="badge good dot">Completed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260901-monthly</b></td><td>Monthly</td><td>01 Sep 2026 02:00</td><td class="num">3.61 GB</td><td><span class="badge good dot">Completed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm" data-open="set-restore"><i data-lucide="rotate-ccw"></i></button></td></tr>
+          <tr><td><b>snap-20260701-fy-open</b><small>FY 2026-27 opening</small></td><td>Year-end</td><td>01 Jul 2026 00:30</td><td class="num">3.20 GB</td><td><span class="badge violet dot">Locked</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Schedule</h3></div></div>
+        <div class="form-grid">
+          <label><span>Frequency</span><select><option>Daily</option><option>Every 12 hours</option><option>Weekly</option></select></label>
+          <label><span>Time</span><input type="time" value="02:00"></label>
+          <label><span>Keep daily for</span><select><option>35 days</option><option>14 days</option><option>90 days</option></select></label>
+          <label><span>Monthly snapshots</span><select><option>12 months</option><option>24 months</option></select></label>
+        </div>
+        <div class="stack mt">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Include attachments &amp; receipts</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Email Owner on failure</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>Copy to my Google Drive</span></label>
+        </div>
+        <div class="form-actions"><button class="btn primary sm" data-toast="Backup schedule saved">Save schedule</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Export data</h3><p>Download per module</p></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Accounting</b><small>COA, vouchers, GL</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="CSV export queued">CSV</button><button class="btn ghost sm" data-toast="Excel export queued">Excel</button></div>
+          <div class="list-item"><span class="icon-well blue"><i data-lucide="shopping-cart"></i></span><div><b>Sales &amp; AR</b><small>Customers, invoices, receipts</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="CSV export queued">CSV</button><button class="btn ghost sm" data-toast="Excel export queued">Excel</button></div>
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="shopping-bag"></i></span><div><b>Purchases &amp; AP</b><small>Vendors, bills, payments</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="CSV export queued">CSV</button><button class="btn ghost sm" data-toast="Excel export queued">Excel</button></div>
+          <div class="list-item"><span class="icon-well teal"><i data-lucide="boxes"></i></span><div><b>Inventory</b><small>Items, stock, movements</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="CSV export queued">CSV</button><button class="btn ghost sm" data-toast="Excel export queued">Excel</button></div>
+          <div class="list-item"><span class="icon-well violet"><i data-lucide="users"></i></span><div><b>HR &amp; Payroll</b><small>Employees, attendance, payslips</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="CSV export queued">CSV</button><button class="btn ghost sm" data-toast="Excel export queued">Excel</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="set-restore">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Restore from backup</h2><p>This replaces ALL current tenant data.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="banner danger mb"><i data-lucide="alert-triangle"></i><div><b>Destructive action</b><p>Transactions entered after the selected snapshot will be lost. All users will be signed out during restore (approx. 15 minutes).</p></div></div>
+        <div class="form-grid">
+          <label class="full"><span>Snapshot</span><select><option>snap-20261001-0200 · 01 Oct 2026 02:00</option><option>snap-20260930-1950 · 30 Sep 2026 19:50</option><option>snap-20260930-0200 · 30 Sep 2026 02:00</option></select></label>
+          <label class="full"><span>Reason *</span><textarea rows="2" placeholder="Required for audit trail"></textarea></label>
+          <label class="full"><span>Type <b>ALNOOR</b> to confirm</span><input placeholder="ALNOOR"></label>
+          <label class="check full"><input type="checkbox" checked> Take a safety backup of current data first</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="Restore scheduled — users will be notified"><i data-lucide="rotate-ccw"></i>Restore data</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MY PROFILE (tenant user) ===================== -->
+<section class="screen" data-route="app/profile" data-title="My Profile">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Account / My Profile</div>
+      <h1>My Profile</h1>
+      <p>Your personal details, sign-in security and preferences.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/notifications"><i data-lucide="bell"></i>Notifications</a>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="profile-head">
+      <span class="avatar xl">SJ</span>
+      <div>
+        <h2>Sana Javed</h2>
+        <p>Finance Manager · Finance · Lahore HQ · sana.javed@alnoor.com.pk</p>
+        <div class="row"><span class="badge info">Finance Manager</span><span class="badge good dot">MFA on</span><span class="badge neutral">Member since Jul 2024</span></div>
+      </div>
+      <div class="head-actions"><button class="btn secondary sm"><i data-lucide="camera"></i>Change photo</button></div>
+    </div>
+  </div>
+
+  <div data-tabs>
+    <div class="tabs"><button class="active" data-tab="prof-profile">Profile</button><button data-tab="prof-security">Security</button><button data-tab="prof-prefs">Preferences</button></div>
+
+    <div class="tab-pane active" data-pane="prof-profile">
+      <div class="split">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Personal details</h3></div></div>
+          <div class="form-grid">
+            <label><span>First name</span><input value="Sana"></label>
+            <label><span>Last name</span><input value="Javed"></label>
+            <label><span>Display name</span><input value="Sana Javed"></label>
+            <label><span>Job title</span><input value="Finance Manager"></label>
+            <label><span>Email</span><input value="sana.javed@alnoor.com.pk" disabled></label>
+            <label><span>Mobile</span><input value="+92 321 448 9012"></label>
+            <label><span>Default branch</span><select><option>Lahore HQ</option><option>Karachi</option></select></label>
+            <label><span>Linked employee</span><input value="EMP-0007" disabled></label>
+            <label class="full"><span>Email signature</span><textarea rows="3">Sana Javed, ACCA
+Finance Manager · Al-Noor Enterprises (Pvt) Ltd
++92 42 3578 1200 ext. 204</textarea></label>
+          </div>
+          <div class="form-actions"><button class="btn secondary">Cancel</button><button class="btn primary" data-toast="Profile saved">Save profile</button></div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Access summary</h3></div></div>
+            <div class="dl">
+              <div><span>Role</span><b>Finance Manager</b></div>
+              <div><span>Branches</span><b>All branches</b></div>
+              <div><span>Approval limit</span><b>Rs 5,000,000</b></div>
+              <div><span>Last sign-in</span><b>Today 09:02</b></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>Recent activity</h3></div></div>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot good"></span><div><b>Posted JV-2026-000045</b><small>Today 09:02</small></div></div>
+              <div class="tl-item"><span class="tl-dot"></span><div><b>Changed lock date to 31 Aug 2026</b><small>30 Sep 2026 16:05</small></div></div>
+              <div class="tl-item"><span class="tl-dot"></span><div><b>Approved BPV-2026-000387</b><small>30 Sep 2026 14:40</small></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="prof-security">
+      <div class="grid-2 mb">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Change password</h3><p>Last changed 64 days ago</p></div></div>
+          <div class="form-grid">
+            <label class="full"><span>Current password</span><input type="password" value="••••••••••"></label>
+            <label class="full"><span>New password</span><input type="password"></label>
+            <label class="full"><span>Confirm new password</span><input type="password"></label>
+          </div>
+          <div class="progress warn mt"><i style="width:55%"></i></div>
+          <p class="small muted">Min. 12 characters with a number and a symbol.</p>
+          <div class="form-actions"><button class="btn primary" data-toast="Password updated — other sessions signed out">Update password</button></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Two-factor authentication</h3><p>Authenticator app (TOTP)</p></div><div class="panel-actions"><span class="badge good dot">Enabled</span></div></div>
+          <div class="row" style="align-items:flex-start;gap:16px">
+            <div style="width:132px;height:132px;flex:none;border:1px dashed #94a3b8;border-radius:12px;display:grid;place-items:center;background:repeating-linear-gradient(45deg,#f1f5f9 0 6px,#e2e8f0 6px 12px)"><i data-lucide="qr-code"></i></div>
+            <div class="stack">
+              <p class="small">Scan with Google Authenticator or Microsoft Authenticator to set up a new device.</p>
+              <p class="small muted">Setup key: <code>JBSW Y3DP EHPK 3PXP</code></p>
+              <label><span class="small">6-digit code</span><input placeholder="000 000"></label>
+              <div class="row"><button class="btn primary sm" data-toast="Authenticator verified">Verify</button><button class="btn ghost sm" data-toast="10 recovery codes downloaded">Recovery codes</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel flush">
+        <div class="panel-head" style="padding:16px 18px 0"><div><h3>Active sessions</h3><p>Devices currently signed in to your account</p></div><div class="panel-actions"><button class="btn danger sm" data-toast="All other sessions revoked">Revoke all others</button></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Device</th><th>Location</th><th>IP address</th><th>Signed in</th><th>Last active</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><b>Edge · Windows 11</b><small>This device</small></td><td>Lahore, PK</td><td>203.99.48.12</td><td>01 Oct 2026 09:01</td><td><span class="badge good dot">Now</span></td><td></td></tr>
+            <tr><td><b>Finsoft iOS app · iPhone 15</b></td><td>Lahore, PK</td><td>39.42.17.205</td><td>28 Sep 2026 20:14</td><td>Today 07:48</td><td class="actions"><button class="btn ghost sm" data-toast="Session revoked">Revoke</button></td></tr>
+            <tr><td><b>Chrome · macOS</b></td><td>Islamabad, PK</td><td>182.185.9.40</td><td>24 Sep 2026 11:30</td><td>26 Sep 2026 18:02</td><td class="actions"><button class="btn ghost sm" data-toast="Session revoked">Revoke</button></td></tr>
+            <tr><td><b>Safari · iPad</b></td><td>Dubai, AE</td><td>94.200.31.8</td><td>15 Sep 2026 22:40</td><td>15 Sep 2026 23:05</td><td class="actions"><button class="btn ghost sm" data-toast="Session revoked">Revoke</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="prof-prefs">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Regional &amp; display</h3></div></div>
+          <div class="form-grid">
+            <label><span>Language</span><select><option>English</option><option>اردو (Urdu)</option></select></label>
+            <label><span>Date format</span><select><option>01 Oct 2026</option><option>01/10/2026</option><option>2026-10-01</option></select></label>
+            <label><span>Number format</span><select><option>1,245,000.00</option><option>12,45,000.00</option></select></label>
+            <label><span>Start page</span><select><option>Dashboard</option><option>Today's Work</option><option>Voucher Register</option></select></label>
+          </div>
+          <div class="form-section mt"><h4>Theme</h4></div>
+          <div class="seg"><button class="active"><i data-lucide="sun"></i>Light</button><button><i data-lucide="moon"></i>Dark</button><button><i data-lucide="monitor"></i>System</button></div>
+          <div class="stack mt">
+            <label class="switch"><input type="checkbox" checked><i></i><span>Compact tables</span></label>
+            <label class="switch"><input type="checkbox"><i></i><span>Show account codes before names</span></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Notifications</h3><p>Choose what reaches you and where</p></div></div>
+          <div class="stack">
+            <label class="switch"><input type="checkbox" checked><i></i><span>Approval requests assigned to me</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Vouchers rejected or returned</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Bank feed &amp; reconciliation alerts</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Customer credit limit breaches</span></label>
+            <label class="switch"><input type="checkbox"><i></i><span>Daily cash position email (08:00)</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Tax return due reminders</span></label>
+            <label class="switch"><input type="checkbox"><i></i><span>WhatsApp alerts</span></label>
+          </div>
+          <div class="form-actions"><button class="btn primary" data-toast="Preferences saved">Save preferences</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS DASHBOARD ===================== -->
+<section class="screen" data-route="ess/dashboard" data-title="My Day">
+  <div class="hero-band mb">
+    <div>
+      <span class="hero-eyebrow">Good morning · Thursday, 01 Oct 2026</span>
+      <h1>Assalam-o-Alaikum, Bilal</h1>
+      <p>Sales Executive · EMP-0042 · Lahore HQ. You have 1 pending request and payday is in 30 days.</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn secondary" href="#/ess/leave"><i data-lucide="plane"></i>Apply leave</a>
+      <a class="btn primary" href="#/ess/payslips"><i data-lucide="file-text"></i>Latest payslip</a>
+    </div>
+  </div>
+
+  <div class="split mb">
+    <div class="stack">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-top"><span>Leave balance</span><span class="icon-well"><i data-lucide="plane"></i></span></div><strong>14 days</strong><small>Annual 9 · Casual 5</small></div>
+        <div class="kpi teal"><div class="kpi-top"><span>This month attendance</span><span class="icon-well"><i data-lucide="fingerprint"></i></span></div><strong>21 / 22</strong><small class="up">95% · 2 late marks</small></div>
+        <div class="kpi blue"><div class="kpi-top"><span>Next payday</span><span class="icon-well"><i data-lucide="calendar-days"></i></span></div><strong>31 Oct</strong><small>in 30 days</small></div>
+        <div class="kpi yellow"><div class="kpi-top"><span>Pending requests</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>1</strong><small>Expense claim</small></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Latest payslip — September 2026</h3><p>Credited to Meezan Bank ****4417 on 30 Sep 2026</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/ess/payslips">All payslips</a></div></div>
+        <div class="grid-3">
+          <div><span class="small muted">Gross earnings</span><h3 style="margin:2px 0">Rs 142,500</h3></div>
+          <div><span class="small muted">Deductions</span><h3 style="margin:2px 0" class="neg">Rs 14,870</h3></div>
+          <div><span class="small muted">Net pay</span><h3 style="margin:2px 0;color:#15803d">Rs 127,630</h3></div>
+        </div>
+        <div class="stackbar mt"><i style="width:64%;background:#15803d"></i><i style="width:16%;background:#0f766e"></i><i style="width:10%;background:#efbc61"></i><i style="width:10%;background:#dc2626"></i></div>
+        <div class="legend"><span><i style="background:#15803d"></i>Basic 92,000</span><span><i style="background:#0f766e"></i>Allowances 23,000</span><span><i style="background:#efbc61"></i>Commission 27,500</span><span><i style="background:#dc2626"></i>Tax &amp; EOBI 14,870</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Attendance</h3><p>General shift · 09:00 – 18:00</p></div><span class="badge info">Not checked in</span></div>
+      <div class="stack" style="align-items:center;text-align:center">
+        <div style="font-size:34px;font-weight:700;letter-spacing:-.5px">09:04 <small class="muted" style="font-size:14px">AM</small></div>
+        <span class="small muted">Thursday, 01 October 2026</span>
+        <button class="punch" data-toast="Checked in at 09:04 AM — Lahore HQ"><i data-lucide="fingerprint"></i><b>Check In</b><small>Tap to punch</small></button>
+        <div class="row small muted"><i data-lucide="map-pin"></i>Lahore HQ · Gulberg III · within geo-fence</div>
+        <div class="banner warn" style="text-align:left"><i data-lucide="clock"></i><div><b>Grace ends at 09:15</b><p>Check in before 09:15 to avoid a late mark.</p></div></div>
+        <div class="grid-2" style="width:100%">
+          <div class="card"><small class="muted">Yesterday in</small><br><b>08:52 AM</b></div>
+          <div class="card"><small class="muted">Yesterday out</small><br><b>06:21 PM</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Upcoming holidays</h3></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well violet"><i data-lucide="party-popper"></i></span><div><b>Iqbal Day</b><small>Mon, 09 Nov 2026</small></div><span class="spacer"></span><span class="badge neutral">39 days</span></div>
+        <div class="list-item"><span class="icon-well violet"><i data-lucide="party-popper"></i></span><div><b>Quaid-e-Azam Day</b><small>Fri, 25 Dec 2026</small></div><span class="spacer"></span><span class="badge neutral">85 days</span></div>
+        <div class="list-item"><span class="icon-well violet"><i data-lucide="party-popper"></i></span><div><b>Kashmir Solidarity Day</b><small>Fri, 05 Feb 2027</small></div><span class="spacer"></span><span class="badge neutral">127 days</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Announcements</h3></div><div class="panel-actions"><a class="btn ghost sm" href="#/ess/company">View all</a></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well blue"><i data-lucide="megaphone"></i></span><div><b>Q2 sales kick-off — 05 Oct</b><small>Ahmed Raza · 2 h ago</small></div></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="heart-pulse"></i></span><div><b>Health insurance renewal (Jubilee)</b><small>HR · 29 Sep</small></div></div>
+        <div class="list-item"><span class="icon-well yellow"><i data-lucide="file-text"></i></span><div><b>Updated travel &amp; expense policy</b><small>Finance · 25 Sep</small></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>My team — who's out</h3><p>Sales · Lahore</p></div></div>
+      <div class="list">
+        <div class="list-item"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>Annual leave · till 03 Oct</small></div><span class="spacer"></span><span class="badge warn">On leave</span></div>
+        <div class="list-item"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>Client visit · Packages Ltd</small></div><span class="spacer"></span><span class="badge info">Field</span></div>
+        <div class="list-item"><span class="avatar sm">FN</span><div><b>Fatima Noor</b><small>Work from home</small></div><span class="spacer"></span><span class="badge neutral">WFH</span></div>
+        <div class="list-item"><span class="avatar sm">UF</span><div><b>Umar Farooq</b><small>Team lead · in office 08:47</small></div><span class="spacer"></span><span class="badge good">In</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS ATTENDANCE ===================== -->
+<section class="screen" data-route="ess/attendance" data-title="My Attendance">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Work / Attendance</div>
+      <h1>My Attendance</h1>
+      <p>September 2026 · General shift 09:00–18:00 · ZKTeco + mobile punches.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>September 2026</option><option>August 2026</option><option>July 2026</option></select>
+      <button class="btn primary" data-open="ess-regularise"><i data-lucide="clock-alert"></i>Request regularisation</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid c5">
+    <div class="kpi"><div class="kpi-top"><span>Present</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>21</strong><small>of 22 working days</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Late marks</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>2</strong><small>1 more = 1 leave deducted</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Leave</span><span class="icon-well"><i data-lucide="plane"></i></span></div><strong>1</strong><small>Casual · 18 Sep</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Absent</span><span class="icon-well"><i data-lucide="x"></i></span></div><strong>0</strong><small>—</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Avg. hours</span><span class="icon-well"><i data-lucide="timer"></i></span></div><strong>9h 12m</strong><small class="up">Overtime 6h 30m</small></div>
+  </div>
+
+  <div class="split mt">
+    <div class="panel">
+      <div class="panel-head"><div><h3>September 2026</h3></div><div class="panel-actions"><div class="legend"><span><i style="background:#15803d"></i>Present</span><span><i style="background:#efbc61"></i>Late</span><span><i style="background:#2563eb"></i>Leave</span><span><i style="background:#7c3aed"></i>Holiday</span></div></div></div>
+      <div class="cal">
+        <div class="cal-head"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+        <div class="cal-day muted">31</div>
+        <div class="cal-day">1<em class="ev good">P 08:51</em></div>
+        <div class="cal-day">2<em class="ev good">P 08:56</em></div>
+        <div class="cal-day">3<em class="ev warn">Late 09:22</em></div>
+        <div class="cal-day">4<em class="ev good">P 08:49</em></div>
+        <div class="cal-day">5<em class="ev good">P ½ day</em></div>
+        <div class="cal-day muted">6</div>
+        <div class="cal-day">7<em class="ev good">P 08:58</em></div>
+        <div class="cal-day">8<em class="ev good">P 08:45</em></div>
+        <div class="cal-day">9<em class="ev good">P 08:53</em></div>
+        <div class="cal-day">10<em class="ev good">P 08:50</em></div>
+        <div class="cal-day">11<em class="ev good">P 08:57</em></div>
+        <div class="cal-day">12<em class="ev good">P ½ day</em></div>
+        <div class="cal-day muted">13</div>
+        <div class="cal-day">14<em class="ev good">P 08:55</em></div>
+        <div class="cal-day">15<em class="ev warn">Late 09:31</em></div>
+        <div class="cal-day">16<em class="ev good">P 08:48</em></div>
+        <div class="cal-day">17<em class="ev good">P 08:59</em></div>
+        <div class="cal-day">18<em class="ev info">L Casual</em></div>
+        <div class="cal-day">19<em class="ev good">P ½ day</em></div>
+        <div class="cal-day muted">20</div>
+        <div class="cal-day">21<em class="ev good">P 08:52</em></div>
+        <div class="cal-day">22<em class="ev good">P 08:47</em></div>
+        <div class="cal-day">23<em class="ev good">P 08:55</em></div>
+        <div class="cal-day">24<em class="ev good">P 08:50</em></div>
+        <div class="cal-day">25<em class="ev good">P 08:54</em></div>
+        <div class="cal-day">26<em class="ev good">P ½ day</em></div>
+        <div class="cal-day muted">27</div>
+        <div class="cal-day">28<em class="ev good">P 08:46</em></div>
+        <div class="cal-day">29<em class="ev good">P 08:58</em></div>
+        <div class="cal-day">30<em class="ev good">P 08:52</em></div>
+        <div class="cal-day today">1 Oct<em class="ev info">Today</em></div>
+        <div class="cal-day muted">2</div>
+        <div class="cal-day muted">3</div>
+        <div class="cal-day muted">4</div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Month summary</h3></div></div>
+        <div class="row" style="justify-content:center"><div class="donut" style="--p:95;--c:#15803d"><b>95%</b><small>Present</small></div></div>
+        <div class="dl mt">
+          <div><span>Scheduled hours</span><b>198h 00m</b></div>
+          <div><span>Worked hours</span><b>202h 30m</b></div>
+          <div><span>Overtime (approved)</span><b>6h 30m</b></div>
+          <div><span>Late minutes</span><b>53 min</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>My requests</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="clock-alert"></i></span><div><b>03 Sep · Missed punch-in</b><small>Traffic on Canal Rd</small></div><span class="spacer"></span><span class="badge good">Approved</span></div>
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="clock-alert"></i></span><div><b>15 Sep · Late — client visit</b><small>Lucky Cement meeting</small></div><span class="spacer"></span><span class="badge warn">Pending</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush mt">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>Punch history</h3><p>Last 7 days</p></div><div class="panel-actions"><button class="btn ghost sm"><i data-lucide="download"></i>Export</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Date</th><th>Check in</th><th>Check out</th><th>Source</th><th>Location</th><th class="num">Hours</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Wed, 30 Sep 2026</td><td>08:52 AM</td><td>06:21 PM</td><td>ZKTeco · Main gate</td><td>Lahore HQ</td><td class="num">9:29</td><td><span class="badge good">Present</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Tue, 29 Sep 2026</td><td>08:58 AM</td><td>07:40 PM</td><td>Mobile app</td><td>Lahore HQ</td><td class="num">10:42</td><td><span class="badge good">Present</span><small>OT 1h 40m</small></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Mon, 28 Sep 2026</td><td>08:46 AM</td><td>06:05 PM</td><td>ZKTeco · Main gate</td><td>Lahore HQ</td><td class="num">9:19</td><td><span class="badge good">Present</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Sat, 26 Sep 2026</td><td>08:57 AM</td><td>01:30 PM</td><td>ZKTeco · Main gate</td><td>Lahore HQ</td><td class="num">4:33</td><td><span class="badge neutral">Half day (Sat)</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Fri, 25 Sep 2026</td><td>08:54 AM</td><td>06:12 PM</td><td>Mobile app</td><td>Packages Ltd, Kot Lakhpat</td><td class="num">9:18</td><td><span class="badge info">Field visit</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Thu, 24 Sep 2026</td><td>08:50 AM</td><td>06:02 PM</td><td>ZKTeco · Main gate</td><td>Lahore HQ</td><td class="num">9:12</td><td><span class="badge good">Present</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td>Tue, 15 Sep 2026</td><td>09:31 AM</td><td>06:40 PM</td><td>ZKTeco · Main gate</td><td>Lahore HQ</td><td class="num">9:09</td><td><span class="badge warn">Late</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-regularise"><i data-lucide="pencil"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="ess-regularise">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Request regularisation</h2><p>Your line manager Umar Farooq will review this.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Date *</span><input type="date" value="2026-09-15"></label>
+          <label><span>Request type *</span><select><option>Late arrival</option><option>Missed punch-in</option><option>Missed punch-out</option><option>On-duty / field visit</option><option>Work from home</option></select></label>
+          <label><span>Actual check in</span><input type="time" value="09:00"></label>
+          <label><span>Actual check out</span><input type="time" value="18:40"></label>
+          <label class="full"><span>Reason *</span><textarea rows="3">Client meeting at Lucky Cement, DHA Phase 5 office from 08:30 — reached HQ at 09:31.</textarea></label>
+          <label class="full"><span>Attachment</span><input type="file"></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Regularisation request submitted"><i data-lucide="send"></i>Submit request</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS LEAVE ===================== -->
+<section class="screen" data-route="ess/leave" data-title="My Leave">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Work / Leave</div>
+      <h1>My Leave</h1>
+      <p>Balances for 2026 calendar year · approver Umar Farooq (line manager), then HR for &gt; 3 days.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/company"><i data-lucide="book-check"></i>Leave policy</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Annual leave</span><span class="icon-well"><i data-lucide="plane"></i></span></div><strong>9 <small>/ 14 days</small></strong><div class="progress"><i style="width:64%"></i></div><small>5 used · accrues 1.17/month</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Casual leave</span><span class="icon-well"><i data-lucide="coffee"></i></span></div><strong>5 <small>/ 10 days</small></strong><div class="progress"><i style="width:50%"></i></div><small>5 used</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Sick leave</span><span class="icon-well"><i data-lucide="heart-pulse"></i></span></div><strong>6 <small>/ 8 days</small></strong><div class="progress"><i style="width:75%"></i></div><small>2 used · certificate &gt; 2 days</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Comp-off</span><span class="icon-well"><i data-lucide="repeat"></i></span></div><strong>1 <small>day</small></strong><div class="progress warn"><i style="width:100%"></i></div><small>Expires 31 Oct 2026</small></div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Apply for leave</h3><p>Submitted requests notify your manager by email and WhatsApp</p></div></div>
+      <div class="form-grid">
+        <label><span>Leave type *</span><select><option>Annual leave (9 available)</option><option>Casual leave (5 available)</option><option>Sick leave (6 available)</option><option>Comp-off (1 available)</option><option>Unpaid leave</option></select></label>
+        <label><span>Day type</span><div class="seg"><button class="active">Full day</button><button>First half</button><button>Second half</button></div></label>
+        <label><span>From *</span><input type="date" value="2026-10-12"></label>
+        <label><span>To *</span><input type="date" value="2026-10-14"></label>
+        <label class="full"><span>Reason *</span><textarea rows="3">Sister's wedding in Sialkot.</textarea></label>
+        <label><span>Handover to</span><select><option>Mehwish Tariq</option><option>Fatima Noor</option><option>Hamza Butt</option></select></label>
+        <label><span>Contact during leave</span><input value="+92 300 418 2290"></label>
+        <label class="full"><span>Attachment</span><input type="file"></label>
+        <label class="check full"><input type="checkbox"> Half day on last date</label>
+      </div>
+      <div class="banner info mt"><i data-lucide="info"></i><div><b>3 working days</b><p>12–14 Oct 2026 · Annual balance after approval: 6 days. No team conflicts — Hamza Butt returns 03 Oct.</p></div></div>
+      <div class="form-actions"><button class="btn secondary">Save draft</button><button class="btn primary" data-toast="Leave request submitted to Umar Farooq"><i data-lucide="send"></i>Submit request</button></div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Team calendar — October</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>28 Sep – 03 Oct · Annual</small></div></div>
+          <div class="list-item"><span class="avatar sm">FN</span><div><b>Fatima Noor</b><small>20 – 21 Oct · Casual</small></div></div>
+          <div class="list-item"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>27 Oct · Sick (planned)</small></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Approval flow</h3></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>You submit</b><small>Bilal Khan</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Line manager</b><small>Umar Farooq · SLA 24 h</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>HR Manager (if &gt; 3 days)</b><small>Ayesha Noor</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush mt">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>My requests</h3></div><div class="panel-actions"><div class="chips"><button class="active">All <i>6</i></button><button>Pending <i>0</i></button><button>Approved <i>5</i></button><button>Rejected <i>1</i></button></div></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Request #</th><th>Type</th><th>From</th><th>To</th><th class="num">Days</th><th>Reason</th><th>Approver</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>LR-2026-0418</b></td><td>Casual</td><td>18 Sep 2026</td><td>18 Sep 2026</td><td class="num">1</td><td>Bank work</td><td>Umar Farooq</td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>LR-2026-0351</b></td><td>Annual</td><td>11 Aug 2026</td><td>14 Aug 2026</td><td class="num">3</td><td>Family trip to Murree</td><td>Ayesha Noor</td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>LR-2026-0302</b></td><td>Sick</td><td>08 Jul 2026</td><td>09 Jul 2026</td><td class="num">2</td><td>Fever</td><td>Umar Farooq</td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>LR-2026-0277</b></td><td>Annual</td><td>22 Jun 2026</td><td>26 Jun 2026</td><td class="num">5</td><td>Eid ul Adha travel</td><td>Ayesha Noor</td><td><span class="badge danger">Rejected</span><small>Quarter-end close</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>LR-2026-0231</b></td><td>Annual</td><td>02 Jun 2026</td><td>03 Jun 2026</td><td class="num">2</td><td>Personal</td><td>Umar Farooq</td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>LR-2026-0119</b></td><td>Casual</td><td>16 Mar 2026</td><td>19 Mar 2026</td><td class="num">4</td><td>House shifting</td><td>Ayesha Noor</td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ===================== ESS PAYSLIPS ===================== -->
+<section class="screen" data-route="ess/payslips" data-title="My Payslips">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Payslips</div>
+      <h1>My Payslips</h1>
+      <p>Monthly payslips, year-to-date earnings and income tax certificates.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>FY 2026-27</option><option>FY 2025-26</option></select>
+      <button class="btn secondary" data-toast="Tax certificate u/s 149 downloaded"><i data-lucide="file-badge"></i>Tax certificate</button>
+      <button class="btn primary" data-toast="Downloading 12 payslips (ZIP)"><i data-lucide="download"></i>Download all</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>YTD gross (FY 26-27)</span><span class="icon-well"><i data-lucide="trending-up"></i></span></div><strong>Rs 418,300</strong><small>Jul – Sep 2026</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>YTD net pay</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 374,020</strong><small>3 payslips</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>YTD tax u/s 149</span><span class="icon-well"><i data-lucide="percent"></i></span></div><strong>Rs 38,730</strong><small>Projected annual Rs 158,400</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Provident fund balance</span><span class="icon-well"><i data-lucide="piggy-bank"></i></span></div><strong>Rs 212,460</strong><small>Incl. employer share</small></div>
+  </div>
+
+  <div class="split">
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>Payslips</h3><p>Last 12 months</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Month</th><th>Payroll run</th><th>Paid on</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net pay</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>September 2026</b></td><td>PR-2026-09</td><td>30 Sep 2026</td><td class="num">142,500.00</td><td class="num cr">14,870.00</td><td class="num dr"><b>127,630.00</b></td><td class="actions"><button class="btn ghost sm" data-toast="Opening payslip PDF…"><i data-lucide="eye"></i>View</button><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>August 2026</b></td><td>PR-2026-08</td><td>29 Aug 2026</td><td class="num">138,900.00</td><td class="num cr">14,210.00</td><td class="num dr"><b>124,690.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>July 2026</b></td><td>PR-2026-07</td><td>31 Jul 2026</td><td class="num">136,900.00</td><td class="num cr">15,200.00</td><td class="num dr"><b>121,700.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>June 2026</b></td><td>PR-2026-06</td><td>30 Jun 2026</td><td class="num">158,000.00</td><td class="num cr">16,450.00</td><td class="num dr"><b>141,550.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>May 2026</b></td><td>PR-2026-05</td><td>29 May 2026</td><td class="num">131,200.00</td><td class="num cr">12,980.00</td><td class="num dr"><b>118,220.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>April 2026</b></td><td>PR-2026-04</td><td>30 Apr 2026</td><td class="num">129,400.00</td><td class="num cr">12,700.00</td><td class="num dr"><b>116,700.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>March 2026</b></td><td>PR-2026-03</td><td>27 Mar 2026</td><td class="num">172,000.00</td><td class="num cr">18,900.00</td><td class="num dr"><b>153,100.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>February 2026</b></td><td>PR-2026-02</td><td>27 Feb 2026</td><td class="num">127,500.00</td><td class="num cr">12,420.00</td><td class="num dr"><b>115,080.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>January 2026</b></td><td>PR-2026-01</td><td>30 Jan 2026</td><td class="num">125,800.00</td><td class="num cr">12,150.00</td><td class="num dr"><b>113,650.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>December 2025</b></td><td>PR-2025-12</td><td>31 Dec 2025</td><td class="num">121,000.00</td><td class="num cr">11,600.00</td><td class="num dr"><b>109,400.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>November 2025</b></td><td>PR-2025-11</td><td>28 Nov 2025</td><td class="num">119,800.00</td><td class="num cr">11,420.00</td><td class="num dr"><b>108,380.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+          <tr><td><b>October 2025</b></td><td>PR-2025-10</td><td>31 Oct 2025</td><td class="num">118,500.00</td><td class="num cr">11,300.00</td><td class="num dr"><b>107,200.00</b></td><td class="actions"><button class="icon-btn-sm" data-toast="Payslip downloaded"><i data-lucide="download"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Net pay trend</h3><p>Oct 2025 – Sep 2026</p></div></div>
+        <div class="bars">
+          <div class="bar" style="--h:58%"><i></i><span>O</span></div>
+          <div class="bar" style="--h:59%"><i></i><span>N</span></div>
+          <div class="bar" style="--h:60%"><i></i><span>D</span></div>
+          <div class="bar" style="--h:62%"><i></i><span>J</span></div>
+          <div class="bar" style="--h:63%"><i></i><span>F</span></div>
+          <div class="bar" style="--h:84%"><i></i><span>M</span></div>
+          <div class="bar" style="--h:64%"><i></i><span>A</span></div>
+          <div class="bar" style="--h:65%"><i></i><span>M</span></div>
+          <div class="bar" style="--h:78%"><i></i><span>J</span></div>
+          <div class="bar" style="--h:67%"><i></i><span>J</span></div>
+          <div class="bar" style="--h:68%"><i></i><span>A</span></div>
+          <div class="bar" style="--h:70%"><i></i><span>S</span></div>
+        </div>
+        <p class="small muted mt">March and June include quarterly sales commission.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>YTD earnings breakdown</h3></div></div>
+        <div class="dl">
+          <div><span>Basic salary</span><b>Rs 268,000</b></div>
+          <div><span>House rent allowance</span><b>Rs 54,000</b></div>
+          <div><span>Conveyance &amp; fuel</span><b>Rs 15,000</b></div>
+          <div><span>Sales commission</span><b>Rs 81,300</b></div>
+          <div><span>Income tax u/s 149</span><b class="neg">− Rs 38,730</b></div>
+          <div><span>EOBI (employee)</span><b class="neg">− Rs 1,110</b></div>
+          <div><span>Provident fund</span><b class="neg">− Rs 4,440</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Tax certificates</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-badge"></i></span><div><b>FY 2025-26 · u/s 149</b><small>Issued 15 Jul 2026</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="Certificate downloaded"><i data-lucide="download"></i>PDF</button></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-badge"></i></span><div><b>FY 2024-25 · u/s 149</b><small>Issued 12 Jul 2025</small></div><span class="spacer"></span><button class="btn ghost sm" data-toast="Certificate downloaded"><i data-lucide="download"></i>PDF</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS LOANS ===================== -->
+<section class="screen" data-route="ess/loans" data-title="Loans &amp; Advances">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Loans &amp; Advances</div>
+      <h1>Loans &amp; Advances</h1>
+      <p>Interest-free staff loans and salary advances, recovered through payroll.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/company"><i data-lucide="book-check"></i>Loan policy</a>
+      <button class="btn primary" data-open="ess-advance"><i data-lucide="plus"></i>Request advance</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid c3 mb">
+    <div class="kpi"><div class="kpi-top"><span>Total outstanding</span><span class="icon-well"><i data-lucide="hand-coins"></i></span></div><strong>Rs 165,000</strong><small>2 active</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Monthly deduction</span><span class="icon-well"><i data-lucide="calendar-days"></i></span></div><strong>Rs 20,000</strong><small>Next: Oct payroll</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Eligible advance</span><span class="icon-well"><i data-lucide="badge-check"></i></span></div><strong>Rs 46,000</strong><small>Up to 50% of basic</small></div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="row mb"><span class="icon-well blue"><i data-lucide="bike"></i></span><div><b>Motorcycle loan</b><small class="muted"> LN-2026-0031 · disbursed 01 Mar 2026</small></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <div class="row small"><span>Repaid Rs 105,000 of Rs 240,000</span><span class="spacer"></span><b>44%</b></div>
+      <div class="progress mt"><i style="width:44%"></i></div>
+      <div class="dl mt">
+        <div><span>Instalment</span><b>Rs 15,000 / month</b></div>
+        <div><span>Remaining instalments</span><b>9 of 16</b></div>
+        <div><span>Outstanding</span><b>Rs 135,000</b></div>
+        <div><span>Ends</span><b>June 2027</b></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row mb"><span class="icon-well yellow"><i data-lucide="banknote"></i></span><div><b>Salary advance</b><small class="muted"> ADV-2026-0112 · disbursed 05 Aug 2026</small></div><span class="spacer"></span><span class="badge good dot">Active</span></div>
+      <div class="row small"><span>Repaid Rs 10,000 of Rs 40,000</span><span class="spacer"></span><b>25%</b></div>
+      <div class="progress warn mt"><i style="width:25%"></i></div>
+      <div class="dl mt">
+        <div><span>Instalment</span><b>Rs 5,000 / month</b></div>
+        <div><span>Remaining instalments</span><b>6 of 8</b></div>
+        <div><span>Outstanding</span><b>Rs 30,000</b></div>
+        <div><span>Ends</span><b>March 2027</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>Repayment schedule — Motorcycle loan</h3><p>Deducted from monthly payroll</p></div><div class="panel-actions"><div class="seg"><button class="active">Motorcycle</button><button>Advance</button></div></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>#</th><th>Month</th><th>Payroll run</th><th class="num">Instalment</th><th class="num">Balance after</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>5</td><td>Jul 2026</td><td>PR-2026-07</td><td class="num">15,000.00</td><td class="num">165,000.00</td><td><span class="badge good">Recovered</span></td></tr>
+          <tr><td>6</td><td>Aug 2026</td><td>PR-2026-08</td><td class="num">15,000.00</td><td class="num">150,000.00</td><td><span class="badge good">Recovered</span></td></tr>
+          <tr><td>7</td><td>Sep 2026</td><td>PR-2026-09</td><td class="num">15,000.00</td><td class="num">135,000.00</td><td><span class="badge good">Recovered</span></td></tr>
+          <tr><td>8</td><td>Oct 2026</td><td>PR-2026-10</td><td class="num">15,000.00</td><td class="num">120,000.00</td><td><span class="badge info">Next</span></td></tr>
+          <tr><td>9</td><td>Nov 2026</td><td>—</td><td class="num">15,000.00</td><td class="num">105,000.00</td><td><span class="badge neutral">Scheduled</span></td></tr>
+          <tr><td>10</td><td>Dec 2026</td><td>—</td><td class="num">15,000.00</td><td class="num">90,000.00</td><td><span class="badge neutral">Scheduled</span></td></tr>
+          <tr><td>11</td><td>Jan 2027</td><td>—</td><td class="num">15,000.00</td><td class="num">75,000.00</td><td><span class="badge neutral">Scheduled</span></td></tr>
+          <tr><td>12</td><td>Feb 2027</td><td>—</td><td class="num">15,000.00</td><td class="num">60,000.00</td><td><span class="badge neutral">Scheduled</span></td></tr>
+          <tr class="total"><td colspan="3">Remaining</td><td class="num">135,000.00</td><td></td><td></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Request history</h3></div></div>
+      <div class="timeline">
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Salary advance Rs 40,000 approved</b><small>Ayesha Noor · 04 Aug 2026</small></div></div>
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Motorcycle loan Rs 240,000 disbursed</b><small>BPV-2026-000061 · 01 Mar 2026</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Advance Rs 25,000 — fully repaid</b><small>Closed Dec 2025</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ess-advance">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Request salary advance</h2><p>Eligible up to Rs 46,000 (50% of basic salary).</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Type *</span><select><option>Salary advance</option><option>Staff loan</option><option>Medical emergency loan</option></select></label>
+          <label><span>Amount (Rs) *</span><input value="30,000"></label>
+          <label><span>Repay over</span><select><option>3 months</option><option>6 months</option><option>1 month</option></select></label>
+          <label><span>Monthly deduction</span><input value="Rs 10,000" disabled></label>
+          <label class="full"><span>Purpose *</span><textarea rows="3">Children's school admission fee — Beaconhouse.</textarea></label>
+        </div>
+        <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>Total deductions</b><p>With existing loans your monthly deduction will be Rs 30,000 (23% of net pay).</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Advance request submitted"><i data-lucide="send"></i>Submit request</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS EXPENSES ===================== -->
+<section class="screen" data-route="ess/expenses" data-title="Expense Claims">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">My Money / Expense Claims</div>
+      <h1>Expense Claims</h1>
+      <p>Submit travel, fuel and client-entertainment expenses for reimbursement.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn primary" data-open="ess-new-claim"><i data-lucide="plus"></i>New claim</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi yellow"><div class="kpi-top"><span>Pending approval</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>Rs 18,450</strong><small>1 claim</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Approved, unpaid</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>Rs 7,200</strong><small>Paid with Oct payroll</small></div>
+    <div class="kpi"><div class="kpi-top"><span>Reimbursed this FY</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 64,830</strong><small>8 claims</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Monthly fuel limit</span><span class="icon-well"><i data-lucide="fuel"></i></span></div><strong>Rs 12,000</strong><small>Rs 3,800 left in Oct</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search claims…"></label>
+    <div class="chips"><button class="active">All <i>11</i></button><button>Draft <i>1</i></button><button>Pending <i>1</i></button><button>Approved <i>1</i></button><button>Paid <i>8</i></button></div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Claim #</th><th>Title</th><th>Submitted</th><th>Category</th><th class="num">Items</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>EXP-2026-0219</b></td><td>Faisalabad client visits<small>Interloop Ltd, Nishat Mills</small></td><td>29 Sep 2026</td><td>Travel</td><td class="num">4</td><td class="num">18,450.00</td><td><span class="badge warn">Pending</span><small>Umar Farooq</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>EXP-2026-0204</b></td><td>Client lunch — Hashoo Hotels team</td><td>22 Sep 2026</td><td>Entertainment</td><td class="num">1</td><td class="num">7,200.00</td><td><span class="badge info">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>EXP-2026-0188</b></td><td>September fuel</td><td>15 Sep 2026</td><td>Fuel</td><td class="num">3</td><td class="num">8,200.00</td><td><span class="badge good">Paid</span><small>PR-2026-09</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>EXP-2026-0161</b></td><td>Karachi trip — Metro Cash &amp; Carry</td><td>28 Aug 2026</td><td>Travel</td><td class="num">6</td><td class="num">31,980.00</td><td><span class="badge good">Paid</span><small>PR-2026-08</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>EXP-2026-0140</b></td><td>Mobile data top-up</td><td>10 Aug 2026</td><td>Communication</td><td class="num">1</td><td class="num">2,500.00</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>EXP-2026-0122</b></td><td>Sample delivery via TCS</td><td>01 Aug 2026</td><td>Courier</td><td class="num">2</td><td class="num">1,650.00</td><td><span class="badge danger">Rejected</span><small>Use company account</small></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="eye"></i></button></td></tr>
+        <tr><td><b>Draft</b></td><td>October fuel</td><td>—</td><td>Fuel</td><td class="num">2</td><td class="num">8,200.00</td><td><span class="badge neutral">Draft</span></td><td class="actions"><button class="icon-btn-sm" data-open="ess-new-claim"><i data-lucide="pencil"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="ess-new-claim">
+    <div class="modal xl">
+      <div class="modal-head"><div><h2>New expense claim</h2><p>Attach a receipt for every item above Rs 1,000.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label><span>Claim title *</span><input value="Faisalabad client visits"></label>
+          <label><span>Project / customer</span><select><option>Interloop Ltd</option><option>Nishat Mills</option><option>— none —</option></select></label>
+          <label><span>Cost centre</span><select><option>Sales — Lahore</option></select></label>
+        </div>
+        <div class="table-wrap mt"><table class="tbl lines">
+          <thead><tr><th>Date</th><th>Category</th><th>Description</th><th class="num">Amount (Rs)</th><th>Receipt</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><input class="cell-input" type="date" value="2026-09-24"></td><td><select class="cell-input"><option>Fuel</option></select></td><td><input class="cell-input" value="Lahore–Faisalabad M-3, return"></td><td class="num"><input class="cell-input" value="7,600.00"></td><td><span class="badge good"><i data-lucide="paperclip"></i>pso.jpg</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><input class="cell-input" type="date" value="2026-09-24"></td><td><select class="cell-input"><option>Tolls</option></select></td><td><input class="cell-input" value="Motorway toll"></td><td class="num"><input class="cell-input" value="1,150.00"></td><td><span class="badge good"><i data-lucide="paperclip"></i>toll.pdf</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><input class="cell-input" type="date" value="2026-09-25"></td><td><select class="cell-input"><option>Meals</option></select></td><td><input class="cell-input" value="Lunch with Interloop procurement"></td><td class="num"><input class="cell-input" value="6,200.00"></td><td><span class="badge warn">Missing</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><input class="cell-input" type="date" value="2026-09-25"></td><td><select class="cell-input"><option>Accommodation</option></select></td><td><input class="cell-input" value="Hotel, 1 night"></td><td class="num"><input class="cell-input" value="3,500.00"></td><td><span class="badge good"><i data-lucide="paperclip"></i>hotel.pdf</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr class="total"><td colspan="3">Total claim</td><td class="num">18,450.00</td><td colspan="2"></td></tr>
+          </tbody>
+        </table></div>
+        <button class="btn ghost sm mt"><i data-lucide="plus"></i>Add line</button>
+        <div class="empty-state mt" style="border:2px dashed #cbd5e1;border-radius:12px">
+          <span class="icon-well lg"><i data-lucide="upload"></i></span>
+          <h4>Drop receipts here</h4>
+          <p>JPG, PNG or PDF up to 10 MB each. We'll read the amount and date automatically.</p>
+          <button class="btn secondary sm">Browse files</button>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close data-toast="Draft saved">Save draft</button><button class="btn primary" data-close data-toast="Claim EXP-2026-0220 submitted"><i data-lucide="send"></i>Submit claim</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS PROFILE ===================== -->
+<section class="screen" data-route="ess/profile" data-title="My Profile">
+  <div class="panel mb">
+    <div class="profile-head">
+      <span class="avatar xl">BK</span>
+      <div>
+        <h2>Bilal Khan</h2>
+        <p>Sales Executive · Sales · Lahore HQ · Reports to Umar Farooq</p>
+        <div class="row"><span class="badge neutral">EMP-0042</span><span class="badge good dot">Permanent</span><span class="badge info">Joined 14 Feb 2022</span></div>
+      </div>
+      <div class="head-actions"><button class="btn primary" data-open="ess-change"><i data-lucide="pencil"></i>Request change</button></div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Personal information</h3></div></div>
+      <div class="dl">
+        <div><span>Full name</span><b>Bilal Ahmed Khan</b></div>
+        <div><span>Father's name</span><b>Javed Iqbal Khan</b></div>
+        <div><span>CNIC</span><b>35202-4418291-3</b></div>
+        <div><span>Date of birth</span><b>17 Mar 1996</b></div>
+        <div><span>Marital status</span><b>Married</b></div>
+        <div><span>Mobile</span><b>+92 300 418 2290</b></div>
+        <div><span>Personal email</span><b>bilal.khan96@gmail.com</b></div>
+        <div><span>Address</span><b>House 42, Street 7, Johar Town, Lahore</b></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Bank &amp; payroll</h3></div></div>
+        <div class="dl">
+          <div><span>Bank</span><b>Meezan Bank · Johar Town</b></div>
+          <div><span>Account / IBAN</span><b>PK36 MEZN 0002 1101 0044 17</b></div>
+          <div><span>NTN status</span><b>Filer (ATL)</b></div>
+          <div><span>EOBI #</span><b>EOB-1180-2294</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Emergency contact</h3></div></div>
+        <div class="dl">
+          <div><span>Name</span><b>Ayesha Bilal (Spouse)</b></div>
+          <div><span>Phone</span><b>+92 321 772 1043</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>My documents</h3><p>Visible to you and HR only</p></div><div class="panel-actions"><button class="btn secondary sm" data-toast="Choose a file to upload"><i data-lucide="upload"></i>Upload document</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Document</th><th>Type</th><th>Uploaded</th><th>Expiry</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>CNIC (front &amp; back)</b></td><td>Identity</td><td>14 Feb 2022</td><td>22 Nov 2029</td><td><span class="badge good">Verified</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        <tr><td><b>Appointment letter</b></td><td>Contract</td><td>14 Feb 2022</td><td class="muted">—</td><td><span class="badge good">Signed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        <tr><td><b>BBA degree — UCP</b></td><td>Education</td><td>14 Feb 2022</td><td class="muted">—</td><td><span class="badge good">Verified</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        <tr><td><b>Increment letter 2026</b></td><td>HR letter</td><td>01 Jul 2026</td><td class="muted">—</td><td><span class="badge good">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        <tr><td><b>Driving licence</b></td><td>Identity</td><td>03 Mar 2026</td><td><span class="badge warn">12 Dec 2026</span></td><td><span class="badge warn">Expiring soon</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+        <tr><td><b>Medical insurance card</b></td><td>Benefits</td><td class="muted">—</td><td class="muted">—</td><td><span class="badge danger">Missing</span></td><td class="actions"><button class="btn ghost sm" data-toast="Choose a file to upload">Upload</button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="ess-change">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Request profile change</h2><p>HR will verify and update your record.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Field to change *</span><select><option>Address</option><option>Mobile number</option><option>Bank account</option><option>Marital status</option><option>Emergency contact</option></select></label>
+          <label><span>Current value</span><input value="House 42, Street 7, Johar Town" disabled></label>
+          <label><span>New value *</span><input placeholder="New address"></label>
+          <label class="full"><span>Supporting document</span><input type="file"></label>
+          <label class="full"><span>Note</span><textarea rows="2"></textarea></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Change request sent to HR">Submit</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESS COMPANY ===================== -->
+<section class="screen" data-route="ess/company" data-title="Company">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Me / Company</div>
+      <h1>Al-Noor Enterprises</h1>
+      <p>Find colleagues, read announcements and company policies.</p>
+    </div>
+  </div>
+
+  <div class="split">
+    <div>
+      <div class="toolbar">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search by name, department or extension…"></label>
+        <select><option>All departments</option><option>Finance</option><option>Human Resources</option><option>Sales</option><option>Operations</option><option>Procurement</option><option>IT</option></select>
+        <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+      </div>
+      <div class="card-grid">
+        <div class="card"><div class="row"><span class="avatar">AR</span><div><b>Ahmed Raza</b><br><small class="muted">CEO · Administration</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 201 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">SJ</span><div><b>Sana Javed</b><br><small class="muted">Finance Manager · Finance</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 204 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">AN</span><div><b>Ayesha Noor</b><br><small class="muted">HR Manager · Human Resources</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 210 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">UF</span><div><b>Umar Farooq</b><br><small class="muted">Sales Team Lead · Sales</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 231 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">HA</span><div><b>Hira Ali</b><br><small class="muted">Accountant · Finance</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 206 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">UA</span><div><b>Usman Ali</b><br><small class="muted">Procurement Officer</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 240 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">FQ</span><div><b>Faisal Qureshi</b><br><small class="muted">Branch Manager · Sales</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 301 <span class="spacer"></span><i data-lucide="map-pin"></i>Karachi</div></div>
+        <div class="card"><div class="row"><span class="avatar">MT</span><div><b>Mehwish Tariq</b><br><small class="muted">Sales Executive · Sales</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 233 <span class="spacer"></span><i data-lucide="map-pin"></i>Islamabad</div></div>
+        <div class="card"><div class="row"><span class="avatar">AH</span><div><b>Ali Haider</b><br><small class="muted">IT Administrator · IT</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 260 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+        <div class="card"><div class="row"><span class="avatar">KA</span><div><b>Kashif Ali</b><br><small class="muted">Warehouse In-charge</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 401 <span class="spacer"></span><i data-lucide="map-pin"></i>Faisalabad</div></div>
+        <div class="card"><div class="row"><span class="avatar">RS</span><div><b>Rabia Saeed</b><br><small class="muted">Accountant · Finance</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 305 <span class="spacer"></span><i data-lucide="map-pin"></i>Karachi</div></div>
+        <div class="card"><div class="row"><span class="avatar">ZR</span><div><b>Zainab Raza</b><br><small class="muted">Payroll Officer · HR</small></div></div><div class="row small muted mt"><i data-lucide="phone"></i>Ext. 212 <span class="spacer"></span><i data-lucide="map-pin"></i>Lahore HQ</div></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Announcements</h3></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Q2 sales kick-off — 05 Oct, 10:00 AM</b><small>Ahmed Raza · Today · Main conference room, Lahore HQ</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Health insurance renewed with Jubilee Life</b><small>HR · 29 Sep · new cards by 15 Oct</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Updated travel &amp; expense policy</b><small>Finance · 25 Sep · fuel limit raised to Rs 12,000</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Welcome Rabia Saeed to Karachi finance</b><small>HR · 22 Sep</small></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Policies &amp; documents</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="book-open"></i></span><div><b>Employee handbook 2026</b><small>PDF · 2.4 MB</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well blue"><i data-lucide="plane"></i></span><div><b>Leave policy</b><small>Updated Jan 2026</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="receipt"></i></span><div><b>Travel &amp; expense policy</b><small>Updated Sep 2026</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well teal"><i data-lucide="hand-coins"></i></span><div><b>Staff loan policy</b><small>Updated Mar 2025</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well violet"><i data-lucide="shield-check"></i></span><div><b>IT &amp; acceptable use</b><small>Updated Aug 2025</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well red"><i data-lucide="scale"></i></span><div><b>Code of conduct &amp; anti-harassment</b><small>Updated Jan 2026</small></div><span class="spacer"></span><button class="icon-btn-sm" data-toast="Downloading…"><i data-lucide="download"></i></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 404 ===================== -->
+<section class="screen" data-route="app/404" data-title="Page not found">
+  <div class="state-page">
+    <span class="icon-well lg"><i data-lucide="map-pinned"></i></span>
+    <h1 style="font-size:64px;margin:8px 0 0">404</h1>
+    <h2>We couldn't find that page</h2>
+    <p class="muted">The link may be broken, or the record may have been moved or deleted. Check the address or head back to your dashboard.</p>
+    <div class="row mt" style="justify-content:center">
+      <a class="btn primary" href="#/app/dashboard"><i data-lucide="layout-grid"></i>Back to dashboard</a>
+      <a class="btn secondary" href="#/app/today"><i data-lucide="list-checks"></i>Today's work</a>
+    </div>
+    <div class="row small muted mt" style="justify-content:center">Error reference: NF-20261001-0904 · <a class="link" href="#/app/settings/audit">Report a problem</a></div>
+  </div>
+</section>
+
+<!-- ===================== UNAUTHORIZED ===================== -->
+<section class="screen" data-route="app/unauthorized" data-title="No access">
+  <div class="state-page">
+    <span class="icon-well lg red"><i data-lucide="shield-x"></i></span>
+    <h1 style="font-size:40px;margin:8px 0 0">You don't have access</h1>
+    <p class="muted">Your role <b>Sales Executive</b> doesn't include permission to view <b>Payroll › Run Payroll</b>. Ask an administrator to grant access.</p>
+    <div class="panel" style="max-width:440px;margin:14px auto;text-align:left">
+      <div class="form-grid">
+        <label class="full"><span>Request access from</span><select><option>Ahmed Raza (Owner)</option><option>Ayesha Noor (HR Manager)</option></select></label>
+        <label class="full"><span>Reason</span><textarea rows="2" placeholder="Why do you need this access?"></textarea></label>
+      </div>
+    </div>
+    <div class="row" style="justify-content:center">
+      <a class="btn secondary" href="#/app/dashboard"><i data-lucide="arrow-left"></i>Go to dashboard</a>
+      <button class="btn primary" data-toast="Access request sent to Ahmed Raza"><i data-lucide="key-round"></i>Request access</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== UI STATES SHOWCASE ===================== -->
+<section class="screen" data-route="app/states" data-title="UI States">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / UI States</div>
+      <h1>UI States</h1>
+      <p>Empty, loading, error, confirmation and toast patterns used across Finsoft.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/404">404 page</a>
+      <a class="btn secondary" href="#/app/unauthorized">No access page</a>
+    </div>
+  </div>
+
+  <h3 class="mb">Empty states</h3>
+  <div class="grid-3 mb">
+    <div class="panel">
+      <div class="empty-state"><span class="icon-well lg"><i data-lucide="inbox"></i></span><h4>No vouchers yet</h4><p>Create your first journal voucher to start recording transactions.</p><a class="btn primary sm" href="#/app/accounting/vouchers/new"><i data-lucide="plus"></i>New voucher</a></div>
+    </div>
+    <div class="panel">
+      <div class="empty-state"><span class="icon-well lg blue"><i data-lucide="search-x"></i></span><h4>No results for "Lucky"</h4><p>Try a different spelling or clear filters for date and branch.</p><button class="btn secondary sm">Clear filters</button></div>
+    </div>
+    <div class="panel">
+      <div class="empty-state"><span class="icon-well lg"><i data-lucide="party-popper"></i></span><h4>All caught up!</h4><p>You have no pending approvals. New requests will appear here.</p><a class="btn ghost sm" href="#/app/today">Today's work</a></div>
+    </div>
+  </div>
+
+  <h3 class="mb">Loading skeletons</h3>
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="row mb"><div class="skeleton" style="width:44px;height:44px;border-radius:50%"></div><div style="flex:1"><div class="skeleton" style="height:12px;width:40%;margin-bottom:8px"></div><div class="skeleton" style="height:10px;width:25%"></div></div></div>
+      <div class="skeleton" style="height:10px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:10px;width:92%;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:10px;width:85%;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:10px;width:60%"></div>
+    </div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)">
+      <div class="panel"><div class="skeleton" style="height:10px;width:50%;margin-bottom:12px"></div><div class="skeleton" style="height:22px;width:70%;margin-bottom:10px"></div><div class="skeleton" style="height:8px;width:40%"></div></div>
+      <div class="panel"><div class="skeleton" style="height:10px;width:50%;margin-bottom:12px"></div><div class="skeleton" style="height:22px;width:70%;margin-bottom:10px"></div><div class="skeleton" style="height:8px;width:40%"></div></div>
+      <div class="panel"><div class="skeleton" style="height:10px;width:50%;margin-bottom:12px"></div><div class="skeleton" style="height:22px;width:70%;margin-bottom:10px"></div><div class="skeleton" style="height:8px;width:40%"></div></div>
+      <div class="panel"><div class="skeleton" style="height:10px;width:50%;margin-bottom:12px"></div><div class="skeleton" style="height:22px;width:70%;margin-bottom:10px"></div><div class="skeleton" style="height:8px;width:40%"></div></div>
+    </div>
+  </div>
+  <div class="panel flush mb">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Voucher #</th><th>Date</th><th>Narration</th><th class="num">Amount</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><div class="skeleton" style="height:10px;width:110px"></div></td><td><div class="skeleton" style="height:10px;width:70px"></div></td><td><div class="skeleton" style="height:10px;width:220px"></div></td><td class="num"><div class="skeleton" style="height:10px;width:80px;margin-left:auto"></div></td><td><div class="skeleton" style="height:16px;width:60px;border-radius:99px"></div></td></tr>
+        <tr><td><div class="skeleton" style="height:10px;width:110px"></div></td><td><div class="skeleton" style="height:10px;width:70px"></div></td><td><div class="skeleton" style="height:10px;width:180px"></div></td><td class="num"><div class="skeleton" style="height:10px;width:80px;margin-left:auto"></div></td><td><div class="skeleton" style="height:16px;width:60px;border-radius:99px"></div></td></tr>
+        <tr><td><div class="skeleton" style="height:10px;width:110px"></div></td><td><div class="skeleton" style="height:10px;width:70px"></div></td><td><div class="skeleton" style="height:10px;width:200px"></div></td><td class="num"><div class="skeleton" style="height:10px;width:80px;margin-left:auto"></div></td><td><div class="skeleton" style="height:16px;width:60px;border-radius:99px"></div></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <h3 class="mb">Banners &amp; errors</h3>
+  <div class="stack mb">
+    <div class="banner danger"><i data-lucide="circle-x"></i><div><b>Couldn't load the trial balance</b><p>The server took too long to respond (timeout after 30s). Your data is safe — try again.</p></div><button class="btn sm secondary" data-toast="Retrying…">Retry</button></div>
+    <div class="banner warn"><i data-lucide="wifi-off"></i><div><b>You're offline</b><p>Changes will sync when your connection is restored. 2 drafts are saved locally.</p></div></div>
+    <div class="banner info"><i data-lucide="info"></i><div><b>Scheduled maintenance</b><p>Finsoft will be unavailable Sunday 04 Oct, 02:00–03:00 PKT.</p></div></div>
+    <div class="banner good"><i data-lucide="circle-check"></i><div><b>Import complete</b><p>412 opening balances imported. Trial balance is in agreement.</p></div><a class="btn sm secondary" href="#/app/reports/trial-balance">View TB</a></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Confirmation modals</h3><p>Click to open</p></div></div>
+      <div class="row" style="flex-wrap:wrap">
+        <button class="btn danger" data-open="set-confirm-delete"><i data-lucide="trash-2"></i>Delete record</button>
+        <button class="btn primary" data-open="set-confirm-post"><i data-lucide="check-check"></i>Post voucher</button>
+        <button class="btn secondary" data-open="set-confirm-approve"><i data-lucide="badge-check"></i>Approve payment</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Toasts</h3><p>Click to trigger</p></div></div>
+      <div class="row" style="flex-wrap:wrap">
+        <button class="btn secondary" data-toast="Invoice INV-2026-000124 saved">Success toast</button>
+        <button class="btn secondary" data-toast="Payslips emailed to 128 employees">Bulk action toast</button>
+        <button class="btn secondary" data-toast="Couldn't connect to FBR — will retry in 5 min">Error toast</button>
+        <button class="btn secondary" data-toast="Copied to clipboard">Info toast</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="set-confirm-delete">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Delete draft voucher?</h2><p>CPV-2026-000219 · Rs 45,000</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="banner danger"><i data-lucide="alert-triangle"></i><div><b>This can't be undone</b><p>The draft and its 2 attachments will be permanently removed. The deletion is recorded in the audit trail.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="Draft voucher deleted"><i data-lucide="trash-2"></i>Delete</button></div>
+    </div>
+  </div>
+  <div class="overlay" id="set-confirm-post">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Post JV-2026-000046?</h2><p>Posting updates the general ledger and locks the voucher.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl">
+          <div><span>Date</span><b>01 Oct 2026</b></div>
+          <div><span>Total debit</span><b>Rs 1,250,000</b></div>
+          <div><span>Total credit</span><b>Rs 1,250,000</b></div>
+          <div><span>Period</span><b>Oct 2026 (open)</b></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="JV-2026-000046 posted"><i data-lucide="check-check"></i>Post voucher</button></div>
+    </div>
+  </div>
+  <div class="overlay" id="set-confirm-approve">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Approve vendor payment?</h2><p>BPV-2026-000388 · Siemens Pakistan</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl mb">
+          <div><span>Amount</span><b>Rs 2,340,000</b></div>
+          <div><span>WHT u/s 153(1)(a)</span><b>Rs 105,300</b></div>
+          <div><span>Bank</span><b>HBL — 8721</b></div>
+          <div><span>Next approver</span><b>Ahmed Raza (CEO)</b></div>
+        </div>
+        <label><span class="small">Comment (optional)</span><textarea rows="2" style="width:100%"></textarea></label>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close data-toast="Payment returned to preparer">Reject</button><button class="btn primary" data-close data-toast="Payment approved — sent to CEO"><i data-lucide="badge-check"></i>Approve</button></div>
+    </div>
+  </div>
+</section>

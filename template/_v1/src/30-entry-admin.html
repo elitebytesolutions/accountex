@@ -1,0 +1,1570 @@
+<!-- =====================================================================
+     30-entry-admin.html — Entry screens (chooser, login, MFA, forgot)
+     and Platform Admin portal (admin/...)
+     ===================================================================== -->
+
+<!-- ============================ ENTRY: CHOOSER ============================ -->
+<section class="screen" data-route="chooser" data-title="Welcome to Finsoft">
+  <div class="auth">
+    <div class="auth-art">
+      <div class="row"><span class="brandmark"><i data-lucide="activity"></i></span><b style="font-size:20px">Finsoft</b><span class="badge neutral">Cloud</span></div>
+      <div style="margin-top:56px">
+        <span class="hero-eyebrow">Accounting + HRMS, built for Pakistan</span>
+        <h1 style="font-size:36px;line-height:1.15;margin:12px 0">One ledger for your money.<br>One home for your people.</h1>
+        <p class="muted">Finsoft brings double-entry accounting, FBR-ready tax, inventory and full payroll into a single, multi-company cloud workspace.</p>
+      </div>
+      <ul class="list" style="margin-top:28px">
+        <li class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Books that close themselves</b><small>Vouchers, bank reconciliation, period close and IFRS statements</small></div></li>
+        <li class="list-item"><span class="icon-well"><i data-lucide="percent"></i></span><div><b>FBR &amp; tax compliant</b><small>GST 18%, WHT u/s 153, 236G/H, Sales Tax Return &amp; POS integration</small></div></li>
+        <li class="list-item"><span class="icon-well"><i data-lucide="users"></i></span><div><b>Payroll your HR will love</b><small>Attendance, leave, EOBI/PESSI, salary tax u/s 149 and payslips</small></div></li>
+      </ul>
+      <div class="grid-3" style="margin-top:36px">
+        <div><strong style="font-size:22px">128</strong><small class="muted" style="display:block">Companies onboard</small></div>
+        <div><strong style="font-size:22px">Rs 42B+</strong><small class="muted" style="display:block">Posted last FY</small></div>
+        <div><strong style="font-size:22px">99.98%</strong><small class="muted" style="display:block">Uptime, 90 days</small></div>
+      </div>
+      <p class="small muted" style="margin-top:40px">&copy; 2026 Finsoft Cloud (Pvt) Ltd &middot; Lahore, Pakistan</p>
+    </div>
+    <div class="auth-main">
+      <div style="max-width:560px;width:100%">
+        <div class="eyebrow">Welcome</div>
+        <h1 style="margin:6px 0 4px">Choose where you want to go</h1>
+        <p class="muted mb">This prototype has three portals. Pick one to explore — you can switch at any time from the user menu.</p>
+        <div class="stack">
+          <a class="portal-card" href="#/admin/dashboard">
+            <span class="icon-well lg violet"><i data-lucide="shield-check"></i></span>
+            <div>
+              <h3>Platform Admin</h3>
+              <p>Finsoft Cloud console — onboard tenants, manage plans &amp; billing, feature flags, support and system health.</p>
+              <div class="row small muted" style="margin-top:6px"><span class="badge violet">Staff only</span><span>Signed in as Saim Javed</span></div>
+            </div>
+            <span class="spacer"></span><i data-lucide="arrow-right"></i>
+          </a>
+          <a class="portal-card" href="#/login">
+            <span class="icon-well lg"><i data-lucide="building-2"></i></span>
+            <div>
+              <h3>Company Workspace</h3>
+              <p>The tenant app for Al-Noor Enterprises — accounting, sales, purchases, inventory, payroll and HR.</p>
+              <div class="row small muted" style="margin-top:6px"><span class="badge good">Tenant app</span><span>alnoor.finsoft.pk</span></div>
+            </div>
+            <span class="spacer"></span><i data-lucide="arrow-right"></i>
+          </a>
+          <a class="portal-card" href="#/ess/dashboard">
+            <span class="icon-well lg blue"><i data-lucide="circle-user"></i></span>
+            <div>
+              <h3>Employee Self-Service</h3>
+              <p>For every employee — mark attendance, apply for leave, download payslips and submit expense claims.</p>
+              <div class="row small muted" style="margin-top:6px"><span class="badge info">Mobile-friendly</span><span>Bilal Khan &middot; EMP-0042</span></div>
+            </div>
+            <span class="spacer"></span><i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+        <p class="small muted mt">Need help? Write to <a class="link" href="#/login/forgot">support@finsoft.pk</a> or call 042-111-346-763.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ENTRY: LOGIN ============================ -->
+<section class="screen" data-route="login" data-title="Sign in">
+  <div class="auth">
+    <div class="auth-art">
+      <div class="row"><span class="brandmark"><i data-lucide="activity"></i></span><b style="font-size:20px">Finsoft</b></div>
+      <div style="margin-top:56px">
+        <span class="hero-eyebrow">Company Workspace</span>
+        <h1 style="font-size:34px;line-height:1.15;margin:12px 0">Close September in days, not weeks.</h1>
+        <p class="muted">Bank feeds, recurring vouchers and payroll posting are already waiting in your Today's Work queue.</p>
+      </div>
+      <div class="panel" style="margin-top:32px">
+        <div class="row"><span class="avatar">SJ</span><div><b>“We cut our month-end close from 9 days to 3.”</b><small class="muted" style="display:block">Sana Javed, Finance Manager — Al-Noor Enterprises</small></div></div>
+      </div>
+      <div class="grid-3" style="margin-top:28px">
+        <div><strong>FBR</strong><small class="muted" style="display:block">POS integrated</small></div>
+        <div><strong>ISO 27001</strong><small class="muted" style="display:block">Hosted in PK region</small></div>
+        <div><strong>256-bit</strong><small class="muted" style="display:block">Encryption at rest</small></div>
+      </div>
+    </div>
+    <div class="auth-main">
+      <div style="max-width:400px;width:100%">
+        <a class="btn ghost sm" href="#/chooser"><i data-lucide="arrow-left"></i>All portals</a>
+        <h1 style="margin:16px 0 4px">Sign in to your workspace</h1>
+        <p class="muted mb">Use your company code and work email.</p>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <label><span>Company code</span><input value="ALNOOR" style="text-transform:uppercase"><small class="muted">alnoor.finsoft.pk</small></label>
+          <label><span>Work email</span><input type="email" value="sana.javed@alnoor.com.pk"></label>
+          <label><span>Password</span><input type="password" value="••••••••••"></label>
+        </div>
+        <div class="row" style="margin:12px 0 18px">
+          <label class="check"><input type="checkbox" checked> Remember me for 30 days</label>
+          <span class="spacer"></span>
+          <a class="link small" href="#/login/forgot">Forgot password?</a>
+        </div>
+        <a class="btn primary lg" href="#/login/mfa" style="width:100%;justify-content:center">Sign in<i data-lucide="arrow-right"></i></a>
+        <div class="row muted small" style="margin:20px 0"><span style="flex:1;border-top:1px solid currentColor;opacity:.25"></span>or continue with<span style="flex:1;border-top:1px solid currentColor;opacity:.25"></span></div>
+        <div class="grid-2">
+          <button class="btn secondary" data-toast="Redirecting to Google…"><i data-lucide="chrome"></i>Google</button>
+          <button class="btn secondary" data-toast="Redirecting to Microsoft Entra ID…"><i data-lucide="grid-2x2"></i>Microsoft</button>
+        </div>
+        <div class="banner info mt"><i data-lucide="shield-check"></i><div><b>Two-step verification is on</b><p>Your admin requires a one-time code after sign in.</p></div></div>
+        <p class="small muted mt">By signing in you agree to the Finsoft Terms of Service and Privacy Policy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ENTRY: MFA ============================ -->
+<section class="screen" data-route="login/mfa" data-title="Verify sign in">
+  <div class="auth">
+    <div class="auth-art">
+      <div class="row"><span class="brandmark"><i data-lucide="activity"></i></span><b style="font-size:20px">Finsoft</b></div>
+      <div style="margin-top:56px">
+        <span class="hero-eyebrow">Security</span>
+        <h1 style="font-size:34px;line-height:1.15;margin:12px 0">Your books deserve a second lock.</h1>
+        <p class="muted">Two-step verification protects payroll, bank details and posting rights — even if a password leaks.</p>
+      </div>
+      <ul class="list" style="margin-top:28px">
+        <li class="list-item"><span class="icon-well"><i data-lucide="smartphone"></i></span><div><b>Authenticator app</b><small>Google or Microsoft Authenticator</small></div></li>
+        <li class="list-item"><span class="icon-well"><i data-lucide="message-square"></i></span><div><b>SMS fallback</b><small>Code to +92 300 ••• 4521</small></div></li>
+        <li class="list-item"><span class="icon-well"><i data-lucide="key-round"></i></span><div><b>Recovery codes</b><small>10 single-use backup codes</small></div></li>
+      </ul>
+    </div>
+    <div class="auth-main">
+      <div style="max-width:400px;width:100%">
+        <a class="btn ghost sm" href="#/login"><i data-lucide="arrow-left"></i>Back to sign in</a>
+        <span class="icon-well lg" style="margin-top:18px"><i data-lucide="shield-check"></i></span>
+        <h1 style="margin:14px 0 4px">Enter verification code</h1>
+        <p class="muted mb">We sent a 6-digit code to your authenticator app for <b>sana.javed@alnoor.com.pk</b>.</p>
+        <div class="otp">
+          <input maxlength="1" value="4"><input maxlength="1" value="8"><input maxlength="1" value="2"><input maxlength="1" value="9"><input maxlength="1" value="1"><input maxlength="1" value="">
+        </div>
+        <label class="check" style="margin:16px 0"><input type="checkbox" checked> Trust this device for 30 days</label>
+        <a class="btn primary lg" href="#/app/dashboard" style="width:100%;justify-content:center">Verify &amp; continue</a>
+        <div class="row small mt"><span class="muted">Code expires in <b>00:48</b></span><span class="spacer"></span><button class="btn ghost sm" data-toast="New code sent by SMS">Resend by SMS</button></div>
+        <p class="small muted mt">Lost your device? <a class="link" href="#/login/forgot">Use a recovery code</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ENTRY: FORGOT ============================ -->
+<section class="screen" data-route="login/forgot" data-title="Reset password">
+  <div class="auth">
+    <div class="auth-art">
+      <div class="row"><span class="brandmark"><i data-lucide="activity"></i></span><b style="font-size:20px">Finsoft</b></div>
+      <div style="margin-top:56px">
+        <span class="hero-eyebrow">Account recovery</span>
+        <h1 style="font-size:34px;line-height:1.15;margin:12px 0">Locked out? We'll get you back in.</h1>
+        <p class="muted">Reset links are valid for 30 minutes and can be used once. Your company admin is notified of every reset.</p>
+      </div>
+      <div class="timeline" style="margin-top:28px">
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Enter your work email</b><small>The one registered with your company</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Open the link we email you</b><small>Check spam if it's not there in 2 minutes</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Choose a new password</b><small>12+ characters, not used before</small></div></div>
+      </div>
+    </div>
+    <div class="auth-main">
+      <div style="max-width:400px;width:100%">
+        <a class="btn ghost sm" href="#/login"><i data-lucide="arrow-left"></i>Back to sign in</a>
+        <span class="icon-well lg" style="margin-top:18px"><i data-lucide="key-round"></i></span>
+        <h1 style="margin:14px 0 4px">Forgot your password?</h1>
+        <p class="muted mb">Enter your company code and email and we'll send you a reset link.</p>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <label><span>Company code</span><input value="ALNOOR"></label>
+          <label><span>Work email</span><input type="email" placeholder="you@company.com.pk" value="sana.javed@alnoor.com.pk"></label>
+        </div>
+        <button class="btn primary lg mt" style="width:100%;justify-content:center" data-toast="Reset link sent to sana.javed@alnoor.com.pk"><i data-lucide="send"></i>Send reset link</button>
+        <div class="banner info mt"><i data-lucide="info"></i><div><b>Don't know your company code?</b><p>Ask your Finsoft administrator, or find it in your welcome email.</p></div></div>
+        <p class="small muted mt">Remembered it? <a class="link" href="#/login">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: DASHBOARD ============================ -->
+<section class="screen" data-route="admin/dashboard" data-title="Platform Overview">
+  <div class="hero-band mb">
+    <div>
+      <span class="hero-eyebrow">Good morning, Saim · Thursday, 01 Oct 2026</span>
+      <h1>Finsoft Cloud is healthy — 128 tenants live</h1>
+      <p>MRR crossed Rs 3.8M this month. 4 tenants need attention and 14 trials are running, 5 of them expire this week.</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn secondary" href="#/admin/system"><i data-lucide="heart-pulse"></i>System health</a>
+      <a class="btn primary" href="#/admin/tenants/new"><i data-lucide="rocket"></i>Onboard tenant</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi">
+      <div class="kpi-top"><span>Monthly Recurring Revenue</span><span class="icon-well"><i data-lucide="banknote"></i></span></div>
+      <strong>Rs 3,845,000</strong>
+      <small class="up">▲ 3.9% vs Aug · ARR Rs 46.1M</small>
+    </div>
+    <div class="kpi teal">
+      <div class="kpi-top"><span>Active Tenants</span><span class="icon-well"><i data-lucide="building-2"></i></span></div>
+      <strong>128</strong>
+      <small class="up">▲ 9 net new this month</small>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-top"><span>Trials Running</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div>
+      <strong>14</strong>
+      <small>5 expire in next 7 days · 38% convert</small>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-top"><span>Logo Churn (30d)</span><span class="icon-well"><i data-lucide="trending-down"></i></span></div>
+      <strong>1.8%</strong>
+      <small class="down">▲ 0.4 pts vs last month</small>
+    </div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel">
+      <div class="panel-head">
+        <div><h3>MRR growth</h3><p>Oct 2025 – Sep 2026 · PKR</p></div>
+        <div class="panel-actions"><div class="seg"><button>6M</button><button class="active">12M</button><button>All</button></div></div>
+      </div>
+      <svg class="chart" viewBox="0 0 600 200" preserveAspectRatio="none" style="height:220px">
+        <path class="area" d="M0,158 L55,150 L109,142 L164,135 L218,122 L273,114 L327,105 L382,92 L436,79 L491,65 L545,50 L600,35 L600,200 L0,200 Z"/>
+        <path class="line" d="M0,158 L55,150 L109,142 L164,135 L218,122 L273,114 L327,105 L382,92 L436,79 L491,65 L545,50 L600,35"/>
+        <path class="line alt" d="M0,170 L55,168 L109,166 L164,164 L218,160 L273,158 L327,155 L382,150 L436,146 L491,141 L545,137 L600,132"/>
+      </svg>
+      <div class="row small muted" style="justify-content:space-between"><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span></div>
+      <div class="legend"><span><i style="background:#15803d"></i>Total MRR (Rs 2.62M → Rs 3.85M)</span><span><i style="background:#0f766e"></i>Expansion MRR</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Plan mix</h3><p>Share of MRR by plan</p></div></div>
+      <div class="row" style="gap:20px;align-items:center">
+        <div class="donut" style="--p:42;--c:var(--brand-600)"><b>42%</b><small>Growth</small></div>
+        <div class="stack" style="gap:8px;flex:1">
+          <div class="row small"><i style="width:10px;height:10px;border-radius:3px;background:#15803d;display:inline-block"></i>Growth<span class="spacer"></span><b>Rs 1,624,935</b></div>
+          <div class="row small"><i style="width:10px;height:10px;border-radius:3px;background:#0f766e;display:inline-block"></i>Business<span class="spacer"></span><b>Rs 1,149,977</b></div>
+          <div class="row small"><i style="width:10px;height:10px;border-radius:3px;background:#efbc61;display:inline-block"></i>Enterprise<span class="spacer"></span><b>Rs 720,000</b></div>
+          <div class="row small"><i style="width:10px;height:10px;border-radius:3px;background:#94a3b8;display:inline-block"></i>Starter<span class="spacer"></span><b>Rs 349,965</b></div>
+        </div>
+      </div>
+      <div class="stackbar mt"><i style="width:42%;background:#15803d"></i><i style="width:30%;background:#0f766e"></i><i style="width:19%;background:#efbc61"></i><i style="width:9%;background:#94a3b8"></i></div>
+      <div class="dl mt">
+        <div><span>Tenants on Growth</span><b>65</b></div>
+        <div><span>Tenants on Business</span><b>23</b></div>
+        <div><span>Enterprise contracts</span><b>5</b></div>
+        <div><span>Starter</span><b>35</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3 mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>New sign-ups</h3><p>Tenants created per month</p></div><div class="panel-actions"><span class="badge good">+18 in Sep</span></div></div>
+      <div class="bars">
+        <div class="bar" style="--h:35%"><i></i><span>Apr</span></div>
+        <div class="bar" style="--h:48%"><i></i><span>May</span></div>
+        <div class="bar" style="--h:42%"><i></i><span>Jun</span></div>
+        <div class="bar" style="--h:78%"><i></i><span>Jul</span></div>
+        <div class="bar" style="--h:66%"><i></i><span>Aug</span></div>
+        <div class="bar" style="--h:90%"><i></i><span>Sep</span></div>
+      </div>
+      <p class="small muted mt">July spike follows the FY 2026-27 start — companies switch books at year-open.</p>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>System health</h3><p>Live · refreshed 30s ago</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/admin/system">Details</a></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well"><i data-lucide="server"></i></span><div><b>API gateway</b><small>p95 182 ms · 99.99%</small></div><span class="spacer"></span><span class="badge good dot">Operational</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="database"></i></span><div><b>PostgreSQL primary</b><small>CPU 41% · 2 replicas in sync</small></div><span class="spacer"></span><span class="badge good dot">Operational</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="cpu"></i></span><div><b>Background workers</b><small>Payroll queue 312 jobs</small></div><span class="spacer"></span><span class="badge warn dot">Busy</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="plug"></i></span><div><b>FBR IRIS / POS gateway</b><small>Upstream latency 2.4 s</small></div><span class="spacer"></span><span class="badge warn dot">Degraded</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="mail"></i></span><div><b>Mail delivery</b><small>98.7% delivered (24h)</small></div><span class="spacer"></span><span class="badge good dot">Operational</span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Recent activity</h3><p>Across the platform</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/admin/audit">Audit log</a></div></div>
+      <div class="timeline">
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Gwadar Marine provisioned</b><small>Starter plan · by Saim Javed · 09:42</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Crescent Textiles renewed on Business</b><small>Annual cycle · 09:10</small></div></div>
+        <div class="tl-item"><span class="tl-dot warn"></span><div><b>Payment failed — Ravi Motors</b><small>Card ending 4417 declined · 08:55</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Mariam Iqbal impersonated ALNOOR</b><small>Ticket TCK-2291 · 08:31</small></div></div>
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Release 4.12 rolled out to 100%</b><small>WHT certificates · yesterday</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0">
+      <div><h3>Tenants needing attention</h3><p>Payment issues, quota limits and low activity</p></div>
+      <div class="panel-actions"><a class="btn ghost sm" href="#/admin/tenants">All tenants</a></div>
+    </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Tenant</th><th>Plan</th><th>Issue</th><th>Since</th><th class="num">MRR (Rs)</th><th>Owner</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><div class="cell-user"><span class="avatar sm">RM</span><div><b>Ravi Motors</b><small>RAVIMTR</small></div></div></td><td><span class="badge info">Growth</span></td><td><span class="badge danger dot">Payment failed (2nd attempt)</span></td><td>28 Sep 2026</td><td class="num">24,999</td><td>Danish Ahmed</td><td class="actions"><a class="btn ghost sm" href="#/admin/tenants/view">Open</a></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">CT</span><div><b>Crescent Textiles</b><small>CRESTEX</small></div></div></td><td><span class="badge violet">Business</span></td><td><span class="badge warn dot">Storage 92% of 100 GB</span></td><td>25 Sep 2026</td><td class="num">49,999</td><td>Mariam Iqbal</td><td class="actions"><a class="btn ghost sm" href="#/admin/tenants/view">Open</a></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">SR</span><div><b>Sukkur Rice Co.</b><small>SUKRICE</small></div></div></td><td><span class="badge neutral">Starter</span></td><td><span class="badge warn dot">No logins in 21 days</span></td><td>10 Sep 2026</td><td class="num">9,999</td><td>Mariam Iqbal</td><td class="actions"><a class="btn ghost sm" href="#/admin/tenants/view">Open</a></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">KT</span><div><b>Karakoram Tech</b><small>KKTECH</small></div></div></td><td><span class="badge neutral">Trial</span></td><td><span class="badge info dot">Trial ends in 2 days</span></td><td>17 Sep 2026</td><td class="num zero">—</td><td>Danish Ahmed</td><td class="actions"><a class="btn ghost sm" href="#/admin/tenants/view">Open</a></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: TENANTS ============================ -->
+<section class="screen" data-route="admin/tenants" data-title="All Tenants">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tenants / All Tenants</div>
+      <h1>Tenants</h1>
+      <p>Every organisation running on Finsoft Cloud — plans, usage and lifecycle status.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export CSV</button>
+      <a class="btn primary" href="#/admin/tenants/new"><i data-lucide="plus"></i>Onboard tenant</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid c5 mb">
+    <div class="kpi"><div class="kpi-top"><span>Total</span><span class="icon-well"><i data-lucide="building-2"></i></span></div><strong>147</strong><small>All-time created</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Active</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>128</strong><small class="up">▲ 9 this month</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Trial</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>14</strong><small>5 ending this week</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Suspended</span><span class="icon-well"><i data-lucide="pause-circle"></i></span></div><strong>3</strong><small>Non-payment</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Total users</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>4,312</strong><small class="up">▲ 6.1%</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search by name, code or NTN…"></label>
+    <select><option>All plans</option><option>Starter</option><option>Growth</option><option>Business</option><option>Enterprise</option></select>
+    <select><option>All cities</option><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+    <div class="chips"><button class="active">All <i>147</i></button><button>Active <i>128</i></button><button>Trial <i>14</i></button><button>Suspended <i>3</i></button><button>Cancelled <i>2</i></button></div>
+    <span class="spacer"></span>
+    <button class="btn secondary sm"><i data-lucide="filter"></i>Filters</button>
+  </div>
+
+  <div class="panel flush">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Tenant</th><th>Plan</th><th class="num">Users</th><th>Modules</th><th>Storage</th><th class="num">MRR (Rs)</th><th>Status</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">AN</span><div><a class="link" href="#/admin/tenants/view"><b>Al-Noor Enterprises (Pvt) Ltd</b></a><small>ALNOOR · Lahore</small></div></div></td><td><span class="badge info">Growth</span></td><td class="num">48</td><td>8 / 9</td><td><div class="progress" style="width:110px"><i style="width:38%"></i></div><small>19 / 50 GB</small></td><td class="num">24,999</td><td><span class="badge good dot">Active</span></td><td>14 Mar 2024</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">CT</span><div><a class="link" href="#/admin/tenants/view"><b>Crescent Textiles</b></a><small>CRESTEX · Faisalabad</small></div></div></td><td><span class="badge violet">Business</span></td><td class="num">186</td><td>9 / 9</td><td><div class="progress danger" style="width:110px"><i style="width:92%"></i></div><small>92 / 100 GB</small></td><td class="num">49,999</td><td><span class="badge good dot">Active</span></td><td>02 Aug 2023</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">BT</span><div><a class="link" href="#/admin/tenants/view"><b>Bhatti Traders</b></a><small>BHATTI · Gujranwala</small></div></div></td><td><span class="badge neutral">Starter</span></td><td class="num">6</td><td>3 / 9</td><td><div class="progress" style="width:110px"><i style="width:22%"></i></div><small>2.2 / 10 GB</small></td><td class="num">9,999</td><td><span class="badge good dot">Active</span></td><td>19 Jan 2025</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">ZB</span><div><a class="link" href="#/admin/tenants/view"><b>Zameen Builders</b></a><small>ZAMEEN · Islamabad</small></div></div></td><td><span class="badge violet">Business</span></td><td class="num">94</td><td>7 / 9</td><td><div class="progress" style="width:110px"><i style="width:54%"></i></div><small>54 / 100 GB</small></td><td class="num">49,999</td><td><span class="badge good dot">Active</span></td><td>11 Nov 2023</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">IF</span><div><a class="link" href="#/admin/tenants/view"><b>Indus Foods</b></a><small>INDUSF · Karachi</small></div></div></td><td><span class="badge warn">Enterprise</span></td><td class="num">412</td><td>9 / 9</td><td><div class="progress" style="width:110px"><i style="width:61%"></i></div><small>305 / 500 GB</small></td><td class="num">180,000</td><td><span class="badge good dot">Active</span></td><td>05 May 2023</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">SL</span><div><a class="link" href="#/admin/tenants/view"><b>Shaheen Logistics</b></a><small>SHAHEEN · Karachi</small></div></div></td><td><span class="badge info">Growth</span></td><td class="num">72</td><td>6 / 9</td><td><div class="progress" style="width:110px"><i style="width:47%"></i></div><small>23 / 50 GB</small></td><td class="num">24,999</td><td><span class="badge good dot">Active</span></td><td>23 Feb 2025</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">PA</span><div><a class="link" href="#/admin/tenants/view"><b>Pak Agro Mills</b></a><small>PAKAGRO · Multan</small></div></div></td><td><span class="badge info">Growth</span></td><td class="num">39</td><td>7 / 9</td><td><div class="progress" style="width:110px"><i style="width:29%"></i></div><small>14 / 50 GB</small></td><td class="num">24,999</td><td><span class="badge good dot">Active</span></td><td>08 Jul 2025</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">KT</span><div><a class="link" href="#/admin/tenants/view"><b>Karakoram Tech</b></a><small>KKTECH · Islamabad</small></div></div></td><td><span class="badge info">Growth</span></td><td class="num">17</td><td>9 / 9</td><td><div class="progress" style="width:110px"><i style="width:6%"></i></div><small>3 / 50 GB</small></td><td class="num zero">—</td><td><span class="badge warn dot">Trial · 2d left</span></td><td>17 Sep 2026</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">MP</span><div><a class="link" href="#/admin/tenants/view"><b>Margalla Pharma</b></a><small>MARGALA · Rawalpindi</small></div></div></td><td><span class="badge violet">Business</span></td><td class="num">121</td><td>8 / 9</td><td><div class="progress warn" style="width:110px"><i style="width:78%"></i></div><small>78 / 100 GB</small></td><td class="num">49,999</td><td><span class="badge good dot">Active</span></td><td>30 Jun 2024</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">RM</span><div><a class="link" href="#/admin/tenants/view"><b>Ravi Motors</b></a><small>RAVIMTR · Lahore</small></div></div></td><td><span class="badge info">Growth</span></td><td class="num">33</td><td>6 / 9</td><td><div class="progress" style="width:110px"><i style="width:41%"></i></div><small>20 / 50 GB</small></td><td class="num">24,999</td><td><span class="badge danger dot">Past due</span></td><td>12 Apr 2024</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">SR</span><div><a class="link" href="#/admin/tenants/view"><b>Sukkur Rice Co.</b></a><small>SUKRICE · Sukkur</small></div></div></td><td><span class="badge neutral">Starter</span></td><td class="num">4</td><td>2 / 9</td><td><div class="progress" style="width:110px"><i style="width:12%"></i></div><small>1.2 / 10 GB</small></td><td class="num">9,999</td><td><span class="badge neutral dot">Suspended</span></td><td>03 Oct 2025</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">GM</span><div><a class="link" href="#/admin/tenants/view"><b>Gwadar Marine</b></a><small>GWADAR · Gwadar</small></div></div></td><td><span class="badge neutral">Starter</span></td><td class="num">2</td><td>3 / 9</td><td><div class="progress" style="width:110px"><i style="width:1%"></i></div><small>0.1 / 10 GB</small></td><td class="num">9,999</td><td><span class="badge info dot">Provisioning</span></td><td>01 Oct 2026</td><td class="actions"><a class="icon-btn-sm" href="#/admin/tenants/view"><i data-lucide="eye"></i></a><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–12 of 147</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>…</button><button>13</button><button>›</button></div></div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: ONBOARD TENANT ============================ -->
+<section class="screen" data-route="admin/tenants/new" data-title="Onboard Tenant">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tenants / Onboard Tenant</div>
+      <h1>Onboard a new tenant</h1>
+      <p>Create the organisation, choose a plan, invite the first admin and provision an isolated workspace.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Draft saved"><i data-lucide="save"></i>Save draft</button>
+      <a class="btn ghost" href="#/admin/tenants"><i data-lucide="x"></i>Cancel</a>
+    </div>
+  </div>
+
+  <div class="wizard" data-wizard>
+    <ol class="steps">
+      <li class="active"><b>1</b><span>Company &amp; Legal</span></li>
+      <li><b>2</b><span>Plan &amp; Modules</span></li>
+      <li><b>3</b><span>Admin User</span></li>
+      <li><b>4</b><span>Configuration</span></li>
+      <li><b>5</b><span>Review &amp; Provision</span></li>
+    </ol>
+
+    <!-- Step 1 -->
+    <div class="wz-pane active">
+      <div class="split">
+        <div class="panel">
+          <div class="form-section"><h4>Company identity</h4><p>As registered with SECP and FBR.</p></div>
+          <div class="form-grid">
+            <label><span>Display name *</span><input value="Al-Noor Enterprises"></label>
+            <label><span>Legal name *</span><input value="Al-Noor Enterprises (Pvt) Ltd"></label>
+            <label><span>NTN *</span><input value="4271839-6"></label>
+            <label><span>STRN</span><input value="32-77-8761-234-55"></label>
+            <label><span>SECP registration #</span><input value="0098412"></label>
+            <label><span>Industry *</span><select><option>Trading &amp; Distribution</option><option>Manufacturing</option><option>Services</option><option>Textiles</option><option>Pharmaceuticals</option><option>Construction</option><option>NGO / Non-profit</option></select></label>
+            <label><span>Country</span><select><option>Pakistan</option></select></label>
+            <label><span>City *</span><select><option>Lahore</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option><option>Rawalpindi</option><option>Multan</option></select></label>
+            <label class="full"><span>Registered address</span><textarea rows="2">Plot 42, Block H, Gulberg III, Lahore 54660</textarea></label>
+            <label><span>Phone</span><input value="+92 42 3587 4410"></label>
+            <label><span>Company email</span><input value="accounts@alnoor.com.pk"></label>
+          </div>
+          <div class="form-section mt"><h4>Workspace address</h4><p>Tenant code is permanent and used for sign-in and the subdomain.</p></div>
+          <div class="form-grid">
+            <label><span>Tenant code *</span><input value="ALNOOR" style="text-transform:uppercase;font-weight:600"><small class="muted">4–10 letters, unique across Finsoft</small></label>
+            <label><span>Subdomain preview</span><input value="alnoor.finsoft.pk" readonly><small style="color:#15803d">✓ Available</small></label>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h3>FBR verification</h3><p>Active Taxpayer List lookup</p></div></div>
+            <div class="list">
+              <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>NTN 4271839-6</b><small>Active · Income Tax</small></div><span class="spacer"></span><span class="badge good">Verified</span></div>
+              <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>STRN 32-77-8761-234-55</b><small>Active · Sales Tax</small></div><span class="spacer"></span><span class="badge good">Verified</span></div>
+            </div>
+          </div>
+          <div class="banner info"><i data-lucide="info"></i><div><b>Tip</b><p>Branches (Karachi, Islamabad, Faisalabad) can be added by the tenant admin after provisioning.</p></div></div>
+        </div>
+      </div>
+      <div class="form-actions"><a class="btn secondary" href="#/admin/tenants">Cancel</a><button class="btn primary" data-next>Continue<i data-lucide="arrow-right"></i></button></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="wz-pane">
+      <div class="form-section"><h4>Choose a plan</h4><p>Prices exclude 16% Punjab sales tax on services. Billed monthly or annually (2 months free).</p></div>
+      <div class="grid-4 mb">
+        <div class="plan-card"><h3>Starter</h3><strong>Rs 9,999<small>/mo</small></strong><p class="small muted">Up to 5 users · 10 GB</p><ul class="small"><li>Accounting &amp; Bank</li><li>Sales &amp; Purchases</li><li>Email support</li></ul><button class="btn secondary sm">Select</button></div>
+        <div class="plan-card featured"><span class="badge good">Selected</span><h3>Growth</h3><strong>Rs 24,999<small>/mo</small></strong><p class="small muted">Up to 50 users · 50 GB</p><ul class="small"><li>Everything in Starter</li><li>Inventory &amp; Payroll</li><li>ESS for all employees</li></ul><button class="btn primary sm"><i data-lucide="check"></i>Selected</button></div>
+        <div class="plan-card"><h3>Business</h3><strong>Rs 49,999<small>/mo</small></strong><p class="small muted">Up to 200 users · 100 GB</p><ul class="small"><li>Everything in Growth</li><li>Multi-branch, approvals</li><li>FBR POS integration</li></ul><button class="btn secondary sm">Select</button></div>
+        <div class="plan-card"><h3>Enterprise</h3><strong>Custom</strong><p class="small muted">Unlimited users · SLA</p><ul class="small"><li>Dedicated database</li><li>SSO &amp; audit export</li><li>Account manager</li></ul><button class="btn secondary sm">Contact sales</button></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Finance modules</h3><p>Included in Growth unless marked add-on</p></div></div>
+          <div class="list">
+            <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Accounting</b><small>GL, vouchers, bank, tax, period close</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked disabled><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="shopping-cart"></i></span><div><b>Sales &amp; AR</b><small>Quotes, invoices, receipts, ageing</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="shopping-bag"></i></span><div><b>Purchases &amp; AP</b><small>POs, bills, payments</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="boxes"></i></span><div><b>Inventory</b><small>Items, warehouses, stock valuation</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="warehouse"></i></span><div><b>Fixed Assets</b><small>Register &amp; depreciation · add-on Rs 2,500</small></div><span class="spacer"></span><label class="switch"><input type="checkbox"><i></i></label></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>HR modules</h3><p>Billed per active employee above 50</p></div></div>
+          <div class="list">
+            <div class="list-item"><span class="icon-well"><i data-lucide="wallet-cards"></i></span><div><b>Payroll</b><small>Salary, tax u/s 149, EOBI, PESSI</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="fingerprint"></i></span><div><b>Attendance</b><small>Biometric sync, shifts, overtime</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="briefcase"></i></span><div><b>Recruitment</b><small>Jobs, candidates, offers · add-on</small></div><span class="spacer"></span><label class="switch"><input type="checkbox"><i></i></label></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="circle-user"></i></span><div><b>Employee Self-Service</b><small>Web &amp; mobile portal</small></div><span class="spacer"></span><label class="switch"><input type="checkbox" checked><i></i></label></div>
+          </div>
+          <div class="form-grid mt">
+            <label><span>Billing cycle</span><select><option>Annual (save Rs 49,998)</option><option>Monthly</option></select></label>
+            <label><span>Start with trial</span><select><option>No — bill immediately</option><option>14-day trial</option><option>30-day trial</option></select></label>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev><i data-lucide="arrow-left"></i>Back</button><button class="btn primary" data-next>Continue<i data-lucide="arrow-right"></i></button></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="wz-pane">
+      <div class="split">
+        <div class="panel">
+          <div class="form-section"><h4>First administrator</h4><p>This person becomes the Tenant Owner with full rights and can invite others.</p></div>
+          <div class="form-grid">
+            <label><span>Full name *</span><input value="Ahmed Raza"></label>
+            <label><span>Designation</span><input value="Chief Executive Officer"></label>
+            <label><span>Work email *</span><input value="ahmed.raza@alnoor.com.pk"></label>
+            <label><span>Mobile *</span><input value="+92 300 845 2210"></label>
+            <label><span>CNIC</span><input value="35202-4417821-3"></label>
+            <label><span>Language</span><select><option>English</option><option>Urdu</option></select></label>
+          </div>
+          <div class="form-section mt"><h4>Security</h4></div>
+          <div class="stack">
+            <label class="switch"><input type="checkbox" checked><i></i><span>Require MFA for all users of this tenant</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Send invitation email now</span></label>
+            <label class="switch"><input type="checkbox"><i></i><span>Allow Google / Microsoft SSO</span></label>
+            <label class="switch"><input type="checkbox" checked><i></i><span>Also invite Sana Javed (Finance Manager) as Accountant</span></label>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Invitation preview</h3><p>From no-reply@finsoft.pk</p></div></div>
+          <div class="paper" style="padding:18px">
+            <div class="row"><span class="brandmark"><i data-lucide="activity"></i></span><b>Finsoft</b></div>
+            <h3 class="mt">Welcome to Finsoft, Ahmed</h3>
+            <p class="small">Your workspace for <b>Al-Noor Enterprises (Pvt) Ltd</b> is ready at <b>alnoor.finsoft.pk</b>. Use company code <b>ALNOOR</b> to sign in.</p>
+            <button class="btn primary sm">Accept invitation</button>
+            <p class="small muted mt">This link expires in 72 hours.</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev><i data-lucide="arrow-left"></i>Back</button><button class="btn primary" data-next>Continue<i data-lucide="arrow-right"></i></button></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="wz-pane">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="form-section"><h4>Financial setup</h4><p>Defaults for the tenant's books.</p></div>
+          <div class="form-grid">
+            <label><span>Fiscal year starts</span><select><option>July (Pakistan tax year)</option><option>January</option><option>April</option></select></label>
+            <label><span>First fiscal year</span><select><option>FY 2026-27 (01 Jul 2026 – 30 Jun 2027)</option></select></label>
+            <label><span>Base currency</span><select><option>PKR — Pakistani Rupee</option></select></label>
+            <label><span>Timezone</span><select><option>Asia/Karachi (PKT, UTC+05:00)</option></select></label>
+            <label><span>Number format</span><select><option>1,245,000.00 (Western)</option><option>12,45,000.00 (South Asian)</option></select></label>
+            <label><span>Date format</span><select><option>DD MMM YYYY</option><option>DD/MM/YYYY</option></select></label>
+            <label class="full"><span>Chart of accounts template</span><select><option>Trading &amp; Distribution (PK) — 214 accounts</option><option>Services (PK) — 168 accounts</option><option>Manufacturing (PK) — 287 accounts</option><option>NGO / Non-profit — 152 accounts</option></select></label>
+            <label class="full"><span>Data residency</span><select><option>Pakistan — Lahore region (primary) + Karachi DR</option><option>UAE — Dubai region</option></select></label>
+          </div>
+          <div class="stack mt">
+            <label class="check"><input type="checkbox" checked> Seed Pakistani tax codes (GST 18%, WHT 153, 236G/H)</label>
+            <label class="check"><input type="checkbox" checked> Seed leave types &amp; salary components</label>
+            <label class="check"><input type="checkbox"> Import opening balances from Excel after provisioning</label>
+          </div>
+        </div>
+        <div class="panel flush">
+          <div class="panel-head" style="padding:16px 18px 0"><div><h3>Number series preview</h3><p>Prefix-YEAR-sequence, resets each fiscal year</p></div></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Document</th><th>Prefix</th><th>Next number</th></tr></thead>
+            <tbody>
+              <tr><td>Journal Voucher</td><td>JV</td><td><b>JV-2026-000001</b></td></tr>
+              <tr><td>Cash Payment Voucher</td><td>CPV</td><td><b>CPV-2026-000001</b></td></tr>
+              <tr><td>Bank Receipt Voucher</td><td>BRV</td><td><b>BRV-2026-000001</b></td></tr>
+              <tr><td>Sales Invoice</td><td>INV</td><td><b>INV-2026-000001</b></td></tr>
+              <tr><td>Purchase Order</td><td>PO</td><td><b>PO-2026-000001</b></td></tr>
+              <tr><td>Vendor Bill</td><td>BILL</td><td><b>BILL-2026-000001</b></td></tr>
+              <tr><td>Payroll Run</td><td>PR</td><td><b>PR-2026-10</b></td></tr>
+              <tr><td>Employee</td><td>EMP</td><td><b>EMP-0001</b></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev><i data-lucide="arrow-left"></i>Back</button><button class="btn primary" data-next>Review<i data-lucide="arrow-right"></i></button></div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="wz-pane">
+      <div class="split">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Review</h3><p>Check everything before provisioning</p></div></div>
+          <div class="dl">
+            <div><span>Legal name</span><b>Al-Noor Enterprises (Pvt) Ltd</b></div>
+            <div><span>Tenant code / URL</span><b>ALNOOR · alnoor.finsoft.pk</b></div>
+            <div><span>NTN / STRN</span><b>4271839-6 · 32-77-8761-234-55</b></div>
+            <div><span>Industry / City</span><b>Trading &amp; Distribution · Lahore</b></div>
+            <div><span>Plan</span><b>Growth — Annual · Rs 249,990 / year</b></div>
+            <div><span>Modules</span><b>Accounting, Sales &amp; AR, Purchases &amp; AP, Inventory, Payroll, Attendance, ESS</b></div>
+            <div><span>Tenant owner</span><b>Ahmed Raza · ahmed.raza@alnoor.com.pk</b></div>
+            <div><span>Security</span><b>MFA required · Invite now</b></div>
+            <div><span>Fiscal year</span><b>July – June · FY 2026-27</b></div>
+            <div><span>Currency / Timezone</span><b>PKR · Asia/Karachi</b></div>
+            <div><span>COA template</span><b>Trading &amp; Distribution (PK) — 214 accounts</b></div>
+            <div><span>Data residency</span><b>Pakistan — Lahore + Karachi DR</b></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Provisioning checklist</h3><p>Estimated time ~ 90 seconds</p></div></div>
+          <div class="timeline">
+            <div class="tl-item"><span class="tl-dot good"></span><div><b>Validate company &amp; tax IDs</b><small>NTN and STRN verified with FBR</small></div></div>
+            <div class="tl-item"><span class="tl-dot good"></span><div><b>Reserve tenant code</b><small>ALNOOR locked</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Create isolated schema</b><small>Postgres schema t_alnoor</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Seed COA, tax codes, leave types, salary components</b><small>Pakistan master data v2026.2</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Open fiscal year FY 2026-27</b><small>12 periods, Jul – Jun</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Configure DNS alnoor.finsoft.pk</b><small>TLS certificate auto-issued</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Create owner &amp; send invitation</b><small>ahmed.raza@alnoor.com.pk</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Generate first invoice</b><small>Rs 249,990 + 16% PST</small></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn secondary" data-prev><i data-lucide="arrow-left"></i>Back</button>
+        <a class="btn ghost" href="#/admin/tenants/view"><i data-lucide="eye"></i>View tenant</a>
+        <button class="btn primary" data-toast="Provisioning started for ALNOOR — owner will be emailed"><i data-lucide="rocket"></i>Provision tenant</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: TENANT VIEW ============================ -->
+<section class="screen" data-route="admin/tenants/view" data-title="Tenant Detail">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tenants / All Tenants / ALNOOR</div>
+      <h1>Tenant detail</h1>
+      <p>Subscription, usage, users and audit trail for this organisation.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="#/admin/tenants"><i data-lucide="arrow-left"></i>All tenants</a>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="profile-head">
+      <span class="avatar xl">AN</span>
+      <div>
+        <h2>Al-Noor Enterprises (Pvt) Ltd</h2>
+        <p>ALNOOR · alnoor.finsoft.pk · Lahore · NTN 4271839-6 · Customer since 14 Mar 2024</p>
+        <div class="row"><span class="badge good dot">Active</span><span class="badge info">Growth plan</span><span class="badge neutral">Annual</span><span class="badge violet">MFA enforced</span></div>
+      </div>
+      <div class="head-actions">
+        <button class="btn secondary" data-open="adm-impersonate"><i data-lucide="user-check"></i>Impersonate</button>
+        <button class="btn secondary" data-open="adm-edit-tenant"><i data-lucide="pencil"></i>Edit</button>
+        <button class="btn danger" data-open="adm-suspend"><i data-lucide="pause-circle"></i>Suspend</button>
+      </div>
+    </div>
+  </div>
+
+  <div data-tabs>
+    <div class="tabs">
+      <button class="active" data-tab="overview">Overview</button>
+      <button data-tab="users">Users</button>
+      <button data-tab="usage">Usage</button>
+      <button data-tab="billing">Billing</button>
+      <button data-tab="audit">Audit</button>
+    </div>
+
+    <div class="tab-pane active" data-pane="overview">
+      <div class="kpi-grid mb">
+        <div class="kpi"><div class="kpi-top"><span>Active users</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>48 / 50</strong><small>2 seats left</small></div>
+        <div class="kpi teal"><div class="kpi-top"><span>Vouchers (Sep)</span><span class="icon-well"><i data-lucide="receipt-text"></i></span></div><strong>3,214</strong><small class="up">▲ 12% vs Aug</small></div>
+        <div class="kpi blue"><div class="kpi-top"><span>Employees on payroll</span><span class="icon-well"><i data-lucide="wallet-cards"></i></span></div><strong>212</strong><small>PR-2026-09 posted</small></div>
+        <div class="kpi yellow"><div class="kpi-top"><span>Storage</span><span class="icon-well"><i data-lucide="hard-drive"></i></span></div><strong>19 GB</strong><small>of 50 GB (38%)</small></div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Organisation details</h3></div></div>
+          <div class="dl">
+            <div><span>Legal name</span><b>Al-Noor Enterprises (Pvt) Ltd</b></div>
+            <div><span>NTN</span><b>4271839-6</b></div>
+            <div><span>STRN</span><b>32-77-8761-234-55</b></div>
+            <div><span>Industry</span><b>Trading &amp; Distribution</b></div>
+            <div><span>Branches</span><b>Lahore HQ, Karachi, Islamabad, Faisalabad</b></div>
+            <div><span>Owner</span><b>Ahmed Raza (CEO)</b></div>
+            <div><span>Billing contact</span><b>Sana Javed · accounts@alnoor.com.pk</b></div>
+            <div><span>Fiscal year</span><b>Jul – Jun · FY 2026-27 open</b></div>
+            <div><span>Data region</span><b>PK-Lahore (DR: Karachi)</b></div>
+            <div><span>Account manager</span><b>Mariam Iqbal</b></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Modules</h3><p>8 of 9 enabled</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/admin/features">Feature flags</a></div></div>
+          <div class="list">
+            <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Accounting</b><small>Core</small></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="shopping-cart"></i></span><div><b>Sales &amp; AR</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="shopping-bag"></i></span><div><b>Purchases &amp; AP</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="boxes"></i></span><div><b>Inventory</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="warehouse"></i></span><div><b>Fixed Assets</b><small>Add-on</small></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="wallet-cards"></i></span><div><b>Payroll</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="fingerprint"></i></span><div><b>Attendance</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="briefcase"></i></span><div><b>Recruitment</b><small>Not in plan</small></div><span class="spacer"></span><span class="badge neutral">Off</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="circle-user"></i></span><div><b>Employee Self-Service</b></div><span class="spacer"></span><span class="badge good">On</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="users">
+      <div class="panel flush">
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>User</th><th>Role</th><th>Branch</th><th>MFA</th><th>Last sign-in</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>ahmed.raza@alnoor.com.pk</small></div></div></td><td>Tenant Owner</td><td>Lahore HQ</td><td><span class="badge good">On</span></td><td>Today 08:12</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>sana.javed@alnoor.com.pk</small></div></div></td><td>Finance Manager</td><td>Lahore HQ</td><td><span class="badge good">On</span></td><td>Today 09:31</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>hira.ali@alnoor.com.pk</small></div></div></td><td>Accountant</td><td>Lahore HQ</td><td><span class="badge good">On</span></td><td>Today 09:05</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">AN</span><div><b>Ayesha Noor</b><small>ayesha.noor@alnoor.com.pk</small></div></div></td><td>HR Manager</td><td>Lahore HQ</td><td><span class="badge good">On</span></td><td>Yesterday 17:44</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>bilal.khan@alnoor.com.pk</small></div></div></td><td>Sales Executive</td><td>Karachi</td><td><span class="badge good">On</span></td><td>30 Sep 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>usman.ali@alnoor.com.pk</small></div></div></td><td>Procurement</td><td>Faisalabad</td><td><span class="badge good">On</span></td><td>29 Sep 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>faisal.q@alnoor.com.pk</small></div></div></td><td>Store Keeper</td><td>Islamabad</td><td><span class="badge warn">Pending</span></td><td>—</td><td><span class="badge info dot">Invited</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-foot"><span>Showing 7 of 48 users</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="usage">
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>API calls</h3><p>Thousands per month</p></div></div>
+          <div class="bars">
+            <div class="bar" style="--h:52%"><i></i><span>Apr</span></div>
+            <div class="bar" style="--h:58%"><i></i><span>May</span></div>
+            <div class="bar" style="--h:71%"><i></i><span>Jun</span></div>
+            <div class="bar" style="--h:88%"><i></i><span>Jul</span></div>
+            <div class="bar" style="--h:76%"><i></i><span>Aug</span></div>
+            <div class="bar" style="--h:82%"><i></i><span>Sep</span></div>
+          </div>
+          <p class="small muted mt">Sep: 412k calls · limit 1M / month</p>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Storage growth</h3><p>GB used, end of month</p></div></div>
+          <div class="bars">
+            <div class="bar" style="--h:24%"><i></i><span>Apr</span></div>
+            <div class="bar" style="--h:26%"><i></i><span>May</span></div>
+            <div class="bar" style="--h:29%"><i></i><span>Jun</span></div>
+            <div class="bar" style="--h:32%"><i></i><span>Jul</span></div>
+            <div class="bar" style="--h:35%"><i></i><span>Aug</span></div>
+            <div class="bar" style="--h:38%"><i></i><span>Sep</span></div>
+          </div>
+          <p class="small muted mt">Attachments 14.2 GB · Database 4.1 GB · Backups 0.7 GB</p>
+        </div>
+      </div>
+      <div class="panel mt">
+        <div class="panel-head"><div><h3>Quota usage</h3></div></div>
+        <div class="stack">
+          <div><div class="row small"><span>Users</span><span class="spacer"></span><b>48 / 50</b></div><div class="progress warn"><i style="width:96%"></i></div></div>
+          <div><div class="row small"><span>Storage</span><span class="spacer"></span><b>19 / 50 GB</b></div><div class="progress"><i style="width:38%"></i></div></div>
+          <div><div class="row small"><span>API calls (Sep)</span><span class="spacer"></span><b>412k / 1M</b></div><div class="progress"><i style="width:41%"></i></div></div>
+          <div><div class="row small"><span>Employees on payroll</span><span class="spacer"></span><b>212 / 250</b></div><div class="progress"><i style="width:85%"></i></div></div>
+          <div><div class="row small"><span>FBR POS invoices (Sep)</span><span class="spacer"></span><b>8,940 / 25,000</b></div><div class="progress"><i style="width:36%"></i></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="billing">
+      <div class="grid-3 mb">
+        <div class="panel"><div class="dl"><div><span>Plan</span><b>Growth — Annual</b></div><div><span>Amount</span><b>Rs 249,990 / yr</b></div><div><span>Next renewal</span><b>14 Mar 2027</b></div></div></div>
+        <div class="panel"><div class="dl"><div><span>Payment method</span><b>Meezan Bank — direct debit</b></div><div><span>Billing email</span><b>accounts@alnoor.com.pk</b></div><div><span>Tax</span><b>16% PST (Punjab)</b></div></div></div>
+        <div class="panel"><div class="dl"><div><span>Balance due</span><b>Rs 2,900</b></div><div><span>Lifetime value</span><b>Rs 674,973</b></div><div><span>Add-ons</span><b>Fixed Assets · Rs 2,500/mo</b></div></div></div>
+      </div>
+      <div class="panel flush">
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Invoice #</th><th>Period</th><th>Issued</th><th class="num">Amount (Rs)</th><th class="num">Tax (Rs)</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><a class="link" href="#/admin/invoices">FS-INV-2026-01842</a></td><td>Oct 2026 add-on</td><td>01 Oct 2026</td><td class="num">2,500.00</td><td class="num">400.00</td><td><span class="badge info">Open</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+            <tr><td><a class="link" href="#/admin/invoices">FS-INV-2026-01611</a></td><td>Sep 2026 add-on</td><td>01 Sep 2026</td><td class="num">2,500.00</td><td class="num">400.00</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+            <tr><td><a class="link" href="#/admin/invoices">FS-INV-2026-00412</a></td><td>Mar 2026 – Feb 2027</td><td>14 Mar 2026</td><td class="num">249,990.00</td><td class="num">39,998.40</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+            <tr><td><a class="link" href="#/admin/invoices">FS-INV-2025-00388</a></td><td>Mar 2025 – Feb 2026</td><td>14 Mar 2025</td><td class="num">199,990.00</td><td class="num">31,998.40</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+            <tr><td><a class="link" href="#/admin/invoices">FS-INV-2024-00121</a></td><td>Mar 2024 – Feb 2025</td><td>14 Mar 2024</td><td class="num">179,990.00</td><td class="num">28,798.40</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="audit">
+      <div class="panel">
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>Mariam Iqbal impersonated Sana Javed</b><small>01 Oct 2026 08:31 · Reason: TCK-2291 bank reconciliation mismatch · 14 min session</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Fixed Assets add-on enabled</b><small>01 Sep 2026 10:02 · by Danish Ahmed</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>User seat limit raised 40 → 50</b><small>30 Sep 2026 11:47 · by Mariam Iqbal</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>FY 2026-27 opened</b><small>01 Jul 2026 00:05 · system</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Plan renewed — Growth Annual</b><small>14 Mar 2026 · Meezan direct debit</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>MFA enforcement turned on</b><small>02 Jan 2026 · by Ahmed Raza (tenant)</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Tenant provisioned</b><small>14 Mar 2024 · Starter plan · by Saim Javed</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="overlay" id="adm-impersonate">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Impersonate a user</h2><p>Every session is recorded and visible to the tenant owner.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Sign in as</span><select><option>Sana Javed — Finance Manager</option><option>Ahmed Raza — Tenant Owner</option><option>Hira Ali — Accountant</option></select></label>
+          <label><span>Linked ticket *</span><input value="TCK-2291"></label>
+          <label><span>Session length</span><select><option>30 minutes</option><option>15 minutes</option><option>60 minutes</option></select></label>
+          <label class="full"><span>Reason *</span><textarea rows="3">Investigating bank reconciliation mismatch for Meezan Bank — 0123 reported by customer.</textarea></label>
+          <label class="check full"><input type="checkbox" checked> Read-only mode (block posting &amp; deletes)</label>
+          <label class="check full"><input type="checkbox" checked> Notify tenant owner by email</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><a class="btn primary" href="#/app/dashboard"><i data-lucide="user-check"></i>Start session</a></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="adm-suspend">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Suspend Al-Noor Enterprises?</h2><p>All 48 users will be signed out immediately.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="banner danger mb"><i data-lucide="alert-triangle"></i><div><b>This blocks access for the whole company</b><p>Data is retained. Scheduled jobs (payroll, recurring vouchers) pause until reactivated.</p></div></div>
+        <div class="form-grid">
+          <label class="full"><span>Reason</span><select><option>Non-payment</option><option>Customer request</option><option>Terms of service violation</option><option>Security incident</option></select></label>
+          <label class="full"><span>Message shown to users</span><textarea rows="2">Your workspace is temporarily suspended. Please contact billing@finsoft.pk.</textarea></label>
+          <label class="full"><span>Type ALNOOR to confirm</span><input placeholder="ALNOOR"></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="ALNOOR suspended"><i data-lucide="pause-circle"></i>Suspend tenant</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="adm-edit-tenant">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Edit tenant</h2><p>ALNOOR · Al-Noor Enterprises (Pvt) Ltd</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Display name</span><input value="Al-Noor Enterprises"></label>
+          <label><span>Legal name</span><input value="Al-Noor Enterprises (Pvt) Ltd"></label>
+          <label><span>Plan</span><select><option>Growth</option><option>Business</option><option>Starter</option></select></label>
+          <label><span>User seats</span><input type="number" value="50"></label>
+          <label><span>Storage quota (GB)</span><input type="number" value="50"></label>
+          <label><span>Account manager</span><select><option>Mariam Iqbal</option><option>Danish Ahmed</option></select></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Tenant updated">Save changes</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: PLANS ============================ -->
+<section class="screen" data-route="admin/plans" data-title="Plans &amp; Pricing">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Plans &amp; Pricing</div>
+      <h1>Plans &amp; pricing</h1>
+      <p>Public price book for Finsoft Cloud. Changes apply to new subscriptions; existing tenants are grandfathered.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="history"></i>Price history</button>
+      <button class="btn primary" data-open="adm-edit-plan"><i data-lucide="plus"></i>New plan</button>
+    </div>
+  </div>
+
+  <div class="row mb"><div class="seg"><button class="active">Monthly</button><button>Annual (2 months free)</button></div><span class="spacer"></span><span class="small muted">Prices exclude provincial sales tax on services</span></div>
+
+  <div class="grid-4 mb">
+    <div class="plan-card">
+      <div class="row"><h3>Starter</h3><span class="spacer"></span><span class="badge neutral">35 tenants</span></div>
+      <strong>Rs 9,999<small>/mo</small></strong>
+      <p class="small muted">For small traders getting their books in order.</p>
+      <ul class="small"><li>Up to 5 users</li><li>10 GB storage</li><li>Accounting, Sales, Purchases</li><li>GST &amp; WHT reports</li><li>Email support (48h)</li></ul>
+      <button class="btn secondary sm" data-open="adm-edit-plan"><i data-lucide="pencil"></i>Edit plan</button>
+    </div>
+    <div class="plan-card featured">
+      <div class="row"><h3>Growth</h3><span class="spacer"></span><span class="badge good">Most popular</span></div>
+      <strong>Rs 24,999<small>/mo</small></strong>
+      <p class="small muted">Accounting + HR for growing SMEs.</p>
+      <ul class="small"><li>Up to 50 users</li><li>50 GB storage</li><li>Inventory &amp; Payroll</li><li>Attendance + ESS</li><li>Chat support (8h)</li></ul>
+      <button class="btn primary sm" data-open="adm-edit-plan"><i data-lucide="pencil"></i>Edit plan</button>
+    </div>
+    <div class="plan-card">
+      <div class="row"><h3>Business</h3><span class="spacer"></span><span class="badge neutral">23 tenants</span></div>
+      <strong>Rs 49,999<small>/mo</small></strong>
+      <p class="small muted">Multi-branch companies with approvals.</p>
+      <ul class="small"><li>Up to 200 users</li><li>100 GB storage</li><li>All modules</li><li>FBR POS integration</li><li>Phone support (4h)</li></ul>
+      <button class="btn secondary sm" data-open="adm-edit-plan"><i data-lucide="pencil"></i>Edit plan</button>
+    </div>
+    <div class="plan-card">
+      <div class="row"><h3>Enterprise</h3><span class="spacer"></span><span class="badge neutral">5 tenants</span></div>
+      <strong>Custom</strong>
+      <p class="small muted">Groups, dedicated infra and SLAs.</p>
+      <ul class="small"><li>Unlimited users</li><li>Dedicated database</li><li>SSO, audit export</li><li>99.95% SLA</li><li>Named account manager</li></ul>
+      <button class="btn secondary sm" data-open="adm-edit-plan"><i data-lucide="pencil"></i>Edit plan</button>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>Feature matrix</h3><p>What each plan includes</p></div></div>
+    <div class="table-wrap"><table class="tbl matrix">
+      <thead><tr><th>Feature</th><th>Starter</th><th>Growth</th><th>Business</th><th>Enterprise</th></tr></thead>
+      <tbody>
+        <tr><td><b>General ledger &amp; vouchers</b></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Bank &amp; cheque management</b></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Sales &amp; purchase invoicing</b></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Sales tax return / WHT statements</b></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Inventory &amp; warehouses</b></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Payroll &amp; statutory (EOBI, PESSI)</b></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Attendance &amp; biometric sync</b></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Employee Self-Service</b></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Fixed assets</b></td><td class="muted"><i data-lucide="x"></i></td><td>Add-on</td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Recruitment &amp; performance</b></td><td class="muted"><i data-lucide="x"></i></td><td>Add-on</td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Multi-branch &amp; approval workflows</b></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>FBR POS real-time integration</b></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Report Studio (custom reports)</b></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>SAML SSO &amp; audit log export</b></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td></tr>
+        <tr><td><b>Dedicated database &amp; SLA</b></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td class="muted"><i data-lucide="x"></i></td><td><i data-lucide="check"></i></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="adm-edit-plan">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Edit plan — Growth</h2><p>65 tenants currently subscribed</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label><span>Plan name</span><input value="Growth"></label>
+          <label><span>Monthly price (Rs)</span><input value="24,999"></label>
+          <label><span>Annual price (Rs)</span><input value="249,990"></label>
+          <label><span>User seats</span><input type="number" value="50"></label>
+          <label><span>Storage (GB)</span><input type="number" value="50"></label>
+          <label><span>Trial length</span><select><option>14 days</option><option>30 days</option></select></label>
+          <label class="full"><span>Tagline</span><input value="Accounting + HR for growing SMEs."></label>
+        </div>
+        <div class="form-section mt"><h4>Included modules</h4></div>
+        <div class="grid-3">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Accounting</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Sales &amp; AR</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Purchases &amp; AP</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Inventory</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>Fixed Assets</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Payroll</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Attendance</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>Recruitment</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>ESS</span></label>
+        </div>
+        <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>Grandfathering</b><p>Price changes apply to new subscriptions and renewals after 01 Nov 2026.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Plan Growth updated">Save plan</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: SUBSCRIPTIONS ============================ -->
+<section class="screen" data-route="admin/subscriptions" data-title="Subscriptions">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Subscriptions</div>
+      <h1>Subscriptions</h1>
+      <p>Billing cycles, renewals and payment methods for every tenant.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-toast="Renewal run queued for 47 subscriptions"><i data-lucide="repeat"></i>Run renewals</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>MRR</span><span class="icon-well"><i data-lucide="banknote"></i></span></div><strong>Rs 3,845,000</strong><small class="up">▲ Rs 144,000 net new</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Annual contracts</span><span class="icon-well"><i data-lucide="calendar-check"></i></span></div><strong>71%</strong><small>91 of 128 tenants</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Renewals in 30 days</span><span class="icon-well"><i data-lucide="calendar-clock"></i></span></div><strong>17</strong><small>Rs 1,285,000 at stake</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Past due</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>Rs 134,997</strong><small class="down">4 subscriptions</small></div>
+  </div>
+
+  <div class="split">
+    <div>
+      <div class="toolbar">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search tenant…"></label>
+        <select><option>All plans</option><option>Starter</option><option>Growth</option><option>Business</option><option>Enterprise</option></select>
+        <div class="chips"><button class="active">All</button><button>Monthly</button><button>Annual</button><button>Past due <i>4</i></button></div>
+      </div>
+      <div class="panel flush">
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Tenant</th><th>Plan</th><th>Cycle</th><th class="num">Amount (Rs)</th><th>Next renewal</th><th>Payment method</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><a class="link" href="#/admin/tenants/view">Al-Noor Enterprises</a><small>ALNOOR</small></td><td>Growth</td><td>Annual</td><td class="num">249,990</td><td>14 Mar 2027</td><td>Meezan direct debit</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Crescent Textiles</a><small>CRESTEX</small></td><td>Business</td><td>Annual</td><td class="num">499,990</td><td>02 Aug 2027</td><td>Bank transfer · HBL</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Indus Foods</a><small>INDUSF</small></td><td>Enterprise</td><td>Annual</td><td class="num">2,160,000</td><td>05 May 2027</td><td>Invoice · 30 days</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Zameen Builders</a><small>ZAMEEN</small></td><td>Business</td><td>Monthly</td><td class="num">49,999</td><td>11 Oct 2026</td><td>Visa •••• 9012</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Shaheen Logistics</a><small>SHAHEEN</small></td><td>Growth</td><td>Monthly</td><td class="num">24,999</td><td>23 Oct 2026</td><td>JazzCash Business</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Margalla Pharma</a><small>MARGALA</small></td><td>Business</td><td>Annual</td><td class="num">499,990</td><td>30 Jun 2027</td><td>UBL direct debit</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Pak Agro Mills</a><small>PAKAGRO</small></td><td>Growth</td><td>Monthly</td><td class="num">24,999</td><td>08 Oct 2026</td><td>Mastercard •••• 2245</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Ravi Motors</a><small>RAVIMTR</small></td><td>Growth</td><td>Monthly</td><td class="num">24,999</td><td>28 Sep 2026</td><td>Visa •••• 4417</td><td><span class="badge danger dot">Past due</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Bhatti Traders</a><small>BHATTI</small></td><td>Starter</td><td>Monthly</td><td class="num">9,999</td><td>19 Oct 2026</td><td>Easypaisa</td><td><span class="badge good dot">Active</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Sukkur Rice Co.</a><small>SUKRICE</small></td><td>Starter</td><td>Monthly</td><td class="num">9,999</td><td>—</td><td>Bank Alfalah transfer</td><td><span class="badge neutral dot">Suspended</span></td></tr>
+            <tr><td><a class="link" href="#/admin/tenants/view">Gwadar Marine</a><small>GWADAR</small></td><td>Starter</td><td>Monthly</td><td class="num">9,999</td><td>01 Nov 2026</td><td>Pending setup</td><td><span class="badge info dot">New</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-foot"><span>Showing 1–11 of 142</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Trials expiring</h3><p>Next 14 days</p></div><span class="badge warn">5 this week</span></div>
+        <div class="list">
+          <div class="list-item"><span class="avatar sm">KT</span><div><b>Karakoram Tech</b><small>Growth trial · 17 users active</small></div><span class="spacer"></span><span class="badge danger">2 days</span></div>
+          <div class="list-item"><span class="avatar sm">HC</span><div><b>Hunza Crafts</b><small>Starter trial · 2 users</small></div><span class="spacer"></span><span class="badge danger">3 days</span></div>
+          <div class="list-item"><span class="avatar sm">QP</span><div><b>Quetta Pistachio Co.</b><small>Growth trial · 9 users</small></div><span class="spacer"></span><span class="badge warn">5 days</span></div>
+          <div class="list-item"><span class="avatar sm">MS</span><div><b>Mehran Steel</b><small>Business trial · 31 users</small></div><span class="spacer"></span><span class="badge warn">6 days</span></div>
+          <div class="list-item"><span class="avatar sm">TS</span><div><b>Thar Solar</b><small>Growth trial · 6 users</small></div><span class="spacer"></span><span class="badge warn">7 days</span></div>
+          <div class="list-item"><span class="avatar sm">CB</span><div><b>Chenab Bottlers</b><small>Business trial · 14 users</small></div><span class="spacer"></span><span class="badge neutral">12 days</span></div>
+        </div>
+        <button class="btn secondary sm mt" data-toast="Reminder emails sent to 5 trial owners"><i data-lucide="send"></i>Send conversion reminders</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>MRR movement — Sep</h3></div></div>
+        <div class="dl">
+          <div><span>New business</span><b class="dr">+ Rs 112,000</b></div>
+          <div><span>Expansion</span><b class="dr">+ Rs 74,500</b></div>
+          <div><span>Contraction</span><b class="cr">− Rs 12,500</b></div>
+          <div><span>Churn</span><b class="neg">− Rs 30,000</b></div>
+          <div><span>Net new MRR</span><b>+ Rs 144,000</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: INVOICES ============================ -->
+<section class="screen" data-route="admin/invoices" data-title="Platform Invoices">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Platform Invoices</div>
+      <h1>Platform invoices</h1>
+      <p>Invoices issued by Finsoft Cloud to tenants, with provincial sales tax on services.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-toast="Manual invoice draft created"><i data-lucide="plus"></i>Manual invoice</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Billed (Sep)</span><span class="icon-well"><i data-lucide="receipt-text"></i></span></div><strong>Rs 4,460,200</strong><small>incl. Rs 615,200 tax</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Collected (Sep)</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>Rs 4,205,100</strong><small class="up">94.3% collection rate</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Open</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>Rs 385,600</strong><small>12 invoices</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Overdue</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>Rs 156,597</strong><small class="down">5 invoices &gt; 7 days</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Invoice # or tenant…"></label>
+    <select><option>Sep 2026</option><option>Aug 2026</option><option>Jul 2026</option></select>
+    <div class="chips"><button class="active">All <i>164</i></button><button>Paid <i>147</i></button><button>Open <i>12</i></button><button>Overdue <i>5</i></button><button>Void <i>0</i></button></div>
+    <span class="spacer"></span>
+    <button class="btn secondary sm"><i data-lucide="filter"></i>Filters</button>
+  </div>
+
+  <div class="panel flush">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Invoice #</th><th>Tenant</th><th>Description</th><th>Issued</th><th>Due</th><th class="num">Subtotal</th><th class="num">Tax</th><th class="num">Total (Rs)</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01842</b></td><td>Al-Noor Enterprises</td><td>Fixed Assets add-on · Oct</td><td>01 Oct 2026</td><td>15 Oct 2026</td><td class="num">2,500.00</td><td class="num">400.00</td><td class="num">2,900.00</td><td><span class="badge info">Open</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01841</b></td><td>Gwadar Marine</td><td>Starter · Oct 2026</td><td>01 Oct 2026</td><td>15 Oct 2026</td><td class="num">9,999.00</td><td class="num">1,499.85</td><td class="num">11,498.85</td><td><span class="badge info">Open</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01822</b></td><td>Zameen Builders</td><td>Business · Oct 2026</td><td>01 Oct 2026</td><td>11 Oct 2026</td><td class="num">49,999.00</td><td class="num">7,999.84</td><td class="num">57,998.84</td><td><span class="badge info">Open</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01790</b></td><td>Ravi Motors</td><td>Growth · Sep 2026</td><td>12 Sep 2026</td><td>28 Sep 2026</td><td class="num">24,999.00</td><td class="num">3,999.84</td><td class="num">28,998.84</td><td><span class="badge danger">Overdue</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01755</b></td><td>Sukkur Rice Co.</td><td>Starter · Sep 2026</td><td>03 Sep 2026</td><td>17 Sep 2026</td><td class="num">9,999.00</td><td class="num">1,299.87</td><td class="num">11,298.87</td><td><span class="badge danger">Overdue</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01702</b></td><td>Shaheen Logistics</td><td>Growth · Sep 2026</td><td>23 Sep 2026</td><td>07 Oct 2026</td><td class="num">24,999.00</td><td class="num">3,249.87</td><td class="num">28,248.87</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01688</b></td><td>Pak Agro Mills</td><td>Growth · Sep 2026</td><td>08 Sep 2026</td><td>22 Sep 2026</td><td class="num">24,999.00</td><td class="num">3,999.84</td><td class="num">28,998.84</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01611</b></td><td>Al-Noor Enterprises</td><td>Fixed Assets add-on · Sep</td><td>01 Sep 2026</td><td>15 Sep 2026</td><td class="num">2,500.00</td><td class="num">400.00</td><td class="num">2,900.00</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01598</b></td><td>Bhatti Traders</td><td>Starter · Sep 2026</td><td>19 Sep 2026</td><td>03 Oct 2026</td><td class="num">9,999.00</td><td class="num">1,599.84</td><td class="num">11,598.84</td><td><span class="badge warn">Partially paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>FS-INV-2026-01544</b></td><td>Margalla Pharma</td><td>Extra storage 50 GB</td><td>15 Aug 2026</td><td>29 Aug 2026</td><td class="num">7,500.00</td><td class="num">1,200.00</td><td class="num">8,700.00</td><td><span class="badge good">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="download"></i></button><button class="icon-btn-sm"><i data-lucide="send"></i></button></td></tr>
+        <tr class="total"><td colspan="6">Total (this page)</td><td class="num">167,493.00</td><td class="num">25,648.75</td><td class="num">193,141.75</td><td colspan="2"></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–10 of 164</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: FEATURES ============================ -->
+<section class="screen" data-route="admin/features" data-title="Modules &amp; Flags">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Modules &amp; Flags</div>
+      <h1>Modules &amp; feature flags</h1>
+      <p>Control module availability and gradually roll out new features across tenants.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="history"></i>Change log</button>
+      <button class="btn primary" data-toast="Flag created"><i data-lucide="plus"></i>New flag</button>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="panel flush">
+        <div class="panel-head" style="padding:16px 18px 0"><div><h3>Modules</h3><p>Global kill-switches — turning off hides the module for all tenants</p></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Module</th><th>Key</th><th class="num">Tenants using</th><th>Min plan</th><th>Enabled</th></tr></thead>
+          <tbody>
+            <tr><td><b>Accounting</b></td><td><code>mod.accounting</code></td><td class="num">128</td><td>Starter</td><td><label class="switch"><input type="checkbox" checked disabled><i></i></label></td></tr>
+            <tr><td><b>Sales &amp; AR</b></td><td><code>mod.sales</code></td><td class="num">126</td><td>Starter</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Purchases &amp; AP</b></td><td><code>mod.purchases</code></td><td class="num">121</td><td>Starter</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Inventory</b></td><td><code>mod.inventory</code></td><td class="num">88</td><td>Growth</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Fixed Assets</b></td><td><code>mod.assets</code></td><td class="num">41</td><td>Business</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Payroll</b></td><td><code>mod.payroll</code></td><td class="num">86</td><td>Growth</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Attendance</b></td><td><code>mod.attendance</code></td><td class="num">79</td><td>Growth</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Recruitment</b></td><td><code>mod.recruitment</code></td><td class="num">22</td><td>Business</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Employee Self-Service</b></td><td><code>mod.ess</code></td><td class="num">84</td><td>Growth</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head" style="padding:16px 18px 0"><div><h3>Feature flags</h3><p>Progressive rollout</p></div><div class="panel-actions"><div class="chips"><button class="active">All</button><button>Rolling out</button><button>Beta</button><button>Off</button></div></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Flag</th><th>Stage</th><th>Rollout</th><th>Owner</th><th>Updated</th><th>On</th></tr></thead>
+          <tbody>
+            <tr><td><b>FBR Digital Invoicing (DI) API</b><small><code>ff.fbr_di_api</code></small></td><td><span class="badge warn">Rolling out</span></td><td><div class="progress" style="width:140px"><i style="width:40%"></i></div><small>40% · 51 tenants</small></td><td>Saim Javed</td><td>29 Sep 2026</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>WHT certificates (153/149)</b><small><code>ff.wht_certificates</code></small></td><td><span class="badge good">GA</span></td><td><div class="progress" style="width:140px"><i style="width:100%"></i></div><small>100%</small></td><td>Saim Javed</td><td>30 Sep 2026</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Bank feed auto-match (AI)</b><small><code>ff.bank_automatch</code></small></td><td><span class="badge violet">Beta</span></td><td><div class="progress" style="width:140px"><i style="width:15%"></i></div><small>15% · opt-in</small></td><td>Danish Ahmed</td><td>21 Sep 2026</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>New payroll engine v3</b><small><code>ff.payroll_v3</code></small></td><td><span class="badge warn">Rolling out</span></td><td><div class="progress warn" style="width:140px"><i style="width:65%"></i></div><small>65%</small></td><td>Mariam Iqbal</td><td>18 Sep 2026</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>Urdu interface</b><small><code>ff.locale_ur</code></small></td><td><span class="badge violet">Beta</span></td><td><div class="progress" style="width:140px"><i style="width:5%"></i></div><small>5% · 6 tenants</small></td><td>Mariam Iqbal</td><td>02 Sep 2026</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td></tr>
+            <tr><td><b>WhatsApp payslip delivery</b><small><code>ff.wa_payslips</code></small></td><td><span class="badge neutral">Off</span></td><td><div class="progress" style="width:140px"><i style="width:0%"></i></div><small>0%</small></td><td>Saim Javed</td><td>14 Aug 2026</td><td><label class="switch"><input type="checkbox"><i></i></label></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Per-tenant overrides</h3><p>ff.fbr_di_api</p></div><button class="btn ghost sm"><i data-lucide="plus"></i>Add</button></div>
+        <label class="search-field mb"><i data-lucide="search"></i><input placeholder="Add tenant override…"></label>
+        <div class="list">
+          <div class="list-item"><span class="avatar sm">AN</span><div><b>Al-Noor Enterprises</b><small>Forced ON · pilot customer</small></div><span class="spacer"></span><span class="badge good">On</span></div>
+          <div class="list-item"><span class="avatar sm">IF</span><div><b>Indus Foods</b><small>Forced ON · Enterprise</small></div><span class="spacer"></span><span class="badge good">On</span></div>
+          <div class="list-item"><span class="avatar sm">MP</span><div><b>Margalla Pharma</b><small>Forced OFF · DRAP integration pending</small></div><span class="spacer"></span><span class="badge danger">Off</span></div>
+          <div class="list-item"><span class="avatar sm">CT</span><div><b>Crescent Textiles</b><small>Forced ON · export invoices</small></div><span class="spacer"></span><span class="badge good">On</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Rollout rule</h3></div></div>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <label><span>Target plans</span><select><option>Business, Enterprise</option><option>All plans</option></select></label>
+          <label><span>Percentage</span><input type="range" value="40"></label>
+          <label><span>Region</span><select><option>All Pakistan</option><option>Punjab only</option></select></label>
+        </div>
+        <div class="form-actions"><button class="btn primary sm" data-toast="Rollout updated to 40%">Apply</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: TEMPLATES ============================ -->
+<section class="screen" data-route="admin/templates" data-title="Templates">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tenants / Templates</div>
+      <h1>COA templates &amp; master seeds</h1>
+      <p>Starter data copied into every new tenant at provisioning — chart of accounts, tax codes, leave types and salary components.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="upload"></i>Import from Excel</button>
+      <button class="btn primary" data-toast="Template duplicated as draft"><i data-lucide="plus"></i>New template</button>
+    </div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="store"></i></span><div><b>Trading &amp; Distribution</b><small class="muted" style="display:block">v2026.2 · 214 accounts</small></div><span class="spacer"></span><span class="badge good">Default</span></div>
+      <p class="small muted mt">Inventory-led COA with GST input/output, further tax 4% and 236G/H advance tax accounts.</p>
+      <div class="row small muted mt"><i data-lucide="building-2"></i>62 tenants<span class="spacer"></span><button class="btn ghost sm">Preview</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well teal"><i data-lucide="briefcase"></i></span><div><b>Services</b><small class="muted" style="display:block">v2026.1 · 168 accounts</small></div><span class="spacer"></span><span class="badge neutral">Published</span></div>
+      <p class="small muted mt">Project &amp; time-based revenue, PST on services (Punjab 16%, Sindh 15%), unbilled receivables.</p>
+      <div class="row small muted mt"><i data-lucide="building-2"></i>31 tenants<span class="spacer"></span><button class="btn ghost sm">Preview</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well yellow"><i data-lucide="factory"></i></span><div><b>Manufacturing</b><small class="muted" style="display:block">v2026.2 · 287 accounts</small></div><span class="spacer"></span><span class="badge neutral">Published</span></div>
+      <p class="small muted mt">Raw material, WIP and finished goods, factory overheads, production variances and EOBI/PESSI accruals.</p>
+      <div class="row small muted mt"><i data-lucide="building-2"></i>27 tenants<span class="spacer"></span><button class="btn ghost sm">Preview</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well violet"><i data-lucide="heart-handshake"></i></span><div><b>NGO / Non-profit</b><small class="muted" style="display:block">v2025.4 · 152 accounts</small></div><span class="spacer"></span><span class="badge warn">Draft v2026</span></div>
+      <p class="small muted mt">Fund accounting with restricted / unrestricted funds, donor grants and Section 2(36) compliance.</p>
+      <div class="row small muted mt"><i data-lucide="building-2"></i>8 tenants<span class="spacer"></span><button class="btn ghost sm">Preview</button></div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Preview — Trading &amp; Distribution</h3><p>Top levels of the account tree</p></div><div class="panel-actions"><button class="btn ghost sm"><i data-lucide="chevrons-down-up"></i>Collapse</button><button class="btn secondary sm"><i data-lucide="pencil"></i>Edit</button></div></div>
+      <div class="tree">
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-down"></i></span><b>1</b> Assets <span class="spacer"></span><span class="badge neutral">Debit</span></div>
+        <div class="tree-row l2"><span class="tw"><i data-lucide="chevron-down"></i></span><b>11</b> Current Assets</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-down"></i></span><b>1101</b> Cash &amp; Bank</div>
+        <div class="tree-row l4"><span class="tw"></span><b>1101001</b> Cash in Hand — Head Office</div>
+        <div class="tree-row l4"><span class="tw"></span><b>1101010</b> Bank — Current Account</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-right"></i></span><b>1102</b> Trade Receivables</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-right"></i></span><b>1103</b> Stock in Trade</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-down"></i></span><b>1105</b> Tax Refunds &amp; Advances</div>
+        <div class="tree-row l4"><span class="tw"></span><b>1105001</b> Input Sales Tax (GST 18%)</div>
+        <div class="tree-row l4"><span class="tw"></span><b>1105004</b> Advance Income Tax u/s 236G/236H</div>
+        <div class="tree-row l2"><span class="tw"><i data-lucide="chevron-right"></i></span><b>12</b> Non-current Assets</div>
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-down"></i></span><b>2</b> Liabilities <span class="spacer"></span><span class="badge neutral">Credit</span></div>
+        <div class="tree-row l2"><span class="tw"><i data-lucide="chevron-down"></i></span><b>21</b> Current Liabilities</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-right"></i></span><b>2101</b> Trade Payables</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-down"></i></span><b>2104</b> Taxes Payable</div>
+        <div class="tree-row l4"><span class="tw"></span><b>2104001</b> Output Sales Tax Payable</div>
+        <div class="tree-row l4"><span class="tw"></span><b>2104005</b> WHT Payable u/s 153</div>
+        <div class="tree-row l4"><span class="tw"></span><b>2104008</b> Salary Tax Payable u/s 149</div>
+        <div class="tree-row l3"><span class="tw"><i data-lucide="chevron-right"></i></span><b>2106</b> EOBI &amp; PESSI Payable</div>
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-right"></i></span><b>3</b> Equity</div>
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-right"></i></span><b>4</b> Revenue</div>
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-right"></i></span><b>5</b> Cost of Sales</div>
+        <div class="tree-row l1"><span class="tw"><i data-lucide="chevron-right"></i></span><b>6</b> Operating Expenses</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Master seed lists</h3><p>Pakistan · v2026.2</p></div></div>
+      <div data-tabs>
+        <div class="tabs"><button class="active" data-tab="tax">Tax codes</button><button data-tab="leave">Leave types</button><button data-tab="salary">Salary</button></div>
+        <div class="tab-pane active" data-pane="tax">
+          <div class="list">
+            <div class="list-item"><div><b>GST-18</b><small>Sales tax standard rate</small></div><span class="spacer"></span><b>18%</b></div>
+            <div class="list-item"><div><b>GST-0</b><small>Zero-rated (export)</small></div><span class="spacer"></span><b>0%</b></div>
+            <div class="list-item"><div><b>GST-EX</b><small>Exempt — Sixth Schedule</small></div><span class="spacer"></span><b>—</b></div>
+            <div class="list-item"><div><b>FT-4</b><small>Further tax, unregistered buyer</small></div><span class="spacer"></span><b>4%</b></div>
+            <div class="list-item"><div><b>WHT-153A</b><small>Supply of goods (filer)</small></div><span class="spacer"></span><b>5%</b></div>
+            <div class="list-item"><div><b>WHT-153B</b><small>Services (filer)</small></div><span class="spacer"></span><b>11%</b></div>
+            <div class="list-item"><div><b>WHT-153C</b><small>Contracts</small></div><span class="spacer"></span><b>7.5%</b></div>
+            <div class="list-item"><div><b>ADV-236G/H</b><small>Distributors / retailers</small></div><span class="spacer"></span><b>0.5–1%</b></div>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="leave">
+          <div class="list">
+            <div class="list-item"><div><b>Annual Leave</b><small>Accrual 1.66 / month · carry fwd 10</small></div><span class="spacer"></span><b>20 d</b></div>
+            <div class="list-item"><div><b>Casual Leave</b><small>Non-carry-forward</small></div><span class="spacer"></span><b>10 d</b></div>
+            <div class="list-item"><div><b>Sick Leave</b><small>Medical certificate after 2 days</small></div><span class="spacer"></span><b>8 d</b></div>
+            <div class="list-item"><div><b>Maternity Leave</b><small>Paid, per Maternity Benefits Act</small></div><span class="spacer"></span><b>90 d</b></div>
+            <div class="list-item"><div><b>Paternity Leave</b><small>Paid</small></div><span class="spacer"></span><b>10 d</b></div>
+            <div class="list-item"><div><b>Hajj Leave</b><small>Once in service</small></div><span class="spacer"></span><b>40 d</b></div>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="salary">
+          <div class="list">
+            <div class="list-item"><div><b>Basic Salary</b><small>Earning · taxable</small></div><span class="spacer"></span><span class="badge good">Earning</span></div>
+            <div class="list-item"><div><b>House Rent Allowance</b><small>45% of basic</small></div><span class="spacer"></span><span class="badge good">Earning</span></div>
+            <div class="list-item"><div><b>Medical Allowance</b><small>10% of basic · exempt</small></div><span class="spacer"></span><span class="badge good">Earning</span></div>
+            <div class="list-item"><div><b>Conveyance</b><small>Fixed</small></div><span class="spacer"></span><span class="badge good">Earning</span></div>
+            <div class="list-item"><div><b>Income Tax u/s 149</b><small>Slab-based FY 2026-27</small></div><span class="spacer"></span><span class="badge danger">Deduction</span></div>
+            <div class="list-item"><div><b>EOBI (Employee 1%)</b><small>Min wage based</small></div><span class="spacer"></span><span class="badge danger">Deduction</span></div>
+            <div class="list-item"><div><b>Provident Fund</b><small>8.33% of basic</small></div><span class="spacer"></span><span class="badge danger">Deduction</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: SUPPORT ============================ -->
+<section class="screen" data-route="admin/support" data-title="Support Tickets">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Support / Tickets</div>
+      <h1>Support tickets</h1>
+      <p>Customer issues across all tenants. SLA: Urgent 2h · High 4h · Normal 8h.</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg"><button class="active"><i data-lucide="columns-3"></i>Board</button><button><i data-lucide="list"></i>List</button></div>
+      <button class="btn primary" data-toast="New ticket created"><i data-lucide="plus"></i>New ticket</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Open tickets</span><span class="icon-well"><i data-lucide="inbox"></i></span></div><strong>23</strong><small>4 unassigned</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>First response</span><span class="icon-well"><i data-lucide="timer"></i></span></div><strong>38 min</strong><small class="up">▼ 12 min vs last week</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>SLA breaches</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>2</strong><small class="down">This week</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>CSAT</span><span class="icon-well"><i data-lucide="smile"></i></span></div><strong>4.7 / 5</strong><small>118 ratings (30d)</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search tickets…"></label>
+    <select><option>All agents</option><option>Mariam Iqbal</option><option>Danish Ahmed</option><option>Saim Javed</option></select>
+    <div class="chips"><button class="active">All</button><button>Urgent <i>2</i></button><button>Billing</button><button>Payroll</button><button>Tax / FBR</button></div>
+  </div>
+
+  <div class="kanban">
+    <div class="kb-col">
+      <div class="kb-col-head"><h4>New</h4><span class="badge neutral">4</span></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge danger">Urgent</span><span class="spacer"></span><small class="muted">TCK-2304</small></div><b>FBR POS invoices not syncing</b><small class="muted">Margalla Pharma · 12 min ago</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge info">Normal</span><span class="spacer"></span><small class="muted">TCK-2303</small></div><b>How to add Hajj leave type?</b><small class="muted">Shaheen Logistics · 40 min ago</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge warn">High</span><span class="spacer"></span><small class="muted">TCK-2301</small></div><b>Card declined — update payment</b><small class="muted">Ravi Motors · 1 h ago</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge neutral">Low</span><span class="spacer"></span><small class="muted">TCK-2299</small></div><b>Request Urdu payslip template</b><small class="muted">Pak Agro Mills · 3 h ago</small></div>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-head"><h4>In progress</h4><span class="badge neutral">7</span></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge danger">Urgent</span><span class="spacer"></span><small class="muted">TCK-2291</small></div><b>Bank reconciliation mismatch — Meezan 0123</b><small class="muted">Al-Noor Enterprises · Mariam Iqbal</small><div class="progress mt"><i style="width:60%"></i></div></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge warn">High</span><span class="spacer"></span><small class="muted">TCK-2288</small></div><b>Salary tax slab wrong for 2 employees</b><small class="muted">Crescent Textiles · Mariam Iqbal</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge info">Normal</span><span class="spacer"></span><small class="muted">TCK-2285</small></div><b>Import opening balances failing</b><small class="muted">Gwadar Marine · Saim Javed</small></div>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-head"><h4>Waiting on customer</h4><span class="badge neutral">5</span></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge info">Normal</span><span class="spacer"></span><small class="muted">TCK-2279</small></div><b>Add 20 more user seats</b><small class="muted">Zameen Builders · Danish Ahmed</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge neutral">Low</span><span class="spacer"></span><small class="muted">TCK-2270</small></div><b>Custom invoice logo position</b><small class="muted">Bhatti Traders · Mariam Iqbal</small></div>
+    </div>
+    <div class="kb-col">
+      <div class="kb-col-head"><h4>Resolved</h4><span class="badge neutral">112</span></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge good">Resolved</span><span class="spacer"></span><small class="muted">TCK-2268</small></div><b>Annex-C export column order</b><small class="muted">Indus Foods · ★★★★★</small></div>
+      <div class="kb-card" data-open="adm-ticket"><div class="row"><span class="badge good">Resolved</span><span class="spacer"></span><small class="muted">TCK-2262</small></div><b>Biometric device offline</b><small class="muted">Karakoram Tech · ★★★★☆</small></div>
+    </div>
+  </div>
+
+  <div class="overlay drawer-overlay" id="adm-ticket">
+    <aside class="drawer">
+      <div class="modal-head"><div><h2>TCK-2291 · Bank reconciliation mismatch</h2><p>Al-Noor Enterprises · opened 30 Sep 2026 16:40</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="row mb"><span class="badge danger">Urgent</span><span class="badge info">In progress</span><span class="badge neutral">Accounting / Bank</span><span class="spacer"></span><small class="muted">SLA 1h 12m left</small></div>
+        <div class="dl mb">
+          <div><span>Requester</span><b>Sana Javed · Finance Manager</b></div>
+          <div><span>Assignee</span><b>Mariam Iqbal</b></div>
+          <div><span>Plan</span><b>Growth</b></div>
+        </div>
+        <div class="stack">
+          <div class="list-item"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>30 Sep 16:40</small><p class="small">The September statement for Meezan Bank — 0123 shows Rs 4,125,300 closing but Finsoft shows Rs 4,138,800 after reconciliation. Difference Rs 13,500. Please help before we close the period.</p></div></div>
+          <div class="list-item"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>30 Sep 17:05</small><p class="small">Thanks Sana. I've requested an impersonation session to inspect the reconciliation. Could you confirm whether cheque #00451288 was cancelled?</p></div></div>
+          <div class="list-item"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>01 Oct 08:20</small><p class="small">Yes, it was cancelled on 22 Sep but the CPV-2026-000318 is still posted.</p></div></div>
+          <div class="list-item"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>01 Oct 08:46 · internal note</small><p class="small"><i>Confirmed: CPV not reversed. Guiding customer to reverse via JV. Not a product bug.</i></p></div></div>
+        </div>
+        <label class="mt" style="display:block"><textarea rows="3" placeholder="Reply to Sana Javed…" style="width:100%"></textarea></label>
+        <div class="row mt"><label class="check"><input type="checkbox"> Internal note</label><span class="spacer"></span><button class="btn ghost sm"><i data-lucide="paperclip"></i>Attach</button></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close data-toast="Ticket resolved">Resolve</button><button class="btn primary" data-toast="Reply sent"><i data-lucide="send"></i>Send reply</button></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: ANNOUNCEMENTS ============================ -->
+<section class="screen" data-route="admin/announcements" data-title="Announcements">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Support / Announcements</div>
+      <h1>Announcements &amp; release notes</h1>
+      <p>In-app banners and emails sent to tenant users. Target by plan, module or tenant.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn primary" data-open="adm-compose"><i data-lucide="megaphone"></i>Compose</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="chips"><button class="active">All <i>18</i></button><button>Published <i>12</i></button><button>Scheduled <i>2</i></button><button>Draft <i>4</i></button></div>
+    <span class="spacer"></span>
+    <select><option>All types</option><option>Release note</option><option>Maintenance</option><option>Compliance</option></select>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="panel">
+        <div class="row"><span class="badge good">Release 4.12</span><span class="badge neutral">Published</span><span class="spacer"></span><small class="muted">30 Sep 2026 · all tenants</small></div>
+        <h3 class="mt">Withholding tax certificates are here</h3>
+        <p class="muted">Generate and email WHT certificates u/s 153 and 149 directly from vendor payments and payroll. Bulk-download as ZIP for FY 2026-27.</p>
+        <div class="row small muted mt"><i data-lucide="eye"></i>3,128 views<i data-lucide="mouse-pointer-click"></i>842 clicks<span class="spacer"></span><button class="btn ghost sm">Edit</button></div>
+      </div>
+      <div class="panel">
+        <div class="row"><span class="badge warn">Maintenance</span><span class="badge info">Scheduled</span><span class="spacer"></span><small class="muted">Sun 05 Oct 2026 02:00–04:00 PKT</small></div>
+        <h3 class="mt">Planned database upgrade</h3>
+        <p class="muted">Finsoft will be read-only for up to 2 hours while we upgrade to PostgreSQL 17. ESS attendance punches will be queued and synced afterwards.</p>
+        <div class="row small muted mt"><i data-lucide="users"></i>All tenants · banner + email<span class="spacer"></span><button class="btn ghost sm">Edit</button></div>
+      </div>
+      <div class="panel">
+        <div class="row"><span class="badge violet">Compliance</span><span class="badge neutral">Published</span><span class="spacer"></span><small class="muted">18 Sep 2026 · Business, Enterprise</small></div>
+        <h3 class="mt">FBR Digital Invoicing — pilot open</h3>
+        <p class="muted">Business and Enterprise customers can join the FBR DI API pilot from Settings → Integrations. Real-time IRN on every sales invoice.</p>
+        <div class="row small muted mt"><i data-lucide="eye"></i>1,044 views<i data-lucide="mouse-pointer-click"></i>211 clicks<span class="spacer"></span><button class="btn ghost sm">Edit</button></div>
+      </div>
+      <div class="panel">
+        <div class="row"><span class="badge good">Release 4.11</span><span class="badge neutral">Published</span><span class="spacer"></span><small class="muted">02 Sep 2026 · Growth+</small></div>
+        <h3 class="mt">Payroll v3 — faster runs, arrears and EOBI changes</h3>
+        <p class="muted">Updated EOBI contribution on revised minimum wage Rs 37,000, arrears calculation and 40% faster payroll processing for 500+ employees.</p>
+        <div class="row small muted mt"><i data-lucide="eye"></i>2,560 views<i data-lucide="mouse-pointer-click"></i>604 clicks<span class="spacer"></span><button class="btn ghost sm">Edit</button></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Drafts</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-pen"></i></span><div><b>Budget 2026-27 tax slab changes</b><small>Edited by Saim Javed · 2 h ago</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-pen"></i></span><div><b>Urdu interface beta</b><small>Edited by Mariam Iqbal · yesterday</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-pen"></i></span><div><b>Annual billing discount — Q4</b><small>Edited by Danish Ahmed · 3 days ago</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-pen"></i></span><div><b>Mobile ESS app on Play Store</b><small>Edited by Saim Javed · 5 days ago</small></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Engagement (30d)</h3></div></div>
+        <div class="bars">
+          <div class="bar" style="--h:84%"><i></i><span>4.12</span></div>
+          <div class="bar" style="--h:32%"><i></i><span>FBR DI</span></div>
+          <div class="bar" style="--h:70%"><i></i><span>4.11</span></div>
+          <div class="bar" style="--h:22%"><i></i><span>Mobile</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="adm-compose">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Compose announcement</h2><p>Shown as an in-app banner and optional email</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Type</span><select><option>Release note</option><option>Maintenance</option><option>Compliance</option><option>Billing</option></select></label>
+          <label><span>Severity</span><select><option>Info</option><option>Warning</option><option>Critical</option></select></label>
+          <label class="full"><span>Title</span><input value="Budget 2026-27 salary tax slabs applied"></label>
+          <label class="full"><span>Message</span><textarea rows="5">Salary tax deductions u/s 149 now follow the Finance Act 2026 slabs. Payroll runs from October 2026 will apply the new rates automatically.</textarea></label>
+          <label><span>Audience</span><select><option>All tenants</option><option>Growth and above</option><option>Payroll module users</option><option>Specific tenants…</option></select></label>
+          <label><span>Publish</span><input type="datetime-local" value="2026-10-02T09:00"></label>
+          <label class="check"><input type="checkbox" checked> Show in-app banner</label>
+          <label class="check"><input type="checkbox" checked> Email tenant admins</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close data-toast="Draft saved">Save draft</button><button class="btn primary" data-close data-toast="Announcement scheduled for 02 Oct 09:00"><i data-lucide="send"></i>Schedule</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: SYSTEM ============================ -->
+<section class="screen" data-route="admin/system" data-title="System Health">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Health</div>
+      <h1>System health</h1>
+      <p>Live status of Finsoft Cloud services, queues and backups · PK-Lahore primary, PK-Karachi DR.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="refresh-cw"></i>Refresh</button>
+      <a class="btn primary" href="#/admin/announcements"><i data-lucide="megaphone"></i>Post incident</a>
+    </div>
+  </div>
+
+  <div class="banner warn mb"><i data-lucide="alert-triangle"></i><div><b>FBR gateway degraded</b><p>FBR IRIS upstream responding in 2.4 s (normal &lt; 600 ms). POS invoices are queued and retried automatically.</p></div><button class="btn sm secondary">View queue</button></div>
+
+  <div class="grid-3 mb">
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="server"></i></span><div><b>API</b><small class="muted" style="display:block">6 pods · p95 182 ms</small></div><span class="spacer"></span><span class="badge good dot">Up</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,20 L10,18 L20,19 L30,16 L40,17 L50,15 L60,18 L70,14 L80,16 L90,15 L100,14"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>99.99%</b></div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="cpu"></i></span><div><b>Workers</b><small class="muted" style="display:block">12 workers · 312 jobs queued</small></div><span class="spacer"></span><span class="badge warn dot">Busy</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,24 L10,22 L20,20 L30,21 L40,15 L50,10 L60,8 L70,12 L80,9 L90,6 L100,8"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>99.97%</b></div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="database"></i></span><div><b>Database</b><small class="muted" style="display:block">PostgreSQL 16 · 2 replicas · lag 40 ms</small></div><span class="spacer"></span><span class="badge good dot">Up</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,18 L10,17 L20,18 L30,17 L40,19 L50,18 L60,17 L70,18 L80,16 L90,17 L100,17"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>100%</b></div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="zap"></i></span><div><b>Redis cache</b><small class="muted" style="display:block">Hit rate 96.4% · 3.1 GB</small></div><span class="spacer"></span><span class="badge good dot">Up</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,12 L10,13 L20,12 L30,11 L40,12 L50,13 L60,12 L70,12 L80,11 L90,12 L100,12"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>99.99%</b></div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="mail"></i></span><div><b>Mail</b><small class="muted" style="display:block">18,420 sent (24h) · bounce 1.3%</small></div><span class="spacer"></span><span class="badge good dot">Up</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,22 L10,20 L20,12 L30,14 L40,20 L50,22 L60,18 L70,10 L80,12 L90,19 L100,21"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>99.95%</b></div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="plug"></i></span><div><b>FBR gateway</b><small class="muted" style="display:block">IRIS / POS · latency 2.4 s</small></div><span class="spacer"></span><span class="badge warn dot">Degraded</span></div>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,24 L10,23 L20,24 L30,22 L40,23 L50,20 L60,14 L70,8 L80,6 L90,5 L100,7"/></svg>
+      <div class="row small muted"><span>Uptime 90d</span><span class="spacer"></span><b>98.70%</b></div>
+    </div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Error rate</h3><p>5xx responses per minute · last 24h</p></div><div class="panel-actions"><div class="seg"><button>1h</button><button class="active">24h</button><button>7d</button></div></div></div>
+      <svg class="chart" viewBox="0 0 600 200" preserveAspectRatio="none" style="height:200px">
+        <path class="area" d="M0,180 L50,178 L100,176 L150,179 L200,175 L250,170 L300,172 L350,160 L400,120 L450,95 L500,110 L550,140 L600,150 L600,200 L0,200 Z"/>
+        <path class="line" d="M0,180 L50,178 L100,176 L150,179 L200,175 L250,170 L300,172 L350,160 L400,120 L450,95 L500,110 L550,140 L600,150"/>
+        <path class="line alt" d="M0,186 L600,186"/>
+      </svg>
+      <div class="row small muted" style="justify-content:space-between"><span>10:00</span><span>14:00</span><span>18:00</span><span>22:00</span><span>02:00</span><span>06:00</span><span>10:00</span></div>
+      <div class="legend"><span><i style="background:#15803d"></i>5xx / min (peak 4.1 at 07:30, FBR timeouts)</span><span><i style="background:#0f766e"></i>Baseline 0.4</span></div>
+    </div>
+    <div class="panel flush">
+      <div class="panel-head" style="padding:16px 18px 0"><div><h3>Job queues</h3><p>Sidekiq / BullMQ</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Queue</th><th class="num">Waiting</th><th class="num">Failed</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>payroll</b><small>month-end runs</small></td><td class="num">312</td><td class="num zero">—</td><td><span class="badge warn">Busy</span></td></tr>
+          <tr><td><b>fbr-pos</b><small>invoice sync</small></td><td class="num">1,284</td><td class="num neg">37</td><td><span class="badge warn">Retrying</span></td></tr>
+          <tr><td><b>reports</b><small>PDF/Excel exports</small></td><td class="num">18</td><td class="num zero">—</td><td><span class="badge good">OK</span></td></tr>
+          <tr><td><b>mail</b><small>transactional</small></td><td class="num">4</td><td class="num">2</td><td><span class="badge good">OK</span></td></tr>
+          <tr><td><b>bank-feeds</b><small>statement import</small></td><td class="num">0</td><td class="num zero">—</td><td><span class="badge good">OK</span></td></tr>
+          <tr><td><b>biometric-sync</b><small>ZKTeco devices</small></td><td class="num">56</td><td class="num">1</td><td><span class="badge good">OK</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>Backups</h3><p>Nightly full + 15-min WAL · retained 35 days · encrypted AES-256</p></div><div class="panel-actions"><button class="btn secondary sm" data-toast="On-demand backup started"><i data-lucide="database-backup"></i>Back up now</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Backup</th><th>Type</th><th>Started</th><th>Duration</th><th class="num">Size</th><th>Location</th><th>Verified</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>bk-20261001-0200</b></td><td>Full</td><td>01 Oct 2026 02:00</td><td>18 min</td><td class="num">412 GB</td><td>PK-Karachi DR</td><td><span class="badge good">Restore-tested</span></td><td><span class="badge good dot">Completed</span></td></tr>
+        <tr><td><b>bk-20260930-0200</b></td><td>Full</td><td>30 Sep 2026 02:00</td><td>17 min</td><td class="num">409 GB</td><td>PK-Karachi DR</td><td><span class="badge good">Checksum OK</span></td><td><span class="badge good dot">Completed</span></td></tr>
+        <tr><td><b>bk-20260929-0200</b></td><td>Full</td><td>29 Sep 2026 02:00</td><td>21 min</td><td class="num">407 GB</td><td>PK-Karachi DR</td><td><span class="badge good">Checksum OK</span></td><td><span class="badge good dot">Completed</span></td></tr>
+        <tr><td><b>bk-20260928-0200</b></td><td>Full</td><td>28 Sep 2026 02:00</td><td>—</td><td class="num zero">—</td><td>PK-Karachi DR</td><td><span class="badge neutral">—</span></td><td><span class="badge danger dot">Failed · retried 02:40 OK</span></td></tr>
+        <tr><td><b>tenant-ALNOOR-manual</b></td><td>Tenant export</td><td>27 Sep 2026 15:12</td><td>2 min</td><td class="num">4.8 GB</td><td>Tenant download</td><td><span class="badge good">Checksum OK</span></td><td><span class="badge good dot">Completed</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: AUDIT ============================ -->
+<section class="screen" data-route="admin/audit" data-title="Platform Audit Log">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Platform Audit Log</div>
+      <h1>Platform audit log</h1>
+      <p>Immutable record of every action taken by platform staff and system processes. Retained for 7 years.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export CSV</button>
+      <button class="btn secondary"><i data-lucide="bell"></i>Alert rules</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search action, actor, IP…"></label>
+    <select><option>All actors</option><option>Saim Javed</option><option>Mariam Iqbal</option><option>Danish Ahmed</option><option>system</option></select>
+    <select><option>All tenants</option><option>ALNOOR</option><option>CRESTEX</option><option>RAVIMTR</option></select>
+    <select><option>Last 7 days</option><option>Today</option><option>Last 30 days</option><option>Custom…</option></select>
+    <div class="chips"><button class="active">All</button><button>Impersonation</button><button>Billing</button><button>Security</button><button>Failed <i>3</i></button></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Tenant</th><th>Details</th><th>IP address</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>01 Oct 2026 09:42:18</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Saim Javed</b><small>Super Admin</small></div></div></td><td><code>tenant.provision</code></td><td>GWADAR</td><td>Plan Starter · COA Trading</td><td>39.45.112.8</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>01 Oct 2026 09:10:02</td><td><div class="cell-user"><span class="avatar sm">DA</span><div><b>Danish Ahmed</b><small>Billing</small></div></div></td><td><code>subscription.renew</code></td><td>CRESTEX</td><td>Business Annual · Rs 499,990</td><td>39.45.112.21</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>01 Oct 2026 08:55:40</td><td><div class="cell-user"><span class="avatar sm">SY</span><div><b>system</b><small>billing-worker</small></div></div></td><td><code>payment.charge</code></td><td>RAVIMTR</td><td>Visa •••• 4417 · do_not_honor</td><td>10.0.4.12</td><td><span class="badge danger">Failed</span></td></tr>
+        <tr><td>01 Oct 2026 08:31:12</td><td><div class="cell-user"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>Support Lead</small></div></div></td><td><code>impersonation.start</code></td><td>ALNOOR</td><td>As Sana Javed · read-only · TCK-2291</td><td>182.185.40.77</td><td><span class="badge warn">Recorded</span></td></tr>
+        <tr><td>01 Oct 2026 08:45:30</td><td><div class="cell-user"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>Support Lead</small></div></div></td><td><code>impersonation.end</code></td><td>ALNOOR</td><td>Duration 14m 18s</td><td>182.185.40.77</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>30 Sep 2026 22:14:09</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Saim Javed</b><small>Super Admin</small></div></div></td><td><code>flag.update</code></td><td>—</td><td>ff.wht_certificates 60% → 100%</td><td>39.45.112.8</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>30 Sep 2026 19:02:51</td><td><div class="cell-user"><span class="avatar sm">??</span><div><b>unknown</b><small>staff login</small></div></div></td><td><code>auth.login</code></td><td>—</td><td>mariam.iqbal@finsoft.pk · bad MFA x3</td><td>103.244.176.5</td><td><span class="badge danger">Blocked</span></td></tr>
+        <tr><td>30 Sep 2026 17:20:44</td><td><div class="cell-user"><span class="avatar sm">DA</span><div><b>Danish Ahmed</b><small>Billing</small></div></div></td><td><code>invoice.void</code></td><td>BHATTI</td><td>FS-INV-2026-01597 duplicate</td><td>39.45.112.21</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>30 Sep 2026 15:08:13</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Saim Javed</b><small>Super Admin</small></div></div></td><td><code>tenant.suspend</code></td><td>SUKRICE</td><td>Reason: non-payment (45 days)</td><td>39.45.112.8</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>30 Sep 2026 11:47:36</td><td><div class="cell-user"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>Support Lead</small></div></div></td><td><code>tenant.quota.update</code></td><td>ALNOOR</td><td>Seats 40 → 50</td><td>182.185.40.77</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>30 Sep 2026 02:40:00</td><td><div class="cell-user"><span class="avatar sm">SY</span><div><b>system</b><small>backup-agent</small></div></div></td><td><code>backup.retry</code></td><td>—</td><td>bk-20260928-0200 rerun</td><td>10.0.2.4</td><td><span class="badge good">Success</span></td></tr>
+        <tr><td>29 Sep 2026 18:30:22</td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Saim Javed</b><small>Super Admin</small></div></div></td><td><code>staff.role.update</code></td><td>—</td><td>Danish Ahmed: + invoices.void</td><td>39.45.112.8</td><td><span class="badge good">Success</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–12 of 2,841 events</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN: STAFF ============================ -->
+<section class="screen" data-route="admin/staff" data-title="Platform Team">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Operations / Platform Team</div>
+      <h1>Platform team</h1>
+      <p>Finsoft Cloud staff with access to this console, and what each role can do.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn primary" data-open="adm-invite-staff"><i data-lucide="user-plus"></i>Invite staff</button>
+    </div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Member</th><th>Role</th><th>MFA</th><th>Tenants assigned</th><th>Last active</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Saim Javed</b><small>saim@finsoft.pk</small></div></div></td><td><span class="badge violet">Super Admin</span></td><td><span class="badge good">Hardware key</span></td><td>All</td><td>Now</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">MI</span><div><b>Mariam Iqbal</b><small>mariam.iqbal@finsoft.pk</small></div></div></td><td><span class="badge info">Support Lead</span></td><td><span class="badge good">Authenticator</span></td><td>54</td><td>12 min ago</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">DA</span><div><b>Danish Ahmed</b><small>danish.ahmed@finsoft.pk</small></div></div></td><td><span class="badge warn">Billing</span></td><td><span class="badge good">Authenticator</span></td><td>All (billing)</td><td>1 h ago</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">AK</span><div><b>Areeba Khalid</b><small>areeba.khalid@finsoft.pk</small></div></div></td><td><span class="badge info">Support Agent</span></td><td><span class="badge good">Authenticator</span></td><td>38</td><td>Yesterday</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">TM</span><div><b>Talha Mehmood</b><small>talha.m@finsoft.pk</small></div></div></td><td><span class="badge neutral">Engineer (read-only)</span></td><td><span class="badge good">Hardware key</span></td><td>—</td><td>3 h ago</td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Noor Sheikh</b><small>noor.sheikh@finsoft.pk</small></div></div></td><td><span class="badge info">Support Agent</span></td><td><span class="badge warn">Not set</span></td><td>—</td><td>—</td><td><span class="badge info dot">Invited</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head" style="padding:16px 18px 0"><div><h3>Role permissions</h3><p>Changes are logged to the platform audit log</p></div><div class="panel-actions"><button class="btn primary sm" data-toast="Role permissions saved">Save</button></div></div>
+    <div class="table-wrap"><table class="tbl matrix">
+      <thead><tr><th>Permission</th><th>Super Admin</th><th>Support Lead</th><th>Support Agent</th><th>Billing</th><th>Engineer</th></tr></thead>
+      <tbody>
+        <tr><td><b>View tenants</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td></tr>
+        <tr><td><b>Onboard / provision tenants</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Suspend / delete tenants</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Impersonate tenant users</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Manage plans &amp; pricing</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Issue / void invoices &amp; refunds</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Feature flags &amp; rollouts</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+        <tr><td><b>Edit COA templates &amp; seeds</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Support tickets</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>Publish announcements</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" checked></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+        <tr><td><b>System health &amp; backups</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox" checked></td></tr>
+        <tr><td><b>Manage platform staff</b></td><td><input type="checkbox" checked disabled></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="adm-invite-staff">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Invite platform staff</h2><p>Must use a @finsoft.pk address</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Full name</span><input placeholder="e.g. Noor Sheikh"></label>
+          <label><span>Email</span><input placeholder="name@finsoft.pk"></label>
+          <label class="full"><span>Role</span><select><option>Support Agent</option><option>Support Lead</option><option>Billing</option><option>Engineer (read-only)</option><option>Super Admin</option></select></label>
+          <label class="check full"><input type="checkbox" checked> Require hardware security key</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Invitation sent"><i data-lucide="send"></i>Send invite</button></div>
+    </div>
+  </div>
+</section>

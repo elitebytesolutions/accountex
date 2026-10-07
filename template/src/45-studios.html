@@ -1,0 +1,109 @@
+<!-- =================== 45-studios: Reports Centre + Report Studio shells (Agent A) =================== -->
+<section class="screen" data-route="app/reports" data-title="Reports Centre">
+  <div class="rpc-page">
+    <div class="rpc-hero">
+      <div>
+        <span class="rpc-eyebrow">Reports / Reports Centre</span>
+        <h1>Reports Centre</h1>
+        <p>Generate, view and share accurate reports from your live books, with powerful filters, flexible formats and professional templates.</p>
+      </div>
+      <div class="rpc-hero-actions">
+        <label class="rpc-search"><i data-lucide="search"></i><input type="search" placeholder="Search reports, studios or templates…" aria-label="Search reports"><kbd>Ctrl K</kbd></label>
+        <a class="btn primary" href="#/app/reports/pnl"><i data-lucide="file-check"></i>Generate Report</a>
+        <a class="btn secondary" href="#/app/reports/studio"><i data-lucide="layers"></i>Template Library</a>
+      </div>
+      <div class="rpc-tagline" aria-hidden="true"><span>Turning numbers<br>into smarter decisions</span><svg viewBox="0 0 46 34"><path d="M3 30 C 14 28, 30 22, 40 6"/><path d="M33 7 L 41 5 L 42 13"/></svg></div>
+    </div>
+
+    <div class="rpc-kpis">
+      <div class="rpc-kpi">
+        <span class="icon-tile green"><i data-lucide="chart-column"></i></span>
+        <div><small>Revenue YTD</small><b data-count>Rs 97,000,000<span class="dec">.00</span></b><em class="up">▲ 13.7% <span>vs last year</span></em></div>
+        <svg class="rpc-spark" viewBox="0 0 64 28" aria-hidden="true"><path class="area" d="M0 24 L8 21 L16 22 L24 17 L32 18 L40 12 L48 13 L56 7 L64 4 L64 28 L0 28 Z"/><path d="M0 24 L8 21 L16 22 L24 17 L32 18 L40 12 L48 13 L56 7 L64 4"/></svg>
+      </div>
+      <div class="rpc-kpi">
+        <span class="icon-tile blue"><i data-lucide="building-2"></i></span>
+        <div><small>Total Assets</small><b data-count>Rs 196,910,000<span class="dec">.00</span></b><em class="up">▲ 7.7% <span>vs 30 Jun</span></em></div>
+        <svg class="rpc-spark" viewBox="0 0 64 28" aria-hidden="true"><path class="area" d="M0 20 L8 19 L16 21 L24 16 L32 17 L40 14 L48 15 L56 10 L64 8 L64 28 L0 28 Z"/><path d="M0 20 L8 19 L16 21 L24 16 L32 17 L40 14 L48 15 L56 10 L64 8"/></svg>
+      </div>
+      <div class="rpc-kpi">
+        <span class="icon-tile orange"><i data-lucide="receipt"></i></span>
+        <div><small>Total Liabilities</small><b data-count>Rs 82,162,600<span class="dec">.00</span></b><em class="warn">▲ 10.5% <span>vs 30 Jun</span></em></div>
+        <svg class="rpc-spark" viewBox="0 0 64 28" aria-hidden="true"><path class="area" d="M0 18 L8 20 L16 17 L24 19 L32 15 L40 16 L48 12 L56 13 L64 9 L64 28 L0 28 Z"/><path d="M0 18 L8 20 L16 17 L24 19 L32 15 L40 16 L48 12 L56 13 L64 9"/></svg>
+      </div>
+      <div class="rpc-kpi">
+        <span class="icon-tile lime"><i data-lucide="trending-up"></i></span>
+        <div><small>Net Profit · Q1</small><b data-count>Rs 6,347,400<span class="dec">.00</span></b><em class="up">▲ 45.6% <span>margin 6.5%</span></em></div>
+        <svg class="rpc-spark" viewBox="0 0 64 28" aria-hidden="true"><path class="area" d="M0 25 L8 22 L16 23 L24 18 L32 19 L40 13 L48 10 L56 9 L64 3 L64 28 L0 28 Z"/><path d="M0 25 L8 22 L16 23 L24 18 L32 19 L40 13 L48 10 L56 9 L64 3"/></svg>
+      </div>
+      <div class="rpc-kpi status">
+        <span class="icon-tile green"><i data-lucide="shield-check"></i></span>
+        <div><small>Status</small><b><i></i>Books balanced</b><em>TB difference Rs 0.00 · 01 Oct, 09:45 AM</em></div>
+      </div>
+    </div>
+
+    <div class="rpc-section-head">
+      <h2>Choose a report</h2>
+      <div class="rpc-chips" role="group" aria-label="Report category">
+        <button class="active" data-rpc-cat="all">All <i>12</i></button>
+        <button data-rpc-cat="fin">Financial <i>7</i></button>
+        <button data-rpc-cat="trade">Sales &amp; Purchases <i>2</i></button>
+        <button data-rpc-cat="inv">Inventory <i>1</i></button>
+        <button data-rpc-cat="people">People <i>2</i></button>
+      </div>
+    </div>
+    <div class="rpc-cards">
+      <a class="rpc-card featured" data-cat="fin" href="#/app/reports/pnl"><span class="icon-tile green"><i data-lucide="chart-column"></i></span><b>Profit &amp; Loss</b><p>Revenue, expenses and profit for a period</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/reports/balance-sheet"><span class="icon-tile blue"><i data-lucide="columns-2"></i></span><b>Balance Sheet</b><p>Assets, liabilities and equity position</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/reports/trial-balance"><span class="icon-tile violet"><i data-lucide="scale"></i></span><b>Trial Balance</b><p>All ledger balances with debit and credit</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/reports/cash-flow"><span class="icon-tile lime"><i data-lucide="waves"></i></span><b>Cash Flow</b><p>Cash inflows and outflows, indirect method</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/reports/gl"><span class="icon-tile orange"><i data-lucide="book-open"></i></span><b>General Ledger</b><p>Transactions with running balances</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/reports/day-book"><span class="icon-tile red"><i data-lucide="calendar"></i></span><b>Day Book</b><p>Every voucher posted on a single day</p><span class="pill"><i data-lucide="landmark"></i>Financial Studio</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="fin" href="#/app/accounting/ledger"><span class="icon-tile blue"><i data-lucide="wallet"></i></span><b>Account Ledger</b><p>Detailed activity for a single account</p><span class="pill"><i data-lucide="book-open"></i>Accounts</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="inv" href="#/app/inventory/reports"><span class="icon-tile green"><i data-lucide="boxes"></i></span><b>Inventory Studio</b><p>Stock, valuation, movement and counts</p><span class="pill"><i data-lucide="package"></i>8 reports</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="trade" href="#/app/receivables/ageing"><span class="icon-tile violet"><i data-lucide="hourglass"></i></span><b>Sales &amp; Receivables</b><p>AR ageing, sales registers and GST output</p><span class="pill"><i data-lucide="users"></i>6 reports</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="trade" href="#/app/payables/ageing"><span class="icon-tile orange"><i data-lucide="receipt"></i></span><b>Purchases &amp; Payables</b><p>AP ageing, purchase register and WHT</p><span class="pill"><i data-lucide="building-2"></i>5 reports</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="people" href="#/app/hr/payroll/reports"><span class="icon-tile lime"><i data-lucide="banknote"></i></span><b>Payroll Studio</b><p>Register, bank advice, EOBI, PESSI and tax</p><span class="pill"><i data-lucide="percent"></i>6 reports</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <a class="rpc-card" data-cat="people" href="#/app/hr/reports"><span class="icon-tile red"><i data-lucide="users"></i></span><b>HR Studio</b><p>Headcount, attendance, leave and turnover</p><span class="pill"><i data-lucide="calendar-clock"></i>6 reports</span><span class="rpc-go"><i data-lucide="arrow-right"></i></span></a>
+      <div class="rpc-noresult" hidden>No reports match your search. Try “ledger”, “stock” or “tax”.</div>
+    </div>
+
+    <div class="rpc-work">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Recent runs</h3><p>Generated in the last 7 days</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/app/reports/pnl">View all</a></div></div>
+        <a class="rpc-recent" href="#/app/reports/pnl"><span><i data-lucide="trending-up"></i></span><div><b>Profit &amp; Loss · Q1 FY 2026-27</b><small>01 Oct 2026, 09:12 AM · Sana Javed</small></div><span class="badge good">PDF</span></a>
+        <a class="rpc-recent" href="#/app/reports/trial-balance"><span><i data-lucide="scale"></i></span><div><b>Trial Balance · 30 Sep 2026</b><small>01 Oct 2026, 09:45 AM · Sana Javed</small></div><span class="badge info">XLSX</span></a>
+        <a class="rpc-recent" href="#/app/receivables/ageing"><span><i data-lucide="hourglass"></i></span><div><b>AR Ageing · as at 01 Oct</b><small>01 Oct 2026, 08:30 AM · Hira Ali</small></div><span class="badge good">PDF</span></a>
+        <a class="rpc-recent" href="#/app/hr/payroll/reports"><span><i data-lucide="file-text"></i></span><div><b>Payroll Register · PR-2026-09</b><small>29 Sep 2026, 05:10 PM · Ayesha Noor</small></div><span class="badge info">XLSX</span></a>
+        <a class="rpc-recent" href="#/app/inventory/reports"><span><i data-lucide="boxes"></i></span><div><b>Current Stock · all warehouses</b><small>28 Sep 2026, 11:02 AM · Usman Ali</small></div><span class="badge good">PDF</span></a>
+        <a class="rpc-recent" href="#/app/reports/cash-flow"><span><i data-lucide="waves"></i></span><div><b>Cash Flow · Q1 FY 2026-27</b><small>27 Sep 2026, 04:18 PM · Sana Javed</small></div><span class="badge neutral">Print</span></a>
+      </div>
+      <div class="panel flush">
+        <div class="panel-head" style="padding:18px 18px 4px"><div><h3>Scheduled reports</h3><p>Delivered automatically by email</p></div><div class="panel-actions"><button class="btn secondary sm" data-toast="Schedule wizard opened"><i data-lucide="plus"></i>New schedule</button></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Report</th><th>Frequency</th><th>Next run</th><th>Recipients</th><th>Format</th><th>Status</th><th data-nosort></th></tr></thead>
+          <tbody>
+            <tr><td><b>Board pack · P&amp;L + BS</b><small>Financial Studio</small></td><td>Monthly · 5th</td><td>05 Oct 2026, 08:00</td><td>Ahmed Raza +2</td><td><span class="badge neutral">PDF</span></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><b>AR Ageing</b><small>Sales &amp; Receivables</small></td><td>Weekly · Mon</td><td>05 Oct 2026, 07:30</td><td>Bilal Khan, Hira Ali</td><td><span class="badge neutral">XLSX</span></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><b>Day Book</b><small>Financial Studio</small></td><td>Daily · 19:00</td><td>01 Oct 2026, 19:00</td><td>Sana Javed</td><td><span class="badge neutral">PDF</span></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><b>Minus Stock alert</b><small>Inventory Studio</small></td><td>Daily · 09:00</td><td>02 Oct 2026, 09:00</td><td>Usman Ali, Hamza Butt</td><td><span class="badge neutral">PDF</span></td><td><span class="badge warn dot">6 items</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><b>EOBI PR-01</b><small>Payroll Studio</small></td><td>Monthly · 10th</td><td>10 Oct 2026, 10:00</td><td>Ayesha Noor</td><td><span class="badge neutral">XLSX</span></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><b>WHT statement</b><small>Purchases &amp; Payables</small></td><td>Monthly · 12th</td><td>12 Oct 2026, 09:00</td><td>Sana Javed</td><td><span class="badge neutral">XLSX</span></td><td><span class="badge neutral dot">Paused</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="more-horizontal"></i></button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" data-route="app/reports/trial-balance" data-title="Trial Balance"><div data-studio="finance" data-tab="tb"></div></section>
+<section class="screen" data-route="app/reports/pnl" data-title="Profit &amp; Loss"><div data-studio="finance" data-tab="pnl"></div></section>
+<section class="screen" data-route="app/reports/balance-sheet" data-title="Balance Sheet"><div data-studio="finance" data-tab="bs"></div></section>
+<section class="screen" data-route="app/reports/cash-flow" data-title="Cash Flow"><div data-studio="finance" data-tab="cf"></div></section>
+<section class="screen" data-route="app/reports/gl" data-title="General Ledger"><div data-studio="finance" data-tab="gl"></div></section>
+<section class="screen" data-route="app/reports/day-book" data-title="Day Book"><div data-studio="finance" data-tab="daybook"></div></section>
+<section class="screen" data-route="app/inventory/reports" data-title="Inventory Reports"><div data-studio="inventory" data-tab="current"></div></section>
+<section class="screen" data-route="app/receivables/ageing" data-title="AR Ageing &amp; Reports"><div data-studio="receivables" data-tab="ageing"></div></section>
+<section class="screen" data-route="app/payables/ageing" data-title="AP Ageing &amp; Reports"><div data-studio="payables" data-tab="ageing"></div></section>
+<section class="screen" data-route="app/hr/payroll/reports" data-title="Payroll Reports"><div data-studio="payroll" data-tab="register"></div></section>
+<section class="screen" data-route="app/hr/reports" data-title="HR Reports"><div data-studio="hr" data-tab="headcount"></div></section>

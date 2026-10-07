@@ -1,0 +1,1290 @@
+<!-- =====================================================================
+     42-acc-reports.html — Fixed Assets, Budgeting, Tax & Compliance,
+     Period Close, Reports Hub, Financial Statements, Report Studio
+     Tenant: Al-Noor Enterprises (Pvt) Ltd · FY 2026-27 · as at 30 Sep 2026
+     ===================================================================== -->
+
+<!-- ============================ FIXED ASSETS: REGISTER ============================ -->
+<section class="screen" data-route="app/assets" data-title="Asset Register">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Fixed Assets / Register</div>
+      <h1>Fixed Asset Register</h1>
+      <p>Cost, accumulated depreciation and net book value across branches · as at 30 Sep 2026.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" onclick="const i=document.createElement('input');i.type='file';i.onchange=()=>FS.toast((i.files[0]?i.files[0].name:'File')+' uploaded · rows validated',{tone:'good'});i.click()"><i data-lucide="upload"></i>Import</button>
+      <button class="btn secondary" data-toast="Exported to Excel"><i data-lucide="download"></i>Export</button>
+      <a class="btn secondary" href="#/app/assets/depreciation"><i data-lucide="trending-down"></i>Run Depreciation</a>
+      <button class="btn primary" data-open="rpt-new-asset"><i data-lucide="plus"></i>New Asset</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-top"><span>Gross Cost</span><span class="icon-well"><i data-lucide="package"></i></span></div>
+      <strong>Rs 148,650,000</strong>
+      <small class="up">▲ Rs 6,818,000 additions in Q1</small>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-top"><span>Accumulated Depreciation</span><span class="icon-well"><i data-lucide="trending-down"></i></span></div>
+      <strong>Rs 52,380,000</strong>
+      <small>Rs 520,000 charged per month</small>
+    </div>
+    <div class="kpi teal">
+      <div class="kpi-top"><span>Net Book Value</span><span class="icon-well"><i data-lucide="landmark"></i></span></div>
+      <strong>Rs 96,270,000</strong>
+      <small class="up">▲ 3.7% vs 30 Jun 2026</small>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-top"><span>Active Assets</span><span class="icon-well"><i data-lucide="boxes"></i></span></div>
+      <strong>186</strong>
+      <small>4 branches · 9 fully depreciated</small>
+    </div>
+  </div>
+
+  <div class="split mt">
+    <div class="stack">
+      <div class="panel flush">
+        <div class="panel-head"><div><h3>Assets</h3><p>186 active · as at 30 Sep 2026</p></div></div>
+        <div class="toolbar">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search code, name, serial or tag…"></label>
+        <div class="chips">
+          <button class="active">All <i>186</i></button>
+          <button>Land &amp; Building <i>6</i></button>
+          <button>Plant &amp; Machinery <i>38</i></button>
+          <button>Vehicles <i>24</i></button>
+          <button>Computers <i>82</i></button>
+          <button>Furniture <i>36</i></button>
+        </div>
+        <span class="spacer"></span>
+        <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+        <button class="btn secondary sm" onclick="const b=this;FS.menu(b,[{label:'Created by me',icon:'user',onClick:()=>FS.toast('Filter: created by me',{tone:'info'})},{label:'Amount above Rs 100,000',icon:'banknote',onClick:()=>FS.toast('Filter: amount above Rs 100,000',{tone:'info'})},{label:'Has attachments',icon:'paperclip',onClick:()=>FS.toast('Filter: has attachments',{tone:'info'})},{sep:true},{label:'Clear filters',icon:'x',onClick:()=>FS.toast('Filters cleared',{tone:'info'})}])"><i data-lucide="filter"></i>Filters</button>
+      </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th><input type="checkbox"></th><th>Code</th><th>Asset</th><th>Category</th><th>Location</th><th>Acquired</th><th class="num">Cost</th><th>Method</th><th class="num">Rate</th><th class="num">NBV</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0001</a></td><td>Freehold land — Quaid-e-Azam Industrial Estate<small>Plot 14-B, 2 kanal</small></td><td>Land &amp; Building</td><td>Lahore HQ</td><td>12 Mar 2014</td><td class="num">32,000,000.00</td><td><span class="badge neutral">None</span></td><td class="num zero">—</td><td class="num">32,000,000.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0002</a></td><td>Head office &amp; warehouse building<small>Covered area 18,400 sq ft</small></td><td>Land &amp; Building</td><td>Lahore HQ</td><td>15 Dec 2019</td><td class="num">46,500,000.00</td><td>SLM</td><td class="num">3.3%</td><td class="num">36,050,000.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0012</a></td><td>Toyota Hilux Revo 2.8 V<small>LEB-21-4587 · Chassis KUN126-0038812</small></td><td>Vehicles</td><td>Lahore HQ</td><td>15 Aug 2023</td><td class="num">11,450,000.00</td><td>WDV</td><td class="num">20%</td><td class="num">5,685,306.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0034</a></td><td>Shrink-wrap packaging line<small>Siemens S7 PLC controlled</small></td><td>Plant &amp; Machinery</td><td>Faisalabad</td><td>04 Jan 2018</td><td class="num">8,750,000.00</td><td>WDV</td><td class="num">10%</td><td class="num">4,100,400.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0041</a></td><td>Diesel generator 250 kVA<small>Cummins C250D5 · Serial 74120988</small></td><td>Plant &amp; Machinery</td><td>Karachi</td><td>18 May 2016</td><td class="num">6,300,000.00</td><td>WDV</td><td class="num">10%</td><td class="num">2,200,000.00</td><td><span class="badge warn dot">Under repair</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0058</a></td><td>Electric forklift 3.0T<small>Toyota 8FBN30</small></td><td>Plant &amp; Machinery</td><td>Lahore HQ</td><td>02 Aug 2026</td><td class="num">5,000,000.00</td><td>WDV</td><td class="num">10%</td><td class="num">4,916,667.00</td><td><span class="badge info dot">New · Q1</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0072</a></td><td>Suzuki Ravi pickup<small>LES-22-1190</small></td><td>Vehicles</td><td>Faisalabad</td><td>11 Oct 2022</td><td class="num">2,390,000.00</td><td>WDV</td><td class="num">20%</td><td class="num">1,060,840.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0096</a></td><td>Honda Civic 1.5 RS Turbo<small>ICT-AQ-551 · CEO pool car</small></td><td>Vehicles</td><td>Islamabad</td><td>20 Feb 2024</td><td class="num">8,950,000.00</td><td>WDV</td><td class="num">20%</td><td class="num">5,250,140.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0124</a></td><td>Dell PowerEdge R750 server<small>ERP &amp; file server</small></td><td>Computers</td><td>Lahore HQ</td><td>08 Sep 2024</td><td class="num">1,350,000.00</td><td>SLM</td><td class="num">25%</td><td class="num">646,875.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0138</a></td><td>HP ProBook 450 G10 × 4<small>Karachi finance team laptops</small></td><td>Computers</td><td>Karachi</td><td>15 Jan 2025</td><td class="num">1,020,000.00</td><td>SLM</td><td class="num">25%</td><td class="num">573,750.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0161</a></td><td>Executive office furniture set<small>CEO &amp; board room</small></td><td>Furniture</td><td>Lahore HQ</td><td>01 Jul 2019</td><td class="num">1,480,000.00</td><td>SLM</td><td class="num">10%</td><td class="num">407,029.00</td><td><span class="badge good dot">In use</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr data-qv-route="app/assets/view"><td><input type="checkbox"></td><td><a class="link" href="#/app/assets/view">FA-0177</a></td><td>Warehouse racking system<small>Selective pallet racking, 420 bays</small></td><td>Furniture</td><td>Karachi</td><td>14 Nov 2015</td><td class="num">2,240,000.00</td><td>SLM</td><td class="num">10%</td><td class="num zero">—</td><td><span class="badge neutral dot">Fully depreciated</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-foot"><span>Showing 1–12 of 186</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>…</button><button>16</button><button>›</button></div></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Cost by category</h3><p>Gross cost Rs 148.65M</p></div></div>
+        <div class="stackbar mb"><i style="width:52.8%;background:var(--primary)"></i><i style="width:19.6%;background:var(--mint)"></i><i style="width:18.1%;background:var(--blue)"></i><i style="width:5.1%;background:var(--lime)"></i><i style="width:4.3%;background:var(--violet)"></i></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="building"></i></span><div><b>Land &amp; Building</b><small>NBV 68,050,000 · Land not depreciated</small></div><span class="spacer"></span><b>78,500,000</b></div>
+          <div class="list-item"><span class="icon-well teal"><i data-lucide="factory"></i></span><div><b>Plant &amp; Machinery</b><small>NBV 12,500,000 · WDV 10%</small></div><span class="spacer"></span><b>29,200,000</b></div>
+          <div class="list-item"><span class="icon-well blue"><i data-lucide="truck"></i></span><div><b>Vehicles</b><small>NBV 13,100,000 · WDV 20%</small></div><span class="spacer"></span><b>26,850,000</b></div>
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="monitor"></i></span><div><b>Computers</b><small>NBV 2,100,000 · SLM 25%</small></div><span class="spacer"></span><b>7,640,000</b></div>
+          <div class="list-item"><span class="icon-well violet"><i data-lucide="armchair"></i></span><div><b>Furniture &amp; Fixtures</b><small>NBV 520,000 · SLM 10%</small></div><span class="spacer"></span><b>6,460,000</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Needs attention</h3><p>3 items</p></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="wrench"></i></span><div><b>FA-0041 under repair</b><small>Generator service by Siemens Pakistan · 9 days</small></div></div>
+          <div class="list-item"><span class="icon-well red"><i data-lucide="shield-alert"></i></span><div><b>Insurance expiring</b><small>4 vehicles — EFU policy ends 31 Oct 2026</small></div></div>
+          <div class="list-item"><span class="icon-well blue"><i data-lucide="scan-barcode"></i></span><div><b>Physical verification due</b><small>Karachi branch · last count 12 Dec 2025</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-new-asset">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>New fixed asset</h2><p>Capitalise an asset and set its depreciation policy.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label><span>Asset code</span><input value="FA-0187" readonly></label>
+          <label class="full"><span>Asset name *</span><input placeholder="e.g. Toyota Corolla Altis 1.6"></label>
+          <label><span>Category *</span><select><option>Vehicles</option><option>Land &amp; Building</option><option>Plant &amp; Machinery</option><option>Computers</option><option>Furniture</option></select></label>
+          <label><span>Location</span><select><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select></label>
+          <label><span>Custodian</span><select><option>Usman Ali</option><option>Hira Ali</option><option>Kashif Ali</option></select></label>
+          <label><span>Acquisition date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Cost (Rs) *</span><input value="0.00"></label>
+          <label><span>Source document</span><input placeholder="BILL-2026-000…"></label>
+          <label><span>Method</span><select><option>WDV — Written down value</option><option>SLM — Straight line</option><option>No depreciation</option></select></label>
+          <label><span>Rate % p.a.</span><input value="20"></label>
+          <label><span>Residual value</span><input value="0.00"></label>
+          <label><span>Asset account</span><select><option>1105 Vehicles — Cost</option></select></label>
+          <label><span>Accum. dep. account</span><select><option>1155 Vehicles — Acc. Dep.</option></select></label>
+          <label><span>Expense account</span><select><option>6107 Depreciation Expense</option></select></label>
+          <label class="check"><input type="checkbox" checked> Charge full month in month of purchase</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Asset FA-0187 created">Save asset</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FIXED ASSETS: DETAIL ============================ -->
+<section class="screen" data-route="app/assets/view" data-title="Asset Detail">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Fixed Assets / <a class="link" href="#/app/assets">Register</a> / FA-0012</div>
+      <h1>Asset Detail</h1>
+      <p>Lifecycle, depreciation schedule and documents for a single asset.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Asset tag sent to the label printer"><i data-lucide="printer"></i>Print tag</button>
+      <button class="btn secondary" data-open="rpt-asset-transfer"><i data-lucide="arrow-left-right"></i>Transfer</button>
+      <a class="btn danger" href="#/app/assets/disposals"><i data-lucide="package-x"></i>Dispose</a>
+      <button class="btn primary" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i>Edit</button>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="profile-head">
+      <span class="avatar xl"><i data-lucide="truck"></i></span>
+      <div>
+        <h2>Toyota Hilux Revo 2.8 V — LEB-21-4587</h2>
+        <p class="muted">FA-0012 · Vehicles · Lahore HQ · Custodian: Usman Ali (Procurement)</p>
+        <div class="row"><span class="badge good dot">In use</span><span class="badge info">WDV 20%</span><span class="badge neutral">Insured — EFU till 31 Oct 2026</span><span class="badge violet">Tag ALN-VH-0012</span></div>
+      </div>
+      <div class="head-actions">
+        <div class="kpi" style="min-width:200px"><div class="kpi-top"><span>Net Book Value</span></div><strong>Rs 5,685,306</strong><small>49.7% of cost</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Net book value</h3><p>Actual to 30 Jun 2026, projected thereafter</p></div><div class="panel-actions"><div class="seg"><button class="active">NBV</button><button>Depreciation</button></div></div></div>
+        <svg class="chart" viewBox="0 0 600 200" preserveAspectRatio="none">
+          <path class="area" d="M20,18.25 L130,49.75 L240,77.8 L350,100.3 L460,118.15 L570,132.55 L570,200 L20,200 Z"/>
+          <path class="line" d="M20,18.25 L130,49.75 L240,77.8 L350,100.3"/>
+          <path class="line alt" d="M350,100.3 L460,118.15 L570,132.55" stroke-dasharray="6 5"/>
+        </svg>
+        <div class="row small muted" style="justify-content:space-between"><span>Aug 2023<br><b>11.45M</b></span><span>Jun 2024<br><b>9.35M</b></span><span>Jun 2025<br><b>7.48M</b></span><span>Jun 2026<br><b>5.98M</b></span><span>Jun 2027<br><b>4.79M</b></span><span>Jun 2028<br><b>3.83M</b></span></div>
+        <div class="legend"><span><i style="background:var(--primary)"></i>Actual NBV</span><span><i style="background:var(--blue)"></i>Projected NBV</span></div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head"><div><h3>Depreciation schedule</h3><p>Written down value @ 20% p.a. · monthly proration</p></div><div class="panel-actions"><button class="btn ghost sm" data-toast="Exported to Excel"><i data-lucide="download"></i>Excel</button></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Fiscal year</th><th class="num">Opening NBV</th><th class="num">Months</th><th class="num">Depreciation</th><th class="num">Accumulated</th><th class="num">Closing NBV</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>FY 2023-24</td><td class="num">11,450,000.00</td><td class="num">11</td><td class="num">2,099,167.00</td><td class="num">2,099,167.00</td><td class="num">9,350,833.00</td><td><span class="badge neutral">Locked</span></td></tr>
+            <tr><td>FY 2024-25</td><td class="num">9,350,833.00</td><td class="num">12</td><td class="num">1,870,167.00</td><td class="num">3,969,334.00</td><td class="num">7,480,666.00</td><td><span class="badge neutral">Locked</span></td></tr>
+            <tr><td>FY 2025-26</td><td class="num">7,480,666.00</td><td class="num">12</td><td class="num">1,496,133.00</td><td class="num">5,465,467.00</td><td class="num">5,984,533.00</td><td><span class="badge neutral">Locked</span></td></tr>
+            <tr><td><b>FY 2026-27</b><small>Jul–Aug posted · Sep in run</small></td><td class="num">5,984,533.00</td><td class="num">3 / 12</td><td class="num">299,227.00</td><td class="num">5,764,694.00</td><td class="num">5,685,306.00</td><td><span class="badge warn">Sep pending</span></td></tr>
+            <tr><td class="muted">FY 2026-27 (full year)</td><td class="num muted">5,984,533.00</td><td class="num muted">12</td><td class="num muted">1,196,907.00</td><td class="num muted">6,662,374.00</td><td class="num muted">4,787,626.00</td><td><span class="badge info">Projected</span></td></tr>
+            <tr><td class="muted">FY 2027-28</td><td class="num muted">4,787,626.00</td><td class="num muted">12</td><td class="num muted">957,525.00</td><td class="num muted">7,619,899.00</td><td class="num muted">3,830,101.00</td><td><span class="badge info">Projected</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Asset details</h3></div></div>
+        <div class="dl">
+          <div><span>Acquired</span><b>15 Aug 2023</b></div>
+          <div><span>Source</span><b><a class="link" href="#/app/purchases/bills">BILL-2023-000614</a></b></div>
+          <div><span>Supplier</span><b>Toyota Garden Motors</b></div>
+          <div><span>Cost</span><b>Rs 11,450,000</b></div>
+          <div><span>Accumulated dep.</span><b>Rs 5,764,694</b></div>
+          <div><span>Residual value</span><b>Rs 0</b></div>
+          <div><span>Engine / Chassis</span><b>1GD-4501182 / KUN126-0038812</b></div>
+          <div><span>Asset GL</span><b>1105 Vehicles — Cost</b></div>
+          <div><span>Accum. GL</span><b>1155 Vehicles — Acc. Dep.</b></div>
+          <div><span>Expense GL</span><b>6107 Depreciation Expense</b></div>
+          <div><span>Cost centre</span><b>Operations</b></div>
+          <div><span>Tax WDV (ITO 2001)</span><b>Rs 5,212,180</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>History</h3><p>Maintenance &amp; transfers</p></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Aug 2026 depreciation posted</b><small>Rs 99,742 · JV-2026-000331 · 31 Aug 2026</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>60,000 km service</b><small>Toyota Garden Motors · Rs 68,400 · 22 Jul 2026</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Insurance renewed</b><small>EFU General · premium Rs 228,000 · 01 Nov 2025</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Transferred Karachi → Lahore HQ</b><small>Custodian Kashif Ali → Usman Ali · 03 Mar 2025</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Capitalised</b><small>Hira Ali · 15 Aug 2023</small></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Documents</h3><p>4 files</p></div><div class="panel-actions"><button class="btn ghost sm" onclick="const i=document.createElement('input');i.type='file';i.onchange=()=>FS.toast((i.files[0]?i.files[0].name:'File')+' uploaded · attached',{tone:'good'});i.click()"><i data-lucide="upload"></i>Upload</button></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>Purchase invoice.pdf</b><small>412 KB · 15 Aug 2023</small></div><span class="spacer"></span><button class="icon-btn-sm" onclick="FS.toast((this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim()+' downloaded',{tone:'info'})"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>Registration book (Excise).pdf</b><small>1.2 MB · 28 Aug 2023</small></div><span class="spacer"></span><button class="icon-btn-sm" onclick="FS.toast((this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim()+' downloaded',{tone:'info'})"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>EFU insurance policy 2025-26.pdf</b><small>640 KB · 01 Nov 2025</small></div><span class="spacer"></span><button class="icon-btn-sm" onclick="FS.toast((this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim()+' downloaded',{tone:'info'})"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="image"></i></span><div><b>Asset photo.jpg</b><small>2.4 MB · 15 Aug 2023</small></div><span class="spacer"></span><button class="icon-btn-sm" onclick="FS.toast((this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim()+' downloaded',{tone:'info'})"><i data-lucide="download"></i></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-asset-transfer">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Transfer asset</h2><p>FA-0012 · Toyota Hilux Revo 2.8 V</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>From location</span><input value="Lahore HQ" readonly></label>
+          <label><span>To location *</span><select><option>Islamabad</option><option>Karachi</option><option>Faisalabad</option></select></label>
+          <label><span>New custodian</span><select><option>Faisal Qureshi</option><option>Ali Haider</option></select></label>
+          <label><span>Effective date</span><input type="date" value="2026-10-01"></label>
+          <label class="full"><span>Reason</span><textarea rows="2">Islamabad branch distribution route expansion</textarea></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Transfer request sent for approval">Submit transfer</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FIXED ASSETS: RUN DEPRECIATION ============================ -->
+<section class="screen" data-route="app/assets/depreciation" data-title="Run Depreciation">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Fixed Assets / Depreciation</div>
+      <h1>Run Depreciation</h1>
+      <p>Compute the monthly charge for all active assets, review the journal and post it to the ledger.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Depreciation run history opened"><i data-lucide="history"></i>Run history</button>
+      <button class="btn primary" data-open="rpt-post-dep"><i data-lucide="send"></i>Post depreciation</button>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="form-grid c4">
+      <label><span>Period</span><select><option>SEP-2026 (01–30 Sep 2026)</option><option>OCT-2026</option></select></label>
+      <label><span>Branch</span><select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select></label>
+      <label><span>Category</span><select><option>All categories</option><option>Plant &amp; Machinery</option><option>Vehicles</option></select></label>
+      <label><span>Posting date</span><input type="date" value="2026-09-30"></label>
+    </div>
+    <div class="row mt"><button class="btn secondary sm" data-toast="Depreciation recomputed for 177 assets"><i data-lucide="refresh-cw"></i>Recompute</button><span class="small muted">Last computed 01 Oct 2026, 09:15 AM by Hira Ali · JUL-2026 and AUG-2026 already posted</span></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Assets in run</span><span class="icon-well"><i data-lucide="boxes"></i></span></div><strong>177</strong><small>9 fully depreciated skipped</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Depreciation — Sep</span><span class="icon-well"><i data-lucide="trending-down"></i></span></div><strong>Rs 520,000</strong><small>Same as Aug 2026</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>YTD after posting</span><span class="icon-well"><i data-lucide="calendar-range"></i></span></div><strong>Rs 1,560,000</strong><small>Jul–Sep 2026</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>NBV after posting</span><span class="icon-well"><i data-lucide="landmark"></i></span></div><strong>Rs 96,270,000</strong><small>From Rs 96,790,000</small></div>
+  </div>
+
+  <div class="split mt">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Computed depreciation — SEP-2026</h3><p>Grouped by category · sample assets shown</p></div><div class="panel-actions"><button class="btn ghost sm" data-toast="Exported to Excel"><i data-lucide="download"></i>Export</button></div></div>
+      <div class="table-wrap"><table class="tbl stmt">
+        <thead><tr><th>Asset / Category</th><th>Method</th><th class="num">Opening NBV</th><th class="num">Charge</th><th class="num">Closing NBV</th></tr></thead>
+        <tbody>
+          <tr class="sec"><td colspan="5">Land &amp; Building · 1 depreciable asset</td></tr>
+          <tr><td class="ind1">FA-0002 Head office &amp; warehouse building</td><td>SLM 3.3%</td><td class="num">36,177,875.00</td><td class="num">127,875.00</td><td class="num">36,050,000.00</td></tr>
+          <tr class="sub"><td colspan="2">Subtotal Land &amp; Building</td><td class="num">36,177,875.00</td><td class="num">127,875.00</td><td class="num">36,050,000.00</td></tr>
+          <tr class="sec"><td colspan="5">Plant &amp; Machinery · 38 assets</td></tr>
+          <tr><td class="ind1">FA-0034 Shrink-wrap packaging line</td><td>WDV 10%</td><td class="num">4,134,570.00</td><td class="num">34,170.00</td><td class="num">4,100,400.00</td></tr>
+          <tr><td class="ind1">FA-0041 Diesel generator 250 kVA</td><td>WDV 10%</td><td class="num">2,218,333.00</td><td class="num">18,333.00</td><td class="num">2,200,000.00</td></tr>
+          <tr><td class="ind1">FA-0058 Electric forklift 3.0T</td><td>WDV 10%</td><td class="num">4,958,334.00</td><td class="num">41,667.00</td><td class="num">4,916,667.00</td></tr>
+          <tr><td class="ind1 muted">35 other assets</td><td></td><td class="num muted">1,292,888.00</td><td class="num muted">9,955.00</td><td class="num muted">1,282,933.00</td></tr>
+          <tr class="sub"><td colspan="2">Subtotal Plant &amp; Machinery</td><td class="num">12,604,125.00</td><td class="num">104,125.00</td><td class="num">12,500,000.00</td></tr>
+          <tr class="sec"><td colspan="5">Vehicles · 24 assets</td></tr>
+          <tr><td class="ind1">FA-0012 Toyota Hilux Revo 2.8 V</td><td>WDV 20%</td><td class="num">5,785,049.00</td><td class="num">99,743.00</td><td class="num">5,685,306.00</td></tr>
+          <tr><td class="ind1">FA-0096 Honda Civic 1.5 RS Turbo</td><td>WDV 20%</td><td class="num">5,337,642.00</td><td class="num">87,502.00</td><td class="num">5,250,140.00</td></tr>
+          <tr><td class="ind1 muted">22 other vehicles</td><td></td><td class="num muted">2,191,309.00</td><td class="num muted">26,755.00</td><td class="num muted">2,164,554.00</td></tr>
+          <tr class="sub"><td colspan="2">Subtotal Vehicles</td><td class="num">13,314,000.00</td><td class="num">214,000.00</td><td class="num">13,100,000.00</td></tr>
+          <tr class="sec"><td colspan="5">Computers · 76 depreciable</td></tr>
+          <tr><td class="ind1">FA-0124 Dell PowerEdge R750 server</td><td>SLM 25%</td><td class="num">675,000.00</td><td class="num">28,125.00</td><td class="num">646,875.00</td></tr>
+          <tr><td class="ind1 muted">75 other computers</td><td></td><td class="num muted">1,485,000.00</td><td class="num muted">31,875.00</td><td class="num muted">1,453,125.00</td></tr>
+          <tr class="sub"><td colspan="2">Subtotal Computers</td><td class="num">2,160,000.00</td><td class="num">60,000.00</td><td class="num">2,100,000.00</td></tr>
+          <tr class="sec"><td colspan="5">Furniture &amp; Fixtures · 29 depreciable</td></tr>
+          <tr><td class="ind1">FA-0161 Executive office furniture set</td><td>SLM 10%</td><td class="num">419,362.00</td><td class="num">12,333.00</td><td class="num">407,029.00</td></tr>
+          <tr><td class="ind1 muted">28 other items</td><td></td><td class="num muted">114,638.00</td><td class="num muted">1,667.00</td><td class="num muted">112,971.00</td></tr>
+          <tr class="sub"><td colspan="2">Subtotal Furniture &amp; Fixtures</td><td class="num">534,000.00</td><td class="num">14,000.00</td><td class="num">520,000.00</td></tr>
+          <tr class="total"><td colspan="2">Total depreciation — SEP-2026</td><td class="num">64,790,000.00</td><td class="num">520,000.00</td><td class="num">64,270,000.00</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Journal preview</h3><p>JV-2026-000412 · 30 Sep 2026</p></div><span class="badge warn">Draft</span></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead>
+          <tbody>
+            <tr><td>6107 Depreciation Expense<small>Cost centre split by branch</small></td><td class="num dr">520,000.00</td><td class="num zero">—</td></tr>
+            <tr><td>1152 Acc. Dep. — Buildings</td><td class="num zero">—</td><td class="num cr">127,875.00</td></tr>
+            <tr><td>1153 Acc. Dep. — Plant &amp; Machinery</td><td class="num zero">—</td><td class="num cr">104,125.00</td></tr>
+            <tr><td>1155 Acc. Dep. — Vehicles</td><td class="num zero">—</td><td class="num cr">214,000.00</td></tr>
+            <tr><td>1156 Acc. Dep. — Computers</td><td class="num zero">—</td><td class="num cr">60,000.00</td></tr>
+            <tr><td>1157 Acc. Dep. — Furniture</td><td class="num zero">—</td><td class="num cr">14,000.00</td></tr>
+            <tr class="total"><td>Total</td><td class="num">520,000.00</td><td class="num">520,000.00</td></tr>
+          </tbody>
+        </table></div>
+        <div class="banner good mt"><i data-lucide="circle-check"></i><div><b>Journal is balanced</b><p>Debits equal credits. Period SEP-2026 is open.</p></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Run history — FY 2026-27</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>AUG-2026 · Rs 520,000</b><small>JV-2026-000331 · posted 31 Aug by Hira Ali</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>JUL-2026 · Rs 520,000</b><small>JV-2026-000254 · posted 31 Jul by Hira Ali</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-post-dep">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Post September depreciation?</h2><p>This creates journal JV-2026-000412 and updates NBV for 177 assets.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl">
+          <div><span>Period</span><b>SEP-2026</b></div>
+          <div><span>Posting date</span><b>30 Sep 2026</b></div>
+          <div><span>Debit — 6107 Depreciation Expense</span><b>Rs 520,000</b></div>
+          <div><span>Credit — Accumulated Depreciation (5 accounts)</span><b>Rs 520,000</b></div>
+        </div>
+        <label class="check mt"><input type="checkbox" checked> Email summary to Sana Javed (Finance Manager)</label>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="JV-2026-000412 posted — Rs 520,000 depreciation">Post journal</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FIXED ASSETS: DISPOSALS ============================ -->
+<section class="screen" data-route="app/assets/disposals" data-title="Asset Disposals">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Fixed Assets / Disposals</div>
+      <h1>Asset Disposals</h1>
+      <p>Sales, scrapping and write-offs — with automatic gain/loss calculation and derecognition journals.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Exported to Excel"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-open="rpt-dispose"><i data-lucide="plus"></i>New Disposal</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Disposals FY 2026-27</span><span class="icon-well"><i data-lucide="package-x"></i></span></div><strong>5</strong><small>3 posted · 1 pending · 1 draft</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>NBV derecognised</span><span class="icon-well"><i data-lucide="landmark"></i></span></div><strong>Rs 2,120,000</strong><small>Cost Rs 8,190,000</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Sale proceeds</span><span class="icon-well"><i data-lucide="banknote"></i></span></div><strong>Rs 2,305,000</strong><small>Received in bank</small></div>
+    <div class="kpi"><div class="kpi-top"><span>Net gain on disposal</span><span class="icon-well"><i data-lucide="trending-up"></i></span></div><strong>Rs 185,000</strong><small class="up">Rs 277,000 posted to Other Income</small></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Disposals</h3><p>FY 2026-27 to date</p></div></div>
+    <div class="toolbar mt">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search disposals…"></label>
+    <div class="chips"><button class="active">All <i>5</i></button><button>Sold <i>3</i></button><button>Scrapped <i>1</i></button><button>Written off <i>1</i></button></div>
+    <span class="spacer"></span>
+    <select><option>FY 2026-27</option><option>FY 2025-26</option></select>
+  </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Disposal #</th><th>Asset</th><th>Date</th><th>Type</th><th>Buyer</th><th class="num">Cost</th><th class="num">Acc. Dep.</th><th class="num">NBV</th><th class="num">Proceeds</th><th class="num">Gain / (Loss)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr data-qv-route="app/assets/view"><td><b>DSP-2026-0009</b></td><td><a class="link" href="#/app/assets/view">FA-0087</a><small>Suzuki Cultus VXL (LEC-19-3321)</small></td><td>14 Jul 2026</td><td>Sale</td><td>Ali Haider (employee)</td><td class="num">1,840,000.00</td><td class="num">1,262,000.00</td><td class="num">578,000.00</td><td class="num">820,000.00</td><td class="num dr">242,000.00</td><td><span class="badge good">Posted</span></td></tr>
+        <tr data-qv-route="app/assets/view"><td><b>DSP-2026-0010</b></td><td><a class="link" href="#/app/assets/view">FA-0063</a><small>Toyota forklift 2.5T diesel</small></td><td>02 Aug 2026</td><td>Trade-in</td><td>Toyota Industries Pakistan</td><td class="num">3,600,000.00</td><td class="num">2,430,000.00</td><td class="num">1,170,000.00</td><td class="num">1,230,000.00</td><td class="num dr">60,000.00</td><td><span class="badge good">Posted</span></td></tr>
+        <tr data-qv-route="app/assets/view"><td><b>DSP-2026-0011</b></td><td><a class="link" href="#/app/assets/view">FA-0141</a><small>Dell PowerEdge R430 (old server)</small></td><td>21 Aug 2026</td><td>Sale</td><td>Daraz Business</td><td class="num">1,250,000.00</td><td class="num">1,180,000.00</td><td class="num">70,000.00</td><td class="num">45,000.00</td><td class="num neg">(25,000.00)</td><td><span class="badge good">Posted</span></td></tr>
+        <tr data-qv-route="app/assets/view"><td><b>DSP-2026-0012</b></td><td><a class="link" href="#/app/assets/view">FA-0119</a><small>Office furniture — Karachi</small></td><td>18 Sep 2026</td><td>Scrapped</td><td>—</td><td class="num">420,000.00</td><td class="num">388,000.00</td><td class="num">32,000.00</td><td class="num zero">—</td><td class="num neg">(32,000.00)</td><td><span class="badge warn">Pending approval</span></td></tr>
+        <tr data-qv-route="app/assets/view"><td><b>DSP-2026-0013</b></td><td><a class="link" href="#/app/assets/view">FA-0156</a><small>HP EliteBook 840 × 6</small></td><td>30 Sep 2026</td><td>Sale</td><td>Staff buy-back scheme</td><td class="num">1,080,000.00</td><td class="num">810,000.00</td><td class="num">270,000.00</td><td class="num">210,000.00</td><td class="num neg">(60,000.00)</td><td><span class="badge neutral">Draft</span></td></tr>
+        <tr class="total"><td colspan="5">Total</td><td class="num">8,190,000.00</td><td class="num">6,070,000.00</td><td class="num">2,120,000.00</td><td class="num">2,305,000.00</td><td class="num">185,000.00</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 5 of 5 disposals</span></div>
+  </div>
+
+  <div class="overlay" id="rpt-dispose">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Dispose asset</h2><p>Derecognise the asset and book the gain or loss on disposal.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label class="full"><span>Asset *</span><select><option>FA-0072 · Suzuki Ravi pickup (LES-22-1190)</option><option>FA-0012 · Toyota Hilux Revo 2.8 V</option></select></label>
+          <label><span>Disposal type</span><select><option>Sale</option><option>Scrapped</option><option>Written off</option><option>Trade-in</option></select></label>
+          <label><span>Disposal date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Buyer</span><input value="Faisalabad Motors"></label>
+          <label><span>Sale proceeds (Rs) *</span><input value="1,350,000.00"></label>
+          <label><span>GST on sale</span><select><option>GST 18% — Rs 243,000</option><option>Exempt</option></select></label>
+          <label><span>Receive into</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>Cash in hand</option></select></label>
+        </div>
+        <div class="form-section"><h4>Computed result</h4><p>Depreciation charged up to the month before disposal.</p></div>
+        <div class="dl">
+          <div><span>Original cost</span><b>Rs 2,390,000</b></div>
+          <div><span>Accumulated depreciation to 30 Sep 2026</span><b>Rs 1,329,160</b></div>
+          <div><span>Net book value</span><b>Rs 1,060,840</b></div>
+          <div><span>Sale proceeds (excl. GST)</span><b>Rs 1,350,000</b></div>
+          <div><span>Gain on disposal → 4910 Other Income</span><b class="dr">Rs 289,160</b></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn secondary" data-close data-toast="Disposal saved as draft">Save draft</button><button class="btn primary" data-close data-toast="Disposal DSP-2026-0014 sent for approval">Submit for approval</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BUDGETING: BUDGETS ============================ -->
+<section class="screen" data-route="app/budgets" data-title="Budgets">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Budgeting / Budgets</div>
+      <h1>Budgets</h1>
+      <p>Operating, capital and department budgets for FY 2026-27 — versioned, approved and tracked against actuals.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/budgets/variance"><i data-lucide="chart-column"></i>Budget vs Actual</a>
+      <button class="btn secondary" data-toast="Copied 48 lines from FY 2025-26 actuals"><i data-lucide="copy"></i>Copy from FY 2025-26</button>
+      <button class="btn primary" data-open="rpt-new-budget"><i data-lucide="plus"></i>New Budget</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Budgeted revenue</span><span class="icon-well"><i data-lucide="trending-up"></i></span></div><strong>Rs 410,000,000</strong><small class="up">▲ 14.2% vs FY 2025-26 actual</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Budgeted costs</span><span class="icon-well"><i data-lucide="receipt"></i></span></div><strong>Rs 322,040,000</strong><small>COGS + key opex lines</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Budgeted operating result</span><span class="icon-well"><i data-lucide="target"></i></span></div><strong>Rs 87,960,000</strong><small>21.5% margin</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Capex utilised</span><span class="icon-well"><i data-lucide="warehouse"></i></span></div><strong>36.9%</strong><small>Rs 6,818,000 of Rs 18,500,000</small></div>
+  </div>
+
+  <div class="panel flush mt">
+    <div class="panel-head"><div><h3>All budgets</h3><p>FY 2026-27 · 6 budgets</p></div><div class="panel-actions"><div class="chips"><button class="active">FY 2026-27</button><button>FY 2025-26</button></div></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Budget</th><th>Type</th><th>Scope</th><th>Version</th><th>Owner</th><th class="num">Amount</th><th>Utilised (Q1)</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>FY 2026-27 Operating Budget</b><small>BUD-2026-01 · Jul 2026 – Jun 2027</small></td><td>Operating</td><td>Company · all branches</td><td><span class="badge neutral">v3</span></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>Finance Manager</small></div></div></td><td class="num">322,040,000.00</td><td><div class="progress"><i style="width:24.9%"></i></div><small>24.9% · Rs 80,325,000</small></td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>FY 2026-27 Capex Budget</b><small>BUD-2026-02 · fixed asset additions</small></td><td>Capital</td><td>Company</td><td><span class="badge neutral">v2</span></td><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>CEO</small></div></div></td><td class="num">18,500,000.00</td><td><div class="progress"><i style="width:36.9%"></i></div><small>36.9% · Rs 6,818,000</small></td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Sales Department Budget</b><small>BUD-2026-03 · selling &amp; marketing</small></td><td>Department</td><td>Sales</td><td><span class="badge neutral">v1</span></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales Exec</small></div></div></td><td class="num">14,800,000.00</td><td><div class="progress warn"><i style="width:29.5%"></i></div><small>29.5% · Rs 4,360,000</small></td><td><span class="badge good">Approved</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Operations &amp; Warehouse Budget</b><small>BUD-2026-04</small></td><td>Department</td><td>Operations, Warehouse</td><td><span class="badge neutral">v2</span></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td class="num">9,600,000.00</td><td><div class="progress"><i style="width:23.1%"></i></div><small>23.1% · Rs 2,218,000</small></td><td><span class="badge warn">In review</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>HR &amp; Administration Budget</b><small>BUD-2026-05</small></td><td>Department</td><td>Human Resources, Administration</td><td><span class="badge neutral">v1</span></td><td><div class="cell-user"><span class="avatar sm">AN</span><div><b>Ayesha Noor</b><small>HR Manager</small></div></div></td><td class="num">6,250,000.00</td><td><div class="progress"><i style="width:22.4%"></i></div><small>22.4% · Rs 1,400,000</small></td><td><span class="badge neutral">Draft</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>IT Department Budget</b><small>BUD-2026-06 · licences, hardware, cloud</small></td><td>Department</td><td>IT</td><td><span class="badge neutral">v1</span></td><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>IT</small></div></div></td><td class="num">4,200,000.00</td><td><div class="progress danger"><i style="width:41.7%"></i></div><small>41.7% · Rs 1,750,000</small></td><td><span class="badge neutral">Draft</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel mt">
+    <div class="panel-head">
+      <div><h3>Budget editor — FY 2026-27 Operating Budget (v3)</h3><p>Amounts in Rs '000 · edit cells and save as a new version</p></div>
+      <div class="panel-actions">
+        <div class="seg"><button class="active">Monthly</button><button>Quarterly</button></div>
+        <button class="btn ghost sm" data-toast="Annual amounts spread evenly across 12 months"><i data-lucide="wand-sparkles"></i>Spread evenly</button>
+        <button class="btn ghost sm" data-toast="7.5% uplift applied to all lines"><i data-lucide="percent"></i>Apply % uplift</button>
+        <button class="btn primary sm" data-toast="Saved as version v4 (draft)"><i data-lucide="save"></i>Save v4</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table class="tbl lines">
+      <thead><tr><th>Account</th><th class="num">Jul</th><th class="num">Aug</th><th class="num">Sep</th><th class="num">Oct</th><th class="num">Nov</th><th class="num">Dec</th><th class="num">Jan</th><th class="num">Feb</th><th class="num">Mar</th><th class="num">Apr</th><th class="num">May</th><th class="num">Jun</th><th class="num">FY Total</th></tr></thead>
+      <tbody>
+        <tr class="sec"><td colspan="14"><b>Revenue</b></td></tr>
+        <tr><td>4101 Sales — Goods</td><td><input class="cell-input num" value="29,500"></td><td><input class="cell-input num" value="30,000"></td><td><input class="cell-input num" value="31,500"></td><td><input class="cell-input num" value="32,000"></td><td><input class="cell-input num" value="33,000"></td><td><input class="cell-input num" value="35,000"></td><td><input class="cell-input num" value="32,000"></td><td><input class="cell-input num" value="30,500"></td><td><input class="cell-input num" value="33,500"></td><td><input class="cell-input num" value="31,000"></td><td><input class="cell-input num" value="32,500"></td><td><input class="cell-input num" value="34,500"></td><td class="num"><b>385,000</b></td></tr>
+        <tr><td>4102 Sales — Services</td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,400"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,000"></td><td><input class="cell-input num" value="2,600"></td><td class="num"><b>25,000</b></td></tr>
+        <tr class="sec"><td colspan="14"><b>Cost of sales &amp; expenses</b></td></tr>
+        <tr><td>5101 Cost of Goods Sold</td><td><input class="cell-input num" value="20,000"></td><td><input class="cell-input num" value="20,400"></td><td><input class="cell-input num" value="21,400"></td><td><input class="cell-input num" value="21,800"></td><td><input class="cell-input num" value="22,400"></td><td><input class="cell-input num" value="23,800"></td><td><input class="cell-input num" value="21,800"></td><td><input class="cell-input num" value="20,700"></td><td><input class="cell-input num" value="22,800"></td><td><input class="cell-input num" value="21,100"></td><td><input class="cell-input num" value="22,100"></td><td><input class="cell-input num" value="23,500"></td><td class="num"><b>261,800</b></td></tr>
+        <tr><td>6101 Salaries &amp; Wages</td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="3,250"></td><td><input class="cell-input num" value="4,250"></td><td class="num"><b>40,000</b></td></tr>
+        <tr><td>6102 Rent, Rates &amp; Taxes</td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td><input class="cell-input num" value="720"></td><td class="num"><b>8,640</b></td></tr>
+        <tr><td>6103 Utilities</td><td><input class="cell-input num" value="520"></td><td><input class="cell-input num" value="520"></td><td><input class="cell-input num" value="480"></td><td><input class="cell-input num" value="400"></td><td><input class="cell-input num" value="380"></td><td><input class="cell-input num" value="420"></td><td><input class="cell-input num" value="440"></td><td><input class="cell-input num" value="410"></td><td><input class="cell-input num" value="400"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="520"></td><td><input class="cell-input num" value="560"></td><td class="num"><b>5,500</b></td></tr>
+        <tr><td>6105 Marketing &amp; Advertising</td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="900"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="700"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td><input class="cell-input num" value="450"></td><td class="num"><b>6,100</b></td></tr>
+        <tr class="total"><td>Operating result</td><td class="num">6,560</td><td class="num">6,660</td><td class="num">7,200</td><td class="num">7,380</td><td class="num">7,800</td><td class="num">8,310</td><td class="num">7,340</td><td class="num">6,970</td><td class="num">7,630</td><td class="num">7,030</td><td class="num">7,460</td><td class="num">7,620</td><td class="num">87,960</td></tr>
+      </tbody>
+    </table></div>
+    <div class="row mt small muted"><i data-lucide="info"></i><span>Jul–Sep are locked because actuals have been posted. Version history: v1 (12 May 2026), v2 (03 Jun 2026), v3 approved by Ahmed Raza on 21 Jun 2026.</span></div>
+  </div>
+
+  <div class="overlay" id="rpt-new-budget">
+    <div class="modal">
+      <div class="modal-head"><div><h2>New budget</h2><p>Start blank or seed from actuals / a prior budget.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Budget name *</span><input value="Finance Department Budget"></label>
+          <label><span>Fiscal year</span><select><option>FY 2026-27</option><option>FY 2027-28</option></select></label>
+          <label><span>Type</span><select><option>Department</option><option>Operating</option><option>Capital</option><option>Project</option></select></label>
+          <label><span>Department</span><select><option>Finance</option><option>Human Resources</option><option>Sales</option><option>Operations</option><option>Procurement</option><option>IT</option><option>Administration</option><option>Warehouse</option></select></label>
+          <label><span>Owner</span><select><option>Sana Javed</option><option>Hira Ali</option></select></label>
+          <label class="full"><span>Seed from</span><select><option>FY 2025-26 actuals + 10% uplift</option><option>Blank</option><option>FY 2025-26 budget (v4)</option></select></label>
+          <label class="check"><input type="checkbox" checked> Require approval from CEO before activation</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Budget BUD-2026-07 created as draft">Create budget</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BUDGETING: BUDGET VS ACTUAL ============================ -->
+<section class="screen" data-route="app/budgets/variance" data-title="Budget vs Actual">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Budgeting / Variance</div>
+      <h1>Budget vs Actual</h1>
+      <p>FY 2026-27 Operating Budget (v3) compared with posted actuals · Q1 (Jul–Sep 2026).</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" onclick="window.print()"><i data-lucide="printer"></i>Print</button>
+      <button class="btn secondary" data-toast="Budget vs actual exported to Excel"><i data-lucide="download"></i>Export</button>
+      <a class="btn primary" href="#/app/budgets"><i data-lucide="pencil"></i>Edit budget</a>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <select><option>FY 2026-27 Operating Budget (v3)</option><option>FY 2026-27 Capex Budget (v2)</option></select>
+    <select><option>Q1 · Jul–Sep 2026</option><option>Sep 2026</option><option>YTD</option><option>Full year</option></select>
+    <div class="chips" onclick="const b=event.target.closest('button');if(!b)return;event.stopPropagation();[...this.children].forEach(x=>x.classList.toggle('active',x===b));const s=this.closest('.screen'),d=b.dataset.d,all=s.querySelector('[data-dv=all]'),g=s.querySelector('[data-dv=dept]');s.querySelectorAll('[data-dept]').forEach(li=>li.style.opacity=!d||li.dataset.dept===d?'':'.38');s.querySelectorAll('.bars.dual .bar').forEach(x=>{x.style.opacity=d?'.55':''});if(!d){all.hidden=false;g.hidden=true;FS.toast('Showing all departments',{tone:'info'});return}all.hidden=true;g.hidden=false;const a=+b.dataset.a,bu=+b.dataset.b,v=bu-a,q=k=>g.querySelector('[data-k='+k+']');q('t').textContent=d+' — Q1 spend';q('a').innerHTML=FS.money(a,{dec:0});q('b').innerHTML=FS.money(bu,{dec:0});q('v').innerHTML=(v<0?'−':'+')+FS.money(Math.abs(v),{dec:0});const vs=q('vs');vs.textContent=(v<0?'▼ ':'▲ ')+Math.abs(v/bu*100).toFixed(1)+(v<0?'% over budget':'% under budget');vs.className=v<0?'down':'up';q('u').textContent=(a/bu*100).toFixed(1)+'%';const pb=q('p');pb.style.width=Math.min(100,a/bu*100)+'%';pb.parentNode.className='progress'+(a>bu?' danger':'');g.querySelectorAll('strong').forEach(x=>FS.countUp&&FS.countUp(x));FS.toast('Filtered to '+d,{tone:'info'})"><button class="active">All departments</button><button data-d="Sales" data-a="4360000" data-b="3700000">Sales</button><button data-d="Operations" data-a="2220000" data-b="2400000">Operations</button><button data-d="Finance" data-a="1180000" data-b="1250000">Finance</button><button data-d="HR" data-a="1400000" data-b="1560000">HR</button><button data-d="IT" data-a="1750000" data-b="1050000">IT</button></div>
+    <span class="spacer"></span>
+    <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option></select>
+  </div>
+
+  <div class="kpi-grid" data-dv="all">
+    <div class="kpi"><div class="kpi-top"><span>Revenue — actual</span><span class="icon-well"><i data-lucide="trending-up"></i></span></div><strong>Rs 98,630,000</strong><small class="up">▲ 1.7% above budget (Rs 97.0M)</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Costs — actual</span><span class="icon-well"><i data-lucide="receipt"></i></span></div><strong>Rs 80,325,000</strong><small class="down">▼ 4.9% over budget (Rs 76.58M)</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Operating result</span><span class="icon-well"><i data-lucide="target"></i></span></div><strong>Rs 18,305,000</strong><small class="down">▼ Rs 2,115,000 below budget</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Lines over budget</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>2 of 7</strong><small>COGS, Salaries</small></div>
+  </div>
+  <div class="kpi-grid" data-dv="dept" hidden>
+    <div class="kpi"><div class="kpi-top"><span data-k="t">Q1 spend</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong data-k="a">Rs 0</strong><small>Posted actuals · Jul–Sep 2026</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Q1 budget</span><span class="icon-well"><i data-lucide="target"></i></span></div><strong data-k="b">Rs 0</strong><small>Operating budget v3</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Variance</span><span class="icon-well"><i data-lucide="scale"></i></span></div><strong data-k="v">Rs 0</strong><small data-k="vs">—</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Utilisation</span><span class="icon-well"><i data-lucide="gauge"></i></span></div><strong data-k="u">0%</strong><div class="progress"><i data-k="p" style="width:0"></i></div></div>
+  </div>
+
+
+  <div class="split mt">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Revenue — budget vs actual</h3><p>Rs millions · FY 2026-27</p></div><div class="panel-actions"><div class="seg"><button class="active">Revenue</button><button>Costs</button><button>Result</button></div></div></div>
+      <div class="bars dual">
+        <div class="bar" style="--h:79%"><i style="height:78.8%"></i><i class="b" style="height:77.3%"></i><span>Jul</span></div>
+        <div class="bar" style="--h:83%"><i style="height:80%"></i><i class="b" style="height:83%"></i><span>Aug</span></div>
+        <div class="bar" style="--h:86%"><i style="height:83.8%"></i><i class="b" style="height:86.3%"></i><span>Sep</span></div>
+        <div class="bar" style="--h:85%"><i style="height:85%"></i><i class="b" style="height:0"></i><span>Oct</span></div>
+        <div class="bar" style="--h:88%"><i style="height:87.5%"></i><i class="b" style="height:0"></i><span>Nov</span></div>
+        <div class="bar" style="--h:94%"><i style="height:93.5%"></i><i class="b" style="height:0"></i><span>Dec</span></div>
+        <div class="bar" style="--h:85%"><i style="height:85%"></i><i class="b" style="height:0"></i><span>Jan</span></div>
+        <div class="bar" style="--h:81%"><i style="height:81.3%"></i><i class="b" style="height:0"></i><span>Feb</span></div>
+        <div class="bar" style="--h:89%"><i style="height:88.8%"></i><i class="b" style="height:0"></i><span>Mar</span></div>
+        <div class="bar" style="--h:83%"><i style="height:82.5%"></i><i class="b" style="height:0"></i><span>Apr</span></div>
+        <div class="bar" style="--h:86%"><i style="height:86.3%"></i><i class="b" style="height:0"></i><span>May</span></div>
+        <div class="bar" style="--h:93%"><i style="height:92.8%"></i><i class="b" style="height:0"></i><span>Jun</span></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--primary)"></i>Budget</span><span><i style="background:var(--lime)"></i>Actual</span><span class="muted small">Jul 31.5 / 30.9 · Aug 32.0 / 33.2 · Sep 33.5 / 34.53</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>By department</h3><p>Q1 spend vs budget</p></div></div>
+      <div class="list">
+        <div class="list-item" data-dept="Sales"><div style="flex:1"><div class="row"><b>Sales</b><span class="spacer"></span><small>4.36M / 3.70M</small></div><div class="progress danger"><i style="width:100%"></i></div><small class="neg">17.8% over</small></div></div>
+        <div class="list-item" data-dept="Operations"><div style="flex:1"><div class="row"><b>Operations</b><span class="spacer"></span><small>2.22M / 2.40M</small></div><div class="progress"><i style="width:92%"></i></div><small class="muted">7.6% under</small></div></div>
+        <div class="list-item" data-dept="Finance"><div style="flex:1"><div class="row"><b>Finance</b><span class="spacer"></span><small>1.18M / 1.25M</small></div><div class="progress"><i style="width:94%"></i></div><small class="muted">5.6% under</small></div></div>
+        <div class="list-item" data-dept="HR"><div style="flex:1"><div class="row"><b>HR &amp; Admin</b><span class="spacer"></span><small>1.40M / 1.56M</small></div><div class="progress"><i style="width:90%"></i></div><small class="muted">10.3% under</small></div></div>
+        <div class="list-item" data-dept="IT"><div style="flex:1"><div class="row"><b>IT</b><span class="spacer"></span><small>1.75M / 1.05M</small></div><div class="progress danger"><i style="width:100%"></i></div><small class="neg">66.7% over — annual licences prepaid</small></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush mt">
+    <div class="panel-head"><div><h3>Variance by account — Q1 FY 2026-27</h3><p>Favourable variance shown positive; adverse in red</p></div></div>
+    <div class="table-wrap"><table class="tbl stmt">
+      <thead><tr><th>Account</th><th class="num">Budget</th><th class="num">Actual</th><th class="num">Variance</th><th class="num">Variance %</th><th>Utilisation</th></tr></thead>
+      <tbody>
+        <tr class="sec"><td colspan="6">Revenue</td></tr>
+        <tr><td class="ind1">4101 Sales — Goods</td><td class="num">91,000,000.00</td><td class="num">92,450,000.00</td><td class="num">1,450,000.00</td><td class="num">1.6%</td><td><div class="progress"><i style="width:100%"></i></div></td></tr>
+        <tr><td class="ind1">4102 Sales — Services</td><td class="num">6,000,000.00</td><td class="num">6,180,000.00</td><td class="num">180,000.00</td><td class="num">3.0%</td><td><div class="progress"><i style="width:100%"></i></div></td></tr>
+        <tr class="sub"><td>Total revenue</td><td class="num">97,000,000.00</td><td class="num">98,630,000.00</td><td class="num">1,630,000.00</td><td class="num">1.7%</td><td></td></tr>
+        <tr class="sec"><td colspan="6">Cost of sales &amp; expenses</td></tr>
+        <tr><td class="ind1">5101 Cost of Goods Sold</td><td class="num">61,800,000.00</td><td class="num">65,700,000.00</td><td class="num neg">(3,900,000.00)</td><td class="num neg">-6.3%</td><td><div class="progress danger"><i style="width:100%"></i></div></td></tr>
+        <tr><td class="ind1">6101 Salaries &amp; Wages</td><td class="num">9,750,000.00</td><td class="num">9,840,000.00</td><td class="num neg">(90,000.00)</td><td class="num neg">-0.9%</td><td><div class="progress warn"><i style="width:100%"></i></div></td></tr>
+        <tr><td class="ind1">6102 Rent, Rates &amp; Taxes</td><td class="num">2,160,000.00</td><td class="num">2,160,000.00</td><td class="num zero">—</td><td class="num">0.0%</td><td><div class="progress"><i style="width:100%"></i></div></td></tr>
+        <tr><td class="ind1">6103 Utilities</td><td class="num">1,520,000.00</td><td class="num">1,385,000.00</td><td class="num">135,000.00</td><td class="num">8.9%</td><td><div class="progress"><i style="width:91%"></i></div></td></tr>
+        <tr><td class="ind1">6105 Marketing &amp; Advertising</td><td class="num">1,350,000.00</td><td class="num">1,240,000.00</td><td class="num">110,000.00</td><td class="num">8.1%</td><td><div class="progress"><i style="width:92%"></i></div></td></tr>
+        <tr class="sub"><td>Total costs</td><td class="num">76,580,000.00</td><td class="num">80,325,000.00</td><td class="num neg">(3,745,000.00)</td><td class="num neg">-4.9%</td><td></td></tr>
+        <tr class="total"><td>Operating result (budgeted lines)</td><td class="num">20,420,000.00</td><td class="num">18,305,000.00</td><td class="num neg">(2,115,000.00)</td><td class="num neg">-10.4%</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>COGS running 6.3% over budget</b><p>Gross margin is 33.4% against a budget of 36.3% on budgeted lines — driven by Nishat Mills price increase in August. Review purchase pricing with Usman Ali.</p></div><a class="btn sm secondary" href="#/app/purchases/orders">Review POs</a></div>
+</section>
+
+<!-- ============================ TAX: TAX CODES ============================ -->
+<section class="screen" data-route="app/tax/codes" data-title="Tax Codes">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tax &amp; Compliance / Tax Codes</div>
+      <h1>Tax Codes</h1>
+      <p>Sales tax and income tax withholding codes applied on invoices, bills and payments — mapped to GL accounts.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Rates checked against Finance Act 2026 — no changes"><i data-lucide="refresh-cw"></i>Check FBR rates</button>
+      <button class="btn primary" data-open="rpt-new-taxcode"><i data-lucide="plus"></i>New Tax Code</button>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Tax codes</h3><p>Sales tax, further tax and withholding</p></div></div>
+    <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search tax codes…"></label>
+    <div class="chips"><button class="active">All <i>13</i></button><button>Sales tax <i>5</i></button><button>Withholding <i>8</i></button><button>Inactive <i>1</i></button></div>
+    <span class="spacer"></span>
+    <span class="small muted">Rates effective 01 Jul 2026 (Finance Act 2026)</span>
+  </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Code</th><th>Description</th><th>Type</th><th>Applies to</th><th class="num">Rate</th><th>Tax account</th><th>FBR reference</th><th>Active</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>GST-18</b></td><td>Sales tax — standard rate</td><td><span class="badge info">Sales tax</span></td><td>Sales &amp; purchases</td><td class="num">18.00%</td><td>2210 Sales Tax Payable<small>1410 Sales Tax Input</small></td><td>Sec 3, STA 1990</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>GST-0</b></td><td>Zero-rated supplies (exports, Fifth Schedule)</td><td><span class="badge info">Sales tax</span></td><td>Sales</td><td class="num">0.00%</td><td>2210 Sales Tax Payable</td><td>Fifth Schedule</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>EXEMPT</b></td><td>Exempt supplies (Sixth Schedule)</td><td><span class="badge info">Sales tax</span></td><td>Sales &amp; purchases</td><td class="num zero">—</td><td class="muted">Not posted</td><td>Sixth Schedule</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>FT-4</b></td><td>Further tax — supplies to unregistered persons</td><td><span class="badge info">Sales tax</span></td><td>Sales</td><td class="num">4.00%</td><td>2211 Further Tax Payable</td><td>Sec 3(1A)</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>GST-RED</b></td><td>Reduced rate (Eighth Schedule)</td><td><span class="badge info">Sales tax</span></td><td>Sales</td><td class="num">10.00%</td><td>2210 Sales Tax Payable</td><td>Eighth Schedule</td><td><label class="switch"><input type="checkbox"><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-153A</b></td><td>Supply of goods — ATL filer (company)</td><td><span class="badge violet">Withholding</span></td><td>Vendor payments</td><td class="num">5.50%</td><td>2230 Income Tax Withheld Payable</td><td>153(1)(a) ITO 2001</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-153A-NF</b></td><td>Supply of goods — non-ATL (double rate)</td><td><span class="badge violet">Withholding</span></td><td>Vendor payments</td><td class="num">11.00%</td><td>2230 Income Tax Withheld Payable</td><td>153(1)(a) · Tenth Schedule</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-153B</b></td><td>Rendering of services — ATL filer</td><td><span class="badge violet">Withholding</span></td><td>Vendor payments</td><td class="num">9.00%</td><td>2230 Income Tax Withheld Payable</td><td>153(1)(b) ITO 2001</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-153C</b></td><td>Execution of contracts</td><td><span class="badge violet">Withholding</span></td><td>Vendor payments</td><td class="num">7.00%</td><td>2230 Income Tax Withheld Payable</td><td>153(1)(c) ITO 2001</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-149</b></td><td>Salary — slab rates (Division I, Part I, First Schedule)</td><td><span class="badge violet">Withholding</span></td><td>Payroll</td><td class="num">Slab</td><td>2231 Salary Tax Payable</td><td>Sec 149 ITO 2001</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>ADV-236G</b></td><td>Advance tax on sales to distributors / dealers / wholesalers</td><td><span class="badge violet">Collection</span></td><td>Sales invoices</td><td class="num">0.10%</td><td>2232 Advance Tax Collected</td><td>Sec 236G</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>ADV-236H</b></td><td>Advance tax on sales to retailers</td><td><span class="badge violet">Collection</span></td><td>Sales invoices</td><td class="num">0.50%</td><td>2232 Advance Tax Collected</td><td>Sec 236H</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+        <tr><td><b>WHT-155</b></td><td>Rent of immovable property</td><td><span class="badge violet">Withholding</span></td><td>Vendor payments</td><td class="num">15.00%</td><td>2230 Income Tax Withheld Payable</td><td>Sec 155 ITO 2001</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td class="actions"><button class="icon-btn-sm" onclick="FS.toast('Editing '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'info'})"><i data-lucide="pencil"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>13 tax codes · 12 active</span></div>
+  </div>
+
+  <div class="overlay" id="rpt-new-taxcode">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>New tax code</h2><p>Define rate, applicability and GL mapping.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label><span>Code *</span><input value="WHT-236Y"></label>
+          <label class="full"><span>Description *</span><input placeholder="e.g. Advance tax on remittance abroad"></label>
+          <label><span>Type</span><select><option>Withholding</option><option>Sales tax</option><option>Collection</option></select></label>
+          <label><span>Applies to</span><select><option>Vendor payments</option><option>Sales invoices</option><option>Purchases</option><option>Payroll</option></select></label>
+          <label><span>Rate %</span><input value="0.00"></label>
+          <label><span>Rate for non-ATL %</span><input placeholder="Optional"></label>
+          <label><span>Tax account *</span><select><option>2230 Income Tax Withheld Payable</option><option>2210 Sales Tax Payable</option><option>1420 Advance Income Tax</option></select></label>
+          <label><span>Effective from</span><input type="date" value="2026-07-01"></label>
+          <label class="full"><span>FBR legal reference</span><input placeholder="Section / schedule"></label>
+          <label class="check"><input type="checkbox" checked> Calculate on amount excluding sales tax</label>
+          <label class="check"><input type="checkbox"> Check vendor ATL status before applying</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Tax code saved">Save tax code</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TAX: SALES TAX RETURN ============================ -->
+<section class="screen" data-route="app/tax/sales-tax" data-title="Sales Tax Return">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tax &amp; Compliance / Sales Tax Return</div>
+      <h1>Sales Tax Return — September 2026</h1>
+      <p>Monthly return under the Sales Tax Act 1990 · STRN 32-77-8761-234-55 · due 18 Oct 2026.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>Sep 2026</option><option>Aug 2026 (filed)</option><option>Jul 2026 (filed)</option></select>
+      <button class="btn secondary" data-toast="Sent to printer"><i data-lucide="printer"></i>Print</button>
+      <button class="btn primary" data-open="rpt-iris-export"><i data-lucide="file-spreadsheet"></i>Export for FBR IRIS</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Output tax (Annex-C)</span><span class="icon-well"><i data-lucide="arrow-up-right"></i></span></div><strong>Rs 5,915,000</strong><small>GST 5,841,000 + further tax 74,000</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Input tax (Annex-A)</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 3,992,400</strong><small>Admissible after 90% cap check</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Net sales tax payable</span><span class="icon-well"><i data-lucide="landmark"></i></span></div><strong>Rs 1,922,600</strong><small class="down">▲ 71.7% vs Aug (Rs 1,120,000)</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Return status</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>Draft</strong><small>17 days to due date</small></div>
+  </div>
+
+  <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>1 purchase invoice not matched with supplier's Annex-C</b><p>Habib Packaging BILL-2026-000195 (input tax Rs 403,200) is not yet declared by the supplier. Input will be inadmissible if unmatched at filing.</p></div><button class="btn sm secondary" data-toast="Supplier notified by email">Notify supplier</button></div>
+  <div class="banner info mt"><i data-lucide="info"></i><div><b>Further tax applied on 39 invoices to unregistered buyers</b><p>Rs 74,000 at 4% on Rs 1,850,000 — verified against buyer CNIC / STRN status from FBR ATL (01 Oct 2026).</p></div></div>
+
+  <div class="split mt">
+    <div data-tabs class="panel">
+      <div class="tabs"><button class="active" data-tab="annc">Annex-C · Sales</button><button data-tab="anna">Annex-A · Purchases</button><button data-tab="summ">Return summary</button></div>
+      <div class="tab-pane active" data-pane="annc">
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Buyer</th><th>NTN / CNIC</th><th>Invoice</th><th>Date</th><th class="num">Value excl. tax</th><th class="num">Sales tax 18%</th><th class="num">Further tax</th></tr></thead>
+          <tbody>
+            <tr data-qv-route="app/sales/invoices/view"><td>Metro Cash &amp; Carry</td><td>0786543-2</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000301</a></td><td>04 Sep 2026</td><td class="num">4,850,000.00</td><td class="num">873,000.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>City Mart Superstores</td><td>3541278-9</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000308</a></td><td>06 Sep 2026</td><td class="num">3,620,000.00</td><td class="num">651,600.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Al-Fatah Stores</td><td>1209876-5</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000315</a></td><td>09 Sep 2026</td><td class="num">2,940,000.00</td><td class="num">529,200.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Engro Foods</td><td>2255189-1</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000322</a></td><td>12 Sep 2026</td><td class="num">5,180,000.00</td><td class="num">932,400.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Hashoo Hotels</td><td>0912345-7</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000329</a></td><td>15 Sep 2026</td><td class="num">1,760,000.00</td><td class="num">316,800.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Packages Ltd</td><td>0011223-4</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000336</a></td><td>18 Sep 2026</td><td class="num">2,450,000.00</td><td class="num">441,000.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Shifa International</td><td>1478523-6</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000344</a></td><td>23 Sep 2026</td><td class="num">1,390,000.00</td><td class="num">250,200.00</td><td class="num zero">—</td></tr>
+            <tr data-qv-route="app/sales/invoices/view"><td>Walk-in trade buyer <span class="badge warn">Unregistered</span></td><td>35202-4417823-1</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000351</a></td><td>25 Sep 2026</td><td class="num">620,000.00</td><td class="num">111,600.00</td><td class="num">24,800.00</td></tr>
+            <tr><td class="muted">Other registered buyers (142 invoices)</td><td></td><td></td><td></td><td class="num">8,410,000.00</td><td class="num">1,513,800.00</td><td class="num zero">—</td></tr>
+            <tr><td class="muted">Other unregistered buyers (38 invoices)</td><td></td><td></td><td></td><td class="num">1,230,000.00</td><td class="num">221,400.00</td><td class="num">49,200.00</td></tr>
+            <tr class="total"><td colspan="4">Total Annex-C (188 invoices)</td><td class="num">32,450,000.00</td><td class="num">5,841,000.00</td><td class="num">74,000.00</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-pane="anna">
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Supplier</th><th>STRN</th><th>Document</th><th>Date</th><th class="num">Value excl. tax</th><th class="num">Input tax</th><th>Match</th></tr></thead>
+          <tbody>
+            <tr><td>Nishat Mills</td><td>03-01-5100-012-37</td><td><a class="link" href="#/app/purchases/bills">BILL-2026-000188</a></td><td>02 Sep 2026</td><td class="num">5,600,000.00</td><td class="num">1,008,000.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>Siemens Pakistan</td><td>12-00-8471-003-19</td><td><a class="link" href="#/app/purchases/bills">BILL-2026-000192</a></td><td>05 Sep 2026</td><td class="num">3,850,000.00</td><td class="num">693,000.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>Habib Packaging</td><td>32-77-6612-118-44</td><td><a class="link" href="#/app/purchases/bills">BILL-2026-000195</a></td><td>08 Sep 2026</td><td class="num">2,240,000.00</td><td class="num">403,200.00</td><td><span class="badge warn">Unmatched</span></td></tr>
+            <tr><td>Shan Foods</td><td>12-11-2104-551-82</td><td><a class="link" href="#/app/purchases/bills">BILL-2026-000199</a></td><td>11 Sep 2026</td><td class="num">4,120,000.00</td><td class="num">741,600.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>Pak Suzuki Spares</td><td>17-02-8700-224-61</td><td><a class="link" href="#/app/purchases/bills">BILL-2026-000203</a></td><td>16 Sep 2026</td><td class="num">1,180,000.00</td><td class="num">212,400.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>K-Electric</td><td>02-04-2700-001-73</td><td>Utility bill · Sep</td><td>18 Sep 2026</td><td class="num">240,000.00</td><td class="num">43,200.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>LESCO</td><td>03-04-2700-002-55</td><td>Utility bill · Sep</td><td>08 Sep 2026</td><td class="num">190,000.00</td><td class="num">34,200.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td>PTCL</td><td>07-01-4811-001-28</td><td>Telephone bill · Sep</td><td>12 Sep 2026</td><td class="num">60,000.00</td><td class="num">10,800.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr><td class="muted">Other suppliers (61 documents)</td><td></td><td></td><td></td><td class="num">4,700,000.00</td><td class="num">846,000.00</td><td><span class="badge good">Matched</span></td></tr>
+            <tr class="total"><td colspan="4">Total Annex-A (69 documents)</td><td class="num">22,180,000.00</td><td class="num">3,992,400.00</td><td></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="tab-pane" data-pane="summ">
+        <div class="table-wrap"><table class="tbl stmt">
+          <tbody>
+            <tr class="sec"><td colspan="2">Output tax</td></tr>
+            <tr><td class="ind1">Sales tax on taxable supplies @ 18% (Annex-C)</td><td class="num">5,841,000.00</td></tr>
+            <tr><td class="ind1">Further tax @ 4% on supplies to unregistered persons</td><td class="num">74,000.00</td></tr>
+            <tr class="sub"><td>Total output tax</td><td class="num">5,915,000.00</td></tr>
+            <tr class="sec"><td colspan="2">Input tax</td></tr>
+            <tr><td class="ind1">Input tax on purchases &amp; imports (Annex-A)</td><td class="num">3,992,400.00</td></tr>
+            <tr><td class="ind1">Inadmissible input u/s 8 / 8B</td><td class="num zero">—</td></tr>
+            <tr class="sub"><td>Admissible input tax</td><td class="num">3,992,400.00</td></tr>
+            <tr><td class="ind1">Carry-forward from previous period</td><td class="num zero">—</td></tr>
+            <tr class="total"><td>Net sales tax payable</td><td class="num">1,922,600.00</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small muted mt">Section 8B check: input claimed is 67.5% of output tax — within the 90% limit.</p>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Validation</h3><p>Pre-filing checks</p></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>All buyers have valid NTN/CNIC</b><small>188 of 188 invoices</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Annex-C reconciles to GL 2210</b><small>Difference Rs 0</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>No suppliers on blacklist / suspended</b><small>Checked 01 Oct 2026, 09:20</small></div></div>
+          <div class="list-item"><span class="icon-well yellow"><i data-lucide="alert-triangle"></i></span><div><b>1 unmatched input invoice</b><small>Habib Packaging · Rs 403,200</small></div></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Digital invoices synced with FBR</b><small>188 / 188 · <a class="link" href="#/app/tax/fbr">view log</a></small></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Filing history</h3></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Period</th><th class="num">Paid</th><th>CPR</th></tr></thead>
+          <tbody>
+            <tr><td>Aug 2026<small>Filed 15 Sep</small></td><td class="num">1,120,000.00</td><td class="small">ST20260915-0021-48812</td></tr>
+            <tr><td>Jul 2026<small>Filed 14 Aug</small></td><td class="num">1,468,300.00</td><td class="small">ST20260814-0017-30561</td></tr>
+            <tr><td>Jun 2026<small>Filed 16 Jul</small></td><td class="num">1,734,900.00</td><td class="small">ST20260716-0019-27744</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-iris-export">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Export for FBR IRIS</h2><p>Generates Annex files in the IRIS upload format.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="check full"><input type="checkbox" checked> Annex-A — Purchases (69 rows)</label>
+          <label class="check full"><input type="checkbox" checked> Annex-C — Sales (188 rows)</label>
+          <label class="check full"><input type="checkbox"> Annex-H — Stock (quarterly)</label>
+          <label><span>Format</span><select><option>IRIS CSV (UTF-8)</option><option>Excel (.xlsx)</option></select></label>
+          <label><span>Exclude unmatched input</span><select><option>No — include and flag</option><option>Yes</option></select></label>
+        </div>
+        <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>1 warning</b><p>Unmatched input of Rs 403,200 will be included.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="STR_SEP2026_ALNOOR.zip downloaded">Download files</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TAX: WITHHOLDING TAX ============================ -->
+<section class="screen" data-route="app/tax/wht" data-title="Withholding Tax">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tax &amp; Compliance / Withholding Tax</div>
+      <h1>Withholding Tax Statements</h1>
+      <p>Income tax deducted and collected under the Income Tax Ordinance 2001 · NTN 4271839-6.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>Sep 2026</option><option>Aug 2026</option><option>Jul 2026</option></select>
+      <button class="btn secondary" data-toast="WHT deduction certificates generated (14 PDFs)"><i data-lucide="file-text"></i>Deduction certificates</button>
+      <button class="btn primary" data-open="rpt-wht-challan"><i data-lucide="plus"></i>Record challan</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Deducted — Sep 2026</span><span class="icon-well"><i data-lucide="file-minus"></i></span></div><strong>Rs 1,977,400</strong><small>214 transactions</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Due to FBR by 15 Oct</span><span class="icon-well"><i data-lucide="calendar-clock"></i></span></div><strong>Rs 1,977,400</strong><small>14 days remaining</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Deposited Q1 to date</span><span class="icon-well"><i data-lucide="landmark"></i></span></div><strong>Rs 3,742,600</strong><small>Jul &amp; Aug challans</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Q1 statement u/s 165</span><span class="icon-well"><i data-lucide="file-check"></i></span></div><strong>Due 20 Oct</strong><small>In preparation</small></div>
+  </div>
+
+  <div class="panel flush mt">
+    <div class="panel-head"><div><h3>Deductions by section — September 2026</h3><p>Posted to 2230 / 2231 / 2232</p></div><div class="panel-actions"><button class="btn ghost sm" data-toast="Exported to Excel"><i data-lucide="download"></i>Export</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Section</th><th>Nature</th><th class="num">Transactions</th><th class="num">Taxable amount</th><th class="num">Rate</th><th class="num">Tax deducted</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>153(1)(a)</b></td><td>Supply of goods — ATL filers</td><td class="num">96</td><td class="num">16,800,000.00</td><td class="num">5.5%</td><td class="num">924,000.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>153(1)(a)</b></td><td>Supply of goods — non-ATL</td><td class="num">7</td><td class="num">640,000.00</td><td class="num">11.0%</td><td class="num">70,400.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>153(1)(b)</b></td><td>Rendering of services</td><td class="num">31</td><td class="num">3,250,000.00</td><td class="num">9.0%</td><td class="num">292,500.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>153(1)(c)</b></td><td>Execution of contracts</td><td class="num">2</td><td class="num">660,000.00</td><td class="num">7.0%</td><td class="num">46,200.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>149</b></td><td>Salary — payroll <a class="link" href="#/app/hr/payroll">PR-2026-09</a></td><td class="num">58</td><td class="num">3,280,000.00</td><td class="num">Slab</td><td class="num">586,000.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>236G</b></td><td>Collected on sales to distributors</td><td class="num">8</td><td class="num">9,600,000.00</td><td class="num">0.1%</td><td class="num">9,600.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr><td><b>236H</b></td><td>Collected on sales to retailers</td><td class="num">12</td><td class="num">9,740,000.00</td><td class="num">0.5%</td><td class="num">48,700.00</td><td><span class="badge warn">Unpaid</span></td></tr>
+        <tr class="total"><td colspan="2">Total September 2026</td><td class="num">214</td><td class="num">43,970,000.00</td><td></td><td class="num">1,977,400.00</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="grid-2 mt">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Challans (CPR)</h3><p>Payments to FBR via e-Payment</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>CPR number</th><th>Period</th><th>Paid on</th><th>Bank</th><th class="num">Amount</th></tr></thead>
+        <tbody>
+          <tr><td><b>IT20260915-0042-77812</b><small>153 · 236G/H</small></td><td>Aug 2026</td><td>15 Sep 2026</td><td>Meezan Bank — 0123</td><td class="num">1,298,600.00</td></tr>
+          <tr><td><b>IT20260915-0042-77813</b><small>149 salary</small></td><td>Aug 2026</td><td>15 Sep 2026</td><td>Meezan Bank — 0123</td><td class="num">581,400.00</td></tr>
+          <tr><td><b>IT20260814-0039-61205</b><small>153 · 236G/H</small></td><td>Jul 2026</td><td>14 Aug 2026</td><td>HBL — 8721</td><td class="num">1,284,100.00</td></tr>
+          <tr><td><b>IT20260814-0039-61206</b><small>149 salary</small></td><td>Jul 2026</td><td>14 Aug 2026</td><td>HBL — 8721</td><td class="num">578,500.00</td></tr>
+          <tr class="total"><td colspan="4">Deposited Q1 to date</td><td class="num">3,742,600.00</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Quarterly statements u/s 165</h3><p>Filed on IRIS</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Quarter</th><th>Due date</th><th class="num">Tax</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>Q1 FY 2026-27</b><small>Jul–Sep 2026</small></td><td>20 Oct 2026</td><td class="num">5,720,000.00</td><td><span class="badge warn dot">In preparation</span></td></tr>
+          <tr><td><b>Q4 FY 2025-26</b><small>Apr–Jun 2026</small></td><td>20 Jul 2026</td><td class="num">5,402,300.00</td><td><span class="badge good dot">Filed 17 Jul</span></td></tr>
+          <tr><td><b>Q3 FY 2025-26</b><small>Jan–Mar 2026</small></td><td>20 Apr 2026</td><td class="num">5,118,750.00</td><td><span class="badge good dot">Filed 18 Apr</span></td></tr>
+          <tr><td><b>Annual statement u/s 149</b><small>FY 2025-26 salary</small></td><td>31 Aug 2026</td><td class="num">6,912,000.00</td><td><span class="badge good dot">Filed 26 Aug</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-wht-challan">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Record WHT challan</h2><p>Link a CPR to the deductions it settles.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Period</span><select><option>Sep 2026</option></select></label>
+          <label><span>Sections</span><select><option>153 · 236G/H (Rs 1,391,400)</option><option>149 salary (Rs 586,000)</option></select></label>
+          <label><span>CPR number *</span><input placeholder="IT2026…"></label>
+          <label><span>Payment date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Paid from</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option></select></label>
+          <label><span>Amount</span><input value="1,391,400.00"></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Challan recorded and BPV created">Save challan</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TAX: FBR INTEGRATION ============================ -->
+<section class="screen" data-route="app/tax/fbr" data-title="FBR Integration">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tax &amp; Compliance / FBR Integration</div>
+      <h1>FBR Integration</h1>
+      <p>Real-time invoice reporting to FBR (POS / Digital Invoicing) for Al-Noor Enterprises (Pvt) Ltd.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Connection OK · FBR responded in 412 ms"><i data-lucide="plug-zap"></i>Test connection</button>
+      <button class="btn primary" data-toast="Sync started — 3 pending invoices queued"><i data-lucide="refresh-cw"></i>Sync now</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-top"><span>Connection</span><span class="icon-well"><i data-lucide="wifi"></i></span></div><strong>Connected</strong><small class="up">Production · token valid till 31 Dec 2026</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Last sync</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>09:42 AM</strong><small>01 Oct 2026 · auto every 5 min</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Invoices reported — Sep</span><span class="icon-well"><i data-lucide="receipt-text"></i></span></div><strong>188 / 188</strong><small>100% success</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Pending / failed</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>3 / 1</strong><small>Today's queue</small></div>
+  </div>
+
+  <div class="split mt">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Invoice sync log</h3><p>Latest submissions to FBR</p></div><div class="panel-actions"><div class="chips"><button class="active">All</button><button>Failed <i>1</i></button><button>Pending <i>3</i></button></div></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Time</th><th>Invoice</th><th>Buyer</th><th class="num">Amount</th><th>FBR invoice no.</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr data-qv-route="app/sales/invoices/view"><td>01 Oct, 09:42</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000489</a></td><td>Interloop Ltd</td><td class="num">1,534,000.00</td><td class="small">128734261001094215112</td><td><span class="badge good">Accepted</span></td></tr>
+          <tr data-qv-route="app/sales/invoices/view"><td>01 Oct, 09:38</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000488</a></td><td>Lucky Cement</td><td class="num">826,000.00</td><td class="small">128734261001093802441</td><td><span class="badge good">Accepted</span></td></tr>
+          <tr data-qv-route="app/sales/invoices/view"><td>01 Oct, 09:31</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000487</a></td><td>Walk-in buyer</td><td class="num">45,200.00</td><td class="small muted">—</td><td><span class="badge danger">Failed</span><small>Invalid CNIC format</small></td></tr>
+          <tr><td>01 Oct, 09:30</td><td>Draft POS-01-0091</td><td>Counter sale</td><td class="num">12,980.00</td><td class="small muted">—</td><td><span class="badge warn">Pending</span></td></tr>
+          <tr data-qv-route="app/sales/invoices/view"><td>30 Sep, 18:12</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000486</a></td><td>Packages Ltd</td><td class="num">2,006,000.00</td><td class="small">128734260930181207733</td><td><span class="badge good">Accepted</span></td></tr>
+          <tr data-qv-route="app/sales/invoices/view"><td>30 Sep, 17:55</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000485</a></td><td>Al-Fatah Stores</td><td class="num">708,000.00</td><td class="small">128734260930175519046</td><td><span class="badge good">Accepted</span></td></tr>
+          <tr data-qv-route="app/sales/invoices/view"><td>30 Sep, 17:41</td><td><a class="link" href="#/app/sales/invoices/view">INV-2026-000484</a></td><td>City Mart Superstores</td><td class="num">1,121,000.00</td><td class="small">128734260930174130218</td><td><span class="badge good">Accepted</span></td></tr>
+          <tr><td>30 Sep, 16:20</td><td><a class="link" href="#/app/sales/credit-notes">CN-2026-000021</a></td><td>Shifa International</td><td class="num">118,000.00</td><td class="small">128734260930162044907</td><td><span class="badge good">Accepted</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="table-foot"><span>Showing 8 of 1,214 this FY</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Credentials</h3><p>Issued by FBR / PRAL</p></div><span class="badge good dot">Live</span></div>
+        <div class="form-grid" style="grid-template-columns:1fr">
+          <label><span>Environment</span><select><option>Production</option><option>Sandbox</option></select></label>
+          <label><span>POS ID</span><input value="128734"></label>
+          <label><span>NTN</span><input value="4271839-6" readonly></label>
+          <label><span>STRN</span><input value="32-77-8761-234-55" readonly></label>
+          <label><span>API security token</span><input type="password" value="••••••••••••••••••••"></label>
+          <label><span>Branch mapping</span><select><option>All branches → POS 128734</option></select></label>
+        </div>
+        <div class="form-section"><h4>Behaviour</h4></div>
+        <label class="switch"><input type="checkbox" checked><i></i><span>Report invoices on posting</span></label>
+        <label class="switch"><input type="checkbox" checked><i></i><span>Print FBR QR code on invoices</span></label>
+        <label class="switch"><input type="checkbox"><i></i><span>Block posting if FBR is unreachable</span></label>
+        <div class="form-actions"><button class="btn secondary" onclick="FS.toast('Cancelled',{tone:'info'})">Cancel</button><button class="btn primary" data-toast="FBR settings saved">Save</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Connection history</h3></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Health check OK</b><small>01 Oct 2026, 09:40 · 412 ms</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>FBR endpoint timeout (recovered)</b><small>27 Sep 2026, 14:05 · 6 invoices retried</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Token renewed</b><small>01 Jul 2026 by Sana Javed</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PERIODS: FISCAL PERIODS ============================ -->
+<section class="screen" data-route="app/periods" data-title="Fiscal Periods">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Period Close / Fiscal Periods</div>
+      <h1>Fiscal Years &amp; Periods</h1>
+      <p>Control which months accept postings. Closed periods block new entries; locked periods cannot be reopened without CEO approval.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="FY 2027-28 will be created on 01 Jun 2027"><i data-lucide="calendar-plus"></i>New fiscal year</button>
+      <a class="btn primary" href="#/app/periods/close"><i data-lucide="lock"></i>Year-end close</a>
+    </div>
+  </div>
+
+  <div class="grid-3 mb">
+    <div class="panel">
+      <div class="row"><span class="icon-well"><i data-lucide="lock"></i></span><div><h3 style="margin:0">FY 2025-26</h3><small class="muted">01 Jul 2025 – 30 Jun 2026</small></div><span class="spacer"></span><span class="badge neutral dot">Closed · Locked</span></div>
+      <div class="dl mt">
+        <div><span>Net profit transferred</span><b>Rs 21,840,000</b></div>
+        <div><span>Closing entry</span><b>JV-2026-000188</b></div>
+        <div><span>Closed by</span><b>Sana Javed · 15 Aug 2026</b></div>
+        <div><span>Audited by</span><b>KPMG Taseer Hadi &amp; Co.</b></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well teal"><i data-lucide="calendar-check"></i></span><div><h3 style="margin:0">FY 2026-27</h3><small class="muted">01 Jul 2026 – 30 Jun 2027</small></div><span class="spacer"></span><span class="badge good dot">Open · Current</span></div>
+      <div class="mt"><div class="row small"><span>2 of 12 periods closed</span><span class="spacer"></span><b>17%</b></div><div class="progress"><i style="width:17%"></i></div></div>
+      <div class="dl mt">
+        <div><span>Profit to date (Q1)</span><b>Rs 6,347,400</b></div>
+        <div><span>Current period</span><b>OCT-2026</b></div>
+        <div><span>Next close</span><b>SEP-2026 · target 07 Oct</b></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="row"><span class="icon-well blue"><i data-lucide="calendar-plus"></i></span><div><h3 style="margin:0">FY 2027-28</h3><small class="muted">01 Jul 2027 – 30 Jun 2028</small></div><span class="spacer"></span><span class="badge info dot">Not created</span></div>
+      <p class="small muted mt">Created automatically one month before year start. Periods: monthly (12), with an optional 13th adjustment period.</p>
+      <label class="switch"><input type="checkbox" checked><i></i><span>Add adjustment period (P13)</span></label>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Periods — FY 2026-27</h3><p>Posting control by month</p></div><div class="panel-actions"><div class="chips"><button class="active">All <i>12</i></button><button>Open <i>10</i></button><button>Closed <i>1</i></button><button>Locked <i>1</i></button></div></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Period</th><th>From</th><th>To</th><th class="num">Vouchers</th><th class="num">Drafts</th><th>Modules</th><th>Status</th><th>Closed by</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>JUL-2026</b></td><td>01 Jul 2026</td><td>31 Jul 2026</td><td class="num">1,248</td><td class="num zero">—</td><td class="small">All locked</td><td><span class="badge violet dot">Locked</span></td><td>Sana Javed<small>08 Aug 2026</small></td><td class="actions"><button class="btn ghost sm" data-open="rpt-reopen-period"><i data-lucide="unlock"></i>Reopen</button></td></tr>
+        <tr><td><b>AUG-2026</b></td><td>01 Aug 2026</td><td>31 Aug 2026</td><td class="num">1,312</td><td class="num zero">—</td><td class="small">AR, AP, GL closed</td><td><span class="badge neutral dot">Closed</span></td><td>Sana Javed<small>09 Sep 2026</small></td><td class="actions"><button class="btn ghost sm" data-open="rpt-reopen-period"><i data-lucide="unlock"></i>Reopen</button><button class="btn ghost sm" data-toast="AUG-2026 locked"><i data-lucide="lock"></i>Lock</button></td></tr>
+        <tr><td><b>SEP-2026</b><small>Close in progress</small></td><td>01 Sep 2026</td><td>30 Sep 2026</td><td class="num">1,377</td><td class="num neg">6</td><td class="small">AR closed · GL open</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="btn secondary sm" data-open="rpt-close-period"><i data-lucide="lock"></i>Close</button></td></tr>
+        <tr><td><b>OCT-2026</b><small>Current</small></td><td>01 Oct 2026</td><td>31 Oct 2026</td><td class="num">42</td><td class="num">3</td><td class="small">All open</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>NOV-2026</td><td>01 Nov 2026</td><td>30 Nov 2026</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>DEC-2026</td><td>01 Dec 2026</td><td>31 Dec 2026</td><td class="num">4</td><td class="num">4</td><td class="small muted">Future · recurring drafts</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>JAN-2027</td><td>01 Jan 2027</td><td>31 Jan 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>FEB-2027</td><td>01 Feb 2027</td><td>28 Feb 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>MAR-2027</td><td>01 Mar 2027</td><td>31 Mar 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>APR-2027</td><td>01 Apr 2027</td><td>30 Apr 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>MAY-2027</td><td>01 May 2027</td><td>31 May 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td>JUN-2027</td><td>01 Jun 2027</td><td>30 Jun 2027</td><td class="num zero">—</td><td class="num zero">—</td><td class="small muted">Future · year-end</td><td><span class="badge good dot">Open</span></td><td class="muted">—</td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="rpt-close-period">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Close SEP-2026?</h2><p>New postings dated 01–30 Sep 2026 will be blocked.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="banner warn"><i data-lucide="alert-triangle"></i><div><b>6 draft vouchers in SEP-2026</b><p>Drafts will be moved to OCT-2026 or must be posted first.</p></div></div>
+        <div class="form-grid mt">
+          <label class="check full"><input type="checkbox" checked> Bank reconciliation completed for all 4 bank accounts</label>
+          <label class="check full"><input type="checkbox" checked> Depreciation for SEP-2026 posted</label>
+          <label class="check full"><input type="checkbox"> Move remaining drafts to OCT-2026</label>
+          <label class="full"><span>Close for modules</span><select><option>All modules (GL, AR, AP, Inventory, Payroll)</option><option>Sub-ledgers only</option></select></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="SEP-2026 closed">Close period</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-reopen-period">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Reopen period</h2><p>Reopening is audited and requires approval.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Period</span><select><option>AUG-2026 (Closed)</option><option>JUL-2026 (Locked)</option></select></label>
+          <label><span>Reopen until</span><input type="date" value="2026-10-03"></label>
+          <label class="full"><span>Reason *</span><textarea rows="3" placeholder="e.g. Late vendor bill from Siemens Pakistan dated 28 Aug 2026 must be recorded in August."></textarea></label>
+          <label><span>Approver</span><select><option>Ahmed Raza (CEO)</option><option>Sana Javed (Finance Manager)</option></select></label>
+          <label class="check"><input type="checkbox" checked> Re-close automatically at the end date</label>
+        </div>
+        <div class="banner info mt"><i data-lucide="info"></i><div><b>Locked periods</b><p>Reopening a locked period also requires the approver to enter their MFA code.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Reopen request sent to Ahmed Raza">Request reopen</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PERIODS: YEAR-END CLOSE ============================ -->
+<section class="screen" data-route="app/periods/close" data-title="Year-end Close">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Period Close / Year-end</div>
+      <h1>Year-end Close</h1>
+      <p>Run checks, post adjustments, transfer profit &amp; loss to retained earnings and lock the year.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>FY 2026-27 — dry run as at 30 Sep 2026</option><option>FY 2025-26 — completed 15 Aug 2026</option></select>
+      <div class="seg"><button class="active">Dry run</button><button>Final close</button></div>
+    </div>
+  </div>
+
+  <div class="banner info mb"><i data-lucide="flask-conical"></i><div><b>Dry-run mode</b><p>Nothing is posted. Use it to rehearse the close and spot issues early; the final close for FY 2026-27 unlocks after 30 Jun 2027.</p></div></div>
+
+  <div class="wizard panel" data-wizard>
+    <ol class="steps">
+      <li class="active"><b>1</b><span>Pre-close checklist</span></li>
+      <li><b>2</b><span>Adjustments</span></li>
+      <li><b>3</b><span>Closing entries</span></li>
+      <li><b>4</b><span>Confirm &amp; lock</span></li>
+    </ol>
+
+    <div class="wz-pane active">
+      <div class="form-section"><h4>Pre-close checklist</h4><p>9 of 11 checks passed · 2 warnings (non-blocking)</p></div>
+      <ul class="period-checks list">
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>All periods JUL–SEP closed or ready</b><small>JUL locked, AUG closed, SEP ready to close</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Trial balance is balanced</b><small>Dr = Cr = Rs 341,992,600</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Bank accounts reconciled</b><small>Meezan, HBL, UBL, Bank Alfalah — to 30 Sep 2026</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Depreciation run for all periods</b><small>Rs 1,560,000 YTD</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Sub-ledgers agree to control accounts</b><small>AR Rs 38,640,000 · AP Rs 21,800,000 · Stock Rs 26,870,000</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Payroll posted</b><small>PR-2026-07, PR-2026-08, PR-2026-09</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Suspense account is nil</b><small>2999 Suspense — balance Rs 0</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Tax provision booked</b><small>Rs 2,592,600 @ 29% of PBT</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item ok"><span class="icon-well"><i data-lucide="circle-check"></i></span><div><b>Inter-branch accounts net to zero</b><small>Lahore ↔ Karachi ↔ Islamabad ↔ Faisalabad</small></div><span class="spacer"></span><span class="badge good">OK</span></li>
+        <li class="list-item warn"><span class="icon-well yellow"><i data-lucide="alert-triangle"></i></span><div><b>6 draft vouchers in SEP-2026</b><small>Post or move before final close</small></div><span class="spacer"></span><a class="btn ghost sm" href="#/app/accounting/vouchers">Review</a></li>
+        <li class="list-item warn"><span class="icon-well yellow"><i data-lucide="alert-triangle"></i></span><div><b>Debtors older than 180 days: Rs 1,284,000</b><small>Consider provision for doubtful debts</small></div><span class="spacer"></span><a class="btn ghost sm" href="#/app/receivables/ageing">AR ageing</a></li>
+      </ul>
+      <div class="form-actions"><button class="btn secondary" data-toast="Checks re-run · 9 passed, 2 warnings"><i data-lucide="refresh-cw"></i>Re-run checks</button><button class="btn primary" data-next>Continue</button></div>
+    </div>
+
+    <div class="wz-pane">
+      <div class="form-section"><h4>Year-end adjustments</h4><p>Proposed entries — select which to include in the close.</p></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th></th><th>Adjustment</th><th>Debit</th><th>Credit</th><th class="num">Amount</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked disabled></td><td>Accrued utilities — September<small>JV-2026-000413</small></td><td>6103 Utilities</td><td>2120 Accrued Liabilities</td><td class="num">182,000.00</td><td><span class="badge good">Posted</span></td></tr>
+          <tr><td><input type="checkbox" checked disabled></td><td>Depreciation — September<small>JV-2026-000412</small></td><td>6107 Depreciation Expense</td><td>115x Accumulated Depreciation</td><td class="num">520,000.00</td><td><span class="badge good">Posted</span></td></tr>
+          <tr><td><input type="checkbox" checked disabled></td><td>Income tax provision Q1</td><td>8101 Taxation</td><td>2240 Provision for Taxation</td><td class="num">2,592,600.00</td><td><span class="badge good">Posted</span></td></tr>
+          <tr><td><input type="checkbox"></td><td>Provision for doubtful debts (50% of &gt;180 days)</td><td>6111 Bad Debts</td><td>1305 Provision for Doubtful Debts</td><td class="num">642,000.00</td><td><span class="badge warn">Proposed</span></td></tr>
+          <tr><td><input type="checkbox"></td><td>Stock obsolescence — slow-moving SKUs</td><td>5105 Stock Write-down</td><td>1205 Stock Provision</td><td class="num">215,000.00</td><td><span class="badge warn">Proposed</span></td></tr>
+          <tr><td><input type="checkbox"></td><td>Gratuity provision true-up (actuarial)</td><td>6101 Salaries &amp; Wages</td><td>2310 Staff Gratuity</td><td class="num">380,000.00</td><td><span class="badge neutral">Awaiting actuary</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted mt">Proposed adjustments are excluded from this dry run unless ticked. Figures on the next step reflect posted entries only.</p>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-next>Continue</button></div>
+    </div>
+
+    <div class="wz-pane">
+      <div class="form-section"><h4>Closing entries preview</h4><p>Transfer of income and expense balances to 3201 Retained Earnings · JV-2027-CLOSE (draft)</p></div>
+      <div class="table-wrap"><table class="tbl stmt">
+        <thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead>
+        <tbody>
+          <tr class="sec"><td colspan="3">Close income accounts</td></tr>
+          <tr><td class="ind1">4101 Sales — Goods</td><td class="num dr">92,450,000.00</td><td class="num zero">—</td></tr>
+          <tr><td class="ind1">4102 Sales — Services</td><td class="num dr">6,180,000.00</td><td class="num zero">—</td></tr>
+          <tr><td class="ind1">4910 Other Income</td><td class="num dr">420,000.00</td><td class="num zero">—</td></tr>
+          <tr class="sec"><td colspan="3">Close expense accounts</td></tr>
+          <tr><td class="ind1">4105 Sales Returns &amp; Discounts</td><td class="num zero">—</td><td class="num cr">1,630,000.00</td></tr>
+          <tr><td class="ind1">5101 Cost of Goods Sold</td><td class="num zero">—</td><td class="num cr">65,700,000.00</td></tr>
+          <tr><td class="ind1">6101–6110 Operating expenses (10 accounts)</td><td class="num zero">—</td><td class="num cr">21,460,000.00</td></tr>
+          <tr><td class="ind1">7101 Mark-up on Running Finance</td><td class="num zero">—</td><td class="num cr">1,180,000.00</td></tr>
+          <tr><td class="ind1">7102 Bank Charges</td><td class="num zero">—</td><td class="num cr">140,000.00</td></tr>
+          <tr><td class="ind1">8101 Taxation</td><td class="num zero">—</td><td class="num cr">2,592,600.00</td></tr>
+          <tr class="sec"><td colspan="3">Transfer to equity</td></tr>
+          <tr><td class="ind1">3201 Retained Earnings — net profit</td><td class="num zero">—</td><td class="num cr">6,347,400.00</td></tr>
+          <tr class="total"><td>Total</td><td class="num">99,050,000.00</td><td class="num">99,050,000.00</td></tr>
+        </tbody>
+      </table></div>
+      <div class="grid-3 mt">
+        <div class="panel"><small class="muted">Retained earnings — opening</small><h3>Rs 58,400,000</h3></div>
+        <div class="panel"><small class="muted">Add: net profit</small><h3 class="dr">Rs 6,347,400</h3></div>
+        <div class="panel"><small class="muted">Retained earnings — after close</small><h3>Rs 64,747,400</h3></div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-next>Continue</button></div>
+    </div>
+
+    <div class="wz-pane">
+      <div class="form-section"><h4>Confirm &amp; lock</h4><p>Review the summary, then run the close.</p></div>
+      <div class="grid-2">
+        <div class="dl">
+          <div><span>Fiscal year</span><b>FY 2026-27 (dry run to 30 Sep 2026)</b></div>
+          <div><span>Net profit transferred</span><b>Rs 6,347,400</b></div>
+          <div><span>Closing journal</span><b>1 voucher · 13 lines</b></div>
+          <div><span>Opening balances FY 2027-28</span><b>Balance sheet accounts only</b></div>
+          <div><span>Warnings acknowledged</span><b>2</b></div>
+        </div>
+        <div class="stack">
+          <label class="check"><input type="checkbox" checked> Lock all 12 periods after closing</label>
+          <label class="check"><input type="checkbox" checked> Carry forward balance sheet balances to FY 2027-28</label>
+          <label class="check"><input type="checkbox"> Generate audit pack (TB, GL, statements) as PDF</label>
+          <label class="check"><input type="checkbox" checked> Notify Ahmed Raza and Sana Javed</label>
+        </div>
+      </div>
+      <div class="banner warn mt"><i data-lucide="shield-alert"></i><div><b>Final close is irreversible without CEO approval</b><p>In dry-run mode the steps are simulated and a report is produced instead.</p></div></div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-toast="Dry run completed — no issues blocking year-end close"><i data-lucide="lock"></i>Run dry-run close</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REPORTS: HUB ============================ -->
+
+
+<!-- ============================ REPORTS: TRIAL BALANCE ============================ -->
+
+
+<!-- ============================ REPORTS: PROFIT & LOSS ============================ -->
+
+
+<!-- ============================ REPORTS: BALANCE SHEET ============================ -->
+
+
+<!-- ============================ REPORTS: CASH FLOW ============================ -->
+
+
+<!-- ============================ REPORTS: GENERAL LEDGER ============================ -->
+
+
+<!-- ============================ REPORTS: DAY BOOK ============================ -->
+
+
+<!-- ============================ REPORTS: REPORT STUDIO ============================ -->
+<section class="screen" data-route="app/reports/studio" data-title="Report Studio">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Analytics / Report Studio</div>
+      <h1>Report Studio</h1>
+      <p>Build custom reports from any data source — pick columns, filter, group and visualise, then save or schedule.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>Untitled — Sales by customer &amp; branch</option><option>Open saved report…</option></select>
+      <button class="btn secondary" data-toast="Exported to Excel"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-open="rpt-studio-save"><i data-lucide="save"></i>Save &amp; schedule</button>
+    </div>
+  </div>
+
+  <div class="split-l">
+    <div class="panel">
+      <div class="form-section"><h4>1. Data source</h4></div>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <label><span>Source</span><select><option>Sales invoices</option><option>Vendor bills</option><option>GL transactions</option><option>Customers</option><option>Stock movements</option><option>Payroll lines</option></select></label>
+        <label><span>Date range</span><select><option>Q1 FY 2026-27 (Jul–Sep 2026)</option><option>This month</option><option>Year to date</option></select></label>
+      </div>
+
+      <div class="form-section"><h4>2. Columns</h4><p>Click to toggle</p></div>
+      <div class="row" style="flex-wrap:wrap">
+        <label class="ck"><input type="checkbox" checked><span>Customer</span></label>
+        <label class="ck"><input type="checkbox" checked><span>Branch</span></label>
+        <label class="ck"><input type="checkbox" checked><span>Invoice count</span></label>
+        <label class="ck"><input type="checkbox" checked><span>Net sales</span></label>
+        <label class="ck"><input type="checkbox" checked><span>GST</span></label>
+        <label class="ck"><input type="checkbox" checked><span>Gross total</span></label>
+        <label class="ck"><input type="checkbox"><span>Salesperson</span></label>
+        <label class="ck"><input type="checkbox"><span>City</span></label>
+        <label class="ck"><input type="checkbox"><span>Further tax</span></label>
+        <label class="ck"><input type="checkbox"><span>Margin %</span></label>
+        <label class="ck"><input type="checkbox"><span>Due date</span></label>
+      </div>
+
+      <div class="form-section"><h4>3. Filters</h4></div>
+      <div class="stack">
+        <div class="row small"><select><option>Status</option></select><select><option>is</option></select><select><option>Posted</option></select><button class="icon-btn-sm" onclick="const r=this.closest('tr,.list-item,.card'),b=r&&r.querySelector('.badge.dot,.badge');if(b){b.className='badge danger dot';b.textContent='Rejected'}if(r){r.classList.remove('row-flash');void r.offsetWidth;r.classList.add('row-flash')}FS.toast('Rejected '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'warn'})"><i data-lucide="x"></i></button></div>
+        <div class="row small"><select><option>Net sales</option></select><select><option>&ge;</option></select><input value="1,000,000" style="width:110px"><button class="icon-btn-sm" onclick="const r=this.closest('tr,.list-item,.card'),b=r&&r.querySelector('.badge.dot,.badge');if(b){b.className='badge danger dot';b.textContent='Rejected'}if(r){r.classList.remove('row-flash');void r.offsetWidth;r.classList.add('row-flash')}FS.toast('Rejected '+(this.closest('tr,.list-item,.card,.panel')?.querySelector('b,a,h3')?.innerText||'item').split(String.fromCharCode(10))[0].trim(),{tone:'warn'})"><i data-lucide="x"></i></button></div>
+        <button class="btn ghost sm" onclick="const b=this;FS.menu(b,[{label:'Created by me',icon:'user',onClick:()=>FS.toast('Filter: created by me',{tone:'info'})},{label:'Amount above Rs 100,000',icon:'banknote',onClick:()=>FS.toast('Filter: amount above Rs 100,000',{tone:'info'})},{label:'Has attachments',icon:'paperclip',onClick:()=>FS.toast('Filter: has attachments',{tone:'info'})},{sep:true},{label:'Clear filters',icon:'x',onClick:()=>FS.toast('Filters cleared',{tone:'info'})}])"><i data-lucide="plus"></i>Add filter</button>
+      </div>
+
+      <div class="form-section"><h4>4. Group &amp; sort</h4></div>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <label><span>Group by</span><select><option>Customer</option><option>Branch</option><option>Month</option><option>Salesperson</option></select></label>
+        <label><span>Sort by</span><select><option>Net sales — descending</option><option>Customer — A to Z</option></select></label>
+        <label><span>Limit</span><select><option>Top 8</option><option>Top 20</option><option>All rows</option></select></label>
+        <label class="check"><input type="checkbox" checked> Show totals row</label>
+      </div>
+      <div class="form-actions"><button class="btn secondary sm" onclick="this.closest('.panel,.modal')?.querySelectorAll('input,textarea,select').forEach(i=>{if(i.type==='checkbox')i.checked=i.defaultChecked;else if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=i.defaultValue});FS.toast('Reset to defaults',{tone:'info'})">Reset</button><button class="btn primary sm" data-toast="Preview refreshed · 8 rows"><i data-lucide="play"></i>Run</button></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel" data-tabs>
+        <div class="panel-head">
+          <div><h3>Sales by customer &amp; branch</h3><p>Q1 FY 2026-27 · posted invoices · net sales ≥ Rs 1,000,000 · top 8</p></div>
+          <div class="panel-actions"><div class="tabs"><button class="active" data-tab="tbl">Table</button><button data-tab="chart">Chart</button></div></div>
+        </div>
+        <div class="tab-pane active" data-pane="tbl">
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Customer</th><th>Branch</th><th class="num">Invoices</th><th class="num">Net sales</th><th class="num">GST</th><th class="num">Gross total</th></tr></thead>
+            <tbody>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Engro Foods</a></td><td>Lahore HQ</td><td class="num">18</td><td class="num">15,640,000.00</td><td class="num">2,815,200.00</td><td class="num">18,455,200.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Metro Cash &amp; Carry</a></td><td>Lahore HQ</td><td class="num">24</td><td class="num">14,280,000.00</td><td class="num">2,570,400.00</td><td class="num">16,850,400.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">City Mart Superstores</a></td><td>Karachi</td><td class="num">21</td><td class="num">10,960,000.00</td><td class="num">1,972,800.00</td><td class="num">12,932,800.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Al-Fatah Stores</a></td><td>Lahore HQ</td><td class="num">19</td><td class="num">8,740,000.00</td><td class="num">1,573,200.00</td><td class="num">10,313,200.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Packages Ltd</a></td><td>Lahore HQ</td><td class="num">9</td><td class="num">7,350,000.00</td><td class="num">1,323,000.00</td><td class="num">8,673,000.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Hashoo Hotels</a></td><td>Islamabad</td><td class="num">12</td><td class="num">5,210,000.00</td><td class="num">937,800.00</td><td class="num">6,147,800.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Lucky Cement</a></td><td>Karachi</td><td class="num">6</td><td class="num">4,480,000.00</td><td class="num">806,400.00</td><td class="num">5,286,400.00</td></tr>
+              <tr data-qv-route="app/customers/view"><td><a class="link" href="#/app/customers/view">Shifa International</a></td><td>Islamabad</td><td class="num">11</td><td class="num">4,120,000.00</td><td class="num">741,600.00</td><td class="num">4,861,600.00</td></tr>
+              <tr class="total"><td colspan="2">Total — top 8 (73.0% of net revenue)</td><td class="num">120</td><td class="num">70,780,000.00</td><td class="num">12,740,400.00</td><td class="num">83,520,400.00</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="tab-pane" data-pane="chart">
+          <div class="row mb"><div class="seg"><button class="active">Bar</button><button>Line</button><button>Donut</button></div><span class="spacer"></span><span class="small muted">Net sales · Rs millions</span></div>
+          <div class="bars">
+            <div class="bar" style="--h:100%"><i></i><span>Engro</span></div>
+            <div class="bar" style="--h:91%"><i></i><span>Metro</span></div>
+            <div class="bar" style="--h:70%"><i></i><span>City Mart</span></div>
+            <div class="bar" style="--h:56%"><i></i><span>Al-Fatah</span></div>
+            <div class="bar" style="--h:47%"><i></i><span>Packages</span></div>
+            <div class="bar" style="--h:33%"><i></i><span>Hashoo</span></div>
+            <div class="bar" style="--h:29%"><i></i><span>Lucky</span></div>
+            <div class="bar" style="--h:26%"><i></i><span>Shifa</span></div>
+          </div>
+          <div class="legend"><span><i style="background:var(--primary)"></i>Net sales Q1 FY 2026-27</span></div>
+        </div>
+      </div>
+      <div class="banner info"><i data-lucide="info"></i><div><b>Tip</b><p>Group by Branch and switch to Chart to compare Lahore HQ, Karachi, Islamabad and Faisalabad side by side.</p></div></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="rpt-studio-save">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Save &amp; schedule report</h2><p>Saved reports appear under Reports Hub → Favourites.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Report name *</span><input value="Sales by customer &amp; branch — quarterly"></label>
+          <label><span>Folder</span><select><option>Sales</option><option>Finance</option><option>Management pack</option></select></label>
+          <label><span>Visibility</span><select><option>Finance &amp; Sales roles</option><option>Only me</option><option>Everyone</option></select></label>
+          <label class="check full"><input type="checkbox" checked> Add to my favourites</label>
+          <label class="check full"><input type="checkbox" checked> Email on a schedule</label>
+          <label><span>Frequency</span><select><option>Monthly · 3rd at 08:00</option><option>Weekly · Monday</option><option>Quarterly</option></select></label>
+          <label><span>Format</span><select><option>Excel (.xlsx)</option><option>PDF</option><option>CSV</option></select></label>
+          <label class="full"><span>Recipients</span><input value="bilal.khan@alnoor.pk, sana.javed@alnoor.pk"></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Report saved and scheduled">Save report</button></div>
+    </div>
+  </div>
+</section>

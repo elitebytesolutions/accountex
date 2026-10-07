@@ -1,0 +1,185 @@
+<!-- ================= 3A · Platform Admin plus (Agent E, prefix ap-) =================
+     Shells only: page heads are static, bodies are rendered by src/9B-admin-plus.js on first enter. -->
+
+<section class="screen ap-screen" data-route="admin/tenants" data-title="All Tenants">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Tenants / All Tenants</div>
+      <h1>All Tenants</h1>
+      <p>Every organisation on Finsoft Cloud: lifecycle, health, revenue and seats in one place.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">128 businesses trust us</span>
+      <button class="btn secondary" data-ap-act="export-tenants"><i data-lucide="download"></i>Export CSV</button>
+      <a class="btn primary" href="#/admin/tenants/new"><i data-lucide="plus"></i>Onboard tenant</a>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/tenants/view" data-title="Tenant 360">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><a class="link" href="#/admin/tenants">Tenants</a> / ALNOOR</div>
+      <h1>Tenant 360</h1>
+      <p>Health, people, usage, billing and audit for Al-Noor Enterprises, all in one view.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="#/admin/tenants"><i data-lucide="arrow-left"></i>All tenants</a>
+      <a class="btn secondary" href="#/admin/support"><i data-lucide="life-buoy"></i>Tickets <span class="badge warn">2</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/staff" data-title="Platform Team">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Operations / Platform Team</div>
+      <h1>Platform Team</h1>
+      <p>Finsoft Cloud staff with console access, their tenant scope and what each role is allowed to do.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/audit"><i data-lucide="scroll-text"></i>Audit log</a>
+      <button class="btn primary" data-ap-act="add-staff"><i data-lucide="user-plus"></i>Add staff</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/analytics" data-title="SaaS Analytics">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Growth / SaaS Analytics</div>
+      <h1>SaaS Analytics</h1>
+      <p>Recurring revenue, retention and acquisition efficiency for Finsoft Cloud. All figures in PKR, excluding tax.</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg" data-ap-period><button data-p="1">1M</button><button data-p="3">3M</button><button data-p="6">6M</button><button class="active" data-p="12">12M</button></div>
+      <button class="btn secondary" data-toast="Board pack exported to PDF"><i data-lucide="file-down"></i>Board pack</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/dunning" data-title="Dunning &amp; Collections">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Dunning &amp; Collections</div>
+      <h1>Dunning &amp; Collections</h1>
+      <p>Failed payments, smart retries across JazzCash, Easypaisa, Raast and cards, and the grace to read-only to suspend policy.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/invoices"><i data-lucide="receipt-text"></i>Platform invoices</a>
+      <button class="btn primary" data-ap-act="retry-all"><i data-lucide="refresh-cw"></i>Retry all due</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/usage" data-title="Usage &amp; Quotas">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Usage &amp; Quotas</div>
+      <h1>Usage &amp; Quotas</h1>
+      <p>Metered usage against plan limits for every tenant. Bars turn amber at 80%, red at 100% and striped when over.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/plans"><i data-lucide="tags"></i>Plan limits</a>
+      <button class="btn primary" data-ap-act="add-rule"><i data-lucide="bell-plus"></i>New alert rule</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/partners" data-title="Partners &amp; Coupons">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Growth / Partners &amp; Coupons</div>
+      <h1>Partners &amp; Coupons</h1>
+      <p>Reseller network, commission payouts and discount codes for campaigns like Ramzan and 14 August.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="Partner portal invite link copied"><i data-lucide="link"></i>Partner invite link</button>
+      <button class="btn primary" data-ap-act="new-coupon"><i data-lucide="ticket-percent"></i>New coupon</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/leads" data-title="Leads CRM">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Growth / Leads CRM</div>
+      <h1>Leads CRM</h1>
+      <p>Drag deals from lead to demo, trial and paid. Values are monthly recurring revenue in PKR.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">Close the gap to Rs 5M</span>
+      <button class="btn primary" data-ap-act="new-lead"><i data-lucide="plus"></i>New lead</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/comms" data-title="Communications">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Support / Communications</div>
+      <h1>Communications</h1>
+      <p>Lifecycle templates in English and Urdu across email, SMS and WhatsApp, with delivery tracking.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/announcements"><i data-lucide="megaphone"></i>Announcements</a>
+      <button class="btn primary" data-ap-act="broadcast"><i data-lucide="radio-tower"></i>Broadcast</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/security" data-title="Security &amp; Privacy">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Security &amp; Privacy</div>
+      <h1>Security &amp; Privacy</h1>
+      <p>Console sign-in, two-factor, network allow-lists, sessions and tenant data requests.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/audit"><i data-lucide="scroll-text"></i>Audit log</a>
+      <button class="btn primary" data-ap-act="sec-save"><i data-lucide="shield-check"></i>Save policies</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/status" data-title="Status &amp; Incidents">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Status &amp; Incidents</div>
+      <h1>Status &amp; Incidents</h1>
+      <p>What tenants see on status.finsoft.pk, live incident updates and planned maintenance.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/system"><i data-lucide="heart-pulse"></i>System health</a>
+      <button class="btn danger" data-ap-act="declare"><i data-lucide="siren"></i>Declare incident</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/integrations" data-title="API &amp; Webhooks">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / API &amp; Webhooks</div>
+      <h1>API &amp; Webhooks</h1>
+      <p>Per-tenant API keys and scopes, webhook endpoints and every delivery with replay.</p>
+    </div>
+    <div class="head-actions">
+      <label class="ap-tenant-pick"><i data-lucide="building-2"></i><select data-ap-tenant></select></label>
+      <button class="btn primary" data-ap-act="new-key"><i data-lucide="key-round"></i>Create API key</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen ap-screen" data-route="admin/tax-master" data-title="Tax Master">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Tax Master</div>
+      <h1>Tax Master</h1>
+      <p>Federal and provincial sales tax, withholding sections and the FBR / PRAL connection used by every tenant.</p>
+    </div>
+    <div class="head-actions">
+      <span class="pill"><i data-lucide="calendar-check"></i>Tax year <b>2027</b></span>
+      <button class="btn primary" data-ap-act="tax-publish"><i data-lucide="upload-cloud"></i>Publish to tenants</button>
+    </div>
+  </div>
+</section>

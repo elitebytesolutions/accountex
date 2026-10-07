@@ -1,0 +1,68 @@
+<!-- ================= 3B · Feature Management (Agent D, prefix ff-) =================
+     Flags, flag detail, segments, plan entitlements and change requests.
+     Shells only: bodies are rendered by src/9J-flags.js on enter and share one in-memory store. -->
+
+<section class="screen ff-screen" data-route="admin/features" data-title="Feature Flags">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Billing / Feature Management</div>
+      <h1>Feature Flags</h1>
+      <p>Release, kill-switch, ops, experiment and entitlement flags across Dev, Staging and Production, with approvals for every Production change.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">ship dark, light it up slowly</span>
+      <a class="btn secondary" href="#/admin/change-requests"><i data-lucide="git-pull-request"></i>Change requests <span class="badge warn" data-ff-pending-badge>2</span></a>
+      <button class="btn primary" data-ff-act="new-flag"><i data-lucide="plus"></i>New flag</button>
+    </div>
+  </div>
+  <div data-ff-mount></div>
+</section>
+
+<section class="screen ff-screen" data-route="admin/features/view" data-title="Flag Detail">
+  <div data-ff-mount></div>
+</section>
+
+<section class="screen ff-screen" data-route="admin/segments" data-title="Segments">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><a class="link" href="#/admin/features">Feature Management</a> / Segments</div>
+      <h1>Segments</h1>
+      <p>Reusable groups of tenants. Define them once and target them from any flag, so a change to a segment updates every flag that uses it.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/features"><i data-lucide="flag"></i>Flags</a>
+      <button class="btn primary" data-ff-act="new-segment"><i data-lucide="plus"></i>New segment</button>
+    </div>
+  </div>
+  <div data-ff-mount></div>
+</section>
+
+<section class="screen ff-screen" data-route="admin/entitlements" data-title="Plan Entitlements">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><a class="link" href="#/admin/features">Feature Management</a> / Plan Entitlements</div>
+      <h1>Plan Entitlements</h1>
+      <p>What each plan includes: modules, features and limits. These are kept separate from release flags, so a rollout never changes what a customer has paid for.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/plans"><i data-lucide="tags"></i>Plans &amp; pricing</a>
+      <button class="btn primary" data-ff-act="ent-review" disabled><i data-lucide="eye"></i>Review changes</button>
+    </div>
+  </div>
+  <div data-ff-mount></div>
+</section>
+
+<section class="screen ff-screen" data-route="admin/change-requests" data-title="Change Requests">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow"><a class="link" href="#/admin/features">Feature Management</a> / Change Requests</div>
+      <h1>Change Requests</h1>
+      <p>Every Production change to a flag needs a second approver. Review the diff, talk it through and approve or reject.</p>
+    </div>
+    <div class="head-actions">
+      <span class="tagline">four eyes on prod</span>
+      <a class="btn secondary" href="#/admin/features"><i data-lucide="flag"></i>Flags</a>
+    </div>
+  </div>
+  <div data-ff-mount></div>
+</section>

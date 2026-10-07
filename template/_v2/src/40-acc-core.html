@@ -1,0 +1,1309 @@
+<!-- ============================================================
+     40-acc-core.html — Dashboard, Today, Notifications, Accounting core, Bank, Cash
+     ============================================================ -->
+
+<!-- ===================== DASHBOARD ===================== -->
+
+
+<!-- ===================== TODAY'S WORK ===================== -->
+<section class="screen" data-route="app/today" data-title="Today's Work">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workspace / Today</div>
+      <h1>Today's Work</h1>
+      <p>Thursday, 01 October 2026 — first day of Q2. Here is what's on your plate, Sana.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="calendar-days"></i>Calendar</button>
+      <button class="btn primary" data-open="acc-new-task"><i data-lucide="plus"></i>Add Task</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid c5 mb">
+    <div class="kpi"><div class="kpi-top"><span>Tasks due today</span><span class="icon-well"><i data-lucide="list-checks"></i></span></div><strong>8</strong><small>3 completed</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Overdue</span><span class="icon-well"><i data-lucide="alarm-clock"></i></span></div><strong>2</strong><small class="down">Since 29 Sep</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Awaiting approval</span><span class="icon-well"><i data-lucide="stamp"></i></span></div><strong>7</strong><small>Rs 17.2M total value</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Due today</span><span class="icon-well"><i data-lucide="calendar-clock"></i></span></div><strong>Rs 3,860,400</strong><small>Invoices, bills &amp; cheques</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Daily progress</span><span class="icon-well"><i data-lucide="gauge"></i></span></div><strong>38%</strong><div class="progress" style="margin-top:6px"><i style="width:38%"></i></div></div>
+  </div>
+
+  <div class="panel mb">
+    <div class="panel-head"><div><h3>This week</h3><p>September 28 – October 4, 2026</p></div><div class="panel-actions"><button class="btn icon sm secondary"><i data-lucide="chevron-left"></i></button><button class="btn icon sm secondary"><i data-lucide="chevron-right"></i></button></div></div>
+    <div class="grid-4" style="grid-template-columns:repeat(7,1fr)">
+      <div class="card"><small class="muted">Mon</small><h3>28</h3><em class="badge good">Payroll accrual</em></div>
+      <div class="card"><small class="muted">Tue</small><h3>29</h3><em class="badge danger">2 overdue</em></div>
+      <div class="card"><small class="muted">Wed</small><h3>30</h3><em class="badge info">Month end</em></div>
+      <div class="card" style="border-color:var(--brand-600);box-shadow:0 0 0 2px var(--brand-600)"><small class="muted">Thu · Today</small><h3>01</h3><em class="badge warn">8 tasks</em></div>
+      <div class="card"><small class="muted">Fri</small><h3>02</h3><em class="badge neutral">PDC × 3</em></div>
+      <div class="card"><small class="muted">Sat</small><h3>03</h3><span class="muted small">—</span></div>
+      <div class="card"><small class="muted">Sun</small><h3>04</h3><span class="muted small">Weekend</span></div>
+    </div>
+  </div>
+
+  <div class="split mb">
+    <div class="stack">
+      <div class="panel flush">
+        <div class="panel-head">
+          <div><h3>My task list</h3><p>Sorted by due time</p></div>
+          <div class="panel-actions"><div class="chips"><button class="active">All <i>8</i></button><button>Pending <i>3</i></button><button>In progress <i>2</i></button><button>Done <i>3</i></button></div></div>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th><input type="checkbox"></th><th>Task</th><th>Module</th><th>Priority</th><th>Due</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><input type="checkbox"></td><td><b>Close September period</b><small>Lock Sep 2026 after final review</small></td><td><a class="link" href="#/app/periods">Period Close</a></td><td><span class="badge danger dot">High</span></td><td>10:00 AM</td><td><span class="badge warn">In progress</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox"></td><td><b>Deposit 3 PDC cheques</b><small>Shifa, Packages, Engro Foods</small></td><td><a class="link" href="#/app/bank/cheque-register">Banking</a></td><td><span class="badge danger dot">High</span></td><td>11:00 AM</td><td><span class="badge neutral">Pending</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox"></td><td><b>Reconcile Meezan Bank — 0123</b><small>14 unmatched statement lines</small></td><td><a class="link" href="#/app/bank/reconciliation">Banking</a></td><td><span class="badge warn dot">Medium</span></td><td>12:30 PM</td><td><span class="badge warn">In progress</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox"></td><td><b>File Sales Tax Return — Sep</b><small>Annex-C reconciliation with FBR</small></td><td><a class="link" href="#/app/tax/sales-tax">Tax</a></td><td><span class="badge danger dot">High</span></td><td>02:00 PM</td><td><span class="badge danger">Overdue</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox"></td><td><b>Follow up Lucky Cement receivable</b><small>Rs 1,304,990 over 90 days</small></td><td><a class="link" href="#/app/receivables/credit">Receivables</a></td><td><span class="badge warn dot">Medium</span></td><td>03:00 PM</td><td><span class="badge neutral">Pending</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox" checked></td><td><b>Review payroll accrual JV</b><small>JV-2026-000045</small></td><td><a class="link" href="#/app/accounting/vouchers/view">Accounting</a></td><td><span class="badge info dot">Low</span></td><td>09:00 AM</td><td><span class="badge good">Done</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox" checked></td><td><b>Top up petty cash — Karachi</b><small>Imprest Rs 50,000</small></td><td><a class="link" href="#/app/cash/petty">Cash</a></td><td><span class="badge info dot">Low</span></td><td>09:30 AM</td><td><span class="badge good">Done</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            <tr><td><input type="checkbox" checked></td><td><b>Post WHT challan 153(1)(a)</b><small>CPR for September deductions</small></td><td><a class="link" href="#/app/tax/wht">Tax</a></td><td><span class="badge warn dot">Medium</span></td><td>09:45 AM</td><td><span class="badge good">Done</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head">
+          <div><h3>Approvals queue</h3><p>Items routed to Finance Manager</p></div>
+          <div class="panel-actions"><button class="btn secondary sm" data-toast="5 items approved"><i data-lucide="check-check"></i>Approve selected</button></div>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th><input type="checkbox"></th><th>Document</th><th>Requested by</th><th>Submitted</th><th class="num">Amount</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000045</a><small>Payroll accrual — September</small></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Accountant</small></div></div></td><td>Today, 08:42</td><td class="num">14,620,000.00</td><td class="actions"><button class="btn sm primary" data-toast="Voucher approved">Approve</button> <button class="btn sm ghost" data-toast="Sent back">Reject</button></td></tr>
+            <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/payables/payments">PAY-2026-000133</a><small>Siemens Pakistan — switchgear</small></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td>Yesterday</td><td class="num">1,560,000.00</td><td class="actions"><button class="btn sm primary" data-toast="Payment approved">Approve</button> <button class="btn sm ghost" data-toast="Sent back">Reject</button></td></tr>
+            <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/purchases/orders">PO-2026-000101</a><small>Habib Packaging — cartons</small></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td>Yesterday</td><td class="num">980,000.00</td><td class="actions"><button class="btn sm primary" data-toast="PO approved">Approve</button> <button class="btn sm ghost" data-toast="Sent back">Reject</button></td></tr>
+            <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/cash/expenses">EXP-0219</a><small>Client visit — Islamabad</small></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales Exec</small></div></div></td><td>30 Sep</td><td class="num">24,600.00</td><td class="actions"><button class="btn sm primary" data-toast="Claim approved">Approve</button> <button class="btn sm ghost" data-toast="Sent back">Reject</button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Due today</h3><p>Rs 3,860,400 across 7 items</p></div></div>
+        <div class="form-section"><h4>Invoices due (receivable)</h4></div>
+        <div class="list mb">
+          <a class="list-item" href="#/app/sales/invoices/view"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>INV-2026-000377</b><small>Packages Ltd</small></div><span class="spacer"></span><b>Rs 865,500</b></a>
+          <a class="list-item" href="#/app/sales/invoices/view"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>INV-2026-000384</b><small>Hashoo Hotels</small></div><span class="spacer"></span><b>Rs 412,300</b></a>
+        </div>
+        <div class="form-section"><h4>Bills due (payable)</h4></div>
+        <div class="list mb">
+          <a class="list-item" href="#/app/purchases/bills"><span class="icon-well"><i data-lucide="receipt"></i></span><div><b>BILL-2026-000248</b><small>PTCL · broadband</small></div><span class="spacer"></span><b>Rs 64,800</b></a>
+          <a class="list-item" href="#/app/purchases/bills"><span class="icon-well"><i data-lucide="receipt"></i></span><div><b>BILL-2026-000252</b><small>LESCO · Lahore HQ</small></div><span class="spacer"></span><b>Rs 297,400</b></a>
+        </div>
+        <div class="form-section"><h4>Cheques maturing</h4></div>
+        <div class="list">
+          <a class="list-item" href="#/app/bank/cheque-register"><span class="icon-well"><i data-lucide="scroll"></i></span><div><b>CHQ 10045821 · HBL</b><small>Shifa International</small></div><span class="spacer"></span><b>Rs 1,250,000</b></a>
+          <a class="list-item" href="#/app/bank/cheque-register"><span class="icon-well"><i data-lucide="scroll"></i></span><div><b>CHQ 00782214 · UBL</b><small>Engro Foods</small></div><span class="spacer"></span><b>Rs 720,400</b></a>
+          <a class="list-item" href="#/app/bank/cheque-register"><span class="icon-well"><i data-lucide="scroll"></i></span><div><b>CHQ 55102931 · Meezan</b><small>Issued to Nishat Mills</small></div><span class="spacer"></span><b class="cr">Rs 250,000</b></a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div><h3>Agenda</h3><p>Meetings &amp; reminders</p></div><div class="panel-actions"><button class="btn ghost sm"><i data-lucide="bell-plus"></i>Remind me</button></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>09:30 · Finance stand-up</b><small>With Hira Ali &amp; Ahmed Raza</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>11:00 · Call HBL relationship manager</b><small>Running finance limit renewal</small></div></div>
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>15:00 · Budget review Q2</b><small>Board room, Lahore HQ</small></div></div>
+          <div class="tl-item"><span class="tl-dot danger"></span><div><b>17:00 · FBR STR deadline reminder</b><small>Sales tax return for Sep 2026</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="acc-new-task">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Add task</h2><p>Create a personal or delegated task</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Title *</span><input placeholder="e.g. Reconcile UBL — 2294"></label>
+          <label><span>Module</span><select><option>Accounting</option><option>Banking</option><option>Receivables</option><option>Payables</option><option>Tax</option><option>HR</option></select></label>
+          <label><span>Assign to</span><select><option>Sana Javed (me)</option><option>Hira Ali</option><option>Usman Ali</option><option>Ayesha Noor</option></select></label>
+          <label><span>Due date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Due time</span><input type="time" value="16:00"></label>
+          <label><span>Priority</span><select><option>High</option><option selected>Medium</option><option>Low</option></select></label>
+          <label><span>Repeat</span><select><option>Never</option><option>Daily</option><option>Weekly</option><option>Monthly</option></select></label>
+          <label class="full"><span>Notes</span><textarea rows="3"></textarea></label>
+          <label class="check"><input type="checkbox" checked> Remind me 30 minutes before</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Task added">Add task</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NOTIFICATIONS ===================== -->
+<section class="screen" data-route="app/notifications" data-title="Notifications">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">System / Notifications</div>
+      <h1>Notification Centre</h1>
+      <p>Approvals, finance alerts, HR events and system messages in one place.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="All notifications marked as read"><i data-lucide="check-check"></i>Mark all read</button>
+      <a class="btn secondary" href="#/app/profile"><i data-lucide="settings"></i>Preferences</a>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div data-tabs>
+        <div class="tabs">
+          <button class="active" data-tab="all">All <span class="badge neutral">24</span></button>
+          <button data-tab="approvals">Approvals <span class="badge warn">7</span></button>
+          <button data-tab="finance">Finance <span class="badge info">9</span></button>
+          <button data-tab="hr">HR <span class="badge good">5</span></button>
+          <button data-tab="system">System <span class="badge neutral">3</span></button>
+        </div>
+        <div class="tab-pane active" data-pane="all">
+          <div class="form-section"><h4>Today</h4></div>
+          <div class="list mb">
+            <a class="list-item" href="#/app/accounting/vouchers/view" style="background:var(--primary-soft)"><span class="icon-well"><i data-lucide="stamp"></i></span><div><b>Hira Ali submitted JV-2026-000045 for approval</b><small>Payroll accrual · Rs 14,620,000 · 08:42 AM</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/bank/cheque-register" style="background:var(--primary-soft)"><span class="icon-well"><i data-lucide="scroll"></i></span><div><b>3 post-dated cheques mature today</b><small>Total Rs 2,220,400 · 08:00 AM</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/tax/sales-tax" style="background:var(--primary-soft)"><span class="icon-well"><i data-lucide="alert-triangle"></i></span><div><b>Sales tax return for September is overdue</b><small>FBR IRIS deadline was 30 Sep · 07:00 AM</small></div><span class="spacer"></span><span class="badge danger dot">Unread</span></a>
+            <a class="list-item" href="#/app/hr/leave/requests"><span class="icon-well"><i data-lucide="plane"></i></span><div><b>Zainab Raza requested 5 days annual leave</b><small>06–10 Oct 2026 · 07:52 AM</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+          <div class="form-section"><h4>Yesterday</h4></div>
+          <div class="list mb">
+            <a class="list-item" href="#/app/receivables/receipts"><span class="icon-well"><i data-lucide="badge-dollar-sign"></i></span><div><b>Receipt from Packages Ltd allocated</b><small>BRV-2026-000188 · Rs 865,500 · 05:14 PM</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/payables/payments"><span class="icon-well"><i data-lucide="send"></i></span><div><b>Usman Ali requested payment to Siemens Pakistan</b><small>PAY-2026-000133 · Rs 1,560,000 · 03:40 PM</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/receivables/credit"><span class="icon-well"><i data-lucide="shield-alert"></i></span><div><b>Lucky Cement exceeded credit limit</b><small>Exposure Rs 5,240,000 vs limit Rs 5,000,000 · 11:20 AM</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/hr/attendance"><span class="icon-well"><i data-lucide="fingerprint"></i></span><div><b>Biometric device at Faisalabad went offline</b><small>ZK-F22 · reconnected after 18 min · 09:02 AM</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+          <div class="form-section"><h4>Earlier this week</h4></div>
+          <div class="list">
+            <a class="list-item" href="#/app/settings/backup"><span class="icon-well"><i data-lucide="database-backup"></i></span><div><b>Nightly backup completed</b><small>2.4 GB · 28 Sep 02:00 AM</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/inventory/stock"><span class="icon-well"><i data-lucide="package"></i></span><div><b>12 items below reorder level</b><small>Main warehouse Lahore · 27 Sep</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/hr/payroll"><span class="icon-well"><i data-lucide="wallet-cards"></i></span><div><b>Payroll PR-2026-09 disbursed</b><small>148 employees · Rs 14,512,800 · 27 Sep</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="approvals">
+          <div class="list">
+            <a class="list-item" href="#/app/accounting/vouchers/view"><span class="icon-well"><i data-lucide="receipt-text"></i></span><div><b>JV-2026-000045 awaiting approval</b><small>Hira Ali · Rs 14,620,000</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/payables/payments"><span class="icon-well"><i data-lucide="send"></i></span><div><b>PAY-2026-000133 awaiting approval</b><small>Usman Ali · Rs 1,560,000</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/purchases/orders"><span class="icon-well"><i data-lucide="clipboard-list"></i></span><div><b>PO-2026-000101 awaiting approval</b><small>Habib Packaging · Rs 980,000</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/cash/expenses"><span class="icon-well"><i data-lucide="receipt"></i></span><div><b>Expense claim EXP-0219</b><small>Bilal Khan · Rs 24,600</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/hr/leave/requests"><span class="icon-well"><i data-lucide="plane"></i></span><div><b>Leave request — Zainab Raza</b><small>5 days annual leave</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="finance">
+          <div class="list">
+            <a class="list-item" href="#/app/bank/cheque-register"><span class="icon-well"><i data-lucide="scroll"></i></span><div><b>3 PDCs mature today</b><small>Rs 2,220,400</small></div><span class="spacer"></span><span class="badge warn dot">Unread</span></a>
+            <a class="list-item" href="#/app/tax/sales-tax"><span class="icon-well"><i data-lucide="alert-triangle"></i></span><div><b>Sales tax return overdue</b><small>September 2026</small></div><span class="spacer"></span><span class="badge danger dot">Unread</span></a>
+            <a class="list-item" href="#/app/receivables/receipts"><span class="icon-well"><i data-lucide="badge-dollar-sign"></i></span><div><b>Receipt allocated — Packages Ltd</b><small>Rs 865,500</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/bank/reconciliation"><span class="icon-well"><i data-lucide="git-compare"></i></span><div><b>Meezan Bank statement imported</b><small>142 lines · 14 unmatched</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="hr">
+          <div class="list">
+            <a class="list-item" href="#/app/hr/leave/requests"><span class="icon-well"><i data-lucide="plane"></i></span><div><b>Leave request — Zainab Raza</b><small>06–10 Oct 2026</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/hr/onboarding"><span class="icon-well"><i data-lucide="door-open"></i></span><div><b>Ali Haider joins IT on 05 Oct</b><small>Onboarding checklist 6/9</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/hr/payroll"><span class="icon-well"><i data-lucide="wallet-cards"></i></span><div><b>Payroll PR-2026-09 disbursed</b><small>148 employees</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+        </div>
+        <div class="tab-pane" data-pane="system">
+          <div class="list">
+            <a class="list-item" href="#/app/settings/backup"><span class="icon-well"><i data-lucide="database-backup"></i></span><div><b>Nightly backup completed</b><small>2.4 GB</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/settings/integrations"><span class="icon-well"><i data-lucide="plug"></i></span><div><b>FBR POS integration token renews in 7 days</b><small>Re-authorise before 08 Oct</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+            <a class="list-item" href="#/app/settings/users"><span class="icon-well"><i data-lucide="shield-check"></i></span><div><b>New sign-in from Karachi</b><small>Hira Ali · Chrome on Windows</small></div><span class="spacer"></span><span class="muted small">Read</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Summary</h3><p>Last 7 days</p></div></div>
+        <div class="dl">
+          <div><span>Unread</span><b>6</b></div>
+          <div><span>Needs action</span><b>7</b></div>
+          <div><span>Mentions</span><b>2</b></div>
+          <div><span>Total received</span><b>24</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Delivery channels</h3><p>How we reach you</p></div></div>
+        <div class="stack">
+          <label class="switch"><input type="checkbox" checked><i></i><span>In-app notifications</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Email digest (daily 08:00)</span></label>
+          <label class="switch"><input type="checkbox"><i></i><span>SMS for approvals above Rs 1M</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>WhatsApp cheque maturity alerts</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHART OF ACCOUNTS ===================== -->
+
+
+<!-- ===================== ACCOUNT LEDGER ===================== -->
+
+
+<!-- ===================== OPENING BALANCES ===================== -->
+<section class="screen" data-route="app/accounting/opening" data-title="Opening Balances">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Accounting / Opening Balances</div>
+      <h1>Opening Balances</h1>
+      <p>Enter balances as at 01 Jul 2026 (start of FY 2026-27). Debits must equal credits before posting.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-open="acc-import-opening"><i data-lucide="upload"></i>Import CSV</button>
+      <button class="btn secondary"><i data-lucide="download"></i>Template</button>
+      <button class="btn primary" data-toast="Opening balances saved as draft"><i data-lucide="save"></i>Save</button>
+    </div>
+  </div>
+
+  <div class="banner warn mb">
+    <i data-lucide="alert-triangle"></i>
+    <div><b>Out of balance by Rs 125,000.00</b><p>Total debits Rs 187,661,470 vs total credits Rs 187,536,470. The difference will be parked in 3900-01 Opening Balance Suspense if you post now.</p></div>
+    <button class="btn sm secondary">Show difference</button>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Total debits</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 187,661,470</strong><small>10 accounts</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Total credits</span><span class="icon-well"><i data-lucide="arrow-up-right"></i></span></div><strong>Rs 187,536,470</strong><small>6 accounts</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Difference</span><span class="icon-well"><i data-lucide="scale"></i></span></div><strong>Rs 125,000</strong><small class="down">Debit heavy</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>As at</span><span class="icon-well"><i data-lucide="calendar"></i></span></div><strong>01 Jul 2026</strong><small>FY 2026-27 · Status: Draft</small></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="toolbar" style="padding:14px 16px 0">
+      <label class="search-field"><i data-lucide="search"></i><input placeholder="Find account…"></label>
+      <div class="chips"><button class="active">All</button><button>Assets</button><button>Liabilities</button><button>Equity</button><button>With balance</button></div>
+      <span class="spacer"></span>
+      <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+    </div>
+    <div class="table-wrap"><table class="tbl lines">
+      <thead><tr><th>Code</th><th>Account</th><th>Type</th><th class="num" style="width:180px">Debit</th><th class="num" style="width:180px">Credit</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>1110-01</b></td><td>Cash in Hand — Lahore HQ</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="684,320.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1120-01</b></td><td>Meezan Bank — 0123</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="18,214,600.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1120-02</b></td><td>HBL — 8721</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="9,872,150.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1120-03</b></td><td>UBL — 2294</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="6,410,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1210-01</b></td><td>Accounts Receivable — Trade</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="15,880,400.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1310-01</b></td><td>Inventory — Finished Goods</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="26,415,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1320-01</b></td><td>Inventory — Raw Material</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="22,190,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1410-01</b></td><td>Advances to Staff</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="5,325,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1510-01</b></td><td>Plant &amp; Machinery</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="64,250,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1520-01</b></td><td>Vehicles</td><td><span class="badge info">Asset</span></td><td><input class="cell-input num" value="18,420,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>1590-01</b></td><td>Accumulated Depreciation</td><td><span class="badge info">Contra asset</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="12,840,000.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>2110-01</b></td><td>Accounts Payable — Trade</td><td><span class="badge danger">Liability</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="11,246,300.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>2130-01</b></td><td>Sales Tax Payable</td><td><span class="badge danger">Liability</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="2,644,920.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>2210-01</b></td><td>Long-term Financing — HBL</td><td><span class="badge danger">Liability</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="38,500,000.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>3100-01</b></td><td>Share Capital</td><td><span class="badge violet">Equity</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="100,000,000.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td><b>3200-01</b></td><td>Unappropriated Profit</td><td><span class="badge violet">Equity</span></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="22,305,250.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="x"></i></button></td></tr>
+        <tr><td colspan="6"><button class="btn ghost sm"><i data-lucide="plus"></i>Add account</button> <span class="muted small">48 accounts with zero balance hidden</span></td></tr>
+        <tr class="total"><td colspan="3">Totals</td><td class="num">187,661,470.00</td><td class="num">187,536,470.00</td><td></td></tr>
+        <tr class="total"><td colspan="3">Difference</td><td class="num neg">125,000.00</td><td class="num zero">—</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="form-actions">
+    <button class="btn secondary">Discard changes</button>
+    <button class="btn secondary" data-toast="Opening balances saved as draft">Save draft</button>
+    <button class="btn primary" data-toast="Opening balances posted as JV-2026-000001">Post opening balances</button>
+  </div>
+
+  <div class="overlay" id="acc-import-opening">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Import opening balances</h2><p>CSV with columns: code, debit, credit, branch</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dropzone mb"><i data-lucide="upload-cloud"></i><b>Drop CSV here or click to browse</b><small>Max 5 MB · UTF-8 · up to 2,000 rows</small></div>
+        <div class="form-grid">
+          <label><span>As at date</span><input type="date" value="2026-07-01"></label>
+          <label><span>On duplicate</span><select><option>Replace existing value</option><option>Add to existing</option><option>Skip row</option></select></label>
+          <label class="check full"><input type="checkbox" checked> Validate account codes against chart of accounts</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="16 rows imported">Import</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VOUCHER REGISTER ===================== -->
+<section class="screen" data-route="app/accounting/vouchers" data-title="Voucher Register">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Accounting / Vouchers</div>
+      <h1>Voucher Register</h1>
+      <p>Track, review and manage every journal, cash, bank and contra voucher.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="calendar"></i>01 Sep – 30 Sep 2026</button>
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <a class="btn primary" href="#/app/accounting/vouchers/new"><i data-lucide="plus"></i>New Voucher</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Total vouchers</span><span class="icon-well"><i data-lucide="clipboard-list"></i></span></div><strong>412</strong><small class="up">▲ 12% vs August</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Total debit</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 96,483,914</strong><small>Balanced with credits</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Pending approval</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>9</strong><small>Rs 16,421,300</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Drafts</span><span class="icon-well"><i data-lucide="file-pen"></i></span></div><strong>6</strong><small>Oldest 4 days</small></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="chips"><button class="active">All <i>412</i></button><button>JV <i>58</i></button><button>CPV <i>97</i></button><button>CRV <i>112</i></button><button>BPV <i>76</i></button><button>BRV <i>61</i></button><button>Contra <i>8</i></button></div>
+    <span class="spacer"></span>
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search vouchers, narration, amount…"></label>
+    <select><option>All statuses</option><option>Draft</option><option>Pending</option><option>Posted</option><option>Reversed</option></select>
+    <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+    <button class="btn secondary sm"><i data-lucide="filter"></i>Filters</button>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Vouchers — September 2026</h3><p>412 vouchers · debits equal credits</p></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Voucher #</th><th>Date</th><th>Type</th><th>Narration</th><th>Branch</th><th class="num">Debit</th><th class="num">Credit</th><th>Status</th><th>Created by</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000045</a><small>Accrual</small></td><td>30 Sep 2026</td><td><span class="badge violet">JV</span></td><td>Salary accrual — September 2026<small>148 employees</small></td><td>Lahore HQ</td><td class="num dr">14,620,000.00</td><td class="num cr">14,620,000.00</td><td><span class="badge warn dot">Pending</span></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">CRV-2026-000112</a><small>Cash sales</small></td><td>30 Sep 2026</td><td><span class="badge good">CRV</span></td><td>Cash sales — month end<small>INV-2026-000410</small></td><td>Lahore HQ</td><td class="num dr">400,000.00</td><td class="num cr">400,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000188</a><small>Receipt</small></td><td>30 Sep 2026</td><td><span class="badge info">BRV</span></td><td>Packages Ltd — against INV-2026-000377<small>Meezan Bank — 0123</small></td><td>Lahore HQ</td><td class="num dr">865,500.00</td><td class="num cr">865,500.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000214</a><small>Utility</small></td><td>29 Sep 2026</td><td><span class="badge warn">BPV</span></td><td>K-Electric — Karachi branch Sep bill<small>HBL — 8721</small></td><td>Karachi</td><td class="num dr">184,320.00</td><td class="num cr">184,320.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000213</a><small>Vendor payment</small></td><td>29 Sep 2026</td><td><span class="badge warn">BPV</span></td><td>Siemens Pakistan — switchgear advance<small>UBL — 2294 · Chq 00451207</small></td><td>Lahore HQ</td><td class="num dr">1,560,000.00</td><td class="num cr">1,560,000.00</td><td><span class="badge warn dot">Pending</span></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">CPV-2026-000097</a><small>Fuel</small></td><td>28 Sep 2026</td><td><span class="badge danger">CPV</span></td><td>Generator diesel — Lahore HQ<small>Cash in Hand</small></td><td>Lahore HQ</td><td class="num dr">355,000.00</td><td class="num cr">355,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">CPV-2026-000096</a><small>Petty</small></td><td>28 Sep 2026</td><td><span class="badge danger">CPV</span></td><td>Office refreshments &amp; TCS courier<small>Petty cash — Lahore HQ</small></td><td>Lahore HQ</td><td class="num dr">18,750.00</td><td class="num cr">18,750.00</td><td><span class="badge neutral dot">Draft</span></td><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Nida Shah</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000044</a><small>Depreciation</small></td><td>27 Sep 2026</td><td><span class="badge violet">JV</span></td><td>Depreciation run — September 2026<small>FA register · 214 assets</small></td><td>All</td><td class="num dr">356,130.00</td><td class="num cr">356,130.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000186</a><small>Receipt</small></td><td>26 Sep 2026</td><td><span class="badge info">BRV</span></td><td>Shifa International — PDC clearing<small>HBL — 8721 · Chq 10045790</small></td><td>Islamabad</td><td class="num dr">1,250,000.00</td><td class="num cr">1,250,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000042</a><small>Recovery</small></td><td>26 Sep 2026</td><td><span class="badge violet">JV</span></td><td>Cash recovered — staff advance LN-0044<small>Kashif Ali</small></td><td>Lahore HQ</td><td class="num dr">776,000.00</td><td class="num cr">776,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">CON-2026-000008</a><small>Contra</small></td><td>25 Sep 2026</td><td><span class="badge neutral">Contra</span></td><td>Transfer Meezan → Bank Alfalah<small>Payroll funding</small></td><td>Lahore HQ</td><td class="num dr">2,000,000.00</td><td class="num cr">2,000,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000039</a><small>Correction</small></td><td>22 Sep 2026</td><td><span class="badge violet">JV</span></td><td>Reclass rent prepaid — Islamabad office<small>Reversed by JV-2026-000041</small></td><td>Islamabad</td><td class="num dr">450,000.00</td><td class="num cr">450,000.00</td><td><span class="badge danger dot">Reversed</span></td><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">CRV-2026-000103</a><small>Receipt</small></td><td>18 Sep 2026</td><td><span class="badge good">CRV</span></td><td>City Mart Superstores — cash receipt<small>RCPT-2026-000226</small></td><td>Lahore HQ</td><td class="num dr">400,000.00</td><td class="num cr">400,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000205</a><small>Vendor payment</small></td><td>15 Sep 2026</td><td><span class="badge warn">BPV</span></td><td>Nishat Mills — fabric rolls BILL-2026-000238<small>Meezan Bank — 0123 · WHT 153(1)(a)</small></td><td>Faisalabad</td><td class="num dr">2,340,000.00</td><td class="num cr">2,340,000.00</td><td><span class="badge good dot">Posted</span></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b></div></div></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr class="total"><td colspan="6">Page total (14 vouchers)</td><td class="num">25,575,700.00</td><td class="num">25,575,700.00</td><td colspan="3"></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–14 of 412</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>…</button><button>30</button><button>›</button></div></div>
+  </div>
+</section>
+
+<!-- ===================== NEW VOUCHER ===================== -->
+<section class="screen" data-route="app/accounting/vouchers/new" data-title="New Voucher">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Accounting / Vouchers / New</div>
+      <h1>New Voucher</h1>
+      <p>Double-entry voucher. Debits must equal credits before it can be posted.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="#/app/accounting/vouchers"><i data-lucide="x"></i>Cancel</a>
+      <a class="btn secondary" href="#/app/accounting/recurring"><i data-lucide="copy"></i>Load template</a>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="row mb">
+      <div class="seg"><button class="active">Journal (JV)</button><button>Cash Payment (CPV)</button><button>Cash Receipt (CRV)</button><button>Bank Payment (BPV)</button><button>Bank Receipt (BRV)</button><button>Contra</button></div>
+      <span class="spacer"></span>
+      <span class="badge neutral dot">Draft — not saved</span>
+    </div>
+    <div class="form-grid c4">
+      <label><span>Voucher date *</span><input type="date" value="2026-10-01"></label>
+      <label><span>Voucher no.</span><input value="JV-2026-000046 (auto)" disabled></label>
+      <label><span>Reference</span><input placeholder="e.g. BILL-2026-000261"></label>
+      <label><span>Branch *</span><select><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select></label>
+      <label><span>Cost centre</span><select><option>— None —</option><option>Finance</option><option>Sales</option><option>Operations</option><option>Warehouse</option></select></label>
+      <label><span>Currency</span><select><option>PKR</option><option>USD</option></select></label>
+      <label style="grid-column:span 2"><span>Narration *</span><input value="Accrual of September utilities and professional fees"></label>
+    </div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="panel-head"><div><h3>Voucher lines</h3><p>Tab between cells · Ctrl+Enter adds a line</p></div></div>
+    <div class="table-wrap"><table class="tbl lines">
+      <thead><tr><th style="width:36px">#</th><th style="width:28%">Account</th><th>Line narration</th><th style="width:150px">Cost centre</th><th class="num" style="width:150px">Debit</th><th class="num" style="width:150px">Credit</th><th style="width:40px"></th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><select class="cell-input"><option>5230-01 · Electricity &amp; Utilities</option><option>5220-01 · Rent — Lahore HQ</option></select></td><td><input class="cell-input" value="LESCO — Lahore HQ September"></td><td><select class="cell-input"><option>Administration</option><option>Finance</option></select></td><td><input class="cell-input num" value="297,400.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        <tr><td>2</td><td><select class="cell-input"><option>5230-01 · Electricity &amp; Utilities</option></select></td><td><input class="cell-input" value="K-Electric — Karachi September"></td><td><select class="cell-input"><option>Operations</option></select></td><td><input class="cell-input num" value="184,320.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        <tr><td>3</td><td><select class="cell-input"><option>5260-01 · Legal &amp; Professional</option></select></td><td><input class="cell-input" value="Audit fee — Q1 review"></td><td><select class="cell-input"><option>Finance</option></select></td><td><input class="cell-input num" value="350,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        <tr><td>4</td><td><select class="cell-input"><option>2130-02 · WHT Payable u/s 153</option></select></td><td><input class="cell-input" value="WHT 153(1)(b) @ 11% on audit fee"></td><td><select class="cell-input"><option>Finance</option></select></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="38,500.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        <tr><td>5</td><td><select class="cell-input"><option>2150-01 · Accrued Expenses</option></select></td><td><input class="cell-input" value="Accrued utilities &amp; audit fee payable"></td><td><select class="cell-input"><option>— None —</option></select></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="793,220.00"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+        <tr><td colspan="7"><button class="btn ghost sm"><i data-lucide="plus"></i>Add line</button> <button class="btn ghost sm"><i data-lucide="list-plus"></i>Add 5 lines</button></td></tr>
+        <tr class="total"><td colspan="4">Totals</td><td class="num">831,720.00</td><td class="num">831,720.00</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="row" style="padding:12px 18px">
+      <span class="badge good dot">Difference 0.00 — Balanced</span>
+      <span class="muted small">5 lines · 3 debit · 2 credit</span>
+      <span class="spacer"></span>
+      <span class="small muted">Rupees eight hundred thirty-one thousand seven hundred twenty only</span>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Attachments</h3><p>Bills, receipts or approvals (PDF, JPG, PNG)</p></div></div>
+      <div class="dropzone"><i data-lucide="paperclip"></i><b>Drop files here or click to upload</b><small>Up to 10 files · 10 MB each</small></div>
+      <div class="list mt">
+        <div class="list-item"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>lesco-sep-2026.pdf</b><small>212 KB</small></div><span class="spacer"></span><button class="icon-btn-sm"><i data-lucide="x"></i></button></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="image"></i></span><div><b>ke-bill-karachi.jpg</b><small>1.1 MB</small></div><span class="spacer"></span><button class="icon-btn-sm"><i data-lucide="x"></i></button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Posting options</h3><p>Controls applied when this voucher is saved</p></div></div>
+      <div class="stack">
+        <label class="switch"><input type="checkbox" checked><i></i><span>Route through approval workflow (amount &gt; Rs 500,000)</span></label>
+        <label class="switch"><input type="checkbox"><i></i><span>Auto-reverse on 01 Nov 2026</span></label>
+        <label class="switch"><input type="checkbox"><i></i><span>Save as recurring template</span></label>
+      </div>
+      <div class="dl mt">
+        <div><span>Approver</span><b>Sana Javed (Finance Manager)</b></div>
+        <div><span>Fiscal period</span><b>Oct 2026 · Open</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <a class="btn ghost" href="#/app/accounting/vouchers">Cancel</a>
+    <button class="btn secondary" data-toast="Saved as draft JV-2026-000046"><i data-lucide="save"></i>Save Draft</button>
+    <button class="btn secondary" data-toast="Submitted to Sana Javed for approval"><i data-lucide="send"></i>Submit for approval</button>
+    <button class="btn primary" data-open="acc-post-voucher"><i data-lucide="check"></i>Post</button>
+  </div>
+
+  <div class="overlay" id="acc-post-voucher">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Post voucher JV-2026-000046?</h2><p>Posting updates the general ledger and cannot be edited afterwards.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl mb">
+          <div><span>Voucher date</span><b>01 Oct 2026</b></div>
+          <div><span>Period</span><b>October 2026 (open)</b></div>
+          <div><span>Total debit / credit</span><b>Rs 831,720.00</b></div>
+          <div><span>Lines</span><b>5</b></div>
+        </div>
+        <div class="banner info"><i data-lucide="info"></i><div><b>Corrections after posting</b><p>Use Reverse on the voucher detail page to create a reversing entry.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><a class="btn primary" href="#/app/accounting/vouchers/view" data-toast="JV-2026-000046 posted">Post voucher</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VOUCHER DETAIL ===================== -->
+<section class="screen" data-route="app/accounting/vouchers/view" data-title="Voucher Detail">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Accounting / Vouchers / JV-2026-000045</div>
+      <h1>JV-2026-000045 <span class="badge warn dot">Pending approval</span></h1>
+      <p>Journal voucher · Salary accrual — September 2026 · Lahore HQ</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="#/app/accounting/vouchers"><i data-lucide="arrow-left"></i>Register</a>
+      <button class="btn secondary"><i data-lucide="printer"></i>Print</button>
+      <a class="btn secondary" href="#/app/accounting/vouchers/new" data-toast="Duplicated as new draft"><i data-lucide="copy"></i>Duplicate</a>
+      <button class="btn danger" data-open="acc-reverse-voucher"><i data-lucide="undo-2"></i>Reverse</button>
+      <button class="btn primary" data-toast="Voucher approved"><i data-lucide="check"></i>Approve</button>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="panel">
+        <div class="grid-3">
+          <div class="dl">
+            <div><span>Voucher type</span><b>Journal Voucher</b></div>
+            <div><span>Voucher date</span><b>30 Sep 2026</b></div>
+            <div><span>Fiscal period</span><b>Sep 2026 · FY 2026-27</b></div>
+          </div>
+          <div class="dl">
+            <div><span>Reference</span><b>PR-2026-09</b></div>
+            <div><span>Branch</span><b>Lahore HQ</b></div>
+            <div><span>Cost centre</span><b>All departments</b></div>
+          </div>
+          <div class="dl">
+            <div><span>Created by</span><b>Hira Ali · 30 Sep 18:12</b></div>
+            <div><span>Submitted</span><b>01 Oct 2026 08:42</b></div>
+            <div><span>Currency</span><b>PKR</b></div>
+          </div>
+        </div>
+        <div class="form-section mt"><h4>Narration</h4><p>Accrual of September 2026 salaries, employer EOBI and PESSI contributions and provident fund for 148 employees pending disbursement on 05 Oct.</p></div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head"><div><h3>Ledger entries</h3><p>6 lines</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/app/accounting/ledger">View in ledger</a></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>#</th><th>Account</th><th>Particulars</th><th>Cost centre</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><b>5210-01</b> Salaries &amp; Wages</td><td>Gross salaries — September</td><td>All</td><td class="num dr">13,240,000.00</td><td class="num zero">—</td></tr>
+            <tr><td>2</td><td><b>5215-01</b> Employer EOBI</td><td>EOBI employer share</td><td>All</td><td class="num dr">296,000.00</td><td class="num zero">—</td></tr>
+            <tr><td>3</td><td><b>5216-01</b> Employer PESSI / SESSI</td><td>Social security contribution</td><td>All</td><td class="num dr">222,000.00</td><td class="num zero">—</td></tr>
+            <tr><td>4</td><td><b>5217-01</b> Provident Fund — employer</td><td>PF @ 8.33% of basic</td><td>All</td><td class="num dr">862,000.00</td><td class="num zero">—</td></tr>
+            <tr><td>5</td><td><b>2120-01</b> Accrued Salaries</td><td>Net payable to employees</td><td>—</td><td class="num zero">—</td><td class="num cr">13,240,000.00</td></tr>
+            <tr><td>6</td><td><b>2140-01</b> EOBI, PESSI &amp; PF Payable</td><td>Statutory contributions payable</td><td>—</td><td class="num zero">—</td><td class="num cr">1,380,000.00</td></tr>
+            <tr class="total"><td colspan="4">Total</td><td class="num">14,620,000.00</td><td class="num">14,620,000.00</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="panel flush">
+        <div class="panel-head"><div><h3>Audit trail</h3><p>Every change to this voucher</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/app/settings/audit">Full audit log</a></div></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>When</th><th>User</th><th>Action</th><th>Detail</th></tr></thead>
+          <tbody>
+            <tr><td>01 Oct 2026 08:42</td><td>Hira Ali</td><td><span class="badge info">Submitted</span></td><td>Routed to Sana Javed (rule: JV &gt; Rs 500,000)</td></tr>
+            <tr><td>30 Sep 2026 18:31</td><td>Hira Ali</td><td><span class="badge neutral">Edited</span></td><td>Line 4 amount 848,000 → 862,000</td></tr>
+            <tr><td>30 Sep 2026 18:20</td><td>Hira Ali</td><td><span class="badge neutral">Attachment</span></td><td>payroll-summary-sep.xlsx added</td></tr>
+            <tr><td>30 Sep 2026 18:12</td><td>Hira Ali</td><td><span class="badge good">Created</span></td><td>Generated from payroll run PR-2026-09</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="kpi teal"><div class="kpi-top"><span>Voucher amount</span><span class="icon-well"><i data-lucide="scale"></i></span></div><strong>Rs 14,620,000</strong><small>Balanced · 6 lines</small></div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Approval</h3><p>Two-step workflow</p></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Prepared — Hira Ali</b><small>30 Sep 2026, 06:12 PM</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Submitted for approval</b><small>01 Oct 2026, 08:42 AM</small></div></div>
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>Finance Manager — Sana Javed</b><small>Awaiting your approval</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>CEO — Ahmed Raza</b><small>Required above Rs 10,000,000</small></div></div>
+        </div>
+        <div class="form-grid mt"><label class="full"><span>Comment</span><textarea rows="2" placeholder="Add a note for the preparer…"></textarea></label></div>
+        <div class="form-actions"><button class="btn secondary sm" data-toast="Sent back to Hira Ali">Send back</button><button class="btn primary sm" data-toast="Approved — forwarded to Ahmed Raza">Approve</button></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Attachments</h3><p>2 files</p></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-spreadsheet"></i></span><div><b>payroll-summary-sep.xlsx</b><small>84 KB · Hira Ali</small></div><span class="spacer"></span><button class="icon-btn-sm"><i data-lucide="download"></i></button></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="file-text"></i></span><div><b>eobi-pessi-calc.pdf</b><small>156 KB · Hira Ali</small></div><span class="spacer"></span><button class="icon-btn-sm"><i data-lucide="download"></i></button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Related</h3></div></div>
+        <div class="list">
+          <a class="list-item" href="#/app/hr/payroll/run"><span class="icon-well"><i data-lucide="wallet-cards"></i></span><div><b>PR-2026-09</b><small>Payroll run · 148 employees</small></div></a>
+          <a class="list-item" href="#/app/periods"><span class="icon-well"><i data-lucide="calendar-range"></i></span><div><b>September 2026</b><small>Fiscal period · Open</small></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="acc-reverse-voucher">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Reverse JV-2026-000045</h2><p>Creates a mirror voucher swapping debits and credits.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Reversal date *</span><input type="date" value="2026-10-01"></label>
+          <label><span>Reversal voucher no.</span><input value="JV-2026-000046 (auto)" disabled></label>
+          <label class="full"><span>Reason *</span><select><option>Incorrect amount</option><option>Wrong account</option><option>Duplicate entry</option><option>Wrong period</option><option>Other</option></select></label>
+          <label class="full"><span>Remarks</span><textarea rows="3" placeholder="Explain why this voucher is being reversed"></textarea></label>
+        </div>
+        <div class="banner warn mt"><i data-lucide="alert-triangle"></i><div><b>This cannot be undone</b><p>Both vouchers stay in the register for audit purposes.</p></div></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="Reversal JV-2026-000046 posted">Reverse voucher</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RECURRING TEMPLATES ===================== -->
+<section class="screen" data-route="app/accounting/recurring" data-title="Recurring Templates">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Accounting / Vouchers / Recurring</div>
+      <h1>Recurring Templates</h1>
+      <p>Vouchers generated automatically on a schedule — rent, accruals, depreciation and loan instalments.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="3 vouchers generated for October"><i data-lucide="play"></i>Run due now</button>
+      <button class="btn primary" data-open="acc-new-recurring"><i data-lucide="plus"></i>New Template</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Active templates</span><span class="icon-well"><i data-lucide="repeat"></i></span></div><strong>11</strong><small>2 paused</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Due this week</span><span class="icon-well"><i data-lucide="calendar-clock"></i></span></div><strong>4</strong><small>Rs 2,550,800</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Monthly value</span><span class="icon-well"><i data-lucide="coins"></i></span></div><strong>Rs 3,002,530</strong><small>Monthly templates</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Failed runs</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>1</strong><small class="down">Period locked — Sep</small></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="toolbar" style="padding:14px 16px 0">
+      <label class="search-field"><i data-lucide="search"></i><input placeholder="Search templates…"></label>
+      <div class="chips"><button class="active">All <i>13</i></button><button>Monthly <i>9</i></button><button>Quarterly <i>2</i></button><button>Yearly <i>1</i></button><button>Paused <i>2</i></button></div>
+    </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Template</th><th>Type</th><th>Frequency</th><th>Next run</th><th>Last run</th><th class="num">Amount</th><th>Auto-post</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>Office rent — Lahore HQ</b><small>Dr 5220-01 · Cr 2150-01</small></td><td><span class="badge violet">JV</span></td><td>Monthly · 1st</td><td>01 Oct 2026</td><td>01 Sep 2026</td><td class="num">450,000.00</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Depreciation — straight line</b><small>From FA register</small></td><td><span class="badge violet">JV</span></td><td>Monthly · last day</td><td>31 Oct 2026</td><td>27 Sep 2026</td><td class="num">356,130.00</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>HBL term loan instalment</b><small>Principal + markup KIBOR + 2%</small></td><td><span class="badge warn">BPV</span></td><td>Monthly · 5th</td><td>05 Oct 2026</td><td>05 Sep 2026</td><td class="num">1,850,000.00</td><td><label class="switch"><input type="checkbox"><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>PTCL broadband — all branches</b><small>Dr 5250-01 · Cr AP — PTCL</small></td><td><span class="badge violet">JV</span></td><td>Monthly · 3rd</td><td>03 Oct 2026</td><td>03 Sep 2026</td><td class="num">64,800.00</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Security services — Karachi</b><small>Vendor contract SC-22</small></td><td><span class="badge violet">JV</span></td><td>Monthly · 1st</td><td>01 Oct 2026</td><td>01 Sep 2026</td><td class="num">186,000.00</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Prepaid insurance amortisation</b><small>EFU policy 2026-27</small></td><td><span class="badge violet">JV</span></td><td>Monthly · last day</td><td>31 Oct 2026</td><td>—</td><td class="num">95,600.00</td><td><label class="switch"><input type="checkbox" checked><i></i></label></td><td><span class="badge danger dot">Failed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Advance tax u/s 147</b><small>Quarterly instalment</small></td><td><span class="badge warn">BPV</span></td><td>Quarterly · 25th</td><td>25 Dec 2026</td><td>25 Sep 2026</td><td class="num">2,140,000.00</td><td><label class="switch"><input type="checkbox"><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Warehouse rent — Faisalabad</b><small>Dr 5220-02 · Cr 2150-01</small></td><td><span class="badge violet">JV</span></td><td>Monthly · 1st</td><td>—</td><td>01 Jun 2026</td><td class="num">220,000.00</td><td><label class="switch"><input type="checkbox"><i></i></label></td><td><span class="badge neutral dot">Paused</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>Annual audit fee accrual</b><small>Dr 5260-01</small></td><td><span class="badge violet">JV</span></td><td>Yearly · 30 Jun</td><td>30 Jun 2027</td><td>30 Jun 2026</td><td class="num">1,400,000.00</td><td><label class="switch"><input type="checkbox"><i></i></label></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 9 of 13 templates</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay" id="acc-new-recurring">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>New recurring template</h2><p>Define voucher lines and a schedule</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label class="full"><span>Template name *</span><input placeholder="e.g. Generator maintenance — Lahore HQ"></label>
+          <label><span>Voucher type</span><select><option>Journal (JV)</option><option>Bank Payment (BPV)</option><option>Cash Payment (CPV)</option></select></label>
+          <label><span>Frequency</span><select><option>Monthly</option><option>Weekly</option><option>Quarterly</option><option>Yearly</option></select></label>
+          <label><span>Day of period</span><select><option>1st</option><option>5th</option><option>15th</option><option>Last day</option></select></label>
+          <label><span>Start date</span><input type="date" value="2026-11-01"></label>
+          <label><span>End after</span><select><option>Never</option><option>12 occurrences</option><option>On date…</option></select></label>
+          <label><span>Branch</span><select><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select></label>
+        </div>
+        <div class="table-wrap mt"><table class="tbl lines">
+          <thead><tr><th>Account</th><th>Narration</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead>
+          <tbody>
+            <tr><td><select class="cell-input"><option>5270-01 · Repairs &amp; Maintenance</option></select></td><td><input class="cell-input" value="Generator AMC"></td><td><input class="cell-input num" value="85,000.00"></td><td><input class="cell-input num" placeholder="0.00"></td></tr>
+            <tr><td><select class="cell-input"><option>2150-01 · Accrued Expenses</option></select></td><td><input class="cell-input" value="Payable to vendor"></td><td><input class="cell-input num" placeholder="0.00"></td><td><input class="cell-input num" value="85,000.00"></td></tr>
+            <tr class="total"><td colspan="2">Totals</td><td class="num">85,000.00</td><td class="num">85,000.00</td></tr>
+          </tbody>
+        </table></div>
+        <div class="stack mt">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Auto-post generated vouchers</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Notify me when a run fails</span></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Recurring template created">Create template</button></div>
+    </div>
+  </div>
+</section>
+<!-- ===================== BANK ACCOUNTS ===================== -->
+<section class="screen" data-route="app/bank/accounts" data-title="Bank Accounts">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Bank / Accounts</div>
+      <h1>Bank Accounts</h1>
+      <p>Balances, reconciliation status and activity across 4 banks.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/bank/transactions"><i data-lucide="upload"></i>Import statement</a>
+      <button class="btn primary" data-open="acc-new-bank"><i data-lucide="plus"></i>Add Bank Account</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi teal"><div class="kpi-top"><span>Total bank balance</span><span class="icon-well"><i data-lucide="landmark"></i></span></div><strong>Rs 45,222,980</strong><small class="up">▲ Rs 6.84M this month</small></div>
+    <div class="kpi"><div class="kpi-top"><span>Deposits (Sep)</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 38,415,200</strong><small>214 transactions</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Withdrawals (Sep)</span><span class="icon-well"><i data-lucide="arrow-up-right"></i></span></div><strong>Rs 31,575,200</strong><small>168 transactions</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Unreconciled items</span><span class="icon-well"><i data-lucide="git-compare"></i></span></div><strong>23</strong><small class="down">3 accounts behind</small></div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Meezan Bank</b><small class="muted" style="display:block">Current · •••• 0123</small></div><span class="spacer"></span><span class="badge good">Primary</span></div>
+      <h2 style="margin:14px 0 2px">Rs 21,452,900</h2>
+      <small class="muted">Gulberg III, Lahore · IBAN PK36MEZN0002…0123</small>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,24 L12,22 L25,20 L37,23 L50,16 L62,14 L75,15 L87,9 L100,6"/></svg>
+      <div class="row small"><span class="muted">Last reconciled 31 Aug 2026</span><span class="spacer"></span><span class="badge warn">14 open</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>HBL</b><small class="muted" style="display:block">Current · •••• 8721</small></div><span class="spacer"></span><span class="badge info">Running finance</span></div>
+      <h2 style="margin:14px 0 2px">Rs 11,988,640</h2>
+      <small class="muted">Clifton, Karachi · Limit Rs 50,000,000</small>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,14 L12,18 L25,15 L37,12 L50,16 L62,20 L75,13 L87,11 L100,10"/></svg>
+      <div class="row small"><span class="muted">Last reconciled 30 Sep 2026</span><span class="spacer"></span><span class="badge good">Reconciled</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>UBL</b><small class="muted" style="display:block">Current · •••• 2294</small></div><span class="spacer"></span><span class="badge neutral">Vendor payments</span></div>
+      <h2 style="margin:14px 0 2px">Rs 7,346,200</h2>
+      <small class="muted">Blue Area, Islamabad</small>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,8 L12,10 L25,14 L37,12 L50,18 L62,16 L75,20 L87,19 L100,17"/></svg>
+      <div class="row small"><span class="muted">Last reconciled 31 Aug 2026</span><span class="spacer"></span><span class="badge warn">6 open</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Bank Alfalah</b><small class="muted" style="display:block">Payroll · •••• 5510</small></div><span class="spacer"></span><span class="badge violet">Payroll</span></div>
+      <h2 style="margin:14px 0 2px">Rs 4,435,240</h2>
+      <small class="muted">Main Boulevard, Faisalabad</small>
+      <svg class="spark" viewBox="0 0 100 30"><path d="M0,26 L12,25 L25,24 L37,6 L50,8 L62,24 L75,25 L87,7 L100,22"/></svg>
+      <div class="row small"><span class="muted">Last reconciled 31 Jul 2026</span><span class="spacer"></span><span class="badge danger">3 open · overdue</span></div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>All bank accounts</h3><p>Linked to chart of accounts group 1120</p></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Bank</th><th>Account title</th><th>Account no.</th><th>GL code</th><th>Branch</th><th class="num">Book balance</th><th class="num">Statement balance</th><th>Reconciled to</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>Meezan Bank</b></td><td>Al-Noor Enterprises (Pvt) Ltd</td><td>•••• 0123</td><td>1120-01</td><td>Lahore HQ</td><td class="num">21,452,900.00</td><td class="num">21,698,400.00</td><td>31 Aug 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><a class="btn ghost sm" href="#/app/bank/reconciliation">Reconcile</a></td></tr>
+        <tr><td><b>HBL</b></td><td>Al-Noor Enterprises (Pvt) Ltd</td><td>•••• 8721</td><td>1120-02</td><td>Karachi</td><td class="num">11,988,640.00</td><td class="num">11,988,640.00</td><td>30 Sep 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><a class="btn ghost sm" href="#/app/bank/book">Bank book</a></td></tr>
+        <tr><td><b>UBL</b></td><td>Al-Noor Enterprises — Vendor A/c</td><td>•••• 2294</td><td>1120-03</td><td>Islamabad</td><td class="num">7,346,200.00</td><td class="num">7,512,800.00</td><td>31 Aug 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><a class="btn ghost sm" href="#/app/bank/reconciliation">Reconcile</a></td></tr>
+        <tr><td><b>Bank Alfalah</b></td><td>Al-Noor Enterprises — Payroll</td><td>•••• 5510</td><td>1120-04</td><td>Faisalabad</td><td class="num">4,435,240.00</td><td class="num">4,402,740.00</td><td>31 Jul 2026</td><td><span class="badge good dot">Active</span></td><td class="actions"><a class="btn ghost sm" href="#/app/bank/reconciliation">Reconcile</a></td></tr>
+        <tr class="total"><td colspan="5">Total</td><td class="num">45,222,980.00</td><td class="num">45,602,580.00</td><td colspan="3"></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="overlay" id="acc-new-bank">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Add bank account</h2><p>Creates a linked GL account under 1120 Banks</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Bank *</span><select><option>Bank Al Habib</option><option>MCB Bank</option><option>Allied Bank</option><option>Faysal Bank</option><option>Standard Chartered</option></select></label>
+          <label><span>Account type</span><select><option>Current</option><option>Savings / PLS</option><option>Running finance</option><option>Foreign currency</option></select></label>
+          <label><span>Account title *</span><input value="Al-Noor Enterprises (Pvt) Ltd"></label>
+          <label><span>Account number *</span><input placeholder="0000-0000000-0"></label>
+          <label><span>IBAN</span><input placeholder="PK00XXXX0000000000000000"></label>
+          <label><span>Bank branch</span><input placeholder="e.g. Mall Road, Lahore"></label>
+          <label><span>GL code</span><input value="1120-05"></label>
+          <label><span>Opening balance</span><input value="0.00"></label>
+          <label class="check"><input type="checkbox" checked> Enable statement import (CSV / MT940)</label>
+          <label class="check"><input type="checkbox"> Use for payroll disbursement</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Bank account added">Add account</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BANK TRANSACTIONS ===================== -->
+<section class="screen" data-route="app/bank/transactions" data-title="Bank Transactions">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Bank / Transactions</div>
+      <h1>Bank Transactions</h1>
+      <p>Deposits and withdrawals from imported statements and posted vouchers.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn secondary" data-open="acc-import-statement"><i data-lucide="upload"></i>Import statement</button>
+      <a class="btn primary" href="#/app/accounting/vouchers/new"><i data-lucide="plus"></i>New transaction</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Deposits</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 9,640,700</strong><small>Last 10 days · 6 items</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Withdrawals</span><span class="icon-well"><i data-lucide="arrow-up-right"></i></span></div><strong>Rs 9,656,840</strong><small>Last 10 days · 6 items</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Uncategorised</span><span class="icon-well"><i data-lucide="tag"></i></span></div><strong>4</strong><small>From imported statement</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Bank charges (Sep)</span><span class="icon-well"><i data-lucide="percent"></i></span></div><strong>Rs 18,940</strong><small>Incl. FED 16%</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search description, cheque no., amount…"></label>
+    <select><option>All bank accounts</option><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>UBL — 2294</option><option>Bank Alfalah — 5510</option></select>
+    <div class="chips"><button class="active">All</button><button>Deposits</button><button>Withdrawals</button><button>Uncategorised <i>4</i></button></div>
+    <input type="date" value="2026-09-21"><input type="date" value="2026-09-30">
+    <span class="spacer"></span>
+    <button class="btn secondary sm"><i data-lucide="filter"></i>Filters</button>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Statement lines</h3><p>All bank accounts · September 2026</p></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Date</th><th>Bank</th><th>Description</th><th>Cheque / Ref</th><th>Voucher</th><th class="num">Deposit</th><th class="num">Withdrawal</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td>30 Sep 2026</td><td>Meezan — 0123</td><td>IBFT from Packages Ltd<small>Against INV-2026-000377</small></td><td>FT26273PKG</td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000188</a></td><td class="num dr">865,500.00</td><td class="num zero">—</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>30 Sep 2026</td><td>Meezan — 0123</td><td>Bank charges &amp; FED<small>SMS alerts + IBFT fee</small></td><td>CHG-0930</td><td><span class="muted">—</span></td><td class="num zero">—</td><td class="num cr">2,320.00</td><td><span class="badge warn">Uncategorised</span></td><td class="actions"><button class="btn ghost sm">Categorise</button></td></tr>
+        <tr><td><input type="checkbox"></td><td>29 Sep 2026</td><td>HBL — 8721</td><td>K-Electric bill payment<small>Karachi branch</small></td><td>00451209</td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000214</a></td><td class="num zero">—</td><td class="num cr">184,320.00</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>29 Sep 2026</td><td>UBL — 2294</td><td>Cheque to Siemens Pakistan<small>Switchgear advance</small></td><td>00451207</td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000213</a></td><td class="num zero">—</td><td class="num cr">1,560,000.00</td><td><span class="badge info">Unpresented</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>28 Sep 2026</td><td>Meezan — 0123</td><td>Cash deposit — Lahore HQ<small>Counter deposit slip</small></td><td>DS-55118</td><td><a class="link" href="#/app/accounting/vouchers/view">CON-2026-000009</a></td><td class="num dr">1,200,000.00</td><td class="num zero">—</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>27 Sep 2026</td><td>Alfalah — 5510</td><td>Salary disbursement PR-2026-09<small>148 IBFT transfers</small></td><td>PAYRL-0927</td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000210</a></td><td class="num zero">—</td><td class="num cr">5,512,800.00</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>26 Sep 2026</td><td>HBL — 8721</td><td>Clearing — Shifa International<small>PDC chq 10045790</small></td><td>10045790</td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000186</a></td><td class="num dr">1,250,000.00</td><td class="num zero">—</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>25 Sep 2026</td><td>Meezan — 0123</td><td>Transfer to Bank Alfalah — payroll funding</td><td>FT26268INT</td><td><a class="link" href="#/app/accounting/vouchers/view">CON-2026-000008</a></td><td class="num zero">—</td><td class="num cr">2,000,000.00</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><input type="checkbox"></td><td>24 Sep 2026</td><td>UBL — 2294</td><td>IBFT from Metro Cash &amp; Carry<small>Unidentified — no remittance advice</small></td><td>FT26267MET</td><td><span class="muted">—</span></td><td class="num dr">2,340,000.00</td><td class="num zero">—</td><td><span class="badge warn">Uncategorised</span></td><td class="actions"><button class="btn ghost sm">Categorise</button></td></tr>
+        <tr><td><input type="checkbox"></td><td>23 Sep 2026</td><td>Meezan — 0123</td><td>Profit on PLS balance<small>September profit credit</small></td><td>PRF-0923</td><td><span class="muted">—</span></td><td class="num dr">185,200.00</td><td class="num zero">—</td><td><span class="badge warn">Uncategorised</span></td><td class="actions"><button class="btn ghost sm">Categorise</button></td></tr>
+        <tr><td><input type="checkbox"></td><td>22 Sep 2026</td><td>HBL — 8721</td><td>Markup on running finance<small>KIBOR + 1.75%</small></td><td>MKP-0922</td><td><span class="muted">—</span></td><td class="num zero">—</td><td class="num cr">397,400.00</td><td><span class="badge warn">Uncategorised</span></td><td class="actions"><button class="btn ghost sm">Categorise</button></td></tr>
+        <tr><td><input type="checkbox"></td><td>21 Sep 2026</td><td>Alfalah — 5510</td><td>IBFT from Engro Foods<small>Against INV-2026-000352</small></td><td>FT26264ENG</td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000181</a></td><td class="num dr">3,800,000.00</td><td class="num zero">—</td><td><span class="badge good">Reconciled</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr class="total"><td colspan="6">Total</td><td class="num">9,640,700.00</td><td class="num">9,656,840.00</td><td colspan="2"></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–12 of 382</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay" id="acc-import-statement">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Import bank statement</h2><p>CSV, Excel or MT940 from your bank portal</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Bank account *</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>UBL — 2294</option><option>Bank Alfalah — 5510</option></select></label>
+          <label><span>Format</span><select><option>Meezan CSV</option><option>HBL Excel</option><option>MT940</option><option>Custom mapping</option></select></label>
+          <label><span>Statement period</span><select><option>September 2026</option><option>Custom…</option></select></label>
+        </div>
+        <div class="dropzone mt"><i data-lucide="upload-cloud"></i><b>Drop statement file here</b><small>We'll auto-match against posted vouchers</small></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="142 lines imported · 128 auto-matched">Import &amp; match</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RECEIVE & ISSUE CHEQUES ===================== -->
+<section class="screen" data-route="app/bank/cheques" data-title="Receive &amp; Issue Cheques">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Bank / Cheques</div>
+      <h1>Receive &amp; Issue Cheques</h1>
+      <p>Record cheques received from customers and issued to vendors, including post-dated cheques.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/bank/cheque-register"><i data-lucide="scroll"></i>Cheque register</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>In hand</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 4,620,400</strong><small>7 cheques</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Deposited · in clearing</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>Rs 2,115,500</strong><small>3 cheques</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Issued · unpresented</span><span class="icon-well"><i data-lucide="send"></i></span></div><strong>Rs 3,810,000</strong><small>5 cheques</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Bounced (FY)</span><span class="icon-well"><i data-lucide="circle-x"></i></span></div><strong>2</strong><small class="down">Rs 640,000</small></div>
+  </div>
+
+  <div class="split">
+    <div class="panel">
+      <div data-tabs>
+        <div class="tabs"><button class="active" data-tab="received">Received <span class="badge neutral">10</span></button><button data-tab="issued">Issued <span class="badge neutral">6</span></button></div>
+        <div class="tab-pane active" data-pane="received">
+          <div class="toolbar">
+            <label class="search-field"><i data-lucide="search"></i><input placeholder="Cheque no., customer…"></label>
+            <div class="chips"><button class="active">All</button><button>In hand</button><button>Deposited</button><button>Cleared</button><button>Bounced</button></div>
+          </div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Cheque #</th><th>Customer</th><th>Drawn on</th><th>Cheque date</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>10045821</b><small>PDC</small></td><td>Shifa International</td><td>HBL</td><td>01 Oct 2026</td><td class="num">1,250,000.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn ghost sm" data-toast="Cheque deposited to Meezan — 0123">Deposit</button></td></tr>
+              <tr><td><b>00782214</b><small>PDC</small></td><td>Engro Foods</td><td>UBL</td><td>01 Oct 2026</td><td class="num">720,400.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn ghost sm" data-toast="Cheque deposited">Deposit</button></td></tr>
+              <tr><td><b>33019874</b><small>PDC</small></td><td>Packages Ltd</td><td>MCB Bank</td><td>05 Oct 2026</td><td class="num">980,000.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn ghost sm">Deposit</button></td></tr>
+              <tr><td><b>55667102</b><small>PDC</small></td><td>Hashoo Hotels</td><td>Bank Alfalah</td><td>15 Oct 2026</td><td class="num">412,300.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn ghost sm">Deposit</button></td></tr>
+              <tr><td><b>90021457</b></td><td>Al-Fatah Stores</td><td>Meezan Bank</td><td>29 Sep 2026</td><td class="num">615,500.00</td><td><span class="badge info dot">Deposited</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>71100983</b></td><td>City Mart Superstores</td><td>HBL</td><td>28 Sep 2026</td><td class="num">1,500,000.00</td><td><span class="badge info dot">Deposited</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>10045790</b></td><td>Shifa International</td><td>HBL</td><td>25 Sep 2026</td><td class="num">1,250,000.00</td><td><span class="badge good dot">Cleared</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>44120065</b></td><td>Lucky Cement</td><td>Allied Bank</td><td>18 Sep 2026</td><td class="num">400,000.00</td><td><span class="badge danger dot">Bounced</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="tab-pane" data-pane="issued">
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Cheque #</th><th>Payee</th><th>Bank</th><th>Cheque date</th><th class="num">Amount</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>00451207</b></td><td>Siemens Pakistan</td><td>UBL — 2294</td><td>29 Sep 2026</td><td class="num">1,560,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>55102931</b><small>PDC</small></td><td>Nishat Mills</td><td>Meezan — 0123</td><td>01 Oct 2026</td><td class="num">250,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>55102932</b><small>PDC</small></td><td>Habib Packaging</td><td>Meezan — 0123</td><td>10 Oct 2026</td><td class="num">980,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>00451206</b></td><td>Shan Foods</td><td>UBL — 2294</td><td>24 Sep 2026</td><td class="num">520,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>00451205</b></td><td>Pak Suzuki Spares</td><td>UBL — 2294</td><td>20 Sep 2026</td><td class="num">500,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+              <tr><td><b>00451201</b></td><td>TCS Logistics</td><td>UBL — 2294</td><td>12 Sep 2026</td><td class="num">146,200.00</td><td><span class="badge good dot">Cleared</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Record cheque</h3><p>Receive from customer or issue to vendor</p></div></div>
+      <div class="seg mb"><button class="active">Receive</button><button>Issue</button></div>
+      <div class="form-grid">
+        <label class="full"><span>Customer *</span><select><option>Metro Cash &amp; Carry</option><option>Shifa International</option><option>Fatima Group</option><option>Interloop Ltd</option></select></label>
+        <label><span>Cheque no. *</span><input placeholder="8 digits"></label>
+        <label><span>Drawn on bank</span><select><option>HBL</option><option>MCB Bank</option><option>Meezan Bank</option><option>UBL</option><option>Allied Bank</option></select></label>
+        <label><span>Cheque date *</span><input type="date" value="2026-10-15"></label>
+        <label><span>Received on</span><input type="date" value="2026-10-01"></label>
+        <label><span>Amount (Rs) *</span><input value="2,340,000.00"></label>
+        <label><span>Deposit into</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>UBL — 2294</option></select></label>
+        <label class="full"><span>Against invoices</span><select><option>INV-2026-000395 · Rs 1,640,000</option><option>INV-2026-000402 · Rs 700,000</option></select></label>
+        <label class="full"><span>Remarks</span><textarea rows="2">Post-dated — collected by Bilal Khan</textarea></label>
+        <label class="check full"><input type="checkbox" checked> Post-dated cheque (PDC) — hold until maturity</label>
+      </div>
+      <div class="form-actions"><button class="btn secondary">Clear</button><button class="btn primary" data-toast="Cheque recorded · CRV draft created"><i data-lucide="check"></i>Save cheque</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHEQUE REGISTER & PDC ===================== -->
+<section class="screen" data-route="app/bank/cheque-register" data-title="Cheque Register &amp; PDC">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Bank / Cheque Register</div>
+      <h1>Cheque Register &amp; PDC</h1>
+      <p>Lifecycle of every cheque — deposit, clearing, bounce and reversal — with post-dated maturity tracking.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="printer"></i>Print register</button>
+      <a class="btn primary" href="#/app/bank/cheques"><i data-lucide="plus"></i>Record cheque</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid c5 mb">
+    <div class="kpi"><div class="kpi-top"><span>PDC receivable</span><span class="icon-well"><i data-lucide="arrow-down-left"></i></span></div><strong>Rs 8,962,700</strong><small>14 cheques</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>PDC payable</span><span class="icon-well"><i data-lucide="arrow-up-right"></i></span></div><strong>Rs 4,230,000</strong><small>6 cheques</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Maturing today</span><span class="icon-well"><i data-lucide="calendar-check"></i></span></div><strong>3</strong><small>Rs 2,220,400</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>In clearing</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>Rs 2,115,500</strong><small>T+1 expected</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Bounced (FY)</span><span class="icon-well"><i data-lucide="circle-x"></i></span></div><strong>Rs 640,000</strong><small class="down">2 cheques</small></div>
+  </div>
+
+  <div class="panel mb">
+    <div class="panel-head"><div><h3>Maturity calendar</h3><p>Next 10 days · receivable vs payable</p></div></div>
+    <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:8px">
+      <div class="card" style="padding:10px;box-shadow:0 0 0 2px var(--brand-600)"><small class="muted">Thu</small><b style="display:block;font-size:18px">01 Oct</b><small class="dr">+1,970,400</small><small class="cr" style="display:block">−250,000</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Fri</small><b style="display:block;font-size:18px">02</b><small class="muted">—</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Sat</small><b style="display:block;font-size:18px">03</b><small class="muted">—</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Sun</small><b style="display:block;font-size:18px">04</b><small class="muted">—</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Mon</small><b style="display:block;font-size:18px">05</b><small class="dr">+980,000</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Tue</small><b style="display:block;font-size:18px">06</b><small class="dr">+2,340,000</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Wed</small><b style="display:block;font-size:18px">07</b><small class="muted">—</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Thu</small><b style="display:block;font-size:18px">08</b><small class="cr">−1,200,000</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Fri</small><b style="display:block;font-size:18px">09</b><small class="muted">—</small></div>
+      <div class="card" style="padding:10px"><small class="muted">Sat</small><b style="display:block;font-size:18px">10</b><small class="cr">−980,000</small></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Cheque no., party, bank…"></label>
+    <div class="chips"><button class="active">All <i>48</i></button><button>Received <i>31</i></button><button>Issued <i>17</i></button><button>PDC <i>20</i></button><button>Bounced <i>2</i></button></div>
+    <span class="spacer"></span>
+    <select><option>Maturity: next 30 days</option><option>Overdue</option><option>All dates</option></select>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Cheques</h3><p>Issued and received, including post-dated</p></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Cheque #</th><th>Direction</th><th>Party</th><th>Bank</th><th>Cheque date</th><th>Days</th><th class="num">Amount</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr><td><b>10045821</b><small>PDC</small></td><td><span class="badge good">Received</span></td><td>Shifa International</td><td>HBL → Meezan 0123</td><td>01 Oct 2026</td><td><span class="badge warn">Today</span></td><td class="num">1,250,000.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn sm primary" data-toast="Deposited to Meezan — 0123">Deposit</button></td></tr>
+        <tr><td><b>00782214</b><small>PDC</small></td><td><span class="badge good">Received</span></td><td>Engro Foods</td><td>UBL → HBL 8721</td><td>01 Oct 2026</td><td><span class="badge warn">Today</span></td><td class="num">720,400.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn sm primary" data-toast="Deposited to HBL — 8721">Deposit</button></td></tr>
+        <tr><td><b>55102931</b><small>PDC</small></td><td><span class="badge warn">Issued</span></td><td>Nishat Mills</td><td>Meezan 0123</td><td>01 Oct 2026</td><td><span class="badge warn">Today</span></td><td class="num">250,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked cleared">Clear</button></td></tr>
+        <tr><td><b>90021457</b></td><td><span class="badge good">Received</span></td><td>Al-Fatah Stores</td><td>Meezan → Meezan 0123</td><td>29 Sep 2026</td><td>−2</td><td class="num">615,500.00</td><td><span class="badge info dot">Deposited</span></td><td class="actions"><button class="btn sm secondary" data-toast="Cheque cleared · BRV posted">Clear</button> <button class="btn sm ghost" data-open="acc-bounce-cheque">Bounce</button></td></tr>
+        <tr><td><b>71100983</b></td><td><span class="badge good">Received</span></td><td>City Mart Superstores</td><td>HBL → Meezan 0123</td><td>28 Sep 2026</td><td>−3</td><td class="num">1,500,000.00</td><td><span class="badge info dot">Deposited</span></td><td class="actions"><button class="btn sm secondary" data-toast="Cheque cleared · BRV posted">Clear</button> <button class="btn sm ghost" data-open="acc-bounce-cheque">Bounce</button></td></tr>
+        <tr><td><b>33019874</b><small>PDC</small></td><td><span class="badge good">Received</span></td><td>Packages Ltd</td><td>MCB → Meezan 0123</td><td>05 Oct 2026</td><td>4</td><td class="num">980,000.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn sm ghost">Deposit</button></td></tr>
+        <tr><td><b>61200457</b><small>PDC</small></td><td><span class="badge good">Received</span></td><td>Metro Cash &amp; Carry</td><td>HBL → UBL 2294</td><td>06 Oct 2026</td><td>5</td><td class="num">2,340,000.00</td><td><span class="badge neutral dot">In hand</span></td><td class="actions"><button class="btn sm ghost">Deposit</button></td></tr>
+        <tr><td><b>55102933</b><small>PDC</small></td><td><span class="badge warn">Issued</span></td><td>Siemens Pakistan</td><td>Meezan 0123</td><td>08 Oct 2026</td><td>7</td><td class="num">1,200,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="btn sm ghost" data-toast="Cheque stopped">Stop</button></td></tr>
+        <tr><td><b>55102932</b><small>PDC</small></td><td><span class="badge warn">Issued</span></td><td>Habib Packaging</td><td>Meezan 0123</td><td>10 Oct 2026</td><td>9</td><td class="num">980,000.00</td><td><span class="badge warn dot">Issued</span></td><td class="actions"><button class="btn sm ghost" data-toast="Cheque stopped">Stop</button></td></tr>
+        <tr><td><b>10045790</b></td><td><span class="badge good">Received</span></td><td>Shifa International</td><td>HBL → HBL 8721</td><td>25 Sep 2026</td><td>—</td><td class="num">1,250,000.00</td><td><span class="badge good dot">Cleared</span></td><td class="actions"><button class="btn sm ghost" data-toast="Reversal voucher created">Reverse</button></td></tr>
+        <tr><td><b>44120065</b></td><td><span class="badge good">Received</span></td><td>Lucky Cement</td><td>Allied → Meezan 0123</td><td>18 Sep 2026</td><td>—</td><td class="num">400,000.00</td><td><span class="badge danger dot">Bounced</span></td><td class="actions"><button class="btn sm ghost" data-toast="Re-presented to bank">Re-present</button></td></tr>
+        <tr><td><b>21877410</b></td><td><span class="badge good">Received</span></td><td>Fatima Group</td><td>UBL → UBL 2294</td><td>02 Aug 2026</td><td>—</td><td class="num">240,000.00</td><td><span class="badge danger dot">Bounced</span></td><td class="actions"><button class="btn sm ghost" data-toast="Replacement cheque recorded">Replace</button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 12 of 48 cheques</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>4</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay" id="acc-bounce-cheque">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Mark cheque as bounced</h2><p>Reverses the receipt and re-opens the customer invoice.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl mb">
+          <div><span>Cheque</span><b>90021457 · Meezan Bank</b></div>
+          <div><span>Customer</span><b>Al-Fatah Stores</b></div>
+          <div><span>Amount</span><b>Rs 615,500.00</b></div>
+        </div>
+        <div class="form-grid">
+          <label><span>Bounce date *</span><input type="date" value="2026-10-01"></label>
+          <label><span>Return reason *</span><select><option>Insufficient funds</option><option>Signature mismatch</option><option>Payment stopped by drawer</option><option>Account closed</option><option>Stale / post-dated</option></select></label>
+          <label><span>Bank charges (Rs)</span><input value="1,500.00"></label>
+          <label><span>Recover charges from customer</span><select><option>Yes — debit note</option><option>No</option></select></label>
+          <label class="check full"><input type="checkbox" checked> Notify Bilal Khan (account owner) and put customer on credit hold</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="Cheque marked bounced · reversal BRV posted">Mark bounced</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BANK RECONCILIATION ===================== -->
+<section class="screen" data-route="app/bank/reconciliation" data-title="Bank Reconciliation">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Bank / Reconciliation</div>
+      <h1>Bank Reconciliation</h1>
+      <p>Match statement lines with book entries for Meezan Bank — 0123 · September 2026.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>UBL — 2294</option><option>Bank Alfalah — 5510</option></select>
+      <a class="btn secondary" href="#/app/bank/transactions"><i data-lucide="upload"></i>Import</a>
+      <button class="btn secondary" data-toast="11 additional matches found"><i data-lucide="wand-sparkles"></i>Auto-match</button>
+      <button class="btn primary" data-toast="Reconciliation saved — Sep 2026"><i data-lucide="lock"></i>Finish</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Statement lines</span><span class="icon-well"><i data-lucide="file-text"></i></span></div><strong>142</strong><small>128 matched</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Matched</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>90%</strong><div class="progress" style="margin-top:6px"><i style="width:90%"></i></div></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Unmatched statement</span><span class="icon-well"><i data-lucide="file-question"></i></span></div><strong>4</strong><small>Rs 2,525,520 net</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Unmatched book</span><span class="icon-well"><i data-lucide="book-x"></i></span></div><strong>3</strong><small>Rs 2,187,380 net</small></div>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="grid-2">
+        <div class="panel flush">
+          <div class="panel-head"><div><h3>Bank statement</h3><p>Meezan Bank · imported 01 Oct 07:40</p></div></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th></th><th>Date</th><th>Description</th><th class="num">Amount</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox" checked></td><td>30 Sep</td><td>IBFT Packages Ltd</td><td class="num dr">865,500.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>30 Sep</td><td>SMS / IBFT charges + FED</td><td class="num cr">−2,320.00</td><td><span class="badge warn">Unmatched</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>28 Sep</td><td>Cash deposit DS-55118</td><td class="num dr">1,200,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>27 Sep</td><td>Clearing chq 71100983</td><td class="num dr">1,500,000.00</td><td><span class="badge warn">Unmatched</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>25 Sep</td><td>FT to Alfalah 5510</td><td class="num cr">−2,000,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>23 Sep</td><td>Profit on PLS</td><td class="num dr">185,200.00</td><td><span class="badge warn">Unmatched</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>15 Sep</td><td>Chq 55102918 Nishat Mills</td><td class="num cr">−2,340,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>12 Sep</td><td>Cash deposit DS-55102</td><td class="num dr">842,640.00</td><td><span class="badge warn">Unmatched</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="panel flush">
+          <div class="panel-head"><div><h3>Book entries</h3><p>GL 1120-01 · posted vouchers</p></div></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th></th><th>Date</th><th>Voucher</th><th class="num">Amount</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><input type="checkbox" checked></td><td>30 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000188</a></td><td class="num dr">865,500.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>28 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">CON-2026-000009</a></td><td class="num dr">1,200,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>27 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">BRV-2026-000187</a><small>City Mart chq 71100983</small></td><td class="num dr">1,500,000.00</td><td><span class="badge info">Suggested</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>25 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">CON-2026-000008</a></td><td class="num cr">−2,000,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>22 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000209</a><small>Chq 55102929 · Habib Packaging</small></td><td class="num cr">−62,620.00</td><td><span class="badge warn">Unpresented</span></td></tr>
+              <tr><td><input type="checkbox" checked></td><td>15 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">BPV-2026-000205</a></td><td class="num cr">−2,340,000.00</td><td><span class="badge good">Matched</span></td></tr>
+              <tr><td><input type="checkbox"></td><td>12 Sep</td><td><a class="link" href="#/app/accounting/vouchers/view">CPV-2026-000085</a><small>Cash deposited — booked 750,000</small></td><td class="num dr">750,000.00</td><td><span class="badge danger">Amount differs</span></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="banner info">
+        <i data-lucide="lightbulb"></i>
+        <div><b>3 suggestions ready</b><p>Bank charges and PLS profit can be booked directly from unmatched statement lines.</p></div>
+        <button class="btn sm secondary" data-toast="Adjustment vouchers created">Create adjustments</button>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Reconciliation summary</h3><p>As at 30 Sep 2026</p></div></div>
+        <div class="dl">
+          <div><span>Balance per bank statement</span><b>Rs 21,698,400.00</b></div>
+          <div><span>Less: unpresented cheques</span><b class="cr">(62,620.00)</b></div>
+          <div><span>Add: deposits in transit</span><b class="dr">0.00</b></div>
+          <div><span>Adjusted bank balance</span><b>Rs 21,635,780.00</b></div>
+        </div>
+        <div class="dl mt">
+          <div><span>Balance per books (1120-01)</span><b>Rs 21,452,900.00</b></div>
+          <div><span>Add: PLS profit not booked</span><b class="dr">185,200.00</b></div>
+          <div><span>Less: bank charges not booked</span><b class="cr">(2,320.00)</b></div>
+          <div><span>Adjusted book balance</span><b>Rs 21,635,780.00</b></div>
+        </div>
+        <div class="banner good mt"><i data-lucide="circle-check"></i><div><b>Difference Rs 0.00</b><p>After pending adjustments and matching the 2 suggested lines.</p></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>History</h3></div></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="lock"></i></span><div><b>August 2026</b><small>Sana Javed · 04 Sep</small></div><span class="spacer"></span><span class="badge good">Closed</span></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="lock"></i></span><div><b>July 2026</b><small>Hira Ali · 05 Aug</small></div><span class="spacer"></span><span class="badge good">Closed</span></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="lock"></i></span><div><b>June 2026</b><small>Hira Ali · 06 Jul</small></div><span class="spacer"></span><span class="badge good">Closed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BANK BOOK ===================== -->
+
+
+<!-- ===================== CASH BOOK ===================== -->
+
+
+<!-- ===================== PETTY CASH ===================== -->
+<section class="screen" data-route="app/cash/petty" data-title="Petty Cash">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Cash / Petty Cash</div>
+      <h1>Petty Cash</h1>
+      <p>Imprest funds by branch with custodians, top-ups and small expense vouchers.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-open="acc-petty-expense"><i data-lucide="receipt"></i>Record expense</button>
+      <button class="btn primary" data-open="acc-petty-topup"><i data-lucide="plus"></i>Top-up fund</button>
+    </div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="coins"></i></span><div><b>Lahore HQ</b><small class="muted" style="display:block">Custodian: Nida Shah</small></div><span class="spacer"></span><span class="badge good">Healthy</span></div>
+      <h2 style="margin:12px 0 2px">Rs 61,250</h2><small class="muted">of Rs 100,000 imprest</small>
+      <div class="progress mt"><i style="width:61%"></i></div>
+      <div class="row small mt"><span class="muted">Spent this cycle Rs 38,750</span><span class="spacer"></span><span class="muted">Since 16 Sep</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="coins"></i></span><div><b>Karachi</b><small class="muted" style="display:block">Custodian: Faisal Qureshi</small></div><span class="spacer"></span><span class="badge good">Topped up</span></div>
+      <h2 style="margin:12px 0 2px">Rs 50,000</h2><small class="muted">of Rs 50,000 imprest</small>
+      <div class="progress mt"><i style="width:100%"></i></div>
+      <div class="row small mt"><span class="muted">Top-up Rs 41,800 on 01 Oct</span><span class="spacer"></span><span class="muted">Today</span></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="coins"></i></span><div><b>Islamabad</b><small class="muted" style="display:block">Custodian: Mehwish Tariq</small></div><span class="spacer"></span><span class="badge warn">Low</span></div>
+      <h2 style="margin:12px 0 2px">Rs 9,400</h2><small class="muted">of Rs 50,000 imprest</small>
+      <div class="progress warn mt"><i style="width:19%"></i></div>
+      <div class="row small mt"><span class="muted">Spent this cycle Rs 40,600</span><span class="spacer"></span><button class="btn sm secondary" data-open="acc-petty-topup">Top-up</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="coins"></i></span><div><b>Faisalabad</b><small class="muted" style="display:block">Custodian: Hamza Butt</small></div><span class="spacer"></span><span class="badge danger">Critical</span></div>
+      <h2 style="margin:12px 0 2px">Rs 2,150</h2><small class="muted">of Rs 40,000 imprest</small>
+      <div class="progress danger mt"><i style="width:5%"></i></div>
+      <div class="row small mt"><span class="muted">Spent this cycle Rs 37,850</span><span class="spacer"></span><button class="btn sm secondary" data-open="acc-petty-topup">Top-up</button></div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="panel flush">
+      <div class="toolbar" style="padding:14px 16px 0">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search expenses…"></label>
+        <select><option>All funds</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+        <div class="chips"><button class="active">All</button><button>Unreplenished</button><button>Replenished</button></div>
+      </div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Date</th><th>Ref</th><th>Fund</th><th>Description</th><th>Category</th><th>Paid to</th><th class="num">Amount</th><th>Receipt</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>30 Sep</td><td>PC-LHR-0412</td><td>Lahore HQ</td><td>Tea, milk &amp; sugar — Sep</td><td>Refreshments</td><td>Local vendor</td><td class="num">8,450.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>29 Sep</td><td>PC-LHR-0411</td><td>Lahore HQ</td><td>TCS courier — FBR documents</td><td>Courier</td><td>TCS Logistics</td><td class="num">1,850.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>29 Sep</td><td>PC-ISB-0207</td><td>Islamabad</td><td>Printer toner — HP 85A</td><td>Stationery</td><td>Daraz Business</td><td class="num">12,900.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 2</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>28 Sep</td><td>PC-FSD-0154</td><td>Faisalabad</td><td>Generator repair — fuel pump</td><td>Repairs</td><td>Al-Madina Auto</td><td class="num">18,500.00</td><td><span class="badge warn">Missing</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>27 Sep</td><td>PC-LHR-0410</td><td>Lahore HQ</td><td>Rickshaw fare — bank visits</td><td>Local travel</td><td>Kashif Ali</td><td class="num">1,200.00</td><td><span class="badge neutral">N/A</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>26 Sep</td><td>PC-ISB-0206</td><td>Islamabad</td><td>Office plant maintenance</td><td>Office upkeep</td><td>Green Islamabad</td><td class="num">6,000.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>25 Sep</td><td>PC-KHI-0318</td><td>Karachi</td><td>Water dispenser bottles</td><td>Refreshments</td><td>Nestlé Pure Life</td><td class="num">4,800.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge good">Replenished</span></td></tr>
+          <tr><td>24 Sep</td><td>PC-FSD-0153</td><td>Faisalabad</td><td>Photocopies — tender documents</td><td>Stationery</td><td>Iqbal Photostat</td><td class="num">3,350.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge neutral">Unreplenished</span></td></tr>
+          <tr><td>22 Sep</td><td>PC-KHI-0317</td><td>Karachi</td><td>Electrician — branch wiring</td><td>Repairs</td><td>Muhammad Aslam</td><td class="num">9,500.00</td><td><span class="badge good"><i data-lucide="paperclip"></i> 1</span></td><td><span class="badge good">Replenished</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="table-foot"><span>Showing 9 of 64 expenses this cycle</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Imprest position</h3><p>All funds</p></div></div>
+        <div class="dl">
+          <div><span>Total imprest</span><b>Rs 240,000</b></div>
+          <div><span>Cash on hand</span><b>Rs 122,800</b></div>
+          <div><span>Vouchers pending replenishment</span><b>Rs 117,200</b></div>
+        </div>
+        <div class="progress mt"><i style="width:51%"></i></div>
+        <small class="muted">51% of imprest available across 4 branches</small>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Spend by category</h3><p>September 2026</p></div></div>
+        <div class="stackbar mb"><i style="width:34%;background:var(--primary)"></i><i style="width:24%;background:var(--mint)"></i><i style="width:18%;background:var(--lime)"></i><i style="width:14%;background:var(--orange)"></i><i style="width:10%;background:var(--violet)"></i></div>
+        <div class="legend" style="flex-wrap:wrap"><span><i style="background:var(--primary)"></i>Repairs 34%</span><span><i style="background:var(--mint)"></i>Stationery 24%</span><span><i style="background:var(--lime)"></i>Refreshments 18%</span><span><i style="background:var(--orange)"></i>Courier 14%</span><span><i style="background:var(--violet)"></i>Travel 10%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="acc-petty-topup">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Top-up petty cash</h2><p>Replenish fund to its imprest level</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Fund *</span><select><option>Faisalabad — Hamza Butt</option><option>Islamabad — Mehwish Tariq</option><option>Lahore HQ — Nida Shah</option></select></label>
+          <label><span>Date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Pay from</span><select><option>Cash in Hand — Lahore HQ</option><option>Meezan Bank — 0123</option><option>Bank Alfalah — 5510</option></select></label>
+          <label><span>Amount (Rs)</span><input value="37,850.00"></label>
+          <label class="full"><span>Replenish vouchers</span><select><option>14 unreplenished vouchers · Rs 37,850</option></select></label>
+          <label class="check full"><input type="checkbox" checked> Post expense vouchers and CPV together</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Faisalabad fund topped up to Rs 40,000">Top-up</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="acc-petty-expense">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Record petty expense</h2><p>Small cash expense paid from a fund</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Fund *</span><select><option>Lahore HQ — Nida Shah</option><option>Karachi — Faisal Qureshi</option><option>Islamabad — Mehwish Tariq</option><option>Faisalabad — Hamza Butt</option></select></label>
+          <label><span>Date</span><input type="date" value="2026-10-01"></label>
+          <label><span>Category</span><select><option>Refreshments</option><option>Stationery</option><option>Courier</option><option>Local travel</option><option>Repairs</option></select></label>
+          <label><span>Amount (Rs)</span><input placeholder="0.00"></label>
+          <label class="full"><span>Description</span><input placeholder="What was purchased?"></label>
+          <label class="full"><span>Paid to</span><input placeholder="Vendor or person"></label>
+        </div>
+        <div class="dropzone mt"><i data-lucide="camera"></i><b>Attach receipt photo</b><small>JPG, PNG or PDF</small></div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Petty expense recorded">Save expense</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EXPENSE CLAIMS ===================== -->
+<section class="screen" data-route="app/cash/expenses" data-title="Expense Claims">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Cash / Expense Claims</div>
+      <h1>Expense Claims</h1>
+      <p>Employee reimbursement claims submitted via ESS — review receipts, approve and pay.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-toast="Payment batch created for 4 approved claims"><i data-lucide="banknote"></i>Pay approved</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi yellow"><div class="kpi-top"><span>Awaiting approval</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>5</strong><small>Rs 112,850</small></div>
+    <div class="kpi"><div class="kpi-top"><span>Approved · unpaid</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>4</strong><small>Rs 58,300</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Paid this month</span><span class="icon-well"><i data-lucide="banknote"></i></span></div><strong>Rs 284,600</strong><small>31 claims</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Policy exceptions</span><span class="icon-well"><i data-lucide="shield-alert"></i></span></div><strong>2</strong><small class="down">Over daily allowance</small></div>
+  </div>
+
+  <div class="toolbar">
+    <label class="search-field"><i data-lucide="search"></i><input placeholder="Search employee or claim #…"></label>
+    <div class="chips"><button class="active">All <i>14</i></button><button>Pending <i>5</i></button><button>Approved <i>4</i></button><button>Paid <i>3</i></button><button>Rejected <i>2</i></button></div>
+    <span class="spacer"></span>
+    <select><option>All departments</option><option>Sales</option><option>Operations</option><option>Procurement</option><option>IT</option></select>
+  </div>
+
+  <div class="split">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Claims this month</h3><p>Submitted by employees · September 2026</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th><input type="checkbox"></th><th>Claim #</th><th>Employee</th><th>Category</th><th>Submitted</th><th>Receipts</th><th class="num">Amount</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--primary-soft)"><td><input type="checkbox"></td><td><b>EXP-0219</b><small>Client visit — Islamabad</small></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales</small></div></div></td><td>Travel</td><td>30 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 3</span></td><td class="num">24,600.00</td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm primary" data-toast="EXP-0219 approved">Approve</button> <button class="btn sm ghost" data-open="acc-reject-claim">Reject</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0218</b><small>Fuel — vendor visits</small></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td>Fuel</td><td>29 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 4</span></td><td class="num">18,250.00</td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm primary" data-toast="EXP-0218 approved">Approve</button> <button class="btn sm ghost" data-open="acc-reject-claim">Reject</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0217</b><small>Hotel — Karachi 2 nights</small></td><td><div class="cell-user"><span class="avatar sm">KA</span><div><b>Kashif Ali</b><small>Operations</small></div></div></td><td>Lodging</td><td>29 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 2</span></td><td class="num">46,000.00</td><td><span class="badge danger dot">Over policy</span></td><td class="actions"><button class="btn sm primary" data-toast="EXP-0217 approved with exception">Approve</button> <button class="btn sm ghost" data-open="acc-reject-claim">Reject</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0216</b><small>Team dinner — Q1 close</small></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Finance</small></div></div></td><td>Meals</td><td>28 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 1</span></td><td class="num">15,800.00</td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm primary" data-toast="EXP-0216 approved">Approve</button> <button class="btn sm ghost" data-open="acc-reject-claim">Reject</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0215</b><small>Mobile internet package</small></td><td><div class="cell-user"><span class="avatar sm">AH</span><div><b>Ali Haider</b><small>IT</small></div></div></td><td>Telecom</td><td>27 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 1</span></td><td class="num">8,200.00</td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm primary" data-toast="EXP-0215 approved">Approve</button> <button class="btn sm ghost" data-open="acc-reject-claim">Reject</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0213</b><small>Training — ICAP CPD</small></td><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>Finance</small></div></div></td><td>Training</td><td>24 Sep 2026</td><td><span class="badge neutral"><i data-lucide="file-text"></i> 1</span></td><td class="num">22,000.00</td><td><span class="badge good dot">Approved</span></td><td class="actions"><button class="btn sm secondary" data-toast="Paid via Bank Alfalah — 5510">Pay</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0211</b><small>Toll &amp; parking — Motorway M-2</small></td><td><div class="cell-user"><span class="avatar sm">UF</span><div><b>Umar Farooq</b><small>Warehouse</small></div></div></td><td>Travel</td><td>22 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 5</span></td><td class="num">6,300.00</td><td><span class="badge good dot">Approved</span></td><td class="actions"><button class="btn sm secondary" data-toast="Paid">Pay</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0209</b><small>Courier — customer samples</small></td><td><div class="cell-user"><span class="avatar sm">FN</span><div><b>Fatima Noor</b><small>Sales</small></div></div></td><td>Courier</td><td>20 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 2</span></td><td class="num">4,500.00</td><td><span class="badge good dot">Approved</span></td><td class="actions"><button class="btn sm secondary" data-toast="Paid">Pay</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0207</b><small>Laptop bag &amp; accessories</small></td><td><div class="cell-user"><span class="avatar sm">RS</span><div><b>Rabia Saeed</b><small>HR</small></div></div></td><td>Office supplies</td><td>18 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 1</span></td><td class="num">25,500.00</td><td><span class="badge good dot">Approved</span></td><td class="actions"><button class="btn sm secondary" data-toast="Paid">Pay</button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0204</b><small>Client lunch — Fatima Group</small></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales</small></div></div></td><td>Meals</td><td>15 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 1</span></td><td class="num">12,400.00</td><td><span class="badge info dot">Paid</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+          <tr><td><input type="checkbox"></td><td><b>EXP-0201</b><small>Personal mobile handset</small></td><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>Operations</small></div></div></td><td>Other</td><td>11 Sep 2026</td><td><span class="badge neutral"><i data-lucide="image"></i> 1</span></td><td class="num">68,000.00</td><td><span class="badge danger dot">Rejected</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        </tbody>
+      </table></div>
+      <div class="table-foot"><span>Showing 11 of 14 claims</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>EXP-0219 · Bilal Khan</h3><p>Client visit — Islamabad · 26–28 Sep</p></div><span class="badge warn dot">Pending</span></div>
+        <div class="grid-3 mb">
+          <div class="card" style="padding:8px;text-align:center"><span class="icon-well lg"><i data-lucide="image"></i></span><small class="muted" style="display:block">Bus ticket</small></div>
+          <div class="card" style="padding:8px;text-align:center"><span class="icon-well lg"><i data-lucide="image"></i></span><small class="muted" style="display:block">Hotel bill</small></div>
+          <div class="card" style="padding:8px;text-align:center"><span class="icon-well lg"><i data-lucide="image"></i></span><small class="muted" style="display:block">Meals</small></div>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Item</th><th class="num">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>Daewoo Express LHR–ISB return</td><td class="num">7,800.00</td></tr>
+            <tr><td>Hotel — 2 nights @ Rs 6,500</td><td class="num">13,000.00</td></tr>
+            <tr><td>Meals &amp; local transport</td><td class="num">3,800.00</td></tr>
+            <tr class="total"><td>Total claim</td><td class="num">24,600.00</td></tr>
+          </tbody>
+        </table></div>
+        <div class="dl mt">
+          <div><span>Policy limit</span><b>Rs 30,000 per trip</b></div>
+          <div><span>Customer</span><b>Fatima Group</b></div>
+          <div><span>Charge to</span><b>5310-01 Travel — Sales</b></div>
+          <div><span>Line manager</span><b>Approved — Ahmed Raza</b></div>
+        </div>
+        <div class="form-actions"><button class="btn secondary sm" data-open="acc-reject-claim">Reject</button><button class="btn primary sm" data-toast="EXP-0219 approved">Approve</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="acc-reject-claim">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Reject expense claim</h2><p>The employee will be notified on ESS.</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Reason *</span><select><option>Missing or unclear receipt</option><option>Exceeds policy limit</option><option>Not a business expense</option><option>Duplicate claim</option></select></label>
+          <label class="full"><span>Comment to employee</span><textarea rows="3" placeholder="Explain what needs to change…"></textarea></label>
+          <label class="check full"><input type="checkbox" checked> Allow employee to resubmit</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn danger" data-close data-toast="Claim rejected">Reject claim</button></div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1510 @@
+<!-- ===================================================================
+     51-hr-pay-talent.html — Payroll, Loans, Settlement, Talent, HR Analytics
+     =================================================================== -->
+
+<!-- ============================ PAYROLL OVERVIEW ============================ -->
+<section class="screen" data-route="app/hr/payroll" data-title="Payroll Overview">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll</div>
+      <h1>Payroll Overview</h1>
+      <p>Monthly salary runs, statutory deductions and payroll cost for Al-Noor Enterprises — 186 employees across 4 branches.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/hr/payroll/reports"><i data-lucide="file-spreadsheet"></i>Statutory Reports</a>
+      <a class="btn secondary" href="#/app/hr/payroll/structures"><i data-lucide="layers"></i>Salary Structures</a>
+      <a class="btn primary" href="#/app/hr/payroll/run"><i data-lucide="play-circle"></i>Run October Payroll</a>
+    </div>
+  </div>
+
+  <div class="hero-band mb">
+    <div>
+      <span class="hero-eyebrow">Last run · PR-2026-09 · September 2026</span>
+      <h1>Rs 19,097,980 paid to 186 employees</h1>
+      <p>Posted to GL on 29 Sep 2026 via JV-2026-000412 · Bank transfers released through Meezan Bank — 0123 and HBL — 8721 IBFT · 179 payslips emailed.</p>
+      <div class="row mt"><span class="badge good dot">Posted</span><span class="badge info">Paid 30 Sep 2026</span><span class="badge neutral">Approved by Ahmed Raza</span></div>
+    </div>
+    <div class="hero-actions">
+      <a class="btn secondary" href="#/app/hr/payroll/payslips"><i data-lucide="file-text"></i>View Payslips</a>
+      <a class="btn secondary" href="#/app/accounting/vouchers/view"><i data-lucide="book-open"></i>Journal JV-2026-000412</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi">
+      <div class="kpi-top"><span>Gross Salary · Sep</span><span class="icon-well"><i data-lucide="wallet"></i></span></div>
+      <strong>Rs 21,450,000</strong>
+      <small class="up">▲ 1.3% vs Aug (Rs 21,180,000)</small>
+    </div>
+    <div class="kpi teal">
+      <div class="kpi-top"><span>Net Pay · Sep</span><span class="icon-well"><i data-lucide="banknote"></i></span></div>
+      <strong>Rs 19,097,980</strong>
+      <small>89.0% of gross · avg Rs 102,677</small>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-top"><span>Income Tax u/s 149</span><span class="icon-well"><i data-lucide="percent"></i></span></div>
+      <strong>Rs 1,286,400</strong>
+      <small>132 taxable employees · due to FBR 15 Oct</small>
+    </div>
+    <div class="kpi violet">
+      <div class="kpi-top"><span>EOBI (Employee + Employer)</span><span class="icon-well"><i data-lucide="shield-check"></i></span></div>
+      <strong>Rs 412,920</strong>
+      <small>Rs 68,820 + Rs 344,100 · 186 insured</small>
+    </div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel">
+      <div class="panel-head">
+        <div><h3>Payroll Cost — Last 12 Months</h3><p>Gross salary in Rs millions · Oct 2025 – Sep 2026</p></div>
+        <div class="panel-actions"><div class="seg"><button class="active">Gross</button><button>Net</button><button>CTC</button></div></div>
+      </div>
+      <div class="bars">
+        <div class="bar" style="--h:83%"><i></i><span>Oct</span></div>
+        <div class="bar" style="--h:84%"><i></i><span>Nov</span></div>
+        <div class="bar" style="--h:100%"><i></i><span>Dec</span></div>
+        <div class="bar" style="--h:85%"><i></i><span>Jan</span></div>
+        <div class="bar" style="--h:86%"><i></i><span>Feb</span></div>
+        <div class="bar" style="--h:88%"><i></i><span>Mar</span></div>
+        <div class="bar" style="--h:89%"><i></i><span>Apr</span></div>
+        <div class="bar" style="--h:89%"><i></i><span>May</span></div>
+        <div class="bar" style="--h:96%"><i></i><span>Jun</span></div>
+        <div class="bar" style="--h:92%"><i></i><span>Jul</span></div>
+        <div class="bar" style="--h:93%"><i></i><span>Aug</span></div>
+        <div class="bar" style="--h:94%"><i></i><span>Sep</span></div>
+      </div>
+      <div class="legend"><span><i style="background:#15803d"></i>Gross salary</span><span class="muted small">Dec: annual bonus Rs 3.4M · Jun: Eid-ul-Adha bonus Rs 1.3M · Jul: annual increments 7.5%</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Upcoming · October 2026 Run</h3><p>PR-2026-10 · Pay date 31 Oct</p></div><span class="badge warn">Draft</span></div>
+      <div class="timeline">
+        <div class="tl-item"><span class="tl-dot good"></span><div><b>Attendance cut-off</b><small>25 Oct 2026 · biometric sync from 6 devices</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Inputs freeze — OT, leave, loans</b><small>26 Oct 2026 · Ayesha Noor (HR)</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Review &amp; variance check</b><small>27 Oct 2026 · Hira Ali (Accounts)</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Approval</b><small>28 Oct 2026 · Sana Javed → Ahmed Raza</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Post to GL &amp; bank transfer</b><small>30 Oct 2026 · Meezan / HBL IBFT files</small></div></div>
+        <div class="tl-item"><span class="tl-dot"></span><div><b>Tax &amp; EOBI deposit</b><small>15 Nov 2026 · CPR via FBR IRIS, EOBI PR-01</small></div></div>
+      </div>
+      <div class="banner info mt"><i data-lucide="info"></i><div><b>3 changes since September</b><p>2 new joiners, 1 exit (Kashif Ali — final settlement), 4 salary revisions.</p></div></div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Cost by Department · September</h3><p>Gross salary and headcount</p></div><div class="panel-actions"><button class="btn ghost sm"><i data-lucide="download"></i>CSV</button></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Department</th><th class="num">Heads</th><th class="num">Gross (Rs)</th><th class="num">Avg / head</th><th>Share</th></tr></thead>
+        <tbody>
+          <tr><td><b>Sales</b></td><td class="num">42</td><td class="num">4,830,000</td><td class="num">115,000</td><td><div class="progress"><i style="width:22.5%"></i></div></td></tr>
+          <tr><td><b>Operations</b></td><td class="num">38</td><td class="num">3,610,000</td><td class="num">95,000</td><td><div class="progress"><i style="width:16.8%"></i></div></td></tr>
+          <tr><td><b>IT</b></td><td class="num">16</td><td class="num">3,040,000</td><td class="num">190,000</td><td><div class="progress"><i style="width:14.2%"></i></div></td></tr>
+          <tr><td><b>Administration</b></td><td class="num">21</td><td class="num">2,600,000</td><td class="num">123,810</td><td><div class="progress"><i style="width:12.1%"></i></div></td></tr>
+          <tr><td><b>Warehouse</b></td><td class="num">34</td><td class="num">2,380,000</td><td class="num">70,000</td><td><div class="progress"><i style="width:11.1%"></i></div></td></tr>
+          <tr><td><b>Finance</b></td><td class="num">14</td><td class="num">2,150,000</td><td class="num">153,571</td><td><div class="progress"><i style="width:10%"></i></div></td></tr>
+          <tr><td><b>Procurement</b></td><td class="num">12</td><td class="num">1,575,000</td><td class="num">131,250</td><td><div class="progress"><i style="width:7.3%"></i></div></td></tr>
+          <tr><td><b>Human Resources</b></td><td class="num">9</td><td class="num">1,265,000</td><td class="num">140,556</td><td><div class="progress"><i style="width:5.9%"></i></div></td></tr>
+          <tr class="total"><td>Total</td><td class="num">186</td><td class="num">21,450,000</td><td class="num">115,323</td><td>100%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>September Breakdown</h3><p>From gross to cost-to-company</p></div></div>
+      <div class="stackbar mb"><i style="width:89%;background:#15803d"></i><i style="width:6%;background:#efbc61"></i><i style="width:2.9%;background:#6d28d9"></i><i style="width:1.8%;background:#0e7490"></i><i style="width:0.3%;background:#dc2626"></i></div>
+      <div class="legend mb"><span><i style="background:#15803d"></i>Net pay</span><span><i style="background:#efbc61"></i>Income tax</span><span><i style="background:#6d28d9"></i>PF</span><span><i style="background:#0e7490"></i>Loans</span><span><i style="background:#dc2626"></i>EOBI</span></div>
+      <div class="dl">
+        <div><span>Gross salary</span><b>Rs 21,450,000</b></div>
+        <div><span>Less: Income tax u/s 149</span><b>(1,286,400)</b></div>
+        <div><span>Less: EOBI employee share (1%)</span><b>(68,820)</b></div>
+        <div><span>Less: Provident Fund employee (8%)</span><b>(612,300)</b></div>
+        <div><span>Less: Loan &amp; advance recovery</span><b>(384,500)</b></div>
+        <div><span>Net pay</span><b>Rs 19,097,980</b></div>
+        <div><span>Add: EOBI employer (5%)</span><b>344,100</b></div>
+        <div><span>Add: PESSI employer (6%)</span><b>186,600</b></div>
+        <div><span>Add: PF employer (8%)</span><b>612,300</b></div>
+        <div><span>Total cost to company</span><b>Rs 22,593,000</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Recent Payroll Runs</h3><p>FY 2026-27 and prior</p></div><div class="panel-actions"><a class="btn ghost sm" href="#/app/hr/payroll/payslips">All payslips</a></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Run #</th><th>Period</th><th class="num">Employees</th><th class="num">Gross (Rs)</th><th class="num">Deductions</th><th class="num">Net (Rs)</th><th>Journal</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-09</a><small>Paid 30 Sep 2026</small></td><td>September 2026</td><td class="num">186</td><td class="num">21,450,000</td><td class="num cr">2,352,020</td><td class="num">19,097,980</td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000412</a></td><td><span class="badge good dot">Posted</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-08</a><small>Paid 29 Aug 2026</small></td><td>August 2026</td><td class="num">184</td><td class="num">21,180,000</td><td class="num cr">2,317,600</td><td class="num">18,862,400</td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000368</a></td><td><span class="badge good dot">Posted</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-07</a><small>Paid 31 Jul 2026</small></td><td>July 2026</td><td class="num">183</td><td class="num">20,920,000</td><td class="num cr">2,279,700</td><td class="num">18,640,300</td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000301</a></td><td><span class="badge good dot">Posted</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-06</a><small>Incl. Eid bonus</small></td><td>June 2026</td><td class="num">181</td><td class="num">21,890,000</td><td class="num cr">2,469,250</td><td class="num">19,420,750</td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000254</a></td><td><span class="badge good dot">Posted</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-05</a><small>Paid 29 May 2026</small></td><td>May 2026</td><td class="num">180</td><td class="num">20,310,000</td><td class="num cr">2,194,400</td><td class="num">18,115,600</td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000207</a></td><td><span class="badge good dot">Posted</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-OFF-02</a><small>Off-cycle</small></td><td>Settlement · Sep 2026</td><td class="num">1</td><td class="num">556,000</td><td class="num cr">93,820</td><td class="num">462,180</td><td><span class="muted">—</span></td><td><span class="badge warn dot">Pending approval</span></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/settlement"><i data-lucide="eye"></i></a></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ RUN PAYROLL WIZARD ============================ -->
+<section class="screen" data-route="app/hr/payroll/run" data-title="Run Payroll">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Run</div>
+      <h1>Run Payroll — October 2026</h1>
+      <p>PR-2026-10 · Period 01–31 Oct 2026 · Pay date 31 Oct 2026 · Draft saved by Ayesha Noor, 01 Oct 2026 10:42</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn ghost" data-toast="Draft saved"><i data-lucide="save"></i>Save draft</button>
+      <a class="btn secondary" href="#/app/hr/payroll"><i data-lucide="x"></i>Exit</a>
+    </div>
+  </div>
+
+  <div class="wizard" data-wizard>
+    <ol class="steps">
+      <li class="active"><b>1</b><span>Period &amp; Scope</span></li>
+      <li><b>2</b><span>Inputs</span></li>
+      <li><b>3</b><span>Review</span></li>
+      <li><b>4</b><span>Approve</span></li>
+      <li><b>5</b><span>Post &amp; Pay</span></li>
+    </ol>
+
+    <!-- Step 1 -->
+    <div class="wz-pane active">
+      <div class="split">
+        <div class="panel">
+          <div class="form-section"><h4>Pay period</h4><p>Monthly payroll for calendar month. Attendance cut-off is the 25th.</p></div>
+          <div class="form-grid c3 mb">
+            <label><span>Payroll month *</span><select><option>October 2026</option><option>November 2026</option></select></label>
+            <label><span>Period from</span><input type="date" value="2026-10-01"></label>
+            <label><span>Period to</span><input type="date" value="2026-10-31"></label>
+            <label><span>Pay date *</span><input type="date" value="2026-10-31"></label>
+            <label><span>Attendance cut-off</span><input type="date" value="2026-10-25"></label>
+            <label><span>Run type</span><select><option>Regular</option><option>Off-cycle</option><option>Bonus only</option></select></label>
+          </div>
+          <div class="form-section"><h4>Scope</h4><p>Choose which employees this run covers.</p></div>
+          <div class="form-grid mb">
+            <label><span>Pay group</span><select><option>Monthly Salaried — Staff &amp; Management</option><option>Monthly — Warehouse Workers</option><option>All pay groups</option></select></label>
+            <label><span>Salary payable account</span><select><option>2140 · Salaries Payable</option></select></label>
+            <label class="check"><input type="checkbox" checked> Lahore HQ <span class="muted">(98)</span></label>
+            <label class="check"><input type="checkbox" checked> Karachi <span class="muted">(41)</span></label>
+            <label class="check"><input type="checkbox" checked> Islamabad <span class="muted">(26)</span></label>
+            <label class="check"><input type="checkbox" checked> Faisalabad <span class="muted">(22)</span></label>
+            <label class="check"><input type="checkbox" checked> Include employees on notice period</label>
+            <label class="check"><input type="checkbox"> Include employees exited in period <span class="muted">(handled in settlement)</span></label>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Run Summary</h3><p>Based on current selection</p></div></div>
+            <div class="dl">
+              <div><span>Employees in scope</span><b>187</b></div>
+              <div><span>New joiners (pro-rata)</span><b>2</b></div>
+              <div><span>Exits (excluded)</span><b>1</b></div>
+              <div><span>On notice period</span><b>3</b></div>
+              <div><span>Salary revisions effective</span><b>4</b></div>
+              <div><span>Working days</span><b>26</b></div>
+              <div><span>Public holidays</span><b>0</b></div>
+            </div>
+          </div>
+          <div class="banner warn"><i data-lucide="alert-triangle"></i><div><b>Previous period locked</b><p>September 2026 (PR-2026-09) is posted. Changes to it require a reversal.</p></div></div>
+        </div>
+      </div>
+      <div class="form-actions"><a class="btn secondary" href="#/app/hr/payroll">Cancel</a><button class="btn primary" data-next>Continue to inputs</button></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="wz-pane">
+      <div class="kpi-grid mb">
+        <div class="kpi teal">
+          <div class="kpi-top"><span>Attendance Sync</span><span class="icon-well"><i data-lucide="fingerprint"></i></span></div>
+          <strong>183 / 187</strong>
+          <small>Last sync 01 Oct 09:15 · 4 missing punches</small>
+        </div>
+        <div class="kpi blue">
+          <div class="kpi-top"><span>Approved Overtime</span><span class="icon-well"><i data-lucide="timer"></i></span></div>
+          <strong>1,284 hrs</strong>
+          <small>Rs 612,500 · 64 employees</small>
+        </div>
+        <div class="kpi yellow">
+          <div class="kpi-top"><span>Unpaid Leave</span><span class="icon-well"><i data-lucide="calendar-x"></i></span></div>
+          <strong>46 days</strong>
+          <small>Rs 168,400 deduction · 11 employees</small>
+        </div>
+        <div class="kpi violet">
+          <div class="kpi-top"><span>Loan Installments</span><span class="icon-well"><i data-lucide="hand-coins"></i></span></div>
+          <strong>Rs 389,510</strong>
+          <small>31 active loans &amp; advances</small>
+        </div>
+      </div>
+
+      <div class="grid-2 mb">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Input Sources</h3><p>Pulled automatically from HR modules</p></div><button class="btn ghost sm" data-toast="Inputs re-synced"><i data-lucide="refresh-cw"></i>Re-sync</button></div>
+          <div class="list">
+            <div class="list-item"><span class="icon-well"><i data-lucide="fingerprint"></i></span><div><b>Attendance register</b><small>6 biometric devices · 4 employees with missing punches</small></div><span class="spacer"></span><span class="badge warn">4 issues</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="timer"></i></span><div><b>Overtime</b><small>All 64 OT requests approved by line managers</small></div><span class="spacer"></span><span class="badge good">Ready</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="plane"></i></span><div><b>Leave without pay</b><small>11 employees · 46 days</small></div><span class="spacer"></span><span class="badge good">Ready</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="hand-coins"></i></span><div><b>Loans &amp; advances</b><small>31 installments · 1 new advance pending approval</small></div><span class="spacer"></span><span class="badge info">1 pending</span></div>
+            <div class="list-item"><span class="icon-well"><i data-lucide="trending-up"></i></span><div><b>Salary revisions</b><small>4 revisions effective 01 Oct 2026</small></div><span class="spacer"></span><span class="badge good">Applied</span></div>
+          </div>
+          <div class="row mt"><a class="btn secondary sm" href="#/app/hr/attendance/register"><i data-lucide="calendar-days"></i>Fix attendance</a><a class="btn secondary sm" href="#/app/hr/overtime"><i data-lucide="timer"></i>Overtime</a><a class="btn secondary sm" href="#/app/hr/loans"><i data-lucide="hand-coins"></i>Loans</a></div>
+        </div>
+        <div class="panel flush">
+          <div class="panel-head"><div><h3>Missing Punches</h3><p>Will be treated as present unless marked</p></div></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Employee</th><th>Date</th><th>Treat as</th></tr></thead>
+            <tbody>
+              <tr><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>EMP-0063 · Warehouse</small></div></div></td><td>14 Oct</td><td><select class="cell-input"><option>Present</option><option>Absent (LWP)</option><option>Half day</option></select></td></tr>
+              <tr><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Nida Shah</b><small>EMP-0071 · Operations</small></div></div></td><td>09 Oct</td><td><select class="cell-input"><option>Present</option><option>Absent (LWP)</option><option>Half day</option></select></td></tr>
+              <tr><td><div class="cell-user"><span class="avatar sm">AH</span><div><b>Ali Haider</b><small>EMP-0094 · IT</small></div></div></td><td>21 Oct</td><td><select class="cell-input"><option>Half day</option><option>Present</option><option>Absent (LWP)</option></select></td></tr>
+              <tr><td><div class="cell-user"><span class="avatar sm">RS</span><div><b>Rabia Saeed</b><small>EMP-0102 · Sales</small></div></div></td><td>22 Oct</td><td><select class="cell-input"><option>Present</option><option>Absent (LWP)</option><option>Half day</option></select></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <div class="panel flush mb">
+        <div class="panel-head"><div><h3>Arrears, Bonuses &amp; One-time Adjustments</h3><p>Enter amounts for this run only</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="upload"></i>Import CSV</button><button class="btn secondary sm"><i data-lucide="plus"></i>Add line</button></div></div>
+        <div class="table-wrap"><table class="tbl lines">
+          <thead><tr><th>Employee</th><th>Component</th><th>Type</th><th class="num">Amount (Rs)</th><th>Taxable</th><th>Remarks</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>EMP-0047</small></div></div></td><td><select class="cell-input"><option>Sales Commission</option></select></td><td><span class="badge good">Earning</span></td><td><input class="cell-input num" value="31,200"></td><td><input type="checkbox" checked></td><td><input class="cell-input" value="Q3 target 112% achieved"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>EMP-0055</small></div></div></td><td><select class="cell-input"><option>Salary Arrears</option></select></td><td><span class="badge good">Earning</span></td><td><input class="cell-input num" value="18,000"></td><td><input type="checkbox" checked></td><td><input class="cell-input" value="Increment w.e.f. 01 Sep not paid in Sep"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>EMP-0068</small></div></div></td><td><select class="cell-input"><option>Performance Bonus</option></select></td><td><span class="badge good">Earning</span></td><td><input class="cell-input num" value="45,000"></td><td><input type="checkbox" checked></td><td><input class="cell-input" value="H1 rating 'Exceeds'"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">UF</span><div><b>Umar Farooq</b><small>EMP-0031</small></div></div></td><td><select class="cell-input"><option>Advance Recovery</option></select></td><td><span class="badge warn">Deduction</span></td><td><input class="cell-input num" value="15,000"></td><td><input type="checkbox"></td><td><input class="cell-input" value="Eid advance — final installment"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>EMP-0039</small></div></div></td><td><select class="cell-input"><option>Mobile Allowance</option></select></td><td><span class="badge good">Earning</span></td><td><input class="cell-input num" value="3,500"></td><td><input type="checkbox" checked></td><td><input class="cell-input" value="Field visits — Karachi"></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="trash-2"></i></button></td></tr>
+            <tr class="total"><td colspan="3">Net one-time adjustments</td><td class="num">82,700</td><td colspan="3"><span class="muted small">Earnings 97,700 · Deductions 15,000</span></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-next>Calculate &amp; review</button></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="wz-pane">
+      <div class="banner warn mb"><i data-lucide="alert-triangle"></i><div><b>6 warnings need attention before approval</b><p>2 employees with net pay variance above 15%, 1 employee with missing bank IBAN, 1 negative-net risk (loan exceeds 50% of gross), 2 pro-rata new joiners.</p></div><button class="btn sm secondary">Show only flagged</button></div>
+
+      <div class="kpi-grid c5 mb">
+        <div class="kpi"><div class="kpi-top"><span>Gross</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 21,612,400</strong><small class="up">▲ 0.76% vs Sep</small></div>
+        <div class="kpi yellow"><div class="kpi-top"><span>Income Tax</span><span class="icon-well"><i data-lucide="percent"></i></span></div><strong>Rs 1,295,300</strong><small>▲ 0.69% vs Sep</small></div>
+        <div class="kpi violet"><div class="kpi-top"><span>EOBI + PF (Emp.)</span><span class="icon-well"><i data-lucide="shield-check"></i></span></div><strong>Rs 686,990</strong><small>EOBI 69,190 · PF 617,800</small></div>
+        <div class="kpi blue"><div class="kpi-top"><span>Loans</span><span class="icon-well"><i data-lucide="hand-coins"></i></span></div><strong>Rs 389,510</strong><small>31 installments</small></div>
+        <div class="kpi teal"><div class="kpi-top"><span>Net Pay</span><span class="icon-well"><i data-lucide="banknote"></i></span></div><strong>Rs 19,240,600</strong><small class="up">▲ 0.75% vs Sep</small></div>
+      </div>
+
+      <div class="panel flush mb">
+        <div class="toolbar">
+          <label class="search-field"><i data-lucide="search"></i><input placeholder="Search employee…"></label>
+          <select><option>All departments</option><option>Sales</option><option>Operations</option><option>Warehouse</option></select>
+          <div class="chips"><button class="active">All <i>187</i></button><button>Flagged <i>6</i></button><button>New <i>2</i></button><button>Revised <i>4</i></button></div>
+          <span class="spacer"></span>
+          <button class="btn secondary sm"><i data-lucide="download"></i>Payroll register</button>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Employee</th><th>Dept</th><th class="num">Paid days</th><th class="num">Gross</th><th class="num">Tax</th><th class="num">EOBI</th><th class="num">PF</th><th class="num">Loan</th><th class="num">Net</th><th>vs Sep</th></tr></thead>
+          <tbody>
+            <tr><td><div class="cell-user"><span class="avatar sm">AR</span><div><b>Ahmed Raza</b><small>EMP-0001 · CEO</small></div></div></td><td>Administration</td><td class="num">31</td><td class="num">850,000</td><td class="num">183,830</td><td class="num">370</td><td class="num">37,800</td><td class="num zero">—</td><td class="num">628,000</td><td><span class="badge neutral">0.0%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>EMP-0004 · Finance Mgr</small></div></div></td><td>Finance</td><td class="num">31</td><td class="num">385,000</td><td class="num">48,560</td><td class="num">370</td><td class="num">17,100</td><td class="num zero">—</td><td class="num">318,970</td><td><span class="badge neutral">0.0%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>EMP-0047 · Sales Exec</small></div></div></td><td>Sales</td><td class="num">31</td><td class="num">188,450</td><td class="num">9,250</td><td class="num">370</td><td class="num">6,800</td><td class="num">10,000</td><td class="num">162,030</td><td><span class="badge good">+1.4%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>EMP-0068 · Ops Lead</small></div></div></td><td>Operations</td><td class="num">31</td><td class="num">200,000</td><td class="num">13,710</td><td class="num">370</td><td class="num">7,600</td><td class="num zero">—</td><td class="num">178,320</td><td><span class="badge warn">+29.6%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>EMP-0055 · Buyer</small></div></div></td><td>Procurement</td><td class="num">31</td><td class="num">156,000</td><td class="num">6,330</td><td class="num">370</td><td class="num">5,600</td><td class="num">5,000</td><td class="num">138,700</td><td><span class="badge warn">+18.2%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>EMP-0063 · Storekeeper</small></div></div></td><td>Warehouse</td><td class="num">29</td><td class="num">60,330</td><td class="num zero">—</td><td class="num">370</td><td class="num">2,320</td><td class="num">8,000</td><td class="num">49,640</td><td><span class="badge danger">−6.5%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">UF</span><div><b>Umar Farooq</b><small>EMP-0031 · Driver</small></div></div></td><td>Operations</td><td class="num">31</td><td class="num">54,000</td><td class="num zero">—</td><td class="num">370</td><td class="num">2,080</td><td class="num">15,000</td><td class="num">36,550</td><td><span class="badge neutral">0.0%</span></td></tr>
+            <tr><td><div class="cell-user"><span class="avatar sm">RS</span><div><b>Rabia Saeed</b><small>EMP-0187 · New joiner</small></div></div></td><td>Sales</td><td class="num">18</td><td class="num">69,680</td><td class="num zero">—</td><td class="num">370</td><td class="num zero">—</td><td class="num zero">—</td><td class="num">69,310</td><td><span class="badge info">New</span></td></tr>
+            <tr><td colspan="10" class="muted small">… 179 more employees</td></tr>
+            <tr class="total"><td colspan="3">Total · 187 employees</td><td class="num">21,612,400</td><td class="num">1,295,300</td><td class="num">69,190</td><td class="num">617,800</td><td class="num">389,510</td><td class="num">19,240,600</td><td><span class="badge good">+0.75%</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="table-foot"><span>Showing 1–8 of 187</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-next>Submit for approval</button></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="wz-pane">
+      <div class="split">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Approval Workflow</h3><p>Payroll &gt; Rs 10M requires two-level approval (Settings → Approval Workflows)</p></div><a class="btn ghost sm" href="#/app/settings/approvals">Configure</a></div>
+          <div class="timeline">
+            <div class="tl-item"><span class="tl-dot good"></span><div><b>Prepared — Ayesha Noor (HR Manager)</b><small>01 Oct 2026 10:42 · Inputs frozen, 187 employees calculated</small></div></div>
+            <div class="tl-item"><span class="tl-dot good"></span><div><b>Checked — Hira Ali (Accountant)</b><small>01 Oct 2026 11:20 · "Variance explained by Mehwish bonus &amp; Faisal arrears."</small></div></div>
+            <div class="tl-item"><span class="tl-dot warn"></span><div><b>Finance approval — Sana Javed (Finance Manager)</b><small>Awaiting · notified by email &amp; in-app</small></div></div>
+            <div class="tl-item"><span class="tl-dot"></span><div><b>Final approval — Ahmed Raza (CEO)</b><small>Required for gross above Rs 20,000,000</small></div></div>
+          </div>
+          <div class="form-grid mt">
+            <label class="full"><span>Approver comment</span><textarea rows="3" placeholder="Add a note for the next approver…"></textarea></label>
+          </div>
+          <div class="row mt"><button class="btn primary" data-toast="Approved — forwarded to Ahmed Raza"><i data-lucide="check"></i>Approve</button><button class="btn secondary" data-toast="Sent back to HR for correction"><i data-lucide="undo-2"></i>Send back</button><button class="btn danger" data-toast="Payroll run rejected"><i data-lucide="x"></i>Reject</button></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h3>Pre-posting Checklist</h3><p>8 of 10 complete</p></div></div>
+          <div class="progress mb"><i style="width:80%"></i></div>
+          <div class="stack">
+            <label class="check"><input type="checkbox" checked> Attendance cut-off applied (25 Oct)</label>
+            <label class="check"><input type="checkbox" checked> Overtime approved by managers</label>
+            <label class="check"><input type="checkbox" checked> Unpaid leave verified</label>
+            <label class="check"><input type="checkbox" checked> Loan installments reconciled</label>
+            <label class="check"><input type="checkbox" checked> Tax computed on projected annual income</label>
+            <label class="check"><input type="checkbox" checked> EOBI wage ceiling Rs 37,000 applied</label>
+            <label class="check"><input type="checkbox" checked> Variances above 15% explained</label>
+            <label class="check"><input type="checkbox" checked> Exit (Kashif Ali) moved to settlement</label>
+            <label class="check"><input type="checkbox"> Missing IBAN — Rabia Saeed (pay by cheque)</label>
+            <label class="check"><input type="checkbox"> Bank balance sufficient (Meezan 0123)</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><button class="btn primary" data-next>Continue to post</button></div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="wz-pane">
+      <div class="split mb">
+        <div class="panel flush">
+          <div class="panel-head"><div><h3>GL Journal Preview</h3><p>JV-2026-000451 · Dated 31 Oct 2026 · Narration: Payroll October 2026 (PR-2026-10)</p></div><span class="badge info">Balanced</span></div>
+          <div class="table-wrap"><table class="tbl">
+            <thead><tr><th>Account</th><th>Cost centre</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead>
+            <tbody>
+              <tr><td><b>5110</b> Salaries &amp; Wages Expense<small>Gross salary, OT, bonuses</small></td><td>By department (8)</td><td class="num dr">21,612,400.00</td><td class="num zero">—</td></tr>
+              <tr><td><b>5115</b> Employer EOBI Contribution</td><td>By department</td><td class="num dr">345,950.00</td><td class="num zero">—</td></tr>
+              <tr><td><b>5116</b> Employer PESSI Contribution</td><td>Lahore / Faisalabad</td><td class="num dr">187,900.00</td><td class="num zero">—</td></tr>
+              <tr><td><b>5117</b> Employer PF Contribution</td><td>By department</td><td class="num dr">617,800.00</td><td class="num zero">—</td></tr>
+              <tr><td><b>2140</b> Salaries Payable<small>Net pay to 187 employees</small></td><td>—</td><td class="num zero">—</td><td class="num cr">19,240,600.00</td></tr>
+              <tr><td><b>2152</b> Income Tax Payable — u/s 149</td><td>—</td><td class="num zero">—</td><td class="num cr">1,295,300.00</td></tr>
+              <tr><td><b>2155</b> EOBI Payable<small>Employee 69,190 + Employer 345,950</small></td><td>—</td><td class="num zero">—</td><td class="num cr">415,140.00</td></tr>
+              <tr><td><b>2156</b> PESSI Payable</td><td>—</td><td class="num zero">—</td><td class="num cr">187,900.00</td></tr>
+              <tr><td><b>2160</b> Provident Fund Payable<small>Employee 617,800 + Employer 617,800</small></td><td>—</td><td class="num zero">—</td><td class="num cr">1,235,600.00</td></tr>
+              <tr><td><b>1340</b> Loans &amp; Advances to Employees</td><td>—</td><td class="num zero">—</td><td class="num cr">389,510.00</td></tr>
+              <tr class="total"><td colspan="2">Total</td><td class="num">22,764,050.00</td><td class="num">22,764,050.00</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Bank Transfer Files</h3><p>Net pay Rs 19,240,600</p></div></div>
+            <div class="list">
+              <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Meezan Bank — 0123</b><small>142 employees · Bulk salary upload (.txt)</small></div><span class="spacer"></span><b>14,860,200</b></div>
+              <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>HBL — 8721 · IBFT</b><small>38 employees · Other-bank IBFT (.csv)</small></div><span class="spacer"></span><b>4,012,400</b></div>
+              <div class="list-item"><span class="icon-well"><i data-lucide="banknote"></i></span><div><b>Cheque / Cash</b><small>7 employees · no IBAN on file</small></div><span class="spacer"></span><b>368,000</b></div>
+            </div>
+            <div class="row mt"><button class="btn secondary sm" data-toast="Meezan bulk file generated"><i data-lucide="file-down"></i>Meezan file</button><button class="btn secondary sm" data-toast="HBL IBFT file generated"><i data-lucide="file-down"></i>HBL IBFT file</button><button class="btn ghost sm"><i data-lucide="printer"></i>Bank advice</button></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>After posting</h3></div></div>
+            <div class="stack">
+              <label class="switch"><input type="checkbox" checked><i></i><span>Email payslips (PDF, password = CNIC last 5)</span></label>
+              <label class="switch"><input type="checkbox" checked><i></i><span>Publish to Employee Self-Service</span></label>
+              <label class="switch"><input type="checkbox"><i></i><span>SMS net-pay alert</span></label>
+              <label class="switch"><input type="checkbox" checked><i></i><span>Create tax &amp; EOBI deposit reminders (15 Nov)</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="banner good mb"><i data-lucide="circle-check"></i><div><b>Approved by Sana Javed and Ahmed Raza</b><p>Posting will lock PR-2026-10, create JV-2026-000451 and mark 31 loan installments as recovered.</p></div></div>
+      <div class="form-actions"><button class="btn secondary" data-prev>Back</button><a class="btn secondary" href="#/app/hr/payroll/payslips"><i data-lucide="eye"></i>Preview payslips</a><button class="btn primary" data-toast="PR-2026-10 posted · JV-2026-000451 created · 187 payslips queued"><i data-lucide="send"></i>Post &amp; Pay</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SALARY STRUCTURES ============================ -->
+<section class="screen" data-route="app/hr/payroll/structures" data-title="Salary Structures">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Structures</div>
+      <h1>Salary Components &amp; Structures</h1>
+      <p>Define earnings, deductions and employer contributions, then combine them into grade-wise salary structures.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="copy"></i>Duplicate structure</button>
+      <button class="btn primary" data-open="pay-component"><i data-lucide="plus"></i>New Component</button>
+    </div>
+  </div>
+
+  <div data-tabs>
+    <div class="tabs"><button class="active" data-tab="comp">Components <span class="badge neutral">17</span></button><button data-tab="struct">Structures &amp; Grades <span class="badge neutral">6</span></button></div>
+
+    <div class="tab-pane active" data-pane="comp">
+      <div class="panel flush mb">
+        <div class="toolbar">
+          <label class="search-field"><i data-lucide="search"></i><input placeholder="Search components…"></label>
+          <div class="chips"><button class="active">All <i>17</i></button><button>Earnings <i>8</i></button><button>Deductions <i>5</i></button><button>Employer <i>4</i></button></div>
+          <span class="spacer"></span>
+          <button class="btn secondary sm"><i data-lucide="download"></i>Export</button>
+        </div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Code</th><th>Component</th><th>Type</th><th>Calculation</th><th>Taxable</th><th>GL account</th><th>Payslip</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><b>BAS</b></td><td>Basic Salary</td><td><span class="badge good">Earning</span></td><td>Fixed — per grade</td><td>Yes</td><td>5110 Salaries &amp; Wages</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>HRA</b></td><td>House Rent Allowance</td><td><span class="badge good">Earning</span></td><td>45% of Basic</td><td>Yes</td><td>5110 Salaries &amp; Wages</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>MED</b></td><td>Medical Allowance</td><td><span class="badge good">Earning</span></td><td>10% of Basic</td><td><span class="badge info">Exempt ≤ 10% basic</span></td><td>5110 Salaries &amp; Wages</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>UTL</b></td><td>Utilities Allowance</td><td><span class="badge good">Earning</span></td><td>Fixed — per grade</td><td>Yes</td><td>5110 Salaries &amp; Wages</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>CNV</b></td><td>Conveyance Allowance</td><td><span class="badge good">Earning</span></td><td>Fixed — per grade</td><td>Yes</td><td>5110 Salaries &amp; Wages</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>FUL</b></td><td>Fuel Allowance</td><td><span class="badge good">Earning</span></td><td>Litres × OGRA price (G3+)</td><td>Yes</td><td>5112 Vehicle &amp; Fuel</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>COM</b></td><td>Sales Commission</td><td><span class="badge good">Earning</span></td><td>Variable — monthly input</td><td>Yes</td><td>5130 Sales Commission</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>OVT</b></td><td>Overtime</td><td><span class="badge good">Earning</span></td><td>(Basic ÷ 208) × 2 × OT hrs</td><td>Yes</td><td>5111 Overtime</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>ITX</b></td><td>Income Tax u/s 149</td><td><span class="badge warn">Deduction</span></td><td>FBR slab on projected annual taxable</td><td>—</td><td>2152 Income Tax Payable</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>EOB</b></td><td>EOBI — Employee</td><td><span class="badge warn">Deduction</span></td><td>1% of min. wage Rs 37,000 = Rs 370</td><td>—</td><td>2155 EOBI Payable</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>PFE</b></td><td>Provident Fund — Employee</td><td><span class="badge warn">Deduction</span></td><td>8% of Basic</td><td>—</td><td>2160 PF Payable</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>LON</b></td><td>Loan Installment</td><td><span class="badge warn">Deduction</span></td><td>From loan schedule</td><td>—</td><td>1340 Loans to Employees</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>ADV</b></td><td>Salary Advance</td><td><span class="badge warn">Deduction</span></td><td>From advance schedule</td><td>—</td><td>1341 Advances to Employees</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>EOR</b></td><td>EOBI — Employer</td><td><span class="badge violet">Employer</span></td><td>5% of Rs 37,000 = Rs 1,850</td><td>—</td><td>5115 / 2155</td><td><input type="checkbox"></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>PSI</b></td><td>PESSI — Employer</td><td><span class="badge violet">Employer</span></td><td>6% of wages ≤ Rs 37,000 (Punjab)</td><td>—</td><td>5116 / 2156</td><td><input type="checkbox"></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>PFR</b></td><td>Provident Fund — Employer</td><td><span class="badge violet">Employer</span></td><td>8% of Basic (matching)</td><td>Exempt ≤ Rs 150,000 p.a.</td><td>5117 / 2160</td><td><input type="checkbox" checked></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+            <tr><td><b>GRT</b></td><td>Gratuity Provision</td><td><span class="badge violet">Employer</span></td><td>1 month Basic per completed year ÷ 12</td><td>—</td><td>5118 / 2170</td><td><input type="checkbox"></td><td class="actions"><button class="icon-btn-sm" data-open="pay-component"><i data-lucide="pencil"></i></button></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="tab-pane" data-pane="struct">
+      <div class="card-grid mb">
+        <div class="card">
+          <div class="row"><span class="badge info">G1</span><b>Staff — Warehouse &amp; Drivers</b></div>
+          <p class="muted small">Basic Rs 32,000 – 45,000 · 48 employees</p>
+          <div class="dl"><div><span>Basic</span><b>B</b></div><div><span>HRA</span><b>B × 45%</b></div><div><span>Medical</span><b>B × 10%</b></div><div><span>Conveyance</span><b>Rs 3,000</b></div><div><span>Gross (mid)</span><b>Rs 60,500</b></div></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="badge info">G2</span><b>Officers &amp; Executives</b></div>
+          <p class="muted small">Basic Rs 50,000 – 90,000 · 72 employees</p>
+          <div class="dl"><div><span>Basic</span><b>B</b></div><div><span>HRA + Medical</span><b>B × 55%</b></div><div><span>Utilities</span><b>Rs 6,000</b></div><div><span>Conveyance</span><b>Rs 7,500</b></div><div><span>Gross (mid)</span><b>Rs 122,000</b></div></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="badge info">G3</span><b>Assistant Managers</b></div>
+          <p class="muted small">Basic Rs 95,000 – 140,000 · 34 employees</p>
+          <div class="dl"><div><span>Basic</span><b>B</b></div><div><span>HRA + Medical</span><b>B × 55%</b></div><div><span>Utilities</span><b>Rs 10,000</b></div><div><span>Fuel</span><b>120 L × OGRA</b></div><div><span>Gross (mid)</span><b>Rs 220,000</b></div></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="badge violet">G4</span><b>Managers</b></div>
+          <p class="muted small">Basic Rs 150,000 – 230,000 · 22 employees</p>
+          <div class="dl"><div><span>Basic</span><b>B</b></div><div><span>HRA + Medical</span><b>B × 55%</b></div><div><span>Utilities</span><b>Rs 15,000</b></div><div><span>Fuel</span><b>200 L × OGRA</b></div><div><span>Gross (mid)</span><b>Rs 365,000</b></div></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="badge violet">G5</span><b>Senior Management</b></div>
+          <p class="muted small">Basic Rs 250,000+ · 6 employees</p>
+          <div class="dl"><div><span>Basic</span><b>B</b></div><div><span>HRA + Medical</span><b>B × 55%</b></div><div><span>Car &amp; Fuel</span><b>Company maintained</b></div><div><span>Gross (mid)</span><b>Rs 540,000</b></div></div>
+        </div>
+        <div class="card">
+          <div class="row"><span class="badge good">S1</span><b>Sales Commission Plan</b></div>
+          <p class="muted small">Add-on to G2/G3 · 42 sales staff</p>
+          <div class="dl"><div><span>Below 90% target</span><b>0%</b></div><div><span>90–100%</span><b>1.0% of sales</b></div><div><span>Above 100%</span><b>1.5% of sales</b></div><div><span>Cap</span><b>50% of Basic</b></div></div>
+        </div>
+      </div>
+      <div class="banner info"><i data-lucide="info"></i><div><b>Formula example — G2 at Basic Rs 85,000</b><p>85,000 + HRA 38,250 + Medical 8,500 + Utilities 6,000 + Conveyance 7,500 = Rs 145,250 fixed gross (excl. fuel &amp; commission).</p></div></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="pay-component">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Salary Component</h2><p>House Rent Allowance · HRA</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3">
+          <label><span>Code *</span><input value="HRA"></label>
+          <label><span>Name *</span><input value="House Rent Allowance"></label>
+          <label><span>Type *</span><select><option>Earning</option><option>Deduction</option><option>Employer contribution</option></select></label>
+          <label><span>Calculation</span><select><option>Percentage of component</option><option>Fixed amount</option><option>Formula</option><option>Monthly input</option></select></label>
+          <label><span>Percentage</span><input value="45"></label>
+          <label><span>Of component</span><select><option>Basic Salary (BAS)</option><option>Gross</option></select></label>
+          <label class="full"><span>Formula (advanced)</span><input value="ROUND(BAS * 0.45, 0)"></label>
+          <label><span>Debit account</span><select><option>5110 · Salaries &amp; Wages</option></select></label>
+          <label><span>Tax treatment</span><select><option>Fully taxable</option><option>Exempt up to limit</option><option>Exempt</option></select></label>
+          <label><span>Pro-rate on paid days</span><select><option>Yes</option><option>No</option></select></label>
+          <label class="check"><input type="checkbox" checked> Show on payslip</label>
+          <label class="check"><input type="checkbox" checked> Include in gratuity base</label>
+          <label class="check"><input type="checkbox"> Include in EOBI wage</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Component saved">Save component</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PAYSLIPS LIST ============================ -->
+<section class="screen" data-route="app/hr/payroll/payslips" data-title="Payslips">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Payslips</div>
+      <h1>Payslips — September 2026</h1>
+      <p>Run PR-2026-09 · 186 payslips · Posted 29 Sep 2026 · Paid 30 Sep 2026</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-toast="ZIP of 186 payslips is being prepared"><i data-lucide="download"></i>Download all (ZIP)</button>
+      <button class="btn primary" data-open="pay-email-slips"><i data-lucide="send"></i>Email payslips</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Generated</span><span class="icon-well"><i data-lucide="file-text"></i></span></div><strong>186</strong><small>All employees in run</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Emailed</span><span class="icon-well"><i data-lucide="mail-check"></i></span></div><strong>179</strong><small class="up">96.2% delivered</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Viewed in ESS</span><span class="icon-well"><i data-lucide="eye"></i></span></div><strong>142</strong><small>76.3% open rate</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Bounced / No email</span><span class="icon-well"><i data-lucide="mail-x"></i></span></div><strong>7</strong><small class="down">Update email in profile</small></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="toolbar">
+      <select><option>September 2026 · PR-2026-09</option><option>August 2026 · PR-2026-08</option><option>July 2026 · PR-2026-07</option></select>
+      <select><option>All departments</option><option>Finance</option><option>Human Resources</option><option>Sales</option><option>Operations</option><option>Procurement</option><option>IT</option><option>Administration</option><option>Warehouse</option></select>
+      <select><option>All branches</option><option>Lahore HQ</option><option>Karachi</option><option>Islamabad</option><option>Faisalabad</option></select>
+      <label class="search-field"><i data-lucide="search"></i><input placeholder="Search name or EMP code…"></label>
+      <div class="chips"><button class="active">All <i>186</i></button><button>Emailed <i>37</i></button><button>Viewed <i>142</i></button><button>Not sent <i>7</i></button></div>
+      <span class="spacer"></span>
+      <button class="btn secondary sm" data-toast="2 payslips emailed"><i data-lucide="send"></i>Email selected</button>
+      <button class="btn secondary sm"><i data-lucide="printer"></i>Print selected</button>
+    </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Employee</th><th>Department</th><th>Bank</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net Pay</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox" checked></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>EMP-0047 · Sales Executive</small></div></div></td><td>Sales · Lahore HQ</td><td>Meezan ••4567</td><td class="num">186,000</td><td class="num cr">26,195</td><td class="num"><b>159,805</b></td><td><span class="badge good dot">Viewed</span><small>30 Sep 18:12</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox" checked></td><td><div class="cell-user"><span class="avatar sm">SJ</span><div><b>Sana Javed</b><small>EMP-0004 · Finance Manager</small></div></div></td><td>Finance · Lahore HQ</td><td>Meezan ••1190</td><td class="num">385,000</td><td class="num cr">66,030</td><td class="num"><b>318,970</b></td><td><span class="badge good dot">Viewed</span><small>30 Sep 09:40</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">AN</span><div><b>Ayesha Noor</b><small>EMP-0006 · HR Manager</small></div></div></td><td>Human Resources · Lahore HQ</td><td>HBL ••3302</td><td class="num">320,000</td><td class="num cr">50,450</td><td class="num"><b>269,550</b></td><td><span class="badge good dot">Viewed</span><small>30 Sep 10:05</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>EMP-0012 · Accountant</small></div></div></td><td>Finance · Lahore HQ</td><td>Meezan ••7741</td><td class="num">142,000</td><td class="num cr">14,620</td><td class="num"><b>127,380</b></td><td><span class="badge info dot">Emailed</span><small>30 Sep 08:00</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>EMP-0019 · Procurement Officer</small></div></div></td><td>Procurement · Karachi</td><td>UBL ••0816</td><td class="num">128,500</td><td class="num cr">16,830</td><td class="num"><b>111,670</b></td><td><span class="badge good dot">Viewed</span><small>01 Oct 08:31</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>EMP-0039 · Sales Coordinator</small></div></div></td><td>Sales · Karachi</td><td>HBL ••6624</td><td class="num">96,000</td><td class="num cr">6,290</td><td class="num"><b>89,710</b></td><td><span class="badge info dot">Emailed</span><small>30 Sep 08:00</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">KA</span><div><b>Kashif Ali</b><small>EMP-0088 · Warehouse Supervisor</small></div></div></td><td>Warehouse · Faisalabad</td><td>Bank Alfalah ••2210</td><td class="num">108,000</td><td class="num zero">—</td><td class="num zero">—</td><td><span class="badge warn dot">On hold</span><small>Paid in final settlement</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/settlement"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>EMP-0063 · Storekeeper</small></div></div></td><td>Warehouse · Lahore HQ</td><td>Cash</td><td class="num">64,500</td><td class="num cr">10,950</td><td class="num"><b>53,550</b></td><td><span class="badge danger dot">No email</span><small>Printed copy issued</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Nida Shah</b><small>EMP-0071 · Operations Officer</small></div></div></td><td>Operations · Islamabad</td><td>Meezan ••3018</td><td class="num">88,000</td><td class="num cr">5,820</td><td class="num"><b>82,180</b></td><td><span class="badge good dot">Viewed</span><small>30 Sep 21:47</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><input type="checkbox"></td><td><div class="cell-user"><span class="avatar sm">AH</span><div><b>Ali Haider</b><small>EMP-0094 · Network Engineer</small></div></div></td><td>IT · Islamabad</td><td>Meezan ••5582</td><td class="num">175,000</td><td class="num cr">16,700</td><td class="num"><b>158,300</b></td><td><span class="badge danger dot">Bounced</span><small>Mailbox full</small></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/payroll/payslip"><i data-lucide="eye"></i></a></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–10 of 186 · Net total Rs 19,097,980</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>…</button><button>19</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay" id="pay-email-slips">
+    <div class="modal">
+      <div class="modal-head"><div><h2>Email payslips</h2><p>PR-2026-09 · September 2026</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label class="full"><span>Recipients</span><select><option>Not yet emailed (7)</option><option>Selected (2)</option><option>All employees (186)</option></select></label>
+          <label class="full"><span>Subject</span><input value="Your payslip for September 2026 — Al-Noor Enterprises"></label>
+          <label class="full"><span>Message</span><textarea rows="3">Dear {first_name}, please find attached your salary slip for September 2026. The PDF is protected with the last 5 digits of your CNIC.</textarea></label>
+        </div>
+        <div class="stack mt">
+          <label class="switch"><input type="checkbox" checked><i></i><span>Password-protect PDF</span></label>
+          <label class="switch"><input type="checkbox" checked><i></i><span>Also notify in Employee Self-Service</span></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="7 payslips queued for email"><i data-lucide="send"></i>Send</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PAYSLIP VIEW ============================ -->
+<section class="screen" data-route="app/hr/payroll/payslip" data-title="Payslip — Bilal Khan">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Payslips</div>
+      <h1>Payslip — Bilal Khan</h1>
+      <p>September 2026 · PR-2026-09 · Viewed by employee 30 Sep 2026 18:12</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn ghost" href="#/app/hr/payroll/payslips"><i data-lucide="arrow-left"></i>All payslips</a>
+      <a class="btn ghost" href="#/app/hr/employees/view"><i data-lucide="user-round"></i>Profile</a>
+      <button class="btn secondary" data-toast="Payslip emailed to bilal.khan@alnoor.pk"><i data-lucide="send"></i>Email</button>
+      <button class="btn secondary"><i data-lucide="download"></i>PDF</button>
+      <button class="btn primary"><i data-lucide="printer"></i>Print</button>
+    </div>
+  </div>
+
+  <div class="paper">
+    <div class="paper-head">
+      <div>
+        <h2>Al-Noor Enterprises (Pvt) Ltd</h2>
+        <p class="small muted">42-B, Gulberg III, Lahore · NTN 4271839-6 · EOBI Reg. LHR-0412-3399 · PESSI 31-0087-221</p>
+      </div>
+      <div class="right">
+        <h3>SALARY SLIP</h3>
+        <p class="small">For the month of <b>September 2026</b><br>Slip # PS-2026-09-0047</p>
+      </div>
+    </div>
+
+    <div class="paper-meta">
+      <div class="dl">
+        <div><span>Employee</span><b>Bilal Khan</b></div>
+        <div><span>Employee code</span><b>EMP-0047</b></div>
+        <div><span>Designation</span><b>Sales Executive</b></div>
+        <div><span>Department</span><b>Sales</b></div>
+        <div><span>Grade</span><b>G2 + Commission Plan S1</b></div>
+      </div>
+      <div class="dl">
+        <div><span>CNIC</span><b>35202-4418827-3</b></div>
+        <div><span>Branch</span><b>Lahore HQ</b></div>
+        <div><span>Date of joining</span><b>12 Feb 2022</b></div>
+        <div><span>EOBI No.</span><b>LHR-1188-72409</b></div>
+        <div><span>Tax status</span><b>Filer (ATL)</b></div>
+      </div>
+      <div class="dl">
+        <div><span>Days in month</span><b>30</b></div>
+        <div><span>Paid days</span><b>30</b></div>
+        <div><span>Leave taken</span><b>1 (Casual)</b></div>
+        <div><span>Leave without pay</span><b>0</b></div>
+        <div><span>Overtime hrs</span><b>0</b></div>
+      </div>
+    </div>
+
+    <div class="grid-2 mt">
+      <table class="tbl">
+        <thead><tr><th>Earnings</th><th class="num">Amount (Rs)</th></tr></thead>
+        <tbody>
+          <tr><td>Basic Salary</td><td class="num">85,000</td></tr>
+          <tr><td>House Rent Allowance (45%)</td><td class="num">38,250</td></tr>
+          <tr><td>Medical Allowance (10%)</td><td class="num">8,500</td></tr>
+          <tr><td>Utilities Allowance</td><td class="num">6,000</td></tr>
+          <tr><td>Conveyance Allowance</td><td class="num">7,500</td></tr>
+          <tr><td>Fuel Allowance</td><td class="num">12,000</td></tr>
+          <tr><td>Sales Commission (Aug sales)</td><td class="num">28,750</td></tr>
+          <tr class="total"><td>Gross Earnings</td><td class="num">186,000</td></tr>
+        </tbody>
+      </table>
+      <table class="tbl">
+        <thead><tr><th>Deductions</th><th class="num">Amount (Rs)</th></tr></thead>
+        <tbody>
+          <tr><td>Income Tax u/s 149</td><td class="num">9,025</td></tr>
+          <tr><td>EOBI — Employee (1%)</td><td class="num">370</td></tr>
+          <tr><td>Provident Fund (8% of Basic)</td><td class="num">6,800</td></tr>
+          <tr><td>Loan Installment (LN-2026-014 · 3/12)</td><td class="num">10,000</td></tr>
+          <tr><td>Salary Advance</td><td class="num zero">—</td></tr>
+          <tr><td>&nbsp;</td><td></td></tr>
+          <tr><td>&nbsp;</td><td></td></tr>
+          <tr class="total"><td>Total Deductions</td><td class="num">26,195</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="paper-totals">
+      <div><span>Gross Earnings</span><b>Rs 186,000</b></div>
+      <div><span>Total Deductions</span><b>(Rs 26,195)</b></div>
+      <div><span>Net Pay</span><b>Rs 159,805</b></div>
+    </div>
+    <p class="small"><b>Amount in words:</b> Rupees One Hundred Fifty-Nine Thousand Eight Hundred and Five Only.</p>
+
+    <div class="grid-3 mt">
+      <div>
+        <h4>Year-to-Date (Jul – Sep 2026)</h4>
+        <div class="dl">
+          <div><span>Gross earnings</span><b>548,250</b></div>
+          <div><span>Income tax</span><b>27,075</b></div>
+          <div><span>EOBI</span><b>1,110</b></div>
+          <div><span>Provident Fund</span><b>20,400</b></div>
+          <div><span>Loan recovered</span><b>30,000</b></div>
+          <div><span>Net paid</span><b>469,665</b></div>
+        </div>
+      </div>
+      <div>
+        <h4>Tax Computation FY 2026-27</h4>
+        <div class="dl">
+          <div><span>Projected annual salary</span><b>2,232,000</b></div>
+          <div><span>Less: medical exempt</span><b>(102,000)</b></div>
+          <div><span>Taxable income</span><b>2,130,000</b></div>
+          <div><span>Slab Rs 1.2M – 2.2M</span><b>6,000 + 11% of excess</b></div>
+          <div><span>Annual tax liability</span><b>108,300</b></div>
+          <div><span>Monthly (÷ 12)</span><b>9,025</b></div>
+        </div>
+      </div>
+      <div>
+        <h4>Payment &amp; Balances</h4>
+        <div class="dl">
+          <div><span>Mode</span><b>Bank transfer</b></div>
+          <div><span>Bank</span><b>Meezan Bank</b></div>
+          <div><span>IBAN</span><b>PK36 MEZN •••• •••• 4567</b></div>
+          <div><span>Transfer ref</span><b>MZN-SAL-260930-0047</b></div>
+          <div><span>Loan outstanding</span><b>90,000</b></div>
+          <div><span>PF balance (emp + er)</span><b>412,860</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paper-foot">
+      <p class="small muted">This is a computer-generated payslip and does not require a signature. Leave balance: Annual 11, Casual 6, Sick 8. For queries contact hr@alnoor.pk · Generated by Finsoft on 29 Sep 2026.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ LOANS & ADVANCES ============================ -->
+<section class="screen" data-route="app/hr/loans" data-title="Loans &amp; Advances">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Loans</div>
+      <h1>Loans &amp; Advances</h1>
+      <p>Employee loans and salary advances, recovered automatically through payroll installments.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="download"></i>Export</button>
+      <button class="btn primary" data-open="pay-new-loan"><i data-lucide="plus"></i>New Loan / Advance</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Active Loans &amp; Advances</span><span class="icon-well"><i data-lucide="hand-coins"></i></span></div><strong>31</strong><small>23 loans · 8 advances</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Outstanding Balance</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 4,862,000</strong><small>GL 1340 + 1341 reconciled</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Monthly Recovery</span><span class="icon-well"><i data-lucide="repeat"></i></span></div><strong>Rs 389,510</strong><small>Scheduled in October payroll</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Pending Requests</span><span class="icon-well"><i data-lucide="inbox"></i></span></div><strong>4</strong><small>Rs 610,000 requested</small></div>
+  </div>
+
+  <div class="panel flush">
+    <div class="toolbar">
+      <label class="search-field"><i data-lucide="search"></i><input placeholder="Search employee or loan #…"></label>
+      <select><option>All types</option><option>Loan</option><option>Advance</option></select>
+      <div class="chips"><button class="active">All <i>43</i></button><button>Pending <i>4</i></button><button>Active <i>31</i></button><button>Closed <i>8</i></button></div>
+      <span class="spacer"></span>
+      <button class="btn secondary sm"><i data-lucide="filter"></i>Filters</button>
+    </div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Loan #</th><th>Employee</th><th>Type</th><th class="num">Amount</th><th class="num">Installments</th><th class="num">Deducted</th><th class="num">Outstanding</th><th>Progress</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><b>LN-2026-021</b><small>Req. 28 Sep</small></td><td><div class="cell-user"><span class="avatar sm">NS</span><div><b>Nida Shah</b><small>Operations</small></div></div></td><td><span class="badge info">Loan</span><small>Medical</small></td><td class="num">250,000</td><td class="num">12,500 × 20</td><td class="num zero">—</td><td class="num">250,000</td><td><div class="progress"><i style="width:0%"></i></div></td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm secondary" data-open="pay-loan-review">Review</button></td></tr>
+        <tr><td><b>AD-2026-033</b><small>Req. 30 Sep</small></td><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>Warehouse</small></div></div></td><td><span class="badge violet">Advance</span><small>Salary</small></td><td class="num">30,000</td><td class="num">10,000 × 3</td><td class="num zero">—</td><td class="num">30,000</td><td><div class="progress"><i style="width:0%"></i></div></td><td><span class="badge warn dot">Pending</span></td><td class="actions"><button class="btn sm secondary" data-open="pay-loan-review">Review</button></td></tr>
+        <tr><td><b>LN-2026-014</b><small>Disb. 01 Jul</small></td><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales</small></div></div></td><td><span class="badge info">Loan</span><small>Motorcycle</small></td><td class="num">120,000</td><td class="num">10,000 × 12</td><td class="num">30,000</td><td class="num">90,000</td><td><div class="progress"><i style="width:25%"></i></div><small>3 / 12</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>LN-2025-088</b><small>Disb. 01 Nov 2025</small></td><td><div class="cell-user"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>Operations</small></div></div></td><td><span class="badge info">Loan</span><small>House</small></td><td class="num">600,000</td><td class="num">25,000 × 24</td><td class="num">275,000</td><td class="num">325,000</td><td><div class="progress"><i style="width:46%"></i></div><small>11 / 24</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>LN-2026-006</b><small>Disb. 01 Apr</small></td><td><div class="cell-user"><span class="avatar sm">FQ</span><div><b>Faisal Qureshi</b><small>Procurement</small></div></div></td><td><span class="badge info">Loan</span><small>Marriage</small></td><td class="num">100,000</td><td class="num">5,000 × 20</td><td class="num">30,000</td><td class="num">70,000</td><td><div class="progress"><i style="width:30%"></i></div><small>6 / 20</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>AD-2026-027</b><small>Disb. 01 Jun</small></td><td><div class="cell-user"><span class="avatar sm">UF</span><div><b>Umar Farooq</b><small>Operations</small></div></div></td><td><span class="badge violet">Advance</span><small>Eid</small></td><td class="num">75,000</td><td class="num">15,000 × 5</td><td class="num">60,000</td><td class="num">15,000</td><td><div class="progress"><i style="width:80%"></i></div><small>4 / 5</small></td><td><span class="badge good dot">Active</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><b>AD-2026-019</b><small>Disb. 01 May</small></td><td><div class="cell-user"><span class="avatar sm">KA</span><div><b>Kashif Ali</b><small>Warehouse · Exiting</small></div></div></td><td><span class="badge violet">Advance</span><small>Salary</small></td><td class="num">90,000</td><td class="num">15,000 × 6</td><td class="num">45,000</td><td class="num neg">45,000</td><td><div class="progress danger"><i style="width:50%"></i></div><small>Recover in F&amp;F</small></td><td><span class="badge danger dot">Settlement</span></td><td class="actions"><a class="icon-btn-sm" href="#/app/hr/settlement"><i data-lucide="eye"></i></a></td></tr>
+        <tr><td><b>LN-2025-061</b><small>Disb. 01 Aug 2025</small></td><td><div class="cell-user"><span class="avatar sm">AH</span><div><b>Ali Haider</b><small>IT</small></div></div></td><td><span class="badge info">Loan</span><small>Laptop</small></td><td class="num">180,000</td><td class="num">15,000 × 12</td><td class="num">180,000</td><td class="num zero">—</td><td><div class="progress"><i style="width:100%"></i></div><small>12 / 12</small></td><td><span class="badge neutral dot">Closed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+    <div class="table-foot"><span>Showing 1–8 of 43</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button></div></div>
+  </div>
+
+  <div class="overlay drawer-overlay" id="pay-loan-review">
+    <aside class="drawer">
+      <div class="modal-head"><div><h2>LN-2026-021 · Loan request</h2><p>Nida Shah · EMP-0071 · Operations Officer</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="dl mb">
+          <div><span>Type / purpose</span><b>Loan — Medical (mother's surgery)</b></div>
+          <div><span>Requested amount</span><b>Rs 250,000</b></div>
+          <div><span>Installments</span><b>20 × Rs 12,500 from Nov 2026</b></div>
+          <div><span>Gross salary</span><b>Rs 88,000</b></div>
+          <div><span>Installment as % of gross</span><b>14.2% (limit 30%)</b></div>
+          <div><span>Service length</span><b>4 yrs 3 mths</b></div>
+          <div><span>Eligible limit (3 × gross)</span><b>Rs 264,000</b></div>
+          <div><span>Existing loans</span><b>None</b></div>
+          <div><span>PF balance (security)</span><b>Rs 186,400</b></div>
+        </div>
+        <div class="banner good mb"><i data-lucide="circle-check"></i><div><b>Within policy</b><p>Amount, tenure and installment ratio comply with the Employee Loan Policy 2025.</p></div></div>
+        <h4>Approval trail</h4>
+        <div class="timeline mb">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Requested via ESS</b><small>28 Sep 2026 · medical estimate attached</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Line manager — Mehwish Tariq</b><small>29 Sep 2026 · Recommended</small></div></div>
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>HR — Ayesha Noor</b><small>Awaiting decision</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Finance — Sana Javed</b><small>Disbursement from Meezan 0123</small></div></div>
+        </div>
+        <div class="form-grid">
+          <label><span>Approved amount</span><input value="250,000"></label>
+          <label><span>Installments</span><input value="20"></label>
+          <label class="full"><span>Comment</span><textarea rows="2">Approved on medical grounds. Recovery to start November 2026 payroll.</textarea></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn danger" data-close data-toast="Loan request rejected">Reject</button><button class="btn primary" data-close data-toast="LN-2026-021 approved — sent to Finance">Approve</button></div>
+    </aside>
+  </div>
+
+  <div class="overlay" id="pay-new-loan">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>New Loan / Advance</h2><p>Recovery is scheduled into payroll automatically</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid c3 mb">
+          <label><span>Employee *</span><select><option>Zainab Raza — EMP-0039</option><option>Hira Ali — EMP-0012</option></select></label>
+          <label><span>Type *</span><select><option>Loan</option><option>Salary advance</option></select></label>
+          <label><span>Purpose</span><select><option>Personal</option><option>Medical</option><option>Marriage</option><option>Vehicle</option><option>House</option></select></label>
+          <label><span>Amount (Rs) *</span><input value="60,000"></label>
+          <label><span>Installments</span><input value="6"></label>
+          <label><span>First deduction</span><select><option>November 2026</option><option>December 2026</option></select></label>
+          <label><span>Disburse from</span><select><option>Meezan Bank — 0123</option><option>HBL — 8721</option><option>Cash in hand</option></select></label>
+          <label><span>Disbursement date</span><input type="date" value="2026-10-03"></label>
+          <label><span>Markup</span><select><option>Interest-free</option></select></label>
+        </div>
+        <h4>Installment schedule preview</h4>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>#</th><th>Payroll month</th><th class="num">Installment</th><th class="num">Balance after</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>November 2026</td><td class="num">10,000</td><td class="num">50,000</td></tr>
+            <tr><td>2</td><td>December 2026</td><td class="num">10,000</td><td class="num">40,000</td></tr>
+            <tr><td>3</td><td>January 2027</td><td class="num">10,000</td><td class="num">30,000</td></tr>
+            <tr><td>4</td><td>February 2027</td><td class="num">10,000</td><td class="num">20,000</td></tr>
+            <tr><td>5</td><td>March 2027</td><td class="num">10,000</td><td class="num">10,000</td></tr>
+            <tr><td>6</td><td>April 2027</td><td class="num">10,000</td><td class="num zero">—</td></tr>
+            <tr class="total"><td colspan="2">Total</td><td class="num">60,000</td><td></td></tr>
+          </tbody>
+        </table></div>
+        <p class="small muted mt">Installment = 10.4% of Zainab's gross (Rs 96,000). Policy limit 30%.</p>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Loan created and sent for approval">Create &amp; submit</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FINAL SETTLEMENT ============================ -->
+<section class="screen" data-route="app/hr/settlement" data-title="Final Settlement">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Final Settlement</div>
+      <h1>Full &amp; Final Settlement — Kashif Ali</h1>
+      <p>FS-2026-007 · Off-cycle run PR-2026-OFF-02 · Prepared by Ayesha Noor on 30 Sep 2026</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="printer"></i>Print settlement</button>
+      <a class="btn secondary" href="#/app/hr/offboarding"><i data-lucide="log-out"></i>Offboarding</a>
+      <button class="btn primary" data-toast="Settlement approved — payment voucher BPV-2026-000318 drafted"><i data-lucide="check"></i>Approve settlement</button>
+    </div>
+  </div>
+
+  <div class="profile-head mb">
+    <span class="avatar xl">KA</span>
+    <div>
+      <h2>Kashif Ali</h2>
+      <p>Warehouse Supervisor · Warehouse · Faisalabad · EMP-0088</p>
+      <div class="row"><span class="badge warn">Resigned</span><span class="badge neutral">7 yrs 6 mths service</span><span class="badge info">Clearance 3 / 4</span></div>
+    </div>
+    <div class="head-actions"><a class="btn ghost sm" href="#/app/hr/employees/view"><i data-lucide="user-round"></i>Profile</a></div>
+  </div>
+
+  <div class="split">
+    <div class="stack">
+      <div class="panel flush">
+        <div class="panel-head"><div><h3>Settlement Computation</h3><p>Last basic Rs 60,000 · Last gross Rs 108,000 · Per-day gross Rs 3,600</p></div><button class="btn ghost sm" data-toast="Recalculated"><i data-lucide="refresh-cw"></i>Recalculate</button></div>
+        <div class="table-wrap"><table class="tbl">
+          <thead><tr><th>Component</th><th>Basis</th><th class="num">Earnings</th><th class="num">Deductions</th></tr></thead>
+          <tbody>
+            <tr><td><b>Pending salary — September 2026</b></td><td>30 days × Rs 3,600</td><td class="num dr">108,000</td><td class="num zero">—</td></tr>
+            <tr><td><b>Leave encashment</b></td><td>14 annual days × Rs 2,000 (basic ÷ 30)</td><td class="num dr">28,000</td><td class="num zero">—</td></tr>
+            <tr><td><b>Gratuity</b></td><td>7 completed years × last basic Rs 60,000</td><td class="num dr">420,000</td><td class="num zero">—</td></tr>
+            <tr><td><b>Notice period shortfall</b></td><td>30 days required, 20 served · 10 × Rs 3,600</td><td class="num zero">—</td><td class="num cr">36,000</td></tr>
+            <tr><td><b>Advance recovery</b></td><td>AD-2026-019 outstanding</td><td class="num zero">—</td><td class="num cr">45,000</td></tr>
+            <tr><td><b>Income tax u/s 149</b></td><td>On salary, encashment &amp; taxable gratuity*</td><td class="num zero">—</td><td class="num cr">12,450</td></tr>
+            <tr><td><b>EOBI — employee</b></td><td>September contribution</td><td class="num zero">—</td><td class="num cr">370</td></tr>
+            <tr class="total"><td colspan="2">Totals</td><td class="num">556,000</td><td class="num">93,820</td></tr>
+          </tbody>
+        </table></div>
+        <div class="panel-head"><div><h3>Net payable to employee</h3><p>Rupees Four Hundred Sixty-Two Thousand One Hundred and Eighty Only</p></div><strong>Rs 462,180</strong></div>
+      </div>
+      <div class="banner info"><i data-lucide="info"></i><div><b>Provident Fund paid separately by PF Trust</b><p>Employee + employer PF balance Rs 512,340 (incl. 9.2% profit) is released by the Al-Noor Staff Provident Fund Trust within 30 days. *Gratuity above the Rs 300,000 exemption is taxed at the average rate of the preceding 3 years.</p></div></div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Accounting on approval</h3><p>JV + bank payment voucher</p></div></div>
+        <div class="dl">
+          <div><span>Dr Salaries &amp; Wages / Gratuity Provision / Leave Provision</span><b>556,000</b></div>
+          <div><span>Cr Notice Pay Recovery (Other Income)</span><b>36,000</b></div>
+          <div><span>Cr Advances to Employees (1341)</span><b>45,000</b></div>
+          <div><span>Cr Income Tax Payable / EOBI Payable</span><b>12,820</b></div>
+          <div><span>Cr Bank Alfalah — 5510 (BPV)</span><b>462,180</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Employee &amp; Exit</h3></div></div>
+        <div class="dl">
+          <div><span>CNIC</span><b>33100-7726541-9</b></div>
+          <div><span>Date of joining</span><b>15 Mar 2019</b></div>
+          <div><span>Resignation submitted</span><b>10 Sep 2026</b></div>
+          <div><span>Last working day</span><b>30 Sep 2026</b></div>
+          <div><span>Notice required / served</span><b>30 / 20 days</b></div>
+          <div><span>Exit reason</span><b>Better opportunity</b></div>
+          <div><span>Rehire eligible</span><b>Yes</b></div>
+          <div><span>Payment to</span><b>Bank Alfalah ••2210</b></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Clearance Checklist</h3><p>3 of 4 departments cleared</p></div></div>
+        <div class="progress mb"><i style="width:75%"></i></div>
+        <div class="list">
+          <div class="list-item"><span class="icon-well"><i data-lucide="laptop"></i></span><div><b>IT — Ali Haider</b><small>Laptop, ERP access &amp; email disabled</small></div><span class="spacer"></span><span class="badge good">Cleared</span></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="building"></i></span><div><b>Admin — Faisal Qureshi</b><small>ID card, keys, SIM returned</small></div><span class="spacer"></span><span class="badge good">Cleared</span></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="warehouse"></i></span><div><b>Warehouse — Stock handover</b><small>Faisalabad WH cycle count signed</small></div><span class="spacer"></span><span class="badge good">Cleared</span></div>
+          <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Finance — Hira Ali</b><small>Advance recovery &amp; open claims check</small></div><span class="spacer"></span><span class="badge warn">Pending</span></div>
+        </div>
+        <button class="btn secondary sm mt" data-toast="Reminder sent to Hira Ali"><i data-lucide="bell"></i>Remind Finance</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Approvals</h3></div></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>HR — Ayesha Noor</b><small>Prepared 30 Sep 2026</small></div></div>
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>Finance — Sana Javed</b><small>Pending review</small></div></div>
+          <div class="tl-item"><span class="tl-dot"></span><div><b>Experience letter &amp; EOBI exit (PR-04)</b><small>Auto-generated on approval</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STATUTORY REPORTS ============================ -->
+<section class="screen" data-route="app/hr/payroll/reports" data-title="Statutory Reports">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll / Statutory Reports</div>
+      <h1>Payroll &amp; Statutory Reports</h1>
+      <p>EOBI, PESSI, FBR salary tax and bank reports generated from posted payroll runs.</p>
+    </div>
+    <div class="head-actions">
+      <select><option>September 2026 · PR-2026-09</option><option>August 2026 · PR-2026-08</option><option>FY 2026-27 (Jul–Sep)</option></select>
+      <a class="btn secondary" href="#/app/tax/fbr"><i data-lucide="plug"></i>FBR Integration</a>
+    </div>
+  </div>
+
+  <div class="banner warn mb"><i data-lucide="calendar-clock"></i><div><b>Deposits due 15 Oct 2026</b><p>Income tax u/s 149 Rs 1,286,400 (CPR via IRIS) · EOBI Rs 412,920 · PESSI Rs 186,600 for September payroll.</p></div><a class="btn sm secondary" href="#/app/tax/wht">Open WHT</a></div>
+
+  <div class="card-grid mb">
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="shield-check"></i></span><div><b>EOBI PR-01 — Monthly</b><small class="muted">Contribution statement · 186 insured</small></div></div>
+      <div class="dl mt"><div><span>Employee 1%</span><b>68,820</b></div><div><span>Employer 5%</span><b>344,100</b></div><div><span>Total</span><b>412,920</b></div></div>
+      <div class="row mt"><span class="badge warn">Due 15 Oct</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="download"></i>Excel</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="heart-pulse"></i></span><div><b>PESSI Contribution</b><small class="muted">Punjab Employees Social Security · 112 secured</small></div></div>
+      <div class="dl mt"><div><span>Contributory wages</span><b>3,110,000</b></div><div><span>Employer 6%</span><b>186,600</b></div><div><span>SESSI (Karachi)</span><b>Separate · 24</b></div></div>
+      <div class="row mt"><span class="badge warn">Due 15 Oct</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="download"></i>Excel</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="percent"></i></span><div><b>Salary Statement u/s 149 — Annex-C</b><small class="muted">Monthly WHT statement for IRIS</small></div></div>
+      <div class="dl mt"><div><span>Taxable employees</span><b>132</b></div><div><span>Taxable salary</span><b>18,940,500</b></div><div><span>Tax deducted</span><b>1,286,400</b></div></div>
+      <div class="row mt"><span class="badge info">IRIS-ready</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="download"></i>CSV</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="piggy-bank"></i></span><div><b>Provident Fund Register</b><small class="muted">Members, contributions &amp; balances</small></div></div>
+      <div class="dl mt"><div><span>Members</span><b>148</b></div><div><span>Sep contribution (8% + 8%)</span><b>1,224,600</b></div><div><span>Fund balance</span><b>48,620,300</b></div></div>
+      <div class="row mt"><span class="badge good">Reconciled</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="download"></i>PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Bank Advice Letter</b><small class="muted">Salary transfer instruction to bank</small></div></div>
+      <div class="dl mt"><div><span>Meezan Bank — 0123</span><b>14,742,580</b></div><div><span>HBL — 8721 IBFT</span><b>3,985,400</b></div><div><span>Cheque / cash</span><b>370,000</b></div></div>
+      <div class="row mt"><span class="badge good">Sent 29 Sep</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="printer"></i>Print</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="table-2"></i></span><div><b>Payroll Register</b><small class="muted">Employee-wise components, all columns</small></div></div>
+      <div class="dl mt"><div><span>Employees</span><b>186</b></div><div><span>Gross</span><b>21,450,000</b></div><div><span>Net</span><b>19,097,980</b></div></div>
+      <div class="row mt"><span class="badge neutral">Internal</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="download"></i>Excel</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="award"></i></span><div><b>Salary &amp; Tax Certificate</b><small class="muted">Per employee, for FY or period</small></div></div>
+      <div class="dl mt"><div><span>Requests this month</span><b>9</b></div><div><span>Last issued</span><b>Bilal Khan · 27 Sep</b></div></div>
+      <div class="row mt"><span class="badge info">On demand</span><span class="spacer"></span><button class="btn sm secondary" data-toast="Certificate generated"><i data-lucide="file-plus"></i>Generate</button></div>
+    </div>
+    <div class="card">
+      <div class="row"><span class="icon-well"><i data-lucide="file-badge"></i></span><div><b>Annual Statement u/s 165</b><small class="muted">Employer annual salary statement FY 2025-26</small></div></div>
+      <div class="dl mt"><div><span>Employees</span><b>194</b></div><div><span>Tax deducted FY</span><b>14,862,700</b></div></div>
+      <div class="row mt"><span class="badge good">Filed 30 Aug</span><span class="spacer"></span><button class="btn sm secondary"><i data-lucide="eye"></i>View</button></div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Preview · EOBI PR-01 — September 2026</h3><p>Employer reg. LHR-0412-3399 · Minimum wage Rs 37,000</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="printer"></i>Print</button><button class="btn primary sm" data-toast="PR-01 exported for EOBI portal"><i data-lucide="download"></i>Export for portal</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>#</th><th>EOBI No.</th><th>Employee</th><th>CNIC</th><th class="num">Days</th><th class="num">Wages</th><th class="num">Employee 1%</th><th class="num">Employer 5%</th><th class="num">Total</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>LHR-0991-10021</td><td>Ahmed Raza</td><td>35202-1188392-1</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>2</td><td>LHR-1022-33410</td><td>Sana Javed</td><td>35201-6630184-2</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>3</td><td>LHR-1045-58812</td><td>Ayesha Noor</td><td>35202-9921347-6</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>4</td><td>LHR-1101-20934</td><td>Hira Ali</td><td>35201-2277840-4</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>5</td><td>LHR-1188-72409</td><td>Bilal Khan</td><td>35202-4418827-3</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>6</td><td>KHI-2240-11873</td><td>Usman Ali</td><td>42201-5530912-7</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td>7</td><td>FSD-3012-40017</td><td>Kashif Ali</td><td>33100-7726541-9</td><td class="num">30</td><td class="num">37,000</td><td class="num">370</td><td class="num">1,850</td><td class="num">2,220</td></tr>
+        <tr><td colspan="9" class="muted small">… 179 more insured persons</td></tr>
+        <tr class="total"><td colspan="4">Total · 186 insured persons</td><td class="num"></td><td class="num">6,882,000</td><td class="num">68,820</td><td class="num">344,100</td><td class="num">412,920</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ RECRUITMENT ============================ -->
+<section class="screen" data-route="app/hr/recruitment" data-title="Recruitment">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Talent / Recruitment</div>
+      <h1>Recruitment</h1>
+      <p>Open positions, applicant pipeline and offers — synced with Rozee.pk, LinkedIn and the careers page.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="share-2"></i>Careers page</button>
+      <button class="btn primary" data-toast="Job requisition draft created"><i data-lucide="plus"></i>New Job Opening</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Open Positions</span><span class="icon-well"><i data-lucide="briefcase"></i></span></div><strong>6</strong><small>9 vacancies · 4 branches</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Active Applicants</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>347</strong><small class="up">▲ 58 this week</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Avg Time to Hire</span><span class="icon-well"><i data-lucide="clock"></i></span></div><strong>27 days</strong><small class="up">▼ 4 days vs FY 2025-26</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Offer Acceptance</span><span class="icon-well"><i data-lucide="handshake"></i></span></div><strong>83%</strong><small>10 of 12 offers this FY</small></div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="panel-head"><div><h3>Job Openings</h3><p>Stage counts across the hiring funnel</p></div><div class="panel-actions"><div class="chips"><button class="active">Open <i>6</i></button><button>On hold <i>1</i></button><button>Closed <i>14</i></button></div></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Position</th><th>Department</th><th>Location</th><th class="num">Openings</th><th class="num">Applicants</th><th class="num">Screening</th><th class="num">Interview</th><th class="num">Offer</th><th>Hiring manager</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><b>Sales Executive</b><small>REQ-2026-031 · Posted 08 Sep</small></td><td>Sales</td><td>Karachi</td><td class="num">3</td><td class="num">126</td><td class="num">34</td><td class="num">9</td><td class="num">1</td><td>Zainab Raza</td><td><span class="badge good dot">Open</span></td></tr>
+        <tr><td><b>IT Support Engineer</b><small>REQ-2026-029 · Posted 01 Sep</small></td><td>IT</td><td>Islamabad</td><td class="num">1</td><td class="num">64</td><td class="num">12</td><td class="num">4</td><td class="num">1</td><td>Ali Haider</td><td><span class="badge good dot">Open</span></td></tr>
+        <tr><td><b>HR Officer</b><small>REQ-2026-028 · Posted 25 Aug</small></td><td>Human Resources</td><td>Lahore HQ</td><td class="num">1</td><td class="num">52</td><td class="num">10</td><td class="num">3</td><td class="num zero">—</td><td>Ayesha Noor</td><td><span class="badge good dot">Open</span></td></tr>
+        <tr><td><b>Senior Accountant</b><small>REQ-2026-027 · Posted 20 Aug</small></td><td>Finance</td><td>Lahore HQ</td><td class="num">1</td><td class="num">48</td><td class="num">8</td><td class="num">3</td><td class="num">1</td><td>Sana Javed</td><td><span class="badge info dot">Offer stage</span></td></tr>
+        <tr><td><b>Warehouse Supervisor</b><small>REQ-2026-033 · Replacement · Kashif Ali</small></td><td>Warehouse</td><td>Faisalabad</td><td class="num">1</td><td class="num">37</td><td class="num">9</td><td class="num">2</td><td class="num zero">—</td><td>Mehwish Tariq</td><td><span class="badge warn dot">Urgent</span></td></tr>
+        <tr><td><b>Delivery Rider</b><small>REQ-2026-030 · Walk-in drive</small></td><td>Operations</td><td>Lahore HQ</td><td class="num">2</td><td class="num">20</td><td class="num">6</td><td class="num">3</td><td class="num zero">—</td><td>Umar Farooq</td><td><span class="badge good dot">Open</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><div><h3>Candidate Pipeline · Sales Executive (Karachi)</h3><p>Drag candidates between stages</p></div><div class="panel-actions"><select><option>Sales Executive — Karachi</option><option>IT Support Engineer — Islamabad</option><option>Senior Accountant — Lahore HQ</option></select></div></div>
+    <div class="kanban">
+      <div class="kb-col">
+        <div class="kb-col-head"><h4>Applied</h4><span class="badge neutral">82</span></div>
+        <div class="kb-card" data-open="pay-candidate"><b>Saad Mehmood</b><small>BBA · 2 yrs FMCG sales</small><div class="row small"><span style="color:#d97706">★★★☆☆</span><span class="spacer"></span><span class="badge neutral">Rozee.pk</span></div></div>
+        <div class="kb-card"><b>Areeba Khalid</b><small>MBA Marketing · fresh</small><div class="row small"><span style="color:#d97706">★★★☆☆</span><span class="spacer"></span><span class="badge neutral">LinkedIn</span></div></div>
+        <div class="kb-card"><b>Junaid Akhtar</b><small>3 yrs distribution · Engro</small><div class="row small"><span style="color:#d97706">★★★★☆</span><span class="spacer"></span><span class="badge neutral">Careers page</span></div></div>
+      </div>
+      <div class="kb-col">
+        <div class="kb-col-head"><h4>Screening</h4><span class="badge neutral">34</span></div>
+        <div class="kb-card"><b>Maham Siddiqui</b><small>4 yrs B2B · Metro Cash &amp; Carry</small><div class="row small"><span style="color:#d97706">★★★★☆</span><span class="spacer"></span><span class="badge neutral">Referral</span></div></div>
+        <div class="kb-card"><b>Taimoor Shah</b><small>2 yrs retail · Al-Fatah</small><div class="row small"><span style="color:#d97706">★★★☆☆</span><span class="spacer"></span><span class="badge neutral">Rozee.pk</span></div></div>
+      </div>
+      <div class="kb-col">
+        <div class="kb-col-head"><h4>Interview</h4><span class="badge neutral">9</span></div>
+        <div class="kb-card" data-open="pay-candidate"><b>Owais Rehman</b><small>5 yrs key accounts · Fatima Group</small><div class="row small"><span style="color:#d97706">★★★★★</span><span class="spacer"></span><span class="badge neutral">LinkedIn</span></div><small class="muted">Panel: 03 Oct, 11:00</small></div>
+        <div class="kb-card"><b>Hafsa Iqbal</b><small>3 yrs pharma sales</small><div class="row small"><span style="color:#d97706">★★★★☆</span><span class="spacer"></span><span class="badge neutral">Referral</span></div><small class="muted">Panel: 03 Oct, 14:30</small></div>
+      </div>
+      <div class="kb-col">
+        <div class="kb-col-head"><h4>Offer</h4><span class="badge neutral">1</span></div>
+        <div class="kb-card"><b>Shahzaib Anwar</b><small>Offered Rs 135,000 gross</small><div class="row small"><span style="color:#d97706">★★★★☆</span><span class="spacer"></span><span class="badge warn">Awaiting reply</span></div></div>
+      </div>
+      <div class="kb-col">
+        <div class="kb-col-head"><h4>Hired</h4><span class="badge neutral">1</span></div>
+        <div class="kb-card"><b>Rabia Saeed</b><small>Joined 14 Oct · EMP-0187</small><div class="row small"><span style="color:#d97706">★★★★☆</span><span class="spacer"></span><a class="badge good" href="#/app/hr/onboarding">Onboarding</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay drawer-overlay" id="pay-candidate">
+    <aside class="drawer">
+      <div class="modal-head"><div><h2>Owais Rehman</h2><p>Sales Executive · Karachi · Applied 10 Sep via LinkedIn</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="row mb"><span class="badge info">Interview</span><span style="color:#d97706">★★★★★</span><span class="muted small">4.6 / 5 from 2 reviewers</span></div>
+        <div class="dl mb">
+          <div><span>Email</span><b>owais.rehman@gmail.com</b></div>
+          <div><span>Phone</span><b>+92 321 2290 417</b></div>
+          <div><span>Current employer</span><b>Fatima Group — Key Account Executive</b></div>
+          <div><span>Experience</span><b>5 years</b></div>
+          <div><span>Current / expected salary</span><b>Rs 120,000 / Rs 150,000</b></div>
+          <div><span>Notice period</span><b>30 days</b></div>
+          <div><span>Education</span><b>BBA (Hons), IBA Karachi</b></div>
+        </div>
+        <h4>Activity</h4>
+        <div class="timeline mb">
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Phone screen — Zainab Raza</b><small>16 Sep · "Strong FMCG network in Karachi, good communication."</small></div></div>
+          <div class="tl-item"><span class="tl-dot good"></span><div><b>Assessment — 82%</b><small>20 Sep · Sales aptitude test</small></div></div>
+          <div class="tl-item"><span class="tl-dot warn"></span><div><b>Panel interview</b><small>03 Oct 11:00 · Zainab Raza, Ayesha Noor</small></div></div>
+        </div>
+        <div class="form-grid">
+          <label class="full"><span>Add note</span><textarea rows="2" placeholder="Interview feedback…"></textarea></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn danger" data-close data-toast="Candidate rejected · regret email sent">Reject</button><button class="btn secondary"><i data-lucide="file-text"></i>CV</button><button class="btn primary" data-close data-toast="Moved to Offer stage">Move to Offer</button></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ ONBOARDING ============================ -->
+<section class="screen" data-route="app/hr/onboarding" data-title="Onboarding">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Talent / Onboarding</div>
+      <h1>Onboarding</h1>
+      <p>Pre-joining and first-30-day tasks for new joiners, assigned to HR, IT, Admin and Finance.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="list-checks"></i>Edit template</button>
+      <a class="btn primary" href="#/app/hr/employees/new"><i data-lucide="user-plus"></i>Add new joiner</a>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>In Onboarding</span><span class="icon-well"><i data-lucide="door-open"></i></span></div><strong>5</strong><small>2 joining in October</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Tasks Completed</span><span class="icon-well"><i data-lucide="circle-check"></i></span></div><strong>41 / 62</strong><small>66% overall</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Overdue Tasks</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>3</strong><small class="down">EOBI registration ×2, laptop ×1</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Probation Reviews Due</span><span class="icon-well"><i data-lucide="calendar-check"></i></span></div><strong>4</strong><small>Next 30 days</small></div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>New Joiners</h3><p>Template: Standard Staff Onboarding (14 tasks)</p></div></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Employee</th><th>Position</th><th>Joining</th><th>Buddy</th><th>Progress</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><div class="cell-user"><span class="avatar sm">RS</span><div><b>Rabia Saeed</b><small>EMP-0187 · Karachi</small></div></div></td><td>Sales Executive</td><td>14 Oct 2026</td><td>Zainab Raza</td><td><div class="progress"><i style="width:43%"></i></div><small>6 / 14</small></td><td><span class="badge info">Pre-joining</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">DA</span><div><b>Danyal Aziz</b><small>EMP-0186 · Lahore HQ</small></div></div></td><td>Senior Accountant</td><td>20 Oct 2026</td><td>Hira Ali</td><td><div class="progress"><i style="width:29%"></i></div><small>4 / 14</small></td><td><span class="badge info">Pre-joining</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">MF</span><div><b>Maryam Fawad</b><small>EMP-0185 · Islamabad</small></div></div></td><td>Operations Officer</td><td>15 Sep 2026</td><td>Nida Shah</td><td><div class="progress"><i style="width:86%"></i></div><small>12 / 14</small></td><td><span class="badge good">Week 3</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">SH</span><div><b>Sameer Hussain</b><small>EMP-0184 · Faisalabad</small></div></div></td><td>Storekeeper</td><td>08 Sep 2026</td><td>Hamza Butt</td><td><div class="progress warn"><i style="width:79%"></i></div><small>11 / 14</small></td><td><span class="badge warn">2 overdue</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">IK</span><div><b>Iqra Kamran</b><small>EMP-0183 · Lahore HQ</small></div></div></td><td>Procurement Assistant</td><td>01 Sep 2026</td><td>Usman Ali</td><td><div class="progress"><i style="width:57%"></i></div><small>8 / 14</small></td><td><span class="badge warn">1 overdue</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Checklist Template</h3><p>Standard Staff Onboarding</p></div><button class="btn ghost sm"><i data-lucide="pencil"></i>Edit</button></div>
+      <div class="form-section"><h4>Documents</h4></div>
+      <div class="stack">
+        <label class="check"><input type="checkbox" checked> CNIC copy, 2 photos, degrees verified</label>
+        <label class="check"><input type="checkbox" checked> Signed offer &amp; appointment letter</label>
+        <label class="check"><input type="checkbox" checked> Experience &amp; police character certificate</label>
+      </div>
+      <div class="form-section"><h4>Statutory &amp; Finance</h4></div>
+      <div class="stack">
+        <label class="check"><input type="checkbox" checked> EOBI registration (PR-02) within 15 days</label>
+        <label class="check"><input type="checkbox" checked> PESSI / SESSI card</label>
+        <label class="check"><input type="checkbox" checked> Bank account &amp; IBAN (Meezan salary account)</label>
+        <label class="check"><input type="checkbox" checked> NTN / ATL status &amp; PF nomination</label>
+      </div>
+      <div class="form-section"><h4>IT &amp; Admin</h4></div>
+      <div class="stack">
+        <label class="check"><input type="checkbox" checked> Laptop, email, Finsoft ESS login</label>
+        <label class="check"><input type="checkbox" checked> Biometric enrolment &amp; ID card</label>
+      </div>
+      <div class="form-section"><h4>Orientation</h4></div>
+      <div class="stack">
+        <label class="check"><input type="checkbox" checked> Day-1 induction &amp; HR policies</label>
+        <label class="check"><input type="checkbox" checked> Department orientation &amp; buddy intro</label>
+        <label class="check"><input type="checkbox" checked> 30-day check-in with manager</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Open Tasks</h3><p>Across all new joiners</p></div><div class="panel-actions"><div class="chips"><button class="active">All <i>21</i></button><button>Overdue <i>3</i></button><button>Mine <i>7</i></button></div></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th><input type="checkbox"></th><th>Task</th><th>New joiner</th><th>Owner</th><th>Due</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><b>EOBI registration (PR-02)</b></td><td>Sameer Hussain</td><td>Ayesha Noor · HR</td><td class="neg">23 Sep 2026</td><td><span class="badge danger dot">Overdue</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>EOBI registration (PR-02)</b></td><td>Iqra Kamran</td><td>Ayesha Noor · HR</td><td class="neg">16 Sep 2026</td><td><span class="badge danger dot">Overdue</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>Issue laptop &amp; email</b></td><td>Sameer Hussain</td><td>Ali Haider · IT</td><td class="neg">29 Sep 2026</td><td><span class="badge danger dot">Overdue</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>Open Meezan salary account</b></td><td>Rabia Saeed</td><td>Hira Ali · Finance</td><td>10 Oct 2026</td><td><span class="badge warn dot">In progress</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>Biometric enrolment</b></td><td>Danyal Aziz</td><td>Faisal Qureshi · Admin</td><td>20 Oct 2026</td><td><span class="badge neutral dot">Not started</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+        <tr><td><input type="checkbox"></td><td><b>30-day check-in</b></td><td>Maryam Fawad</td><td>Nida Shah · Manager</td><td>15 Oct 2026</td><td><span class="badge neutral dot">Scheduled</span></td><td class="actions"><button class="btn sm secondary" data-toast="Marked complete">Complete</button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ OFFBOARDING ============================ -->
+<section class="screen" data-route="app/hr/offboarding" data-title="Offboarding">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Talent / Offboarding</div>
+      <h1>Offboarding &amp; Exits</h1>
+      <p>Resignations, notice periods, clearance and exit interviews leading to final settlement.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary" data-open="pay-exit-interview"><i data-lucide="clipboard-pen"></i>Exit interview</button>
+      <button class="btn primary" data-toast="Resignation recorded"><i data-lucide="plus"></i>Record resignation</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Exits in FY 2026-27</span><span class="icon-well"><i data-lucide="log-out"></i></span></div><strong>5</strong><small>Jul–Sep · 4 voluntary</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Serving Notice</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>3</strong><small>Last days in Oct–Nov</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Annualised Attrition</span><span class="icon-well"><i data-lucide="trending-down"></i></span></div><strong>11.4%</strong><small class="down">▲ 1.2 pts vs FY 2025-26</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Pending Settlements</span><span class="icon-well"><i data-lucide="user-x"></i></span></div><strong>1</strong><small>Rs 462,180 · Kashif Ali</small></div>
+  </div>
+
+  <div class="panel flush mb">
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Employee</th><th>Department</th><th>Resignation</th><th>Last day</th><th>Notice</th><th>Reason</th><th>Clearance</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><div class="cell-user"><span class="avatar sm">KA</span><div><b>Kashif Ali</b><small>EMP-0088 · Warehouse Supervisor</small></div></div></td><td>Warehouse</td><td>10 Sep 2026</td><td>30 Sep 2026</td><td>20 / 30 days</td><td>Better opportunity</td><td><div class="progress"><i style="width:75%"></i></div><small>3 / 4</small></td><td><span class="badge warn dot">Settlement</span></td><td class="actions"><a class="btn sm secondary" href="#/app/hr/settlement">F&amp;F</a></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">FN</span><div><b>Fatima Noor</b><small>EMP-0052 · Sales Executive</small></div></div></td><td>Sales</td><td>22 Sep 2026</td><td>22 Oct 2026</td><td>30 / 30 days</td><td>Higher studies (abroad)</td><td><div class="progress"><i style="width:25%"></i></div><small>1 / 4</small></td><td><span class="badge info dot">Serving notice</span></td><td class="actions"><button class="btn sm secondary" data-open="pay-exit-interview">Interview</button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">WA</span><div><b>Waqas Ahmed</b><small>EMP-0117 · Driver</small></div></div></td><td>Operations</td><td>25 Sep 2026</td><td>25 Oct 2026</td><td>30 / 30 days</td><td>Relocation (Multan)</td><td><div class="progress"><i style="width:0%"></i></div><small>0 / 4</small></td><td><span class="badge info dot">Serving notice</span></td><td class="actions"><button class="btn sm secondary" data-open="pay-exit-interview">Interview</button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">SK</span><div><b>Sobia Khan</b><small>EMP-0140 · IT Analyst</small></div></div></td><td>IT</td><td>30 Sep 2026</td><td>29 Nov 2026</td><td>60 days</td><td>Compensation</td><td><div class="progress"><i style="width:0%"></i></div><small>0 / 4</small></td><td><span class="badge warn dot">Retention talk</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">TM</span><div><b>Tariq Mehmood</b><small>EMP-0076 · Loader</small></div></div></td><td>Warehouse</td><td>—</td><td>18 Aug 2026</td><td>Terminated</td><td>Misconduct</td><td><div class="progress"><i style="width:100%"></i></div><small>4 / 4</small></td><td><span class="badge neutral dot">Closed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">AS</span><div><b>Adnan Sheikh</b><small>EMP-0098 · Accounts Officer</small></div></div></td><td>Finance</td><td>05 Jul 2026</td><td>04 Aug 2026</td><td>30 / 30 days</td><td>Better opportunity</td><td><div class="progress"><i style="width:100%"></i></div><small>4 / 4</small></td><td><span class="badge neutral dot">Closed</span></td><td class="actions"><button class="icon-btn-sm"><i data-lucide="more-horizontal"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Exit Reasons · last 12 months</h3><p>21 exits</p></div></div>
+      <div class="stack">
+        <div><div class="row small"><span>Better opportunity</span><span class="spacer"></span><b>8</b></div><div class="progress"><i style="width:38%"></i></div></div>
+        <div><div class="row small"><span>Compensation</span><span class="spacer"></span><b>5</b></div><div class="progress"><i style="width:24%"></i></div></div>
+        <div><div class="row small"><span>Relocation</span><span class="spacer"></span><b>3</b></div><div class="progress"><i style="width:14%"></i></div></div>
+        <div><div class="row small"><span>Higher studies</span><span class="spacer"></span><b>2</b></div><div class="progress"><i style="width:10%"></i></div></div>
+        <div><div class="row small"><span>Terminated / misconduct</span><span class="spacer"></span><b>3</b></div><div class="progress danger"><i style="width:14%"></i></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Clearance by Department</h3><p>Open exit cases</p></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well"><i data-lucide="laptop"></i></span><div><b>IT</b><small>Assets &amp; access revocation</small></div><span class="spacer"></span><span class="badge warn">2 pending</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="building"></i></span><div><b>Administration</b><small>ID card, keys, SIM, vehicle</small></div><span class="spacer"></span><span class="badge warn">2 pending</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="landmark"></i></span><div><b>Finance</b><small>Loans, advances, claims</small></div><span class="spacer"></span><span class="badge warn">3 pending</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="users"></i></span><div><b>Line manager</b><small>Knowledge handover</small></div><span class="spacer"></span><span class="badge good">1 cleared</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="pay-exit-interview">
+    <div class="modal wide">
+      <div class="modal-head"><div><h2>Exit Interview</h2><p>Fatima Noor · Sales Executive · Last day 22 Oct 2026</p></div><button class="x" data-close><i data-lucide="x"></i></button></div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <label><span>Interview date</span><input type="date" value="2026-10-15"></label>
+          <label><span>Conducted by</span><select><option>Ayesha Noor — HR Manager</option></select></label>
+          <label><span>Primary reason</span><select><option>Higher studies</option><option>Better opportunity</option><option>Compensation</option><option>Manager / culture</option><option>Relocation</option></select></label>
+          <label><span>Would you rejoin Al-Noor?</span><select><option>Yes</option><option>Maybe</option><option>No</option></select></label>
+          <label><span>Satisfaction with role (1–5)</span><select><option>4</option><option>5</option><option>3</option></select></label>
+          <label><span>Satisfaction with manager (1–5)</span><select><option>5</option><option>4</option><option>3</option></select></label>
+          <label><span>Compensation fairness (1–5)</span><select><option>3</option><option>4</option><option>2</option></select></label>
+          <label><span>Recommend Al-Noor to friends?</span><select><option>Yes</option><option>No</option></select></label>
+          <label class="full"><span>What did you value most?</span><textarea rows="2">Supportive team and clear sales targets; commission plan is motivating.</textarea></label>
+          <label class="full"><span>What should we improve?</span><textarea rows="2">Field travel allowance in Karachi and faster commission payouts.</textarea></label>
+          <label class="check"><input type="checkbox" checked> Eligible for rehire</label>
+          <label class="check"><input type="checkbox"> Confidential — HR only</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn secondary" data-close>Cancel</button><button class="btn primary" data-close data-toast="Exit interview saved">Save interview</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PERFORMANCE ============================ -->
+<section class="screen" data-route="app/hr/performance" data-title="Performance">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Talent / Performance</div>
+      <h1>Performance Management</h1>
+      <p>Appraisal cycles, goals &amp; KRAs, ratings and calibration.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="target"></i>Goal library</button>
+      <button class="btn primary" data-toast="Reminder sent to 71 managers"><i data-lucide="bell"></i>Remind managers</button>
+    </div>
+  </div>
+
+  <div class="hero-band mb">
+    <div>
+      <span class="hero-eyebrow">Active cycle · 01 Jul – 31 Dec 2026</span>
+      <h1>FY 2026-27 H1 Appraisal</h1>
+      <p>168 eligible employees (excludes 18 on probation) · Manager review closes 15 Oct · Calibration 20–24 Oct · Increments effective January 2027 payroll.</p>
+    </div>
+    <div class="hero-actions"><button class="btn secondary"><i data-lucide="download"></i>Export ratings</button><button class="btn secondary"><i data-lucide="settings"></i>Cycle settings</button></div>
+  </div>
+
+  <div class="panel mb">
+    <ol class="steps">
+      <li class="done"><b>1</b><span>Goal setting · 100%</span></li>
+      <li class="done"><b>2</b><span>Self review · 90%</span></li>
+      <li class="active"><b>3</b><span>Manager review · 58%</span></li>
+      <li><b>4</b><span>Calibration</span></li>
+      <li><b>5</b><span>Sign-off &amp; letters</span></li>
+    </ol>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Self Reviews</span><span class="icon-well"><i data-lucide="user-check"></i></span></div><strong>151 / 168</strong><small class="up">90% submitted</small></div>
+    <div class="kpi yellow"><div class="kpi-top"><span>Manager Reviews</span><span class="icon-well"><i data-lucide="clipboard-check"></i></span></div><strong>97 / 168</strong><small>58% · 14 days left</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Avg Rating (so far)</span><span class="icon-well"><i data-lucide="star"></i></span></div><strong>3.4 / 5</strong><small>H2 FY 2025-26: 3.3</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Goals On Track</span><span class="icon-well"><i data-lucide="target"></i></span></div><strong>74%</strong><small>612 of 828 KRAs</small></div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel flush">
+      <div class="toolbar">
+        <label class="search-field"><i data-lucide="search"></i><input placeholder="Search employee…"></label>
+        <select><option>All departments</option><option>Sales</option><option>Finance</option><option>Operations</option></select>
+        <span class="spacer"></span>
+        <div class="chips"><button class="active">All</button><button>Awaiting manager</button></div>
+      </div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Employee</th><th>Manager</th><th class="num">Goals</th><th class="num">Self</th><th class="num">Manager</th><th>Stage</th></tr></thead>
+        <tbody>
+          <tr><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales Executive</small></div></div></td><td>Zainab Raza</td><td class="num">112%</td><td class="num">4.2</td><td class="num">4.0</td><td><span class="badge good">Reviewed</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">MT</span><div><b>Mehwish Tariq</b><small>Operations Lead</small></div></div></td><td>Ahmed Raza</td><td class="num">108%</td><td class="num">4.5</td><td class="num">4.6</td><td><span class="badge good">Reviewed</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Accountant</small></div></div></td><td>Sana Javed</td><td class="num">96%</td><td class="num">4.0</td><td class="num">3.8</td><td><span class="badge good">Reviewed</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement Officer</small></div></div></td><td>Sana Javed</td><td class="num">88%</td><td class="num">3.8</td><td class="num zero">—</td><td><span class="badge warn">Awaiting manager</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">AH</span><div><b>Ali Haider</b><small>Network Engineer</small></div></div></td><td>Ahmed Raza</td><td class="num">101%</td><td class="num">3.9</td><td class="num zero">—</td><td><span class="badge warn">Awaiting manager</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>Storekeeper</small></div></div></td><td>Mehwish Tariq</td><td class="num">71%</td><td class="num">3.5</td><td class="num">2.6</td><td><span class="badge danger">PIP suggested</span></td></tr>
+          <tr><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>Sales Coordinator</small></div></div></td><td>Ahmed Raza</td><td class="num">104%</td><td class="num zero">—</td><td class="num zero">—</td><td><span class="badge neutral">Self pending</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="table-foot"><span>Showing 1–7 of 168</span><div class="pager"><button>‹</button><button class="active">1</button><button>2</button><button>›</button></div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><h3>Goals &amp; KRAs — Bilal Khan</h3><p>Weighted score 4.0 · Exceeds</p></div></div>
+      <div class="stack">
+        <div><div class="row small"><b>Achieve Rs 18M H1 sales (40%)</b><span class="spacer"></span><span>Rs 20.2M</span></div><div class="progress"><i style="width:100%"></i></div><small class="muted">112% of target</small></div>
+        <div><div class="row small"><b>Add 15 new retail accounts (20%)</b><span class="spacer"></span><span>13</span></div><div class="progress"><i style="width:87%"></i></div><small class="muted">87%</small></div>
+        <div><div class="row small"><b>Collections within 45 days (20%)</b><span class="spacer"></span><span>82%</span></div><div class="progress warn"><i style="width:82%"></i></div><small class="muted">Target 90%</small></div>
+        <div><div class="row small"><b>CRM hygiene — 100% visit logs (10%)</b><span class="spacer"></span><span>96%</span></div><div class="progress"><i style="width:96%"></i></div></div>
+        <div><div class="row small"><b>Complete negotiation training (10%)</b><span class="spacer"></span><span>Done</span></div><div class="progress"><i style="width:100%"></i></div></div>
+      </div>
+      <div class="banner info mt"><i data-lucide="message-square"></i><div><b>Manager comment</b><p>"Exceeded revenue target with City Mart and Al-Fatah. Needs to tighten collections." — Zainab Raza</p></div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><div><h3>9-Box Talent Grid</h3><p>Performance (x) vs potential (y) · 168 employees · draft before calibration</p></div><div class="panel-actions"><button class="btn ghost sm">Open calibration</button></div></div>
+    <div class="grid-3">
+      <div class="card"><div class="row"><b>Enigma</b><span class="spacer"></span><span class="badge warn">4</span></div><small class="muted">High potential · Low performance</small></div>
+      <div class="card"><div class="row"><b>Growth Employee</b><span class="spacer"></span><span class="badge info">18</span></div><small class="muted">High potential · Moderate performance</small></div>
+      <div class="card"><div class="row"><b>Future Leader ★</b><span class="spacer"></span><span class="badge good">12</span></div><small class="muted">Mehwish Tariq, Bilal Khan, Ali Haider +9</small></div>
+      <div class="card"><div class="row"><b>Inconsistent Player</b><span class="spacer"></span><span class="badge warn">8</span></div><small class="muted">Moderate potential · Low performance</small></div>
+      <div class="card"><div class="row"><b>Core Player</b><span class="spacer"></span><span class="badge neutral">62</span></div><small class="muted">Moderate potential · Moderate performance</small></div>
+      <div class="card"><div class="row"><b>High Performer</b><span class="spacer"></span><span class="badge good">21</span></div><small class="muted">Moderate potential · High performance</small></div>
+      <div class="card"><div class="row"><b>Risk</b><span class="spacer"></span><span class="badge danger">9</span></div><small class="muted">Low potential · Low performance — PIP review</small></div>
+      <div class="card"><div class="row"><b>Effective Employee</b><span class="spacer"></span><span class="badge neutral">28</span></div><small class="muted">Low potential · Moderate performance</small></div>
+      <div class="card"><div class="row"><b>Trusted Professional</b><span class="spacer"></span><span class="badge info">6</span></div><small class="muted">Low potential · High performance</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TRAINING ============================ -->
+<section class="screen" data-route="app/hr/training" data-title="Training">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Talent / Training</div>
+      <h1>Training &amp; Development</h1>
+      <p>Programs, sessions, enrolments and certifications · FY 2026-27 budget Rs 3,600,000.</p>
+    </div>
+    <div class="head-actions">
+      <button class="btn secondary"><i data-lucide="calendar-plus"></i>Schedule session</button>
+      <button class="btn primary" data-toast="Program draft created"><i data-lucide="plus"></i>New Program</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Training Hours (FY)</span><span class="icon-well"><i data-lucide="graduation-cap"></i></span></div><strong>2,148 hrs</strong><small>11.5 hrs per employee</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Budget Utilised</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 1,284,000</strong><small>35.7% of Rs 3,600,000</small></div>
+    <div class="kpi blue"><div class="kpi-top"><span>Active Enrolments</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>94</strong><small>6 programs running</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Certifications Expiring</span><span class="icon-well"><i data-lucide="alert-triangle"></i></span></div><strong>7</strong><small class="down">Next 60 days</small></div>
+  </div>
+
+  <div class="card-grid mb">
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="shield"></i></span><b>Fire Safety &amp; First Aid</b></div><p class="small muted">Mandatory · Warehouse &amp; Operations · Rescue 1122 trainers</p><div class="progress"><i style="width:68%"></i></div><div class="row small mt"><span>49 / 72 completed</span><span class="spacer"></span><span class="badge warn">Compliance</span></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="handshake"></i></span><b>Consultative Selling</b></div><p class="small muted">Sales · 3-day workshop · Rs 18,000 / head</p><div class="progress"><i style="width:55%"></i></div><div class="row small mt"><span>23 / 42 completed</span><span class="spacer"></span><span class="badge info">In progress</span></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="file-spreadsheet"></i></span><b>Advanced Excel &amp; Finsoft Reporting</b></div><p class="small muted">Finance &amp; Procurement · Online, 8 modules</p><div class="progress"><i style="width:81%"></i></div><div class="row small mt"><span>21 / 26 completed</span><span class="spacer"></span><span class="badge info">In progress</span></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="percent"></i></span><b>Sales Tax &amp; FBR Updates 2026</b></div><p class="small muted">Finance · ICAP CPD-certified · 6 hrs</p><div class="progress"><i style="width:100%"></i></div><div class="row small mt"><span>14 / 14 completed</span><span class="spacer"></span><span class="badge good">Completed</span></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="users-round"></i></span><b>First-time Managers</b></div><p class="small muted">G3 &amp; new G4 · LUMS Executive Education</p><div class="progress"><i style="width:20%"></i></div><div class="row small mt"><span>3 / 15 completed</span><span class="spacer"></span><span class="badge info">Starts Oct</span></div></div>
+    <div class="card"><div class="row"><span class="icon-well"><i data-lucide="forklift"></i></span><b>Forklift Operator Licence</b></div><p class="small muted">Warehouse · practical + written test</p><div class="progress warn"><i style="width:40%"></i></div><div class="row small mt"><span>6 / 15 certified</span><span class="spacer"></span><span class="badge warn">Renewals due</span></div></div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Upcoming Sessions · October 2026</h3></div></div>
+      <div class="list">
+        <div class="list-item"><span class="icon-well"><i data-lucide="calendar-days"></i></span><div><b>Consultative Selling — Day 1</b><small>06 Oct · 09:30–17:00 · Karachi office · 14 seats</small></div><span class="spacer"></span><span class="badge info">12 / 14</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="calendar-days"></i></span><div><b>Fire Safety Drill — Faisalabad WH</b><small>09 Oct · 10:00–13:00 · Rescue 1122</small></div><span class="spacer"></span><span class="badge info">18 / 20</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="calendar-days"></i></span><div><b>First-time Managers — Module 1</b><small>14 Oct · 09:00–16:00 · LUMS, Lahore</small></div><span class="spacer"></span><span class="badge info">15 / 15</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="video"></i></span><div><b>Finsoft Payroll for HR (online)</b><small>21 Oct · 15:00–16:30 · Microsoft Teams</small></div><span class="spacer"></span><span class="badge info">8 / 30</span></div>
+        <div class="list-item"><span class="icon-well"><i data-lucide="calendar-days"></i></span><div><b>Harassment at Workplace Act — awareness</b><small>28 Oct · 11:00–12:30 · All branches (hybrid)</small></div><span class="spacer"></span><span class="badge warn">Mandatory</span></div>
+      </div>
+    </div>
+    <div class="panel flush">
+      <div class="panel-head"><div><h3>Certifications Expiring</h3><p>Next 60 days</p></div><button class="btn ghost sm" data-toast="Renewal reminders sent">Send reminders</button></div>
+      <div class="table-wrap"><table class="tbl">
+        <thead><tr><th>Employee</th><th>Certification</th><th>Expires</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Hamza Butt</td><td>Forklift Operator Licence</td><td class="neg">12 Oct 2026</td><td><span class="badge danger">11 days</span></td></tr>
+          <tr><td>Sameer Hussain</td><td>Forklift Operator Licence</td><td class="neg">19 Oct 2026</td><td><span class="badge danger">18 days</span></td></tr>
+          <tr><td>Umar Farooq</td><td>HTV Driving Licence</td><td>02 Nov 2026</td><td><span class="badge warn">32 days</span></td></tr>
+          <tr><td>Nida Shah</td><td>First Aid (Red Crescent)</td><td>10 Nov 2026</td><td><span class="badge warn">40 days</span></td></tr>
+          <tr><td>Ali Haider</td><td>CCNA</td><td>18 Nov 2026</td><td><span class="badge warn">48 days</span></td></tr>
+          <tr><td>Hira Ali</td><td>ICAP CPD hours (FY)</td><td>25 Nov 2026</td><td><span class="badge warn">55 days</span></td></tr>
+          <tr><td>Faisal Qureshi</td><td>CIPS Level 4</td><td>29 Nov 2026</td><td><span class="badge warn">59 days</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel flush">
+    <div class="panel-head"><div><h3>Enrolments</h3><p>Current programs</p></div><div class="panel-actions"><button class="btn secondary sm"><i data-lucide="user-plus"></i>Enrol employees</button></div></div>
+    <div class="table-wrap"><table class="tbl">
+      <thead><tr><th>Employee</th><th>Program</th><th>Enrolled</th><th>Progress</th><th class="num">Score</th><th class="num">Cost (Rs)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><div class="cell-user"><span class="avatar sm">BK</span><div><b>Bilal Khan</b><small>Sales</small></div></div></td><td>Consultative Selling</td><td>01 Sep 2026</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="num">88%</td><td class="num">18,000</td><td><span class="badge good">Completed</span></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">ZR</span><div><b>Zainab Raza</b><small>Sales</small></div></div></td><td>First-time Managers</td><td>20 Sep 2026</td><td><div class="progress"><i style="width:0%"></i></div></td><td class="num zero">—</td><td class="num">65,000</td><td><span class="badge info">Enrolled</span></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">HA</span><div><b>Hira Ali</b><small>Finance</small></div></div></td><td>Advanced Excel &amp; Finsoft Reporting</td><td>15 Aug 2026</td><td><div class="progress"><i style="width:75%"></i></div></td><td class="num">92%</td><td class="num">9,500</td><td><span class="badge info">In progress</span></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">HB</span><div><b>Hamza Butt</b><small>Warehouse</small></div></div></td><td>Fire Safety &amp; First Aid</td><td>10 Sep 2026</td><td><div class="progress warn"><i style="width:30%"></i></div></td><td class="num zero">—</td><td class="num">4,000</td><td><span class="badge warn">Behind</span></td></tr>
+        <tr><td><div class="cell-user"><span class="avatar sm">UA</span><div><b>Usman Ali</b><small>Procurement</small></div></div></td><td>Advanced Excel &amp; Finsoft Reporting</td><td>15 Aug 2026</td><td><div class="progress"><i style="width:100%"></i></div></td><td class="num">79%</td><td class="num">9,500</td><td><span class="badge good">Completed</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================ HR ANALYTICS ============================ -->
+<section class="screen" data-route="app/hr/reports" data-title="HR Reports">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Insights / Analytics / HR Reports</div>
+      <h1>HR Analytics</h1>
+      <p>Headcount, attrition, attendance and payroll cost trends for Al-Noor Enterprises · as of 01 Oct 2026.</p>
+    </div>
+    <div class="head-actions">
+      <div class="seg"><button>FY 2025-26</button><button class="active">Last 12 months</button><button>YTD</button></div>
+      <a class="btn secondary" href="#/app/reports/studio"><i data-lucide="wand-sparkles"></i>Report Studio</a>
+      <button class="btn primary"><i data-lucide="download"></i>Export pack</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid mb">
+    <div class="kpi"><div class="kpi-top"><span>Headcount</span><span class="icon-well"><i data-lucide="users"></i></span></div><strong>186</strong><small class="up">▲ 18 (10.7%) in 12 months</small></div>
+    <div class="kpi red"><div class="kpi-top"><span>Attrition (annualised)</span><span class="icon-well"><i data-lucide="trending-down"></i></span></div><strong>11.4%</strong><small class="down">21 exits · voluntary 85%</small></div>
+    <div class="kpi teal"><div class="kpi-top"><span>Average Tenure</span><span class="icon-well"><i data-lucide="hourglass"></i></span></div><strong>3.8 yrs</strong><small>Median 3.1 yrs</small></div>
+    <div class="kpi violet"><div class="kpi-top"><span>Cost per Employee</span><span class="icon-well"><i data-lucide="wallet"></i></span></div><strong>Rs 121,468</strong><small>Monthly CTC · Sep 2026</small></div>
+  </div>
+
+  <div class="split mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Headcount Trend</h3><p>Oct 2025 – Sep 2026 · month-end active employees</p></div></div>
+      <svg class="chart" viewBox="0 0 600 200" preserveAspectRatio="none">
+        <path class="area" d="M0,142 L55,130 L109,124 L164,112 L218,118 L273,100 L327,88 L382,94 L436,76 L491,64 L545,52 L600,34 L600,200 L0,200 Z"/>
+        <path class="line" d="M0,142 L55,130 L109,124 L164,112 L218,118 L273,100 L327,88 L382,94 L436,76 L491,64 L545,52 L600,34"/>
+        <path class="line alt" d="M0,178 L55,176 L109,178 L164,174 L218,172 L273,176 L327,174 L382,170 L436,176 L491,174 L545,172 L600,170"/>
+      </svg>
+      <div class="legend"><span><i style="background:#15803d"></i>Headcount (168 → 186)</span><span><i style="background:#efbc61"></i>Monthly exits (0–3)</span></div>
+      <div class="row small muted mt"><span>Oct</span><span class="spacer"></span><span>Jan</span><span class="spacer"></span><span>Apr</span><span class="spacer"></span><span>Jul</span><span class="spacer"></span><span>Sep</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Gender Diversity</h3><p>186 employees</p></div></div>
+      <div class="row" style="justify-content:center;gap:24px">
+        <div class="donut" style="--p:24;--c:#6d28d9"><b>24%</b><small>Female</small></div>
+        <div class="dl" style="min-width:150px">
+          <div><span>Male</span><b>141</b></div>
+          <div><span>Female</span><b>45</b></div>
+          <div><span>Women in G3+</span><b>14 of 62</b></div>
+          <div><span>FY target</span><b>28%</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-head"><div><h3>Headcount by Department</h3></div></div>
+      <div class="stack">
+        <div><div class="row small"><span>Sales</span><span class="spacer"></span><b>42</b></div><div class="progress"><i style="width:100%"></i></div></div>
+        <div><div class="row small"><span>Operations</span><span class="spacer"></span><b>38</b></div><div class="progress"><i style="width:90%"></i></div></div>
+        <div><div class="row small"><span>Warehouse</span><span class="spacer"></span><b>34</b></div><div class="progress"><i style="width:81%"></i></div></div>
+        <div><div class="row small"><span>Administration</span><span class="spacer"></span><b>21</b></div><div class="progress"><i style="width:50%"></i></div></div>
+        <div><div class="row small"><span>IT</span><span class="spacer"></span><b>16</b></div><div class="progress"><i style="width:38%"></i></div></div>
+        <div><div class="row small"><span>Finance</span><span class="spacer"></span><b>14</b></div><div class="progress"><i style="width:33%"></i></div></div>
+        <div><div class="row small"><span>Procurement</span><span class="spacer"></span><b>12</b></div><div class="progress"><i style="width:29%"></i></div></div>
+        <div><div class="row small"><span>Human Resources</span><span class="spacer"></span><b>9</b></div><div class="progress"><i style="width:21%"></i></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><h3>Attendance Rate</h3><p>Average daily present % · last 6 months</p></div></div>
+      <div class="bars">
+        <div class="bar" style="--h:94%"><i></i><span>Apr</span></div>
+        <div class="bar" style="--h:93%"><i></i><span>May</span></div>
+        <div class="bar" style="--h:90%"><i></i><span>Jun</span></div>
+        <div class="bar" style="--h:92%"><i></i><span>Jul</span></div>
+        <div class="bar" style="--h:95%"><i></i><span>Aug</span></div>
+        <div class="bar" style="--h:96%"><i></i><span>Sep</span></div>
+      </div>
+      <div class="legend"><span><i style="background:#15803d"></i>Present %</span><span class="muted small">Sep: 96.1% present · 412 late marks</span></div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <a class="card" href="#/app/hr/employees"><div class="row"><span class="icon-well"><i data-lucide="contact"></i></span><b>Employee Master List</b></div><p class="small muted">All active employees with grade, branch, CNIC, bank &amp; statutory numbers.</p></a>
+    <a class="card" href="#/app/hr/attendance/register"><div class="row"><span class="icon-well"><i data-lucide="calendar-days"></i></span><b>Attendance Summary</b></div><p class="small muted">Monthly present, absent, late and overtime by employee.</p></a>
+    <a class="card" href="#/app/hr/leave/balances"><div class="row"><span class="icon-well"><i data-lucide="scale"></i></span><b>Leave Liability</b></div><p class="small muted">Leave balances and encashment liability — Rs 4.1M accrued.</p></a>
+    <a class="card" href="#/app/hr/offboarding"><div class="row"><span class="icon-well"><i data-lucide="trending-down"></i></span><b>Attrition Analysis</b></div><p class="small muted">Exits by reason, tenure band, department and manager.</p></a>
+    <a class="card" href="#/app/hr/payroll/reports"><div class="row"><span class="icon-well"><i data-lucide="file-spreadsheet"></i></span><b>Payroll Cost Analysis</b></div><p class="small muted">CTC by department, cost centre and component — 12-month trend.</p></a>
+    <a class="card" href="#/app/hr/performance"><div class="row"><span class="icon-well"><i data-lucide="star"></i></span><b>Performance Distribution</b></div><p class="small muted">Rating bell curve, 9-box and increment recommendations.</p></a>
+    <a class="card" href="#/app/hr/org"><div class="row"><span class="icon-well"><i data-lucide="network"></i></span><b>Span of Control</b></div><p class="small muted">Reporting lines and team sizes across 71 managers.</p></a>
+    <a class="card" href="#/app/hr/training"><div class="row"><span class="icon-well"><i data-lucide="graduation-cap"></i></span><b>Training Effectiveness</b></div><p class="small muted">Hours, spend and post-training scores per program.</p></a>
+  </div>
+</section>

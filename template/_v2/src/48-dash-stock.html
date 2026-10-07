@@ -1,0 +1,577 @@
+<!-- ===================================================================
+     48-dash-stock.html  (Agent D)
+     Fundcy-style dashboards: app/dashboard, admin/dashboard, ess/dashboard,
+     app/hr/payroll  +  Whole Stock: app/inventory/stock
+     Charts are rendered by src/92-dash.js from data-fd-* attributes.
+     =================================================================== -->
+
+<!-- ============================ TENANT DASHBOARD ============================ -->
+<section class="screen fd-screen" data-route="app/dashboard" data-title="Dashboard">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Thursday, 01 October 2026 · FY 2026-27 · Q2</div>
+      <h1>Good morning, Sana</h1>
+      <p>Keep track, assess and enhance your financial performance</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/today"><i data-lucide="calendar-days"></i>Today's Work</a>
+      <a class="btn primary" href="#/app/sales/invoices/new"><i data-lucide="plus"></i>New Invoice</a>
+    </div>
+  </div>
+
+  <div class="fd-grid fd-r1">
+    <!-- Cash & Bank -->
+    <article class="fd-card" style="--i:0">
+      <div class="fd-head"><h3>Cash &amp; Bank Balance</h3><span class="spacer"></span>
+        <label class="fd-sel"><select aria-label="Period"><option>All time</option><option>This month</option><option>This quarter</option><option>FY 2026-27</option></select><i data-lucide="chevron-down"></i></label>
+      </div>
+      <div class="fd-body fd-bottom">
+        <span class="fd-label">Total balance · 4 banks, 3 cash books</span>
+        <b class="num-big fd-big" data-count>Rs 48,215,300<span class="dec">.00</span></b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="wallet"></i>Total earned last month <b class="up">+Rs 3,412,600.00</b></span>
+          <span class="pill"><i data-lucide="zap"></i>Collections MTD <b class="up">+Rs 1,860,000</b></span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Revenue -->
+    <article class="fd-card" style="--i:1">
+      <div class="fd-head"><h3>Revenue</h3><span class="spacer"></span><span class="fd-date">September 2026</span></div>
+      <div class="fd-body">
+        <div class="fd-row-top">
+          <div><span class="fd-label">Total revenue</span></div>
+          <div class="fd-heat" data-fd-heat="2,3,2,4,3,5,4,6,5,3,4,6" aria-label="Daily revenue intensity"></div>
+        </div>
+        <b class="num-big fd-big" data-count>Rs 18,642,750<span class="dec">.00</span></b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="trending-down"></i>Min <b class="down">−2.4% MoM</b></span>
+          <span class="pill"><i data-lucide="zap"></i>Earned <b class="up">+Rs 458,000</b></span>
+        </div>
+        <div class="fd-split">
+          <div style="--c:var(--fd-forest)"><span>Sales</span><b>Rs 12.4M</b></div>
+          <div style="--c:var(--fd-lime)"><span>Services</span><b>Rs 4.1M</b></div>
+          <div style="--c:var(--fd-mint)"><span>Other</span><b>Rs 2.1M</b></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Expenses + gauge -->
+    <article class="fd-card" style="--i:2">
+      <div class="fd-body">
+        <b class="num-big fd-big" data-count>Rs 9,874,200<span class="dec">.00</span></b>
+        <span class="fd-label">Total expenses · September 2026</span>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="receipt-text"></i>Min <b class="up">7.4% below plan</b></span>
+          <span class="pill"><i data-lucide="zap"></i>Saved <b class="up">+Rs 800,000</b></span>
+        </div>
+        <div class="fd-gauge" data-fd-gauge="64" data-ticks="30"></div>
+        <div class="fd-gauge-foot"><span>September 2026</span><span class="spacer"></span><span>With a goal of 75% <i data-lucide="zap" class="fd-zap"></i></span></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r2">
+    <!-- Money Flow -->
+    <article class="fd-card" style="--i:3">
+      <div class="fd-head"><h3>Money Flow</h3><span class="spacer"></span>
+        <div class="fd-legend"><span><i class="fd-k-a"></i>Income</span><span><i class="fd-k-b"></i>Expense</span><span><i class="fd-k-s"></i>Space</span></div>
+        <label class="fd-sel"><select data-fd-mode aria-label="Grouping"><option value="m">Monthly</option><option value="q">Quarterly</option></select><i data-lucide="chevron-down"></i></label>
+      </div>
+      <div class="fd-flow" data-fd-flow="money" data-mode="overlay" data-hot="5"></div>
+    </article>
+
+    <!-- Budget Remaining -->
+    <article class="fd-card" style="--i:4">
+      <div class="fd-head"><h3>Budget Remaining</h3><span class="spacer"></span><a class="fd-link" href="#/app/budgets">Budget setting <i data-lucide="arrow-right"></i></a></div>
+      <div class="fd-remain">
+        <div>
+          <b class="fd-pct" data-count>69<span class="dec">%</span></b>
+          <span class="pill"><i data-lucide="sparkles"></i>Additional AVG <b class="up">2.4%</b></span>
+        </div>
+        <p class="fd-note"><b>You're in great shape—</b>Q2 spending is on plan and every cost centre is still under its limit.</p>
+      </div>
+      <div class="fd-tiles">
+        <div class="fd-tcol" style="--h:89%;--i:0"><div class="fd-space"><i></i></div>
+          <div class="fd-tile t-forest"><b>89<small>%</small></b><span>Payroll</span>
+            <div class="fd-tile-foot"><small>Rs 19.1M</small><small>Rs 21.5M</small></div><div class="fd-tile-bar"><i style="width:89%"></i></div></div></div>
+        <div class="fd-tcol" style="--h:78%;--i:1"><div class="fd-space"><i></i></div>
+          <div class="fd-tile t-lime"><b>78<small>%</small></b><span>Operations</span></div></div>
+        <div class="fd-tcol" style="--h:42%;--i:2"><div class="fd-space"><i></i></div>
+          <div class="fd-tile t-mint"><b>42<small>%</small></b><span>Marketing</span></div></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r3">
+    <!-- Transaction history -->
+    <article class="fd-card fd-flush" style="--i:5">
+      <div class="fd-head fd-pad"><h3>Transaction History</h3><span class="spacer"></span>
+        <label class="fd-sel"><select aria-label="Type"><option>All transactions</option><option>Receipts</option><option>Payments</option></select><i data-lucide="chevron-down"></i></label>
+        <a class="btn icon ghost sm" href="#/app/bank/transactions" aria-label="Filters"><i data-lucide="sliders-horizontal"></i></a>
+      </div>
+      <div class="table-wrap"><table class="tbl fd-tbl">
+        <thead><tr><th>Name</th><th>Date</th><th>Method</th><th class="num">Amount</th><th>Status</th><th data-nosort class="right">Action</th></tr></thead>
+        <tbody>
+          <tr><td><div class="fd-party"><span class="fd-logo l-forest">SI</span><div><b>Shifa International</b><small>RCPT-2026-000318</small></div></div></td><td>01 Oct 2026<small>10:42 AM</small></td><td><span class="fd-method"><i data-lucide="landmark"></i>Bank Transfer</span></td><td class="num fd-amt in">+Rs 1,245,000<span class="dec">.00</span></td><td><span class="fd-status ok">Completed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-orange">KE</span><div><b>K-Electric</b><small>BILL-2026-000342</small></div></div></td><td>30 Sep 2026<small>04:15 PM</small></td><td><span class="fd-method"><i data-lucide="credit-card"></i>Corporate Card</span></td><td class="num fd-amt">Rs 186,420<span class="dec">.00</span></td><td><span class="fd-status wait">Pending</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-blue">PL</span><div><b>Packages Ltd</b><small>INV-2026-000123</small></div></div></td><td>30 Sep 2026<small>11:08 AM</small></td><td><span class="fd-method"><i data-lucide="landmark"></i>Bank Transfer</span></td><td class="num fd-amt in">+Rs 920,540<span class="dec">.00</span></td><td><span class="fd-status ok">Completed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-violet">NM</span><div><b>Nishat Mills</b><small>PAY-2026-000207</small></div></div></td><td>29 Sep 2026<small>03:30 PM</small></td><td><span class="fd-method"><i data-lucide="file-text"></i>Cheque</span></td><td class="num fd-amt">Rs 2,480,000<span class="dec">.00</span></td><td><span class="fd-status ok">Completed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-red">PT</span><div><b>PTCL</b><small>BILL-2026-000339</small></div></div></td><td>29 Sep 2026<small>09:12 AM</small></td><td><span class="fd-method"><i data-lucide="credit-card"></i>Corporate Card</span></td><td class="num fd-amt">Rs 48,250<span class="dec">.00</span></td><td><span class="fd-status ok">Completed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-lime">MC</span><div><b>Metro Cash &amp; Carry</b><small>RCPT-2026-000316</small></div></div></td><td>28 Sep 2026<small>05:47 PM</small></td><td><span class="fd-method"><i data-lucide="landmark"></i>Bank Transfer</span></td><td class="num fd-amt in">+Rs 764,300<span class="dec">.00</span></td><td><span class="fd-status wait">Pending</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-forest">TC</span><div><b>TCS Logistics</b><small>BILL-2026-000335</small></div></div></td><td>27 Sep 2026<small>12:20 PM</small></td><td><span class="fd-method"><i data-lucide="coins"></i>Petty Cash</span></td><td class="num fd-amt">Rs 12,800<span class="dec">.00</span></td><td><span class="fd-status ok">Completed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-blue">SP</span><div><b>Siemens Pakistan</b><small>PO-2026-000188</small></div></div></td><td>26 Sep 2026<small>02:05 PM</small></td><td><span class="fd-method"><i data-lucide="file-text"></i>Cheque</span></td><td class="num fd-amt">Rs 1,120,000<span class="dec">.00</span></td><td><span class="fd-status fail">Failed</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </article>
+
+    <div class="fd-col-stack">
+      <article class="fd-card" style="--i:6">
+        <div class="fd-head"><h3>Pending approvals</h3><span class="fd-count">5</span><span class="spacer"></span><a class="fd-link" href="#/app/today">View all <i data-lucide="arrow-right"></i></a></div>
+        <div class="fd-list">
+          <a href="#/app/accounting/vouchers/view"><span class="icon-tile green"><i data-lucide="receipt-text"></i></span><div><b>JV-2026-000451</b><small>Accrual · Hira Ali</small></div><em>Rs 340,000</em></a>
+          <a href="#/app/purchases/orders"><span class="icon-tile blue"><i data-lucide="package"></i></span><div><b>PO-2026-000188</b><small>Siemens Pakistan</small></div><em>Rs 1.12M</em></a>
+          <a href="#/app/purchases/bills"><span class="icon-tile orange"><i data-lucide="file-text"></i></span><div><b>BILL-2026-000342</b><small>K-Electric · due 05 Oct</small></div><em>Rs 186,420</em></a>
+          <a href="#/app/cash/expenses"><span class="icon-tile violet"><i data-lucide="wallet"></i></span><div><b>Expense claim</b><small>Bilal Khan · client visit</small></div><em>Rs 18,450</em></a>
+          <a href="#/app/payables/payments"><span class="icon-tile lime"><i data-lucide="landmark"></i></span><div><b>PAY-2026-000209</b><small>Habib Packaging</small></div><em>Rs 612,000</em></a>
+        </div>
+      </article>
+      <a class="fd-card fd-night" href="#/app/hr/payroll/run" style="--i:7">
+        <div class="fd-head"><h3>Payroll · October</h3><span class="spacer"></span><span class="fd-chip-night">PR-2026-10</span></div>
+        <span class="fd-label">Estimated net pay · 186 employees</span>
+        <b class="num-big fd-big sm" data-count>Rs 19,310,000<span class="dec">.00</span></b>
+        <div class="fd-steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="fd-night-foot"><span>3 of 6 steps · due 28 Oct</span><span class="spacer"></span><b>Prepare run <i data-lucide="arrow-right"></i></b></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ADMIN DASHBOARD ============================ -->
+<section class="screen fd-screen" data-route="admin/dashboard" data-title="Platform Overview">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Finsoft Cloud · Thursday, 01 October 2026</div>
+      <h1>Good morning, Saim</h1>
+      <p>128 tenants live. MRR crossed Rs 3.8M, 4 tenants need attention and 14 trials are running.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/admin/system"><i data-lucide="gauge"></i>System health</a>
+      <a class="btn primary" href="#/admin/tenants/new"><i data-lucide="plus"></i>Onboard tenant</a>
+    </div>
+  </div>
+
+  <div class="fd-grid fd-r1">
+    <article class="fd-card" style="--i:0">
+      <div class="fd-head"><h3>Monthly Recurring Revenue</h3><span class="spacer"></span>
+        <label class="fd-sel"><select aria-label="Period"><option>Sep 2026</option><option>Aug 2026</option></select><i data-lucide="chevron-down"></i></label></div>
+      <div class="fd-body fd-bottom">
+        <span class="fd-label">Total MRR · ARR Rs 46.1M</span>
+        <b class="num-big fd-big" data-count>Rs 3,845,000<span class="dec">.00</span></b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="trending-up"></i>vs August <b class="up">+3.9%</b></span>
+          <span class="pill"><i data-lucide="zap"></i>Expansion <b class="up">+Rs 79,000</b></span>
+        </div>
+      </div>
+    </article>
+    <article class="fd-card" style="--i:1">
+      <div class="fd-head"><h3>Active tenants</h3><span class="spacer"></span><span class="fd-date">Sign-ups · 12 months</span></div>
+      <div class="fd-body">
+        <div class="fd-row-top">
+          <span class="fd-label">Live organisations</span>
+          <div class="fd-heat" data-fd-heat="5,4,3,6,5,7,6,6,8,12,10,11"></div>
+        </div>
+        <b class="num-big fd-big" data-count>128</b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="building-2"></i>Net new <b class="up">+9</b></span>
+          <span class="pill"><i data-lucide="clock"></i>Trials <b>14 running</b></span>
+        </div>
+        <div class="fd-split">
+          <div style="--c:var(--fd-forest)"><span>Growth</span><b>65</b></div>
+          <div style="--c:var(--fd-lime)"><span>Business</span><b>23</b></div>
+          <div style="--c:var(--fd-mint)"><span>Starter</span><b>35</b></div>
+        </div>
+      </div>
+    </article>
+    <article class="fd-card" style="--i:2">
+      <div class="fd-body">
+        <b class="num-big fd-big" data-count>1.8<span class="dec">%</span></b>
+        <span class="fd-label">Logo churn · last 30 days</span>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="trending-down"></i>vs Aug <b class="down">+0.4 pts</b></span>
+          <span class="pill"><i data-lucide="users"></i>Lost <b>2 tenants</b></span>
+        </div>
+        <div class="fd-gauge" data-fd-gauge="36" data-ticks="30" data-max="5" data-unit="%"></div>
+        <div class="fd-gauge-foot"><span>September 2026</span><span class="spacer"></span><span>Ceiling of 2.5% <i data-lucide="zap" class="fd-zap"></i></span></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r2">
+    <article class="fd-card" style="--i:3">
+      <div class="fd-head"><h3>MRR Flow</h3><span class="spacer"></span>
+        <div class="fd-legend"><span><i class="fd-k-a"></i>New</span><span><i class="fd-k-b"></i>Expansion</span><span><i class="fd-k-s"></i>Space</span></div>
+        <label class="fd-sel"><select data-fd-mode aria-label="Grouping"><option value="m">Monthly</option><option value="q">Quarterly</option></select><i data-lucide="chevron-down"></i></label>
+      </div>
+      <div class="fd-flow" data-fd-flow="mrr" data-mode="stack" data-hot="9"></div>
+    </article>
+    <article class="fd-card" style="--i:4">
+      <div class="fd-head"><h3>Plan mix</h3><span class="spacer"></span><a class="fd-link" href="#/admin/plans">Plans <i data-lucide="arrow-right"></i></a></div>
+      <div class="fd-remain">
+        <div><b class="fd-pct" data-count>42<span class="dec">%</span></b><span class="pill"><i data-lucide="sparkles"></i>Growth share <b class="up">+1.8%</b></span></div>
+        <p class="fd-note"><b>Growth leads—</b>65 tenants on Rs 24,999/mo drive the largest share of MRR.</p>
+      </div>
+      <div class="fd-tree fd-tree-plan">
+        <div class="fd-tile t-forest" style="grid-area:a;--i:0"><b>42<small>%</small></b><span>Growth</span><div class="fd-tile-foot"><small>65 tenants</small><small>Rs 1.62M</small></div></div>
+        <div class="fd-tile t-lime" style="grid-area:b;--i:1"><b>30<small>%</small></b><span>Business · Rs 1.15M</span></div>
+        <div class="fd-tile t-mint" style="grid-area:c;--i:2"><b>19<small>%</small></b><span>Enterprise</span></div>
+        <div class="fd-tile t-hatch" style="grid-area:d;--i:3"><b>9<small>%</small></b><span>Starter</span></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r3">
+    <article class="fd-card fd-flush" style="--i:5">
+      <div class="fd-head fd-pad"><h3>Tenants needing attention</h3><span class="fd-count">4</span><span class="spacer"></span><a class="fd-link" href="#/admin/tenants">All tenants <i data-lucide="arrow-right"></i></a></div>
+      <div class="table-wrap"><table class="tbl fd-tbl">
+        <thead><tr><th>Tenant</th><th>Plan</th><th>Issue</th><th>Since</th><th class="num">MRR</th><th>Owner</th><th data-nosort class="right">Action</th></tr></thead>
+        <tbody>
+          <tr><td><div class="fd-party"><span class="fd-logo l-red">RM</span><div><b>Ravi Motors</b><small>RAVIMTR</small></div></div></td><td><span class="fd-status info">Growth</span></td><td><span class="fd-status fail">Payment failed (2nd attempt)</span></td><td>28 Sep 2026</td><td class="num fd-amt">Rs 24,999<span class="dec">.00</span></td><td>Danish Ahmed</td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-violet">CT</span><div><b>Crescent Textiles</b><small>CRESTEX</small></div></div></td><td><span class="fd-status vio">Business</span></td><td><span class="fd-status wait">Storage 92% of 100 GB</span></td><td>25 Sep 2026</td><td class="num fd-amt">Rs 49,999<span class="dec">.00</span></td><td>Mariam Iqbal</td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-lime">SR</span><div><b>Sukkur Rice Co.</b><small>SUKRICE</small></div></div></td><td><span class="fd-status">Starter</span></td><td><span class="fd-status wait">No logins in 21 days</span></td><td>10 Sep 2026</td><td class="num fd-amt">Rs 9,999<span class="dec">.00</span></td><td>Mariam Iqbal</td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+          <tr><td><div class="fd-party"><span class="fd-logo l-blue">KT</span><div><b>Karakoram Tech</b><small>KKTECH</small></div></div></td><td><span class="fd-status">Trial</span></td><td><span class="fd-status info">Trial ends in 2 days</span></td><td>17 Sep 2026</td><td class="num zero">—</td><td>Danish Ahmed</td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        </tbody>
+      </table></div>
+    </article>
+    <div class="fd-col-stack">
+      <article class="fd-card" style="--i:6">
+        <div class="fd-head"><h3>System health</h3><span class="fd-live"><i></i>Live</span><span class="spacer"></span><a class="fd-link" href="#/admin/system">Details <i data-lucide="arrow-right"></i></a></div>
+        <div class="fd-list">
+          <a href="#/admin/system"><span class="icon-tile green"><i data-lucide="zap"></i></span><div><b>API gateway</b><small>p95 182 ms · 99.99%</small></div><span class="fd-status ok">Operational</span></a>
+          <a href="#/admin/system"><span class="icon-tile green"><i data-lucide="layers"></i></span><div><b>PostgreSQL primary</b><small>CPU 41% · 2 replicas</small></div><span class="fd-status ok">Operational</span></a>
+          <a href="#/admin/system"><span class="icon-tile orange"><i data-lucide="clock"></i></span><div><b>Background workers</b><small>Payroll queue 312 jobs</small></div><span class="fd-status wait">Busy</span></a>
+          <a href="#/admin/system"><span class="icon-tile orange"><i data-lucide="landmark"></i></span><div><b>FBR IRIS gateway</b><small>Upstream latency 2.4 s</small></div><span class="fd-status wait">Degraded</span></a>
+          <a href="#/admin/system"><span class="icon-tile green"><i data-lucide="megaphone"></i></span><div><b>Mail delivery</b><small>98.7% delivered (24h)</small></div><span class="fd-status ok">Operational</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ESS DASHBOARD ============================ -->
+<section class="screen fd-screen" data-route="ess/dashboard" data-title="My Day">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Thursday, 01 October 2026 · Lahore HQ</div>
+      <h1>Assalam-o-Alaikum, Bilal</h1>
+      <p>Sales Executive · EMP-0042 · General shift 09:00 – 18:00. You have 1 pending request.</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/ess/leave"><i data-lucide="plane"></i>Apply leave</a>
+      <a class="btn primary" href="#/ess/payslips"><i data-lucide="file-text"></i>Latest payslip</a>
+    </div>
+  </div>
+
+  <div class="fd-grid fd-ess1">
+    <!-- Punch clock -->
+    <article class="fd-card fd-punch-card" style="--i:0" data-fd-punch>
+      <div class="fd-head"><h3>Attendance</h3><span class="spacer"></span><span class="fd-status" data-punch-state>Not checked in</span></div>
+      <div class="fd-clock">
+        <b data-clock>09:04:12</b><small data-clock-ampm>AM</small>
+      </div>
+      <span class="fd-label fd-center" data-clock-date>Thursday, 01 October 2026</span>
+      <div class="fd-punch-wrap">
+        <button class="fd-punch" type="button" data-punch>
+          <i data-lucide="fingerprint"></i><b data-punch-label>Check In</b><small data-punch-sub>Tap to punch</small>
+        </button>
+      </div>
+      <div class="fd-geo"><i data-lucide="map-pin"></i>Lahore HQ · Gulberg III · within geo-fence</div>
+      <div class="fd-punch-log">
+        <div><span>Check in</span><b data-punch-in>—</b></div>
+        <div><span>Check out</span><b data-punch-out>—</b></div>
+        <div><span>Worked</span><b data-punch-worked>0h 00m</b></div>
+      </div>
+    </article>
+
+    <!-- Leave balance -->
+    <article class="fd-card" style="--i:1">
+      <div class="fd-head"><h3>Leave balance</h3><span class="spacer"></span><a class="fd-link" href="#/ess/leave">Apply <i data-lucide="arrow-right"></i></a></div>
+      <div class="fd-body">
+        <span class="fd-label">Days available · 2026</span>
+        <b class="num-big fd-big" data-count>14<span class="dec"> days</span></b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="plane"></i>Annual <b>9 left</b></span>
+          <span class="pill"><i data-lucide="sun"></i>Casual <b>5 left</b></span>
+        </div>
+        <div class="fd-gauge" data-fd-gauge="58" data-ticks="24" data-max="24" data-unit=""></div>
+        <div class="fd-gauge-foot"><span>14 of 24 days left</span><span class="spacer"></span><span>Next: Iqbal Day <i data-lucide="zap" class="fd-zap"></i></span></div>
+      </div>
+    </article>
+
+    <!-- Payslip -->
+    <article class="fd-card" style="--i:2">
+      <div class="fd-head"><h3>Latest payslip</h3><span class="spacer"></span><span class="fd-date">September 2026</span></div>
+      <div class="fd-body">
+        <span class="fd-label">Net pay · credited 30 Sep to Meezan ****4417</span>
+        <b class="num-big fd-big" data-count>Rs 127,630<span class="dec">.00</span></b>
+        <div class="fd-pills">
+          <span class="pill"><i data-lucide="trending-up"></i>vs Aug <b class="up">+Rs 6,200</b></span>
+          <span class="pill"><i data-lucide="coins"></i>Commission <b class="up">Rs 27,500</b></span>
+        </div>
+        <div class="fd-hbar" aria-label="Earnings versus deductions">
+          <i style="--w:58%;--c:var(--fd-forest);--i:0" title="Basic Rs 92,000"></i><i style="--w:14.5%;--c:var(--fd-mint);--i:1" title="Allowances Rs 23,000"></i><i style="--w:17.4%;--c:var(--fd-lime);--i:2" title="Commission Rs 27,500"></i><i class="ded" style="--w:9.4%;--i:3" title="Tax &amp; EOBI Rs 14,870"></i>
+        </div>
+        <div class="fd-hbar-legend">
+          <span><i style="background:var(--fd-forest)"></i>Basic <b>92,000<span class="dec">.00</span></b></span>
+          <span><i style="background:var(--fd-mint)"></i>Allowances <b>23,000<span class="dec">.00</span></b></span>
+          <span><i style="background:var(--fd-lime)"></i>Commission <b>27,500<span class="dec">.00</span></b></span>
+          <span><i class="ded"></i>Deductions <b class="neg">−14,870<span class="dec">.00</span></b></span>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-ess2">
+    <article class="fd-card" style="--i:3">
+      <div class="fd-head"><h3>Attendance · September</h3><span class="spacer"></span><span class="pill"><i data-lucide="circle-check"></i>Present <b class="up">21 / 22</b></span></div>
+      <div class="fd-cal" data-fd-cal></div>
+      <div class="fd-legend fd-cal-legend"><span><i class="c-p"></i>Present</span><span><i class="c-l"></i>Late</span><span><i class="c-v"></i>Leave</span><span><i class="c-h"></i>Holiday</span><span><i class="c-w"></i>Weekend</span></div>
+    </article>
+    <article class="fd-card" style="--i:4">
+      <div class="fd-head"><h3>Upcoming holidays</h3><span class="spacer"></span><a class="fd-link" href="#/ess/company">Calendar <i data-lucide="arrow-right"></i></a></div>
+      <div class="fd-list">
+        <a href="#/ess/company"><span class="fd-day"><b>09</b><small>Nov</small></span><div><b>Iqbal Day</b><small>Monday · public holiday</small></div><span class="fd-status">39 days</span></a>
+        <a href="#/ess/company"><span class="fd-day"><b>25</b><small>Dec</small></span><div><b>Quaid-e-Azam Day</b><small>Friday · public holiday</small></div><span class="fd-status">85 days</span></a>
+        <a href="#/ess/company"><span class="fd-day"><b>05</b><small>Feb</small></span><div><b>Kashmir Solidarity Day</b><small>Friday · public holiday</small></div><span class="fd-status">127 days</span></a>
+      </div>
+    </article>
+    <article class="fd-card" style="--i:5">
+      <div class="fd-head"><h3>Announcements</h3><span class="spacer"></span><a class="fd-link" href="#/ess/company">View all <i data-lucide="arrow-right"></i></a></div>
+      <div class="fd-list">
+        <a href="#/ess/company"><span class="icon-tile lime"><i data-lucide="megaphone"></i></span><div><b>Q2 sales kick-off · 05 Oct</b><small>Ahmed Raza · 2 h ago</small></div></a>
+        <a href="#/ess/company"><span class="icon-tile green"><i data-lucide="sparkles"></i></span><div><b>Health insurance renewal</b><small>HR · 29 Sep</small></div></a>
+        <a href="#/ess/company"><span class="icon-tile blue"><i data-lucide="file-text"></i></span><div><b>Updated travel &amp; expense policy</b><small>Finance · 25 Sep</small></div></a>
+        <a href="#/ess/company"><span class="icon-tile violet"><i data-lucide="party-popper"></i></span><div><b>Annual dinner — save the date</b><small>Admin · 22 Sep</small></div></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================ PAYROLL OVERVIEW ============================ -->
+<section class="screen fd-screen" data-route="app/hr/payroll" data-title="Payroll Overview">
+  <div class="page-head">
+    <div>
+      <div class="eyebrow">Workforce / Payroll</div>
+      <h1>Payroll Overview</h1>
+      <p>September 2026 run PR-2026-09 · 186 employees across 4 branches · posted via JV-2026-000412</p>
+    </div>
+    <div class="head-actions">
+      <a class="btn secondary" href="#/app/hr/payroll/reports"><i data-lucide="file-text"></i>Statutory Reports</a>
+      <a class="btn secondary" href="#/app/hr/payroll/structures"><i data-lucide="layers"></i>Salary Structures</a>
+      <a class="btn primary" href="#/app/hr/payroll/run"><i data-lucide="play-circle"></i>Run Payroll</a>
+    </div>
+  </div>
+
+  <div class="fd-grid fd-r4">
+    <article class="fd-card" style="--i:0">
+      <div class="fd-head"><h3>Gross salary</h3><span class="spacer"></span><span class="fd-date">Sep 2026</span></div>
+      <b class="num-big fd-big" data-count>Rs 21,450,000<span class="dec">.00</span></b>
+      <div class="fd-pills"><span class="pill"><i data-lucide="trending-up"></i>vs Aug <b class="up">+1.3%</b></span><span class="pill"><i data-lucide="users"></i><b>186</b> paid</span></div>
+    </article>
+    <article class="fd-card" style="--i:1">
+      <div class="fd-head"><h3>Net pay</h3><span class="spacer"></span><span class="fd-status ok">Paid 30 Sep</span></div>
+      <b class="num-big fd-big" data-count>Rs 19,097,980<span class="dec">.00</span></b>
+      <div class="fd-pills"><span class="pill"><i data-lucide="wallet"></i>Of gross <b class="up">89.0%</b></span><span class="pill"><i data-lucide="coins"></i>Avg <b>Rs 102,677</b></span></div>
+    </article>
+    <article class="fd-card" style="--i:2">
+      <div class="fd-head"><h3>Income tax u/s 149</h3><span class="spacer"></span><span class="fd-status wait">Due 15 Oct</span></div>
+      <b class="num-big fd-big" data-count>Rs 1,286,400<span class="dec">.00</span></b>
+      <div class="fd-pills"><span class="pill"><i data-lucide="receipt-text"></i>Taxable <b>132</b></span><span class="pill"><i data-lucide="trending-up"></i>vs Aug <b class="down">+Rs 21,600</b></span></div>
+    </article>
+    <article class="fd-card" style="--i:3">
+      <div class="fd-head"><h3>EOBI</h3><span class="spacer"></span><span class="fd-date">Employee + employer</span></div>
+      <b class="num-big fd-big" data-count>Rs 412,920<span class="dec">.00</span></b>
+      <div class="fd-pills"><span class="pill"><i data-lucide="users"></i>Insured <b>186</b></span><span class="pill"><i data-lucide="building-2"></i>Employer <b>Rs 344,100</b></span></div>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r2">
+    <article class="fd-card" style="--i:4">
+      <div class="fd-head"><h3>Payroll cost · 12 months</h3><span class="spacer"></span>
+        <div class="fd-legend"><span><i class="fd-k-a"></i>Salaries</span><span><i class="fd-k-b"></i>Allowances &amp; bonus</span><span><i class="fd-k-s"></i>Budget</span></div>
+        <label class="fd-sel"><select data-fd-mode aria-label="Grouping"><option value="m">Monthly</option><option value="q">Quarterly</option></select><i data-lucide="chevron-down"></i></label>
+      </div>
+      <div class="fd-flow" data-fd-flow="payroll" data-mode="stack" data-hot="11"></div>
+    </article>
+    <article class="fd-card" style="--i:5">
+      <div class="fd-head"><h3>October 2026 run</h3><span class="spacer"></span><span class="fd-status wait">Draft</span></div>
+      <span class="fd-label">PR-2026-10 · pay date 31 Oct</span>
+      <ol class="fd-tl">
+        <li class="done"><b>Attendance cut-off</b><small>25 Oct · biometric sync from 6 devices</small></li>
+        <li class="now"><b>Inputs freeze — OT, leave, loans</b><small>26 Oct · Ayesha Noor (HR)</small></li>
+        <li><b>Review &amp; variance check</b><small>27 Oct · Hira Ali (Accounts)</small></li>
+        <li><b>Approval</b><small>28 Oct · Sana Javed → Ahmed Raza</small></li>
+        <li><b>Post to GL &amp; bank transfer</b><small>30 Oct · Meezan / HBL IBFT files</small></li>
+        <li><b>Tax &amp; EOBI deposit</b><small>15 Nov · CPR via FBR IRIS, EOBI PR-01</small></li>
+      </ol>
+      <a class="btn primary fd-full" href="#/app/hr/payroll/run"><i data-lucide="play-circle"></i>Start October run</a>
+    </article>
+  </div>
+
+  <div class="fd-grid fd-r2">
+    <article class="fd-card" style="--i:6">
+      <div class="fd-head"><h3>Cost by department</h3><span class="spacer"></span><span class="fd-date">September · gross</span></div>
+      <div class="fd-tree fd-tree-dept">
+        <div class="fd-tile t-forest" style="grid-area:s;--i:0"><b>22.5<small>%</small></b><span>Sales · 42 heads</span><div class="fd-tile-foot"><small>Rs 4.83M</small><small>avg 115k</small></div></div>
+        <div class="fd-tile t-lime" style="grid-area:o;--i:1"><b>16.8<small>%</small></b><span>Operations · 38</span><div class="fd-tile-foot"><small>Rs 3.61M</small></div></div>
+        <div class="fd-tile t-mint" style="grid-area:i;--i:2"><b>14.2<small>%</small></b><span>IT · 16</span></div>
+        <div class="fd-tile t-soft" style="grid-area:a;--i:3"><b>12.1<small>%</small></b><span>Administration</span></div>
+        <div class="fd-tile t-forest2" style="grid-area:w;--i:4"><b>11.1<small>%</small></b><span>Warehouse</span></div>
+        <div class="fd-tile t-lime2" style="grid-area:f;--i:5"><b>10<small>%</small></b><span>Finance</span></div>
+        <div class="fd-tile t-hatch" style="grid-area:p;--i:6"><b>7.3<small>%</small></b><span>Procurement</span></div>
+        <div class="fd-tile t-hatch" style="grid-area:h;--i:7"><b>5.9<small>%</small></b><span>HR</span></div>
+      </div>
+    </article>
+    <article class="fd-card" style="--i:7">
+      <div class="fd-head"><h3>September breakdown</h3><span class="spacer"></span><span class="fd-date">Gross → CTC</span></div>
+      <div class="fd-hbar"><i style="--w:89%;--c:var(--fd-forest);--i:0" title="Net pay"></i><i style="--w:6%;--c:var(--fd-lime);--i:1" title="Income tax"></i><i style="--w:2.9%;--c:var(--fd-mint);--i:2" title="Provident Fund"></i><i class="ded" style="--w:2.1%;--i:3" title="Loans &amp; EOBI"></i></div>
+      <div class="fd-dl">
+        <div><span>Gross salary</span><b>Rs 21,450,000<span class="dec">.00</span></b></div>
+        <div><span>Income tax u/s 149</span><b class="neg">(1,286,400<span class="dec">.00</span>)</b></div>
+        <div><span>EOBI employee (1%)</span><b class="neg">(68,820<span class="dec">.00</span>)</b></div>
+        <div><span>Provident Fund (8%)</span><b class="neg">(612,300<span class="dec">.00</span>)</b></div>
+        <div><span>Loan &amp; advance recovery</span><b class="neg">(384,500<span class="dec">.00</span>)</b></div>
+        <div class="tot"><span>Net pay</span><b>Rs 19,097,980<span class="dec">.00</span></b></div>
+        <div><span>Employer EOBI · PESSI · PF</span><b>1,143,000<span class="dec">.00</span></b></div>
+        <div class="tot"><span>Total cost to company</span><b>Rs 22,593,000<span class="dec">.00</span></b></div>
+      </div>
+    </article>
+  </div>
+
+  <article class="fd-card fd-flush" style="--i:8">
+    <div class="fd-head fd-pad"><h3>Recent payroll runs</h3><span class="spacer"></span><a class="fd-link" href="#/app/hr/payroll/payslips">All payslips <i data-lucide="arrow-right"></i></a></div>
+    <div class="table-wrap"><table class="tbl fd-tbl">
+      <thead><tr><th>Run #</th><th>Period</th><th class="num">Employees</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net</th><th>Journal</th><th>Status</th><th data-nosort></th></tr></thead>
+      <tbody>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-09</a><small>Paid 30 Sep 2026</small></td><td>September 2026</td><td class="num">186</td><td class="num fd-amt">21,450,000<span class="dec">.00</span></td><td class="num cr">2,352,020.00</td><td class="num fd-amt">19,097,980<span class="dec">.00</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000412</a></td><td><span class="fd-status ok">Posted</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-08</a><small>Paid 29 Aug 2026</small></td><td>August 2026</td><td class="num">184</td><td class="num fd-amt">21,180,000<span class="dec">.00</span></td><td class="num cr">2,317,600.00</td><td class="num fd-amt">18,862,400<span class="dec">.00</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000368</a></td><td><span class="fd-status ok">Posted</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-07</a><small>Paid 31 Jul 2026</small></td><td>July 2026</td><td class="num">183</td><td class="num fd-amt">20,920,000<span class="dec">.00</span></td><td class="num cr">2,279,700.00</td><td class="num fd-amt">18,640,300<span class="dec">.00</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000301</a></td><td><span class="fd-status ok">Posted</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-06</a><small>Incl. Eid bonus</small></td><td>June 2026</td><td class="num">181</td><td class="num fd-amt">21,890,000<span class="dec">.00</span></td><td class="num cr">2,469,250.00</td><td class="num fd-amt">19,420,750<span class="dec">.00</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000254</a></td><td><span class="fd-status ok">Posted</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/payroll/payslips">PR-2026-05</a><small>Paid 29 May 2026</small></td><td>May 2026</td><td class="num">180</td><td class="num fd-amt">20,310,000<span class="dec">.00</span></td><td class="num cr">2,194,400.00</td><td class="num fd-amt">18,115,600<span class="dec">.00</span></td><td><a class="link" href="#/app/accounting/vouchers/view">JV-2026-000207</a></td><td><span class="fd-status ok">Posted</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+        <tr><td><a class="link" href="#/app/hr/settlement">PR-2026-OFF-02</a><small>Off-cycle</small></td><td>Settlement · Sep 2026</td><td class="num">1</td><td class="num fd-amt">556,000<span class="dec">.00</span></td><td class="num cr">93,820.00</td><td class="num fd-amt">462,180<span class="dec">.00</span></td><td><span class="muted">—</span></td><td><span class="fd-status wait">Pending approval</span></td><td class="actions"><button class="icon-btn-sm" aria-label="Row actions"><i data-lucide="ellipsis-vertical"></i></button></td></tr>
+      </tbody>
+    </table></div>
+  </article>
+</section>
+
+<!-- ============================ WHOLE STOCK ============================ -->
+<section class="screen ws-screen" data-route="app/inventory/stock" data-title="Whole Stock">
+  <div class="ws-head">
+    <div class="ws-title">
+      <span class="ws-cube"><i data-lucide="package"></i></span>
+      <div><h1>Whole Stock</h1><p>View and analyze your complete inventory across all warehouse locations</p></div>
+    </div>
+    <div class="ws-head-actions">
+      <div class="ws-field-top"><span>Stock View</span>
+        <div class="seg ws-seg" data-ws-view><button class="active" type="button" data-v="current">Current</button><button type="button" data-v="date">As on Date</button></div>
+      </div>
+      <div class="ws-field-top"><span>As on Date</span>
+        <label class="ws-date"><i data-lucide="calendar"></i><input type="date" value="2026-10-01" data-ws-asof aria-label="As on date"></label>
+      </div>
+      <button class="btn secondary" type="button" data-ws-export><i data-lucide="download"></i>Export<i data-lucide="chevron-down"></i></button>
+      <button class="btn secondary" type="button" data-ws-print><i data-lucide="printer"></i>Print</button>
+      <a class="btn primary" href="#/app/inventory/items"><i data-lucide="plus"></i>Add Product</a>
+    </div>
+  </div>
+
+  <div class="ws-kpis">
+    <div class="ws-kpi" style="--i:0"><span class="ws-kpi-ic green"><i data-lucide="package"></i></span><div><span>Total Products</span><b><em data-count>1,842</em><small class="up">↑ 5%</small></b><small>Across all categories</small></div></div>
+    <div class="ws-kpi" style="--i:1"><span class="ws-kpi-ic green"><i data-lucide="layers"></i></span><div><span>Total Stock (Units)</span><b><em data-count>425,680</em><small class="up">↑ 12%</small></b><small>Total available units</small></div></div>
+    <div class="ws-kpi" style="--i:2"><span class="ws-kpi-ic green"><i data-lucide="coins"></i></span><div><span>Total Stock Value</span><b><em data-count>Rs 38,521,400</em><small class="up">↑ 8%</small></b><small>At average cost</small></div></div>
+    <div class="ws-kpi warn" style="--i:3"><span class="ws-kpi-ic"><i data-lucide="triangle-alert"></i></span><div><span>Low Stock Items</span><b><em data-count>37</em><small>↑ 23%</small></b><small>Below reorder level</small></div></div>
+    <div class="ws-kpi violet" style="--i:4"><span class="ws-kpi-ic"><i data-lucide="chart-column"></i></span><div><span>Overstock Items</span><b><em data-count>62</em><small>↑ 15%</small></b><small>Above max level</small></div></div>
+    <div class="ws-kpi danger" style="--i:5"><span class="ws-kpi-ic"><i data-lucide="circle-x"></i></span><div><span>Out of Stock</span><b><em data-count>12</em><small>↑ 20%</small></b><small>No stock available</small></div></div>
+    <div class="ws-tagline"><span>Stock Today</span><span>Stronger Tomorrow</span><i></i></div>
+  </div>
+
+  <!-- Filters & Search -->
+  <div class="ws-panel ws-filters" data-ws-filters>
+    <div class="ws-panel-head">
+      <span class="ws-ptile"><i data-lucide="filter"></i></span>
+      <h2>Filters &amp; Search</h2><span class="ws-psub">Find exactly what you need with powerful filters</span>
+      <span class="spacer"></span>
+      <button class="ws-toggle" type="button" data-ws-toggle aria-expanded="true"><span>Hide Filters</span><i data-lucide="chevron-down"></i></button>
+    </div>
+    <div class="ws-collapse"><div class="ws-collapse-in">
+      <div class="ws-searchrow">
+        <label class="ws-search"><i data-lucide="search"></i><input type="search" placeholder="Search products, SKU, barcode, or keyword…" data-ws-q aria-label="Search products"></label>
+        <span class="ws-hint">e.g. Carton, CTN-1812, 8964001…</span>
+      </div>
+      <div class="ws-fgrid">
+        <label class="ws-f"><span>Company / Principal</span><div class="ws-ctl"><i data-lucide="building-2"></i><select data-ws-f="company"><option value="">All Companies</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Category</span><div class="ws-ctl"><i data-lucide="boxes"></i><select data-ws-f="cls"><option value="">All Categories</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Sub Category</span><div class="ws-ctl"><i data-lucide="layers"></i><select data-ws-f="sub"><option value="">All Sub Categories</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Warehouse</span><div class="ws-ctl"><i data-lucide="warehouse"></i><select data-ws-f="wh"><option value="">All Warehouses</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Location</span><div class="ws-ctl"><i data-lucide="map-pin"></i><select data-ws-f="loc"><option value="">All Locations</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Stock Status</span><div class="ws-ctl"><i data-lucide="tag"></i><select data-ws-f="status"><option value="">All Status</option><option>In Stock</option><option>Low Stock</option><option>Overstock</option><option>Out of Stock</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Stock Count</span><div class="ws-ctl"><i data-lucide="chart-column"></i><select data-ws-f="count"><option value="">All</option><option value="0">Zero</option><option value="1-500">1 – 500</option><option value="501-5000">501 – 5,000</option><option value="5001-">Above 5,000</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <div class="ws-f ws-f2"><span>Stock Value (PKR)</span><div class="ws-range"><div class="ws-ctl"><i data-lucide="coins"></i><input type="number" placeholder="Min Value" data-ws-vmin aria-label="Minimum value"></div><em>to</em><div class="ws-ctl"><input type="number" placeholder="Max Value" data-ws-vmax aria-label="Maximum value"></div></div></div>
+        <label class="ws-f"><span>Reorder Level</span><div class="ws-ctl"><i data-lucide="chart-column"></i><select data-ws-f="reorder"><option value="">All</option><option value="below">Below reorder</option><option value="above">Above reorder</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+        <label class="ws-f"><span>Stock As On Date</span><div class="ws-ctl"><i data-lucide="calendar-days"></i><input type="date" value="2026-10-01" data-ws-asof2 aria-label="Stock as on date"></div></label>
+        <label class="ws-f"><span>Sort By</span><div class="ws-ctl"><i data-lucide="arrow-up-down"></i><select data-ws-sortby><option value="name:1">Product Name (A – Z)</option><option value="name:-1">Product Name (Z – A)</option><option value="value:-1">Stock Value (High – Low)</option><option value="cur:-1">Current Stock (High – Low)</option><option value="last:-1">Last Movement (Newest)</option></select><i data-lucide="chevron-down" class="ws-chev"></i></div></label>
+      </div>
+      <div class="ws-active">
+        <b>Active Filters:</b>
+        <div class="ws-chips" data-ws-chips>
+          <button type="button" class="active" data-chip=""><span>All Products</span><em>1,842</em></button>
+          <button type="button" data-chip="In Stock"><i class="d-good"></i><span>In Stock</span><em>1,731</em></button>
+          <button type="button" data-chip="Low Stock"><i class="d-warn"></i><span>Low Stock</span><em>37</em></button>
+          <button type="button" data-chip="Overstock"><i class="d-violet"></i><span>Overstock</span><em>62</em></button>
+          <button type="button" data-chip="Out of Stock"><i class="d-danger"></i><span>Out of Stock</span><em>12</em></button>
+        </div>
+        <span class="spacer"></span>
+        <button class="btn secondary" type="button" data-ws-reset><i data-lucide="rotate-ccw"></i>Reset Filters</button>
+        <button class="btn secondary" type="button" data-ws-save><i data-lucide="bookmark"></i>Save View<i data-lucide="chevron-down"></i></button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Products -->
+  <div class="ws-panel ws-products">
+    <div class="ws-panel-head">
+      <span class="ws-ptile"><i data-lucide="boxes"></i></span>
+      <h2>Products <small data-ws-total>(1,842)</small></h2><span class="ws-psub">Complete stock details across all locations</span>
+      <span class="spacer"></span>
+      <div class="ws-colwrap">
+        <button class="btn secondary ws-colbtn" type="button" data-ws-cols aria-expanded="false"><i data-lucide="columns-3"></i>Columns<i data-lucide="chevron-down"></i></button>
+        <div class="ws-colpop" data-ws-colpop hidden>
+          <div class="ws-colpop-head"><b>Show / Hide Columns</b><button type="button" class="ws-linkbtn" data-ws-colreset>Reset Columns</button></div>
+          <div class="ws-colgrid" data-ws-colgrid></div>
+          <div class="ws-colpop-foot"><button type="button" class="ws-linkbtn ink" data-ws-colmanage><i data-lucide="sliders-horizontal"></i>Manage Columns</button><span data-ws-colcount>16 of 18 columns selected</span></div>
+        </div>
+      </div>
+      <button class="btn secondary" type="button" data-ws-export><i data-lucide="download"></i>Export<i data-lucide="chevron-down"></i></button>
+      <button class="btn secondary" type="button" data-ws-print><i data-lucide="printer"></i>Print</button>
+      <button class="btn secondary icon" type="button" data-ws-more aria-label="More"><i data-lucide="ellipsis-vertical"></i></button>
+    </div>
+    <div class="table-wrap ws-tablewrap"><table class="tbl ws-tbl" data-plain>
+      <thead data-ws-thead></thead>
+      <tbody data-ws-tbody></tbody>
+    </table></div>
+    <div class="ws-foot">
+      <span>Show</span>
+      <label class="ws-ctl ws-entries"><select data-ws-per aria-label="Entries per page"><option>10</option><option selected>20</option><option>50</option></select><i data-lucide="chevron-down" class="ws-chev"></i></label>
+      <span>entries</span>
+      <span class="spacer"></span>
+      <span class="ws-showing" data-ws-showing>Showing 1 – 14 of 14 products</span>
+      <div class="ws-pager" data-ws-pager></div>
+    </div>
+  </div>
+
+  <div class="ws-strip">
+    <span class="ws-leaf"><i data-lucide="sparkles"></i></span>
+    <span>Accurate inventory. Healthier tomorrow.</span>
+    <span class="spacer"></span>
+    <span class="ws-caps">PEOPLE · PRODUCTS · POSSIBILITIES</span><i class="ws-dash"></i>
+  </div>
+</section>

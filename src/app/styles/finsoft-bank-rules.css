@@ -1,0 +1,68 @@
+/*
+ * Bank rules styles, ported verbatim from template/src/1A-company-plus.css section "9. BANK RULES" (lines 787-850, 2026-10-05).
+ * Shared cp- tokens are in finsoft-company.css. Do not hand-edit.
+ */
+/* ===================== 9. BANK RULES ===================== */
+.cp-br-split{grid-template-columns:minmax(0,1fr) 440px}
+.cp-br-prog{display:none;flex-direction:column;gap:6px;text-align:left;margin-top:14px}
+.cp-br-prog:not(:empty){display:flex}
+.cp-br-prog small{font-size:12px;color:var(--muted)}
+.cp-br-prog .progress>i{transition:width .35s var(--ease)}
+.cp-drop.done{cursor:default}
+.cp-drop.sm.done .cp-drop-idle{opacity:.55}
+.cp-btn-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--lime);color:var(--lime-ink);font-size:11px;font-weight:800}
+.btn:disabled .cp-btn-n{background:rgba(255,255,255,.25);color:inherit}
+.cp-br-lt td{vertical-align:middle}
+.cp-desc{font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:-.01em;word-break:break-word;font-weight:600}
+.cp-br-lt td:nth-child(2){white-space:normal;min-width:240px}
+.cp-br-lt tr.cp-scan td{background:color-mix(in srgb,var(--lime) 22%,var(--surface));transition:none}
+.cp-br-lt tr.cp-scan td:first-child{box-shadow:inset 3px 0 0 var(--lime)}
+.cp-br-lt tr.cp-done-row td:first-child{box-shadow:inset 3px 0 0 var(--good)}
+.cp-catd{display:inline-flex;align-items:center;gap:8px}
+.cp-catd>svg{width:18px;height:18px;color:var(--good);flex:none}
+.cp-catd.rx>svg{color:var(--info)}
+.cp-catd b{display:block;font-size:12.5px;color:var(--ink);white-space:nowrap}
+.cp-catd small{font-size:11px!important;color:var(--muted)}
+.cp-br-lt .empty-state{padding:26px 10px}
+.cp-brs{display:flex;flex-direction:column;gap:10px;max-height:620px;overflow:auto;margin:0 -6px;padding:2px 6px}
+.cp-br{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface);transition:opacity .25s,border-color .2s;animation:fadeUp .4s var(--ease) both;animation-delay:calc(var(--i)*40ms)}
+.cp-br:hover{border-color:var(--line-2)}
+.cp-br.off{opacity:.55;background:var(--surface-2)}
+.cp-br-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cp-br-h>div{flex:1;min-width:0}
+.cp-br-h b{display:block;font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cp-br-h small{font-size:11px;color:var(--muted);white-space:nowrap}
+.cp-br-flow{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--ink-2);padding:4px 0;line-height:1.5}
+.cp-br-flow b{color:var(--ink)}
+.cp-br-flow em{font-style:normal;font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase}
+.cp-br-if,.cp-br-then{font-size:10px;font-weight:800;letter-spacing:.6px;border-radius:6px;padding:2px 6px;flex:none;min-width:40px;text-align:center}
+.cp-br-if{background:var(--blue-soft);color:var(--blue)}
+.cp-br-then{background:var(--good-soft);color:var(--good)}
+.cp-rx{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.2fr) auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line-2);animation:fadeUp .4s var(--ease) both;animation-delay:calc(var(--i)*60ms)}
+.cp-rx:last-child{border-bottom:0}
+.cp-rx-l{display:flex;align-items:center;gap:8px;min-width:0}
+.cp-rx-l>div,.cp-rx-r>div{min-width:0}
+.cp-rx b{display:block;font-size:13px;color:var(--ink);white-space:nowrap}
+.cp-rx small{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-rx-tag{font-size:9.5px;font-weight:800;letter-spacing:.5px;border-radius:6px;padding:3px 6px;flex:none}
+.cp-rx-tag.raast{background:var(--lime);color:var(--lime-ink)}
+.cp-rx-tag.ibft{background:var(--blue-soft);color:var(--blue)}
+.cp-rx-arrow{color:var(--muted-2);display:grid}.cp-rx-arrow svg{width:16px;height:16px}
+.cp-rx-r{display:flex;align-items:center;gap:8px;min-width:0}
+.cp-rx-r .badge{font-size:10.5px;padding:1px 7px;flex:none}
+.cp-rx.done{opacity:.65}
+.cp-rx.done .cp-rx-arrow{color:var(--good)}
+.cp-rb-sec{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.cp-rb-sec h4{margin:0 0 10px;font-size:13px;font-weight:800;color:var(--ink)}
+.cp-rb-sec .row{margin-bottom:10px}.cp-rb-sec .row h4{margin:0}
+.cp-cond{display:grid;grid-template-columns:52px 130px 120px minmax(0,1fr) 32px;gap:8px;align-items:center;margin-bottom:8px}
+.cp-cond select,.cp-cond input{height:38px;min-width:0;width:100%}
+.cp-cond-w{font-size:10.5px;font-weight:800;color:var(--blue);background:var(--blue-soft);border-radius:7px;text-align:center;padding:4px 0}
+.cp-rb-live{margin-top:18px;padding:14px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line)}
+.cp-rb-ctr{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.cp-rb-ctr>b{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:24px;letter-spacing:-.04em;background:var(--surface-3);color:var(--muted);transition:.3s;flex:none}
+.cp-rb-ctr.hit>b{background:var(--lime);color:var(--lime-ink)}
+.cp-rb-ctr span{font-size:13px;color:var(--ink-2)}
+.cp-rb-m{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:6px 4px;border-top:1px dashed var(--line-2);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink-2);animation:fadeUp .3s var(--ease) both}
+.cp-rb-m svg{width:13px;height:13px;color:var(--muted);flex:none}
+.cp-rb-m span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+

@@ -1,0 +1,9 @@
+-- =============================================================================
+-- Finsoft ERP (FULL) — fk/14-rpt-fks.sql
+-- Cross-module foreign keys of the rpt schema.
+--
+-- None: Report Studio tables reference only rpt.* and core.* (Users, role,
+-- branch, attachment), which are declared inline in 14-rpt.sql. Report data is
+-- read from views (90-views.sql) and module tables at run time, never FK'd.
+-- File kept so the install order (fk/*) is uniform across modules.
+-- =============================================================================

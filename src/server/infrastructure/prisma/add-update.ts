@@ -1,0 +1,93 @@
+import type { PrismaService } from './prisma.service.js';
+
+/**
+ * The database's save functions (one per table): insert when `id` is absent, otherwise a partial update.
+ * They take the tenant from app.tenantId, check `rowVersion` (40001 when stale) and raise P0002 when not found.
+ * Names (and their schema) are allow-listed here because they are interpolated into SQL.
+ */
+const FUNCTIONS = {
+  branchAddUpdate: 'Company',
+  exchangeRateAddUpdate: 'Company',
+  companySettingAddUpdate: 'Company',
+  numberingSeriesAddUpdate: 'Company',
+  userAddUpdate: 'Company',
+  roleAddUpdate: 'Company',
+  userPreferenceAddUpdate: 'Company',
+  approvalWorkflowAddUpdate: 'Company',
+  approvalDelegationAddUpdate: 'Company',
+  documentTemplateAddUpdate: 'Company',
+  defaultAccountMappingAddUpdate: 'Company',
+  accountAddUpdate: 'Accounting',
+  savedLedgerViewAddUpdate: 'Accounting',
+  costCentreAddUpdate: 'Accounting',
+  projectAddUpdate: 'Accounting',
+  costAllocationRuleAddUpdate: 'Accounting',
+  taxCodeAddUpdate: 'Tax',
+  bankAddUpdate: 'BankCash',
+  bankAccountAddUpdate: 'BankCash',
+  chequeBookAddUpdate: 'BankCash',
+  cashAccountAddUpdate: 'BankCash',
+  cashCategoryAddUpdate: 'BankCash',
+  expenseCategoryAddUpdate: 'BankCash',
+  bankRuleAddUpdate: 'BankCash',
+  pettyCashFundAddUpdate: 'BankCash',
+  fixedAssetCategoryAddUpdate: 'FixedAssets',
+  unitOfMeasureAddUpdate: 'Inventory',
+  productCompanyAddUpdate: 'Inventory',
+  productClassAddUpdate: 'Inventory',
+  productSubclassAddUpdate: 'Inventory',
+  warehouseAddUpdate: 'Inventory',
+  warehouseBinAddUpdate: 'Inventory',
+  stockMovementReasonAddUpdate: 'Inventory',
+  productAddUpdate: 'Inventory',
+  productUnitAddUpdate: 'Inventory',
+  productBarcodeAddUpdate: 'Inventory',
+  productSupplierAddUpdate: 'Inventory',
+  productPriceLogAdd: 'Inventory',
+  productBatchAddUpdate: 'Inventory',
+  kitAddUpdate: 'Inventory',
+  barcodeLabelTemplateAddUpdate: 'Inventory',
+  barcodeLabelJobAddUpdate: 'Inventory',
+  reorderRuleAddUpdate: 'Inventory',
+  customerGroupAddUpdate: 'Sales',
+  customerAddUpdate: 'Sales',
+  customerContactAddUpdate: 'Sales',
+  customerAddressAddUpdate: 'Sales',
+  customerNoteAddUpdate: 'Sales',
+  vendorCategoryAddUpdate: 'Purchases',
+  vendorAddUpdate: 'Purchases',
+  vendorContactAddUpdate: 'Purchases',
+  vendorBankAccountAddUpdate: 'Purchases',
+  priceListAddUpdate: 'Sales',
+  priceListItemsUpsert: 'Sales',
+  quantityBreaksReplace: 'Sales',
+  salesSchemeAddUpdate: 'Sales',
+  paymentReminderTemplateAddUpdate: 'Sales',
+  paymentReminderRuleAddUpdate: 'Sales',
+  priceTierAddUpdate: 'Distribution',
+  departmentAddUpdate: 'HumanResources',
+  designationAddUpdate: 'HumanResources',
+  gradeAddUpdate: 'HumanResources',
+  workShiftAddUpdate: 'HumanResources',
+  holidayAddUpdate: 'HumanResources',
+  leaveTypeAddUpdate: 'HumanResources',
+  leaveEligibilityReplace: 'HumanResources',
+  overtimePolicyAddUpdate: 'HumanResources',
+  biometricDeviceAddUpdate: 'HumanResources',
+  employeeAddUpdate: 'HumanResources',
+  branchHrSettingAddUpdate: 'HumanResources',
+  fbrSettingAddUpdate: 'Tax',
+  segregationOfDutiesRuleAddUpdate: 'Company',
+} as const;
+export type AddUpdateFunction = keyof typeof FUNCTIONS;
+
+/** Runs <schema>.<fn>(data) on the current withContext transaction and returns the row id. */
+export async function addUpdate(prisma: PrismaService, fn: AddUpdateFunction, data: Record<string, unknown>): Promise<string> {
+  const schema = FUNCTIONS[fn];
+  if (!schema) throw new Error(`Unknown save function ${fn}`);
+  const rows = await prisma.db().$queryRawUnsafe<{ id: string }[]>(
+    `select "${schema}"."${fn}"($1::jsonb)::text as id`,
+    JSON.stringify(data),
+  );
+  return rows[0]!.id;
+}

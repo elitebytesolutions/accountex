@@ -1,0 +1,1760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Finsoft Schema Explorer</title>
+<style>
+:root{
+  --bg:#F3F4F1;--surface:#FFFFFF;--surface-2:#F7F8F5;--line:#E7EAE5;--ink:#0F1A14;--muted:#6B746E;
+  --primary:#1F5F45;--primary-soft:#E6F0EA;--lime:#C6E85B;--on-lime:#0F1A14;
+  --edge:#A3ADA6;--zebra:#FAFBF8;--warn:#B45309;--shadow:0 1px 2px rgba(15,26,20,.05),0 10px 30px rgba(15,26,20,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A0F0D;--surface:#111815;--surface-2:#161F1B;--line:#212C27;--ink:#E8EFEA;--muted:#8A978F;
+    --primary:#3DD39B;--primary-soft:#12291F;--lime:#C6E85B;--on-lime:#0F1A14;
+    --edge:#4E5D55;--zebra:#131B17;--warn:#F59E0B;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A0F0D;--surface:#111815;--surface-2:#161F1B;--line:#212C27;--ink:#E8EFEA;--muted:#8A978F;
+  --primary:#3DD39B;--primary-soft:#12291F;--lime:#C6E85B;--on-lime:#0F1A14;
+  --edge:#4E5D55;--zebra:#131B17;--warn:#F59E0B;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:13px/1.45 'Plus Jakarta Sans',Inter,'Segoe UI',system-ui,sans-serif;
+  display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+.mono{font-family:ui-monospace,'Cascadia Code',Consolas,monospace}
+
+/* header */
+.top{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap;position:relative;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:32px;height:32px;border-radius:10px;background:var(--primary);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;flex:none}
+:root[data-theme="dark"] .logo{color:#0A0F0D}
+.brand h1{font-size:15px;margin:0;font-weight:750;letter-spacing:-.01em;white-space:nowrap}
+.brand small{display:block;color:var(--muted);font-size:11px;font-weight:500;margin-top:-1px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:750;letter-spacing:.06em;background:var(--lime);color:var(--on-lime)}
+.badge.adhoc{background:var(--primary-soft);color:var(--primary)}
+.stats{display:flex;gap:6px;flex-wrap:wrap}
+.stat{padding:4px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);font-size:12px;color:var(--muted);white-space:nowrap}
+.stat b{color:var(--ink);font-weight:700}
+.spacer{flex:1}
+.search{position:relative;width:300px;max-width:100%}
+.search input{width:100%;height:36px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);padding:0 12px 0 34px;outline:none}
+.search input:focus{border-color:var(--primary);background:var(--surface)}
+.search svg{position:absolute;left:11px;top:10px;color:var(--muted)}
+.results{position:absolute;top:42px;right:0;width:min(520px,calc(100vw - 24px));background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);max-height:60vh;overflow:auto;display:none;padding:6px;z-index:50}
+.results.open{display:block}
+.res{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:10px;cursor:pointer}
+.res.act,.res:hover{background:var(--primary-soft)}
+.res .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.res .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res .kd{margin-left:auto;font-size:11px;color:var(--muted);flex:none}
+.res .ty{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.btn{height:36px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12.5px;white-space:nowrap}
+.btn:hover{border-color:var(--primary);color:var(--primary)}
+.btn.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.btn.icon{width:36px;padding:0;justify-content:center}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* module strip */
+.mods{display:flex;gap:6px;padding:8px 16px;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:thin;flex:none}
+.mod{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:600;white-space:nowrap}
+.mod i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.mod span{color:var(--muted);font-weight:500}
+.mod.act{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.mod.act span{color:inherit;opacity:.7}
+.mod.zero{opacity:.55}
+
+/* stage */
+.stage{position:relative;flex:1;min-height:0;overflow:hidden}
+#svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#svg.grabbing{cursor:grabbing}
+.title{position:absolute;left:16px;top:14px;max-width:min(560px,calc(100% - 32px));pointer-events:none}
+.title h2{margin:0;font-size:20px;font-weight:750;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.title h2 i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.title p{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.tools{position:absolute;left:16px;bottom:16px;display:flex;gap:6px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;box-shadow:var(--shadow);z-index:5}
+.tools .btn{height:32px;border-radius:10px;font-size:12px}
+.tools .btn.icon{width:32px}
+.hint{position:absolute;right:16px;bottom:16px;color:var(--muted);font-size:11.5px;pointer-events:none}
+
+/* empty */
+#empty{position:absolute;inset:0;display:none;place-items:center;padding:16px;z-index:6}
+#empty.show{display:grid}
+.drop{max-width:520px;width:100%;background:var(--surface);border:1.5px dashed var(--line);border-radius:18px;padding:32px 24px;text-align:center;box-shadow:var(--shadow)}
+.drop h3{margin:8px 0 6px;font-size:18px}
+.drop p{margin:0 0 16px;color:var(--muted)}
+.drop .ic{width:52px;height:52px;border-radius:16px;background:var(--primary-soft);color:var(--primary);display:inline-grid;place-items:center}
+.dropover{position:fixed;inset:0;background:rgba(31,95,69,.12);border:3px dashed var(--primary);display:none;place-items:center;z-index:100;font-size:18px;font-weight:700;color:var(--primary)}
+.dropover.show{display:grid}
+
+/* drawer */
+.drawer{position:absolute;top:12px;right:12px;bottom:12px;width:460px;max-width:calc(100% - 24px);background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+  transform:translateX(calc(100% + 24px));transition:transform .22s ease;display:flex;flex-direction:column;z-index:10}
+.drawer.open{transform:none}
+.dh{padding:16px 18px 12px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
+.dh .t{flex:1;min-width:0}
+.dh .sch{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dh .sch i{width:8px;height:8px;border-radius:50%}
+.dh h3{margin:2px 0 0;font-size:18px;font-weight:750;word-break:break-word}
+.db{overflow:auto;padding:4px 18px 18px;flex:1}
+.sec{margin-top:16px}
+.sec h4{margin:0 0 8px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;gap:6px;align-items:center}
+.sec h4 span{background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:0 7px;font-size:10.5px;letter-spacing:0}
+.desc{white-space:pre-wrap;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:12.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);font-size:11.5px;color:var(--muted)}
+.chip b{color:var(--ink);font-weight:600}
+table.cols{width:100%;border-collapse:collapse;font-size:12px}
+table.cols th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:6px 6px;border-bottom:1px solid var(--line);position:sticky;top:-4px;background:var(--surface)}
+table.cols td{padding:6px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.cols td.n{font-weight:600;overflow-wrap:anywhere}
+table.cols td.n small{display:block;font-weight:400;color:var(--muted);word-break:normal}
+table.cols td.ty{color:var(--muted);font-family:ui-monospace,Consolas,monospace;font-size:11px;word-break:break-word}
+table.cols td.df{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--muted);word-break:break-word;max-width:110px}
+.k{display:inline-block;font-size:9.5px;font-weight:800;padding:0 4px;border-radius:5px;margin-right:4px;vertical-align:1px}
+.k.pk{background:var(--lime);color:var(--on-lime)}
+.k.fk{background:var(--primary-soft);color:var(--primary)}
+.k.uq{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.k.lk{background:#FDF3D0;color:#7A5300;border:1px solid #EBCB6B;cursor:pointer;font-family:inherit}
+.k.lk:hover{border-color:var(--primary)}
+:root[data-theme="dark"] .k.lk{background:#2B2410;color:#F5C451;border-color:#5C4A12}
+.lkt{display:block;color:#7A5300;font-size:10.5px;cursor:pointer;background:none;border:0;padding:0;font-family:ui-monospace,Consolas,monospace;text-align:left}
+:root[data-theme="dark"] .lkt{color:#F5C451}
+.lkt:hover{text-decoration:underline}
+.tone{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 2px var(--surface-2)}
+table.lv{width:100%;border-collapse:collapse;font-size:12px}
+table.lv th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:6px;border-bottom:1px solid var(--line)}
+table.lv td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.lv td.c{font-family:ui-monospace,Consolas,monospace;font-weight:600;word-break:break-word}
+table.lv td.p{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--muted)}
+.fn{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.fn .fk{font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:6px;background:var(--surface);border:1px solid var(--line);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;flex:none}
+.fn .fk.save{background:var(--primary-soft);color:var(--primary);border-color:transparent}
+.fn .fk.get{background:var(--surface);color:var(--primary)}
+.fn .fk.posting{background:var(--lime);color:var(--on-lime);border-color:transparent}
+.fn .fk.action{background:#FDF3D0;color:#7A5300;border-color:transparent}
+:root[data-theme="dark"] .fn .fk.action{background:#2B2410;color:#F5C451}
+.fn b{font-family:ui-monospace,Consolas,monospace;font-weight:600;word-break:break-all}
+.lchips{display:flex;flex-wrap:wrap;gap:5px}
+.lchip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);font:600 11px ui-monospace,Consolas,monospace;color:var(--ink);cursor:pointer}
+.lchip:hover{border-color:var(--primary);color:var(--primary)}
+.lchip span{color:var(--muted);font-weight:500}
+.back{margin-top:12px}
+.nn{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--primary)}
+.lnk{color:var(--primary);cursor:pointer;font-weight:600;text-decoration:none;border:0;background:none;padding:0;text-align:left;font-size:inherit}
+.lnk:hover{text-decoration:underline}
+.lnk.missing{color:var(--warn)}
+ul.lst{list-style:none;margin:0;padding:0}
+ul.lst li{padding:7px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:6px;background:var(--surface-2);font-size:12px;word-break:break-word}
+ul.lst li small{color:var(--muted);display:block}
+.ck{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--muted);word-break:break-word}
+.none{color:var(--muted);font-size:12px;font-style:italic}
+
+/* svg styling (also embedded into SVG exports) */
+/*SVG_CSS_PLACEHOLDER*/
+
+@media (max-width:860px){
+  .stats{display:none}
+  .search{order:5;width:100%;flex:1 1 100%}
+  .top{gap:8px;padding:8px 12px}
+  .mods{padding:6px 12px}
+  .btn .lbl{display:none}
+  .btn{padding:0 10px}
+  .hint{display:none}
+}
+@media (max-width:720px){
+  .drawer{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;height:72vh;border-radius:18px 18px 0 0;transform:translateY(105%)}
+  .drawer.open{transform:none}
+  .drawer::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--line);margin:8px auto 0}
+  .title h2{font-size:17px}
+  .title p{display:none}
+  .tools{left:12px;bottom:12px;right:12px;justify-content:center}
+}
+</style>
+</head>
+<body data-edition="__EDITION__" data-built="__BUILT__">
+<header class="top">
+  <div class="brand">
+    <div class="logo">F</div>
+    <div><h1>Finsoft Schema Explorer</h1><small>Fundcy &times; Finsoft &middot; PostgreSQL ERD</small></div>
+    <span class="badge" id="edition">FULL</span>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="spacer"></div>
+  <div class="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Search tables &amp; columns  ( / )" autocomplete="off" spellcheck="false">
+    <div class="results" id="results"></div>
+  </div>
+  <button class="btn" id="btnViews" title="Views"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M9 9v11"/></svg><span class="lbl">Views</span> <span id="viewCount"></span></button>
+  <button class="btn" id="btnExport" title="Export current view as SVG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span class="lbl">Export SVG</span></button>
+  <button class="btn" id="btnOpen" title="Open .sql files"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg><span class="lbl">Open SQL</span></button>
+  <button class="btn icon" id="btnTheme" title="Toggle light / dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  <input type="file" id="file" accept=".sql,text/plain" multiple hidden>
+</header>
+<nav class="mods" id="mods"></nav>
+<main class="stage" id="stage">
+  <svg id="svg" xmlns="http://www.w3.org/2000/svg"><g id="vp"></g></svg>
+  <div class="title" id="title"></div>
+  <div class="tools" id="tools">
+    <button class="btn" id="btnOverview" title="Back to module overview">Overview</button>
+    <button class="btn icon" id="btnZoomOut" title="Zoom out">&minus;</button>
+    <button class="btn icon" id="btnZoomIn" title="Zoom in">+</button>
+    <button class="btn" id="btnFit" title="Fit to screen">Fit</button>
+    <button class="btn" id="btnKeys" title="Show keys only / all columns">Keys only</button>
+    <button class="btn" id="btnTenant" title="Show tenantId links to Platform.Tenants">Tenant links</button>
+  </div>
+  <div class="hint">Wheel to zoom &middot; drag to pan &middot; click a table for details</div>
+  <div class="empty" id="empty">
+    <div class="drop">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
+      <h3>No DDL embedded</h3>
+      <p>Drop one or more <b>.sql</b> files anywhere on this page, or rebuild with <span class="mono">powershell -File build-erd.ps1</span>.</p>
+      <button class="btn on" id="btnPick">Choose .sql files</button>
+    </div>
+  </div>
+  <aside class="drawer" id="drawer"><div class="dh"><div class="t" id="dTitle"></div><button class="btn icon" id="dClose" title="Close">&times;</button></div><div class="db" id="dBody"></div></aside>
+</main>
+<div class="dropover" id="dropover">Drop .sql files to view them</div>
+
+<!--DDL-->
+
+<script>
+(function () {
+'use strict';
+
+/* ======================================================================
+   Constants
+   ====================================================================== */
+var MODULES = [
+  ['Platform', 'SaaS console', '#64748B'], ['Company', 'Company & users', '#15803D'], ['Accounting', 'Accounting', '#2563EB'],
+  ['BankCash', 'Bank & cash', '#0891B2'], ['FixedAssets', 'Fixed assets', '#7C3AED'], ['Tax', 'Tax', '#DB2777'],
+  ['Sales', 'Sales & receivables', '#EA580C'], ['Purchases', 'Purchases & payables', '#CA8A04'], ['Inventory', 'Inventory', '#65A30D'],
+  ['Distribution', 'Distribution', '#DC2626'], ['HumanResources', 'Human resources', '#C026D3'], ['Payroll', 'Payroll', '#4F46E5'],
+  ['EmployeeSelfService', 'Employee self-service', '#0F766E'], ['Reports', 'Report studio', '#78716C'],
+  ['Lookups', 'Lookup lists (utility)', '#B08900']
+];
+var UTILITY_MODS = { Lookups: 1 };
+var MOD = {};
+MODULES.forEach(function (m, i) { MOD[m[0]] = { key: m[0], label: m[1], color: m[2], i: i }; });
+function modKey(s) {
+  // case-insensitive module name -> key
+  if (MOD[s]) return s;
+  var l = String(s || '').toLowerCase();
+  for (var k in MOD) if (k.toLowerCase() === l) return k;
+  return s;
+}
+var TONES = { good: '#16A34A', warn: '#D97706', danger: '#DC2626', info: '#2563EB', neutral: '#94A3B8', violet: '#7C3AED' };
+function toneColor(t) { return TONES[t] || TONES.neutral; }
+var W = 264, HEAD = 48, ROW = 21, PADB = 8, GAPX = 220, GAPY = 26;
+var FONT = "'Plus Jakarta Sans',Inter,'Segoe UI',system-ui,sans-serif";
+var THEME_KEY = 'finsoft-erd-theme';
+
+var SVG_CSS = [
+  'text{font-family:' + FONT + '}',
+  '.c-body{fill:var(--surface);stroke:var(--line);stroke-width:1}',
+  '.c-head{fill:var(--surface-2)}',
+  '.c-sep{stroke:var(--line);stroke-width:1}',
+  '.c-title{font-size:13px;font-weight:700;fill:var(--ink)}',
+  '.c-pill{fill:var(--surface);stroke:var(--line)}',
+  '.c-pilltx{font-size:9.5px;font-weight:700;fill:var(--muted)}',
+  '.c-pk .c-pill{fill:var(--lime);stroke:var(--lime)}.c-pk .c-pilltx{fill:var(--on-lime)}',
+  '.c-fk .c-pill{fill:var(--primary-soft);stroke:var(--primary-soft)}.c-fk .c-pilltx{fill:var(--primary)}',
+  '.c-zebra{fill:var(--zebra)}',
+  '.c-col{font-size:11.5px;fill:var(--ink)}',
+  '.c-col.k{font-weight:700}',
+  '.c-type{font-size:10.5px;fill:var(--muted)}',
+  '.c-nn{fill:var(--primary)}',
+  '.c-key{fill:none;stroke:#8DAA2B;stroke-width:1.6}',
+  '.c-lnk{fill:none;stroke:var(--primary);stroke-width:1.4}',
+  '.c-more{font-size:10.5px;fill:var(--muted);font-style:italic}',
+  '.c-lk{cursor:pointer}',
+  '.c-lk rect{fill:#FDF3D0;stroke:#EBCB6B}',
+  '.c-lk text{font-size:8.5px;font-weight:800;fill:#7A5300}',
+  '.c-lk:hover rect{stroke:var(--primary)}',
+  '.c-lkty{font-size:10.5px;fill:#9A6B00}',
+  '.card{cursor:pointer}',
+  '.card:hover .c-body{stroke:var(--primary)}',
+  '.card.sel .c-body{stroke:var(--primary);stroke-width:2.5}',
+  '.card.nb .c-body{stroke:var(--primary);stroke-width:1.5}',
+  '.edge{fill:none;stroke:var(--edge);stroke-width:1.4}',
+  '.emk{fill:none;stroke:var(--edge);stroke-width:1.4}',
+  '.edge-g.on .edge,.edge-g.on .emk{stroke:var(--primary);stroke-width:2.2}',
+  '.dim .card:not(.sel):not(.nb){opacity:.25}',
+  '.dim .edge-g:not(.on){opacity:.12}',
+  '.dim .stub:not(.on){opacity:.25}',
+  '.stub{cursor:pointer}',
+  '.stub rect{fill:var(--surface);stroke:var(--line)}',
+  '.stub:hover rect{stroke:var(--primary)}',
+  '.stub text{font-size:10.5px;font-weight:600;fill:var(--ink)}',
+  '.stub.missing rect{stroke-dasharray:3 2;stroke:var(--warn)}',
+  '.stub line{stroke:var(--edge);stroke-width:1.2;stroke-dasharray:3 3}',
+  '.ov-edge{fill:none;stroke:var(--edge);stroke-linecap:round}',
+  '.ov-edge-g.on .ov-edge{stroke:var(--primary)}',
+  '.ov-lbl rect{fill:var(--surface);stroke:var(--line)}',
+  '.ov-lbl text{font-size:10.5px;font-weight:700;fill:var(--muted)}',
+  '.ovdim .ov-edge-g:not(.on){opacity:.12}',
+  '.ovdim .bub:not(.on){opacity:.35}',
+  '.bub{cursor:pointer}',
+  '.bub-halo{opacity:.14}',
+  '.bub:hover .bub-halo{opacity:.3}',
+  '.bub-name{font-size:14px;font-weight:750;fill:#fff}',
+  '.bub-cnt{font-size:11px;font-weight:600;fill:#fff;opacity:.85}',
+  '.bub.empty .bub-name{fill:var(--muted)}',
+  '.bub.empty .bub-cnt{fill:var(--muted)}',
+  '.bub-out{font-size:11px;font-weight:600;fill:var(--muted)}',
+  '.bub-core{fill:var(--surface);opacity:.0}'
+].join('\n');
+
+/* ======================================================================
+   Utilities
+   ====================================================================== */
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function fmt(n) { return Number(n).toLocaleString('en-US'); }
+function modColor(s) { return MOD[s] ? MOD[s].color : '#8A978F'; }
+function modOf(id) { return id.split('.')[0]; }
+
+var measureCtx = document.createElement('canvas').getContext('2d');
+var mCache = {};
+function textW(s, font) {
+  var k = font + '|' + s;
+  if (mCache[k] != null) return mCache[k];
+  measureCtx.font = font;
+  return (mCache[k] = measureCtx.measureText(s).width);
+}
+function fit(s, maxW, font) {
+  if (textW(s, font) <= maxW) return s;
+  var lo = 0, hi = s.length;
+  while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (textW(s.slice(0, mid) + '…', font) <= maxW) lo = mid; else hi = mid - 1; }
+  return s.slice(0, lo) + '…';
+}
+var F_COL = '11.5px ' + FONT, F_COLB = '700 11.5px ' + FONT, F_TYPE = '10.5px ' + FONT, F_TITLE = '700 13px ' + FONT, F_STUB = '600 10.5px ' + FONT;
+
+/* ======================================================================
+   SQL scanner: splits into statements, drops /* *\/ comments, skips
+   dollar-quoted bodies, keeps -- comments as markers \u0001..\u0002 and
+   records the contiguous -- block right above each statement.
+   Identifiers: "Quoted" (case kept, "" = embedded quote) or unquoted
+   (folded to lower case, as PostgreSQL does). Display names never carry
+   quotes: "Sales"."SalesInvoices" -> Sales.SalesInvoices.
+   ====================================================================== */
+var IDENT_SRC = '(?:"(?:[^"]|"")+"|[A-Za-z_][\\w$]*)';
+var QNAME_SRC = IDENT_SRC + '(?:\\s*\\.\\s*' + IDENT_SRC + ')*';
+function endQuote(s, i) {
+  // s[i] === '"'; index of the closing quote (skips "" escapes)
+  var n = s.length, k = i + 1;
+  while (k < n) { if (s[k] === '"') { if (s[k + 1] === '"') { k += 2; continue; } return k; } k++; }
+  return n - 1;
+}
+function identParts(s) {
+  s = String(s == null ? '' : s);
+  var out = [], i = 0, n = s.length;
+  while (i < n) {
+    var c = s[i];
+    if (c === '"') { var e = endQuote(s, i); out.push(s.slice(i + 1, e).replace(/""/g, '"')); i = e + 1; continue; }
+    if (/[\w$]/.test(c)) { var k = i; while (k < n && /[\w$]/.test(s[k])) k++; out.push(s.slice(i, k).toLowerCase()); i = k; continue; }
+    i++;
+  }
+  return out;
+}
+function qn(s) {
+  var p = identParts(s);
+  if (!p.length) return 'public.?';
+  if (p.length === 1) return 'public.' + p[0];
+  return p.slice(-2).join('.');
+}
+function cn(s) { var p = identParts(s); return p.length ? p[p.length - 1] : ''; }
+function unq(s) { return identParts(s).join('.'); }
+
+function splitStatements(src) {
+  var out = [], buf = '', started = false, pending = [], lead = [];
+  var nlSinceEnd = 1, nlSinceCmt = 99, i = 0, n = src.length;
+  function startStmt() {
+    if (!started) { started = true; lead = nlSinceCmt <= 1 ? pending : []; pending = []; }
+  }
+  while (i < n) {
+    var c = src[i], d = src[i + 1];
+    if (c === '-' && d === '-') {
+      var j = src.indexOf('\n', i); if (j < 0) j = n;
+      var text = src.slice(i + 2, j).replace(/\r$/, '').replace(/[\u0001\u0002]/g, '').trim();
+      if (!started) {
+        if (nlSinceEnd > 0) { if (nlSinceCmt >= 2) pending = []; pending.push(text); nlSinceCmt = 0; }
+      } else buf += '\u0001' + text + '\u0002';
+      i = j; continue;
+    }
+    if (c === '/' && d === '*') {
+      var e = src.indexOf('*/', i + 2); e = e < 0 ? n : e + 2;
+      if (started) buf += ' ';
+      i = e; continue;
+    }
+    if (c === "'") {
+      startStmt();
+      var bs = /[eE]/.test(src[i - 1] || '') && !/\w/.test(src[i - 2] || '');
+      var k = i + 1;
+      while (k < n) {
+        if (bs && src[k] === '\\') { k += 2; continue; }
+        if (src[k] === "'") { if (src[k + 1] === "'") { k += 2; continue; } break; }
+        k++;
+      }
+      buf += src.slice(i, k + 1); i = k + 1; continue;
+    }
+    if (c === '"') {
+      startStmt();
+      var q = endQuote(src, i);
+      buf += src.slice(i, q + 1); i = q + 1; continue;
+    }
+    if (c === '$' && !/[\w$]/.test(src[i - 1] || '')) {
+      var m = /^\$([A-Za-z_][A-Za-z0-9_]*)?\$/.exec(src.slice(i, i + 80));
+      if (m) {
+        startStmt();
+        var tag = m[0], close = src.indexOf(tag, i + tag.length);
+        close = close < 0 ? n : close + tag.length;
+        buf += ' $$ ';
+        i = close; continue;
+      }
+    }
+    if (c === ';') {
+      if (started) out.push({ text: buf, lead: lead });
+      buf = ''; started = false; lead = []; nlSinceEnd = 0; i++; continue;
+    }
+    if (c === ' ' || c === '\t' || c === '\r' || c === '\n' || c === '\f') {
+      if (!started) { if (c === '\n') { nlSinceEnd++; nlSinceCmt++; } }
+      else buf += c;
+      i++; continue;
+    }
+    startStmt();
+    buf += c; i++;
+  }
+  if (started && buf.trim()) out.push({ text: buf, lead: lead });
+  return out;
+}
+function stripMarks(s) { return s.replace(/\u0001[^\u0002]*\u0002/g, ' '); }
+function cleanLead(lines) {
+  return lines.filter(function (l) { return !/^[-=*#~_+.\s]*$/.test(l); }).join('\n').trim();
+}
+
+/* split at top-level separators, skipping strings, quoted names, (), [] and markers */
+function splitTop(s, sep) {
+  var parts = [], depth = 0, start = 0, i = 0, n = s.length;
+  while (i < n) {
+    var c = s[i];
+    if (c === '\u0001') { var e = s.indexOf('\u0002', i); i = e < 0 ? n : e + 1; continue; }
+    if (c === "'") { i++; while (i < n) { if (s[i] === "'") { if (s[i + 1] === "'") { i += 2; continue; } break; } i++; } i++; continue; }
+    if (c === '"') { i = endQuote(s, i) + 1; continue; }
+    if (c === '(' || c === '[') depth++;
+    else if (c === ')' || c === ']') depth--;
+    else if (c === sep && depth === 0) { parts.push(s.slice(start, i)); start = i + 1; }
+    i++;
+  }
+  parts.push(s.slice(start));
+  return parts;
+}
+function matchParen(s, open) {
+  var depth = 0, i = open, n = s.length;
+  while (i < n) {
+    var c = s[i];
+    if (c === '\u0001') { var e = s.indexOf('\u0002', i); i = e < 0 ? n : e + 1; continue; }
+    if (c === "'") { i++; while (i < n) { if (s[i] === "'") { if (s[i + 1] === "'") { i += 2; continue; } break; } i++; } i++; continue; }
+    if (c === '"') { i = endQuote(s, i) + 1; continue; }
+    if (c === '(') depth++;
+    else if (c === ')') { depth--; if (depth === 0) return i; }
+    i++;
+  }
+  return n;
+}
+
+/* tokens: w = word / (qualified) identifier {v: display text, n: normalised name, parts, quoted},
+   s = string literal, g = parenthesised group, p = punctuation */
+function tokenize(s) {
+  var T = [], i = 0, n = s.length;
+  while (i < n) {
+    var c = s[i], j;
+    if (/\s/.test(c)) { i++; continue; }
+    if (c === "'") {
+      j = i + 1;
+      while (j < n) { if (s[j] === "'") { if (s[j + 1] === "'") { j += 2; continue; } break; } j++; }
+      T.push({ k: 's', v: s.slice(i, j + 1) }); i = j + 1; continue;
+    }
+    if (c === '(') { j = matchParen(s, i); T.push({ k: 'g', v: s.slice(i + 1, j) }); i = j + 1; continue; }
+    if (c === '"' || /[\w$]/.test(c)) {
+      var parts = [], disp = [], quoted = false;
+      j = i;
+      for (;;) {
+        if (s[j] === '"') {
+          var e = endQuote(s, j), qv = s.slice(j + 1, e).replace(/""/g, '"');
+          if (!parts.length) quoted = true;
+          parts.push(qv); disp.push(qv); j = e + 1;
+        } else {
+          var k = j; while (k < n && /[\w$]/.test(s[k])) k++;
+          var w = s.slice(j, k); parts.push(w.toLowerCase()); disp.push(w); j = k;
+        }
+        if (s[j] === '.' && (s[j + 1] === '"' || /[\w$]/.test(s[j + 1] || ''))) { j++; continue; }
+        break;
+      }
+      T.push({ k: 'w', v: disp.join('.'), n: parts.join('.'), parts: parts, quoted: quoted }); i = j; continue;
+    }
+    if (c === ':' && s[i + 1] === ':') { T.push({ k: 'p', v: '::' }); i += 2; continue; }
+    T.push({ k: 'p', v: c }); i++;
+  }
+  return T;
+}
+function up(t) { return t && t.k === 'w' && !t.quoted ? t.v.toUpperCase() : ''; }
+function tq(t) {
+  // qualified table name of a word token
+  if (!t || t.k !== 'w') return 'public.?';
+  var p = t.parts || [t.v];
+  return p.length === 1 ? 'public.' + p[0] : p.slice(-2).join('.');
+}
+var SPACE_KW = /^(IN|AND|OR|NOT|AS|CHECK|KEY|ANY|ALL|EXISTS|VALUES|USING|WITH|BETWEEN|IS|WHEN|THEN|ELSE|CASE|ON)$/i;
+function joinT(T) {
+  var s = '';
+  for (var i = 0; i < T.length; i++) {
+    var t = T[i], p = T[i - 1];
+    var v = t.k === 'g' ? '(' + t.v.replace(/\s+/g, ' ').trim() + ')' : t.v;
+    var noSpace = i === 0 || v === '[' || v === ']' || v === '::' || v === ',' || (p && (p.v === '::' || p.v === '[')) ||
+      (t.k === 'g' && p && p.k === 'w' && !SPACE_KW.test(p.v));
+    s += (noSpace ? '' : ' ') + v;
+  }
+  return s;
+}
+function niceExpr(s) {
+  // display form of a raw SQL fragment: collapse blanks, drop identifier quotes
+  return String(s || '').replace(/\s+/g, ' ').trim().replace(/"((?:[^"]|"")+)"/g, function (_, x) { return x.replace(/""/g, '"'); });
+}
+function splitCols(g) {
+  return splitTop(stripMarks(g), ',').map(function (c) {
+    var t = tokenize(c.trim()); return t.length && t[0].k === 'w' ? t[0].n : '';
+  }).filter(Boolean);
+}
+
+var COL_KW = { NOT: 1, NULL: 1, DEFAULT: 1, PRIMARY: 1, UNIQUE: 1, REFERENCES: 1, CHECK: 1, CONSTRAINT: 1, GENERATED: 1, COLLATE: 1 };
+var REF_ACT = { ON: 1, DELETE: 1, UPDATE: 1, CASCADE: 1, RESTRICT: 1, NO: 1, ACTION: 1, SET: 1, MATCH: 1, FULL: 1, SIMPLE: 1, PARTIAL: 1, DEFERRABLE: 1, INITIALLY: 1, DEFERRED: 1, IMMEDIATE: 1, NOT: 1, NULL: 1, DEFAULT: 1, VALID: 1 };
+var TENANT_COLS = { tenantId: 1, tenant_id: 1 };
+var TENANT_TABLES = { 'Platform.Tenants': 1, 'platform.tenant': 1 };
+
+function parseRefTail(T, i) {
+  // T[i] = REFERENCES; returns {to, toCols, actions, next}
+  var to = tq(T[i + 1]); i += 2;
+  var toCols = null;
+  if (T[i] && T[i].k === 'g') { toCols = splitCols(T[i].v); i++; }
+  var acts = [];
+  while (T[i] && T[i].k === 'w' && REF_ACT[up(T[i])]) {
+    var w = up(T[i]);
+    if (w === 'NOT' && up(T[i + 1]) === 'NULL') break;
+    if ((w === 'NULL' || w === 'DEFAULT') && up(T[i - 1]) !== 'SET') break;
+    acts.push(w); i++;
+  }
+  return { to: to, toCols: toCols, actions: acts.join(' '), next: i };
+}
+
+function parseColumn(T, tbl, src) {
+  var col = { name: T[0].n, type: '', notNull: false, def: null, pk: false, unique: false, checks: [], gen: null, note: '', fks: [], lookup: null };
+  var i = 1, ty = [];
+  while (i < T.length && !(T[i].k === 'w' && COL_KW[up(T[i])])) ty.push(T[i++]);
+  col.type = joinT(ty);
+  while (i < T.length) {
+    var w = up(T[i]);
+    if (w === 'CONSTRAINT') { i += 2; continue; }
+    if (w === 'NOT' && up(T[i + 1]) === 'NULL') { col.notNull = true; i += 2; continue; }
+    if (w === 'PRIMARY') { col.pk = true; col.notNull = true; i += 2; continue; }
+    if (w === 'UNIQUE') { col.unique = true; i++; if (up(T[i]) === 'NULLS') i += up(T[i + 1]) === 'NOT' ? 3 : 2; continue; }
+    if (w === 'DEFAULT') {
+      i++; var d = [];
+      while (i < T.length && !(T[i].k === 'w' && COL_KW[up(T[i])] && !(d.length === 0 && up(T[i]) === 'NULL'))) d.push(T[i++]);
+      col.def = joinT(d); continue;
+    }
+    if (w === 'CHECK') { col.checks.push(niceExpr(T[i + 1] && T[i + 1].v)); i += 2; if (up(T[i]) === 'NO' && up(T[i + 1]) === 'INHERIT') i += 2; continue; }
+    if (w === 'REFERENCES') {
+      var r = parseRefTail(T, i);
+      tbl._fks.push({ from: tbl.id, cols: [col.name], to: r.to, toCols: r.toCols, actions: r.actions, name: null, src: src });
+      i = r.next; continue;
+    }
+    if (w === 'GENERATED') {
+      var g = []; i++;
+      while (i < T.length && !(T[i].k === 'w' && COL_KW[up(T[i])] && up(T[i]) !== 'DEFAULT')) g.push(T[i++]);
+      col.gen = niceExpr(joinT(g)); continue;
+    }
+    if (w === 'COLLATE') { i += 2; continue; }
+    i++;
+  }
+  return col;
+}
+
+function parseTableConstraint(T, tbl, src) {
+  var i = 0, name = null;
+  if (up(T[0]) === 'CONSTRAINT') { name = T[1] ? T[1].n : null; i = 2; }
+  var w = up(T[i]);
+  function firstGroup(from) { for (var k = from; k < T.length; k++) if (T[k].k === 'g') return k; return -1; }
+  if (w === 'PRIMARY') {
+    var g = firstGroup(i); var cols = g >= 0 ? splitCols(T[g].v) : [];
+    tbl.pk = cols; tbl.constraints.push({ kind: 'PRIMARY KEY', name: name, cols: cols }); return;
+  }
+  if (w === 'UNIQUE') {
+    var g2 = firstGroup(i); var c2 = g2 >= 0 ? splitCols(T[g2].v) : [];
+    tbl.constraints.push({ kind: 'UNIQUE', name: name, cols: c2 }); return;
+  }
+  if (w === 'FOREIGN') {
+    var g3 = firstGroup(i); var c3 = g3 >= 0 ? splitCols(T[g3].v) : [];
+    var ri = g3 + 1; while (ri < T.length && up(T[ri]) !== 'REFERENCES') ri++;
+    if (ri < T.length) {
+      var r = parseRefTail(T, ri);
+      tbl._fks.push({ from: tbl.id, cols: c3, to: r.to, toCols: r.toCols, actions: r.actions, name: name, src: src });
+    }
+    return;
+  }
+  if (w === 'CHECK') {
+    tbl.constraints.push({ kind: 'CHECK', name: name, expr: niceExpr(T[i + 1] && T[i + 1].v) }); return;
+  }
+  if (w === 'EXCLUDE') {
+    tbl.constraints.push({ kind: 'EXCLUDE', name: name, expr: joinT(T.slice(i + 1)) }); return;
+  }
+}
+
+/* split body items and attribute trailing -- comments */
+function bodyItems(body) {
+  var segs = splitTop(body, ',');
+  var items = [];
+  segs.forEach(function (seg) {
+    var pos = 0, sawNL = false, n = seg.length;
+    while (pos < n) {
+      var c = seg[pos];
+      if (c === ' ' || c === '\t' || c === '\r') { pos++; continue; }
+      if (c === '\n') { sawNL = true; pos++; continue; }
+      if (c === '\u0001') {
+        var e = seg.indexOf('\u0002', pos); if (e < 0) e = n;
+        var note = seg.slice(pos + 1, e);
+        if (!sawNL && items.length) items[items.length - 1].notes.push(note);
+        pos = e + 1; continue;
+      }
+      break;
+    }
+    var rest = seg.slice(pos), notes = [];
+    rest.replace(/\u0001([^\u0002]*)\u0002/g, function (_, t) { notes.push(t); return ''; });
+    var clean = stripMarks(rest).trim();
+    if (clean) items.push({ text: clean, notes: notes });
+    else if (notes.length && items.length) items[items.length - 1].notes = items[items.length - 1].notes.concat(notes);
+  });
+  return items;
+}
+
+var TC_START = { CONSTRAINT: 1, PRIMARY: 1, UNIQUE: 1, FOREIGN: 1, CHECK: 1, EXCLUDE: 1, LIKE: 1 };
+var RX = {
+  table: new RegExp('^CREATE\\s+(?:(?:GLOBAL|LOCAL)\\s+)?(?:(?:TEMP|TEMPORARY|UNLOGGED)\\s+)?TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?(' + QNAME_SRC + ')\\s*\\(', 'i'),
+  part: new RegExp('^CREATE\\s+TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?(' + QNAME_SRC + ')\\s+PARTITION\\s+OF\\s+(' + QNAME_SRC + ')', 'i'),
+  view: new RegExp('^CREATE\\s+(?:OR\\s+REPLACE\\s+)?(?:(?:TEMP|TEMPORARY)\\s+)?(?:RECURSIVE\\s+)?(MATERIALIZED\\s+)?VIEW\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?(' + QNAME_SRC + ')', 'i'),
+  func: new RegExp('^CREATE\\s+(?:OR\\s+REPLACE\\s+)?(FUNCTION|PROCEDURE)\\s+(' + QNAME_SRC + ')\\s*\\(', 'i'),
+  alter: new RegExp('^ALTER\\s+TABLE\\s+(?:IF\\s+EXISTS\\s+)?(?:ONLY\\s+)?(' + QNAME_SRC + ')\\s+([\\s\\S]*)$', 'i'),
+  insert: new RegExp('^INSERT\\s+INTO\\s+(' + QNAME_SRC + ')\\s*\\(', 'i'),
+  comment: new RegExp('^COMMENT\\s+ON\\s+(TABLE|COLUMN|SCHEMA|VIEW|MATERIALIZED\\s+VIEW|FUNCTION|PROCEDURE)\\s+(' + QNAME_SRC + ')\\s*(\\([^)]*\\))?\\s+IS\\s+(\'(?:[^\']|\'\')*\'|NULL)', 'i'),
+  qref: new RegExp('(?:^|[^\\w."$])(' + IDENT_SRC + '\\s*\\.\\s*' + IDENT_SRC + ')(?![\\w"$])', 'g')
+};
+var LOOKUP_VALUES = 'Lookups.Lookups', LOOKUP_COLUMNS = 'Lookups.LookupColumns';
+
+function parseSql(files) {
+  var M = { tables: {}, order: [], views: [], fks: [], funcs: [], funcById: {}, schemaDesc: {}, warnings: [], files: [],
+    lookups: {}, lookupTypes: [], lookupCols: {}, lookupColList: [], lookupIssues: [] };
+  var deferred = [];
+  files.forEach(function (f) {
+    M.files.push(f.file);
+    var stmts;
+    try { stmts = splitStatements(f.text); } catch (e) { M.warnings.push(f.file + ': ' + e.message); return; }
+    stmts.forEach(function (st) {
+      var raw = st.text.replace(/^\s+/, ''), t = stripMarks(raw).trim(), m;
+      try {
+        m = RX.table.exec(raw);
+        if (m) { parseCreate(M, raw, m, st, f.file); return; }
+        m = RX.part.exec(t);
+        if (m) { deferred.push({ kind: 'part', name: qn(m[1]), parent: qn(m[2]) }); return; }
+        m = RX.view.exec(t);
+        if (m) { M.views.push({ id: qn(m[2]), materialized: !!m[1], file: f.file, desc: cleanLead(st.lead), body: t }); return; }
+        m = RX.func.exec(t);
+        if (m) { parseFunction(M, t, m, st, f.file); return; }
+        if (/^ALTER\s+TABLE\s/i.test(t)) { deferred.push({ kind: 'alter', raw: raw, file: f.file }); return; }
+        if (/^COMMENT\s+ON\s/i.test(t)) { deferred.push({ kind: 'comment', text: t }); return; }
+        m = RX.insert.exec(t);
+        if (m) { var tid = qn(m[1]); if (tid === LOOKUP_VALUES || tid === LOOKUP_COLUMNS) parseInsert(M, t, m, tid); return; }
+      } catch (e) { M.warnings.push(f.file + ': ' + e.message + ' in "' + t.slice(0, 60) + '"'); }
+    });
+  });
+  deferred.forEach(function (d) {
+    try {
+      if (d.kind === 'part') { var p = M.tables[d.parent]; if (p) p.partitions.push(d.name); }
+      else if (d.kind === 'alter') parseAlter(M, d.raw, d.file);
+      else if (d.kind === 'comment') parseComment(M, d.text);
+    } catch (e) { M.warnings.push(e.message); }
+  });
+  finalize(M);
+  return M;
+}
+
+function newTable(id, file) {
+  var p = id.split('.');
+  return { id: id, schema: p[0], name: p.slice(1).join('.'), file: file, desc: '', comment: '', cols: [], colMap: {}, pk: [], constraints: [],
+    partition: '', partitions: [], fksOut: [], fksIn: [], views: [], funcs: [], _fks: [] };
+}
+
+function parseCreate(M, raw, m, st, file) {
+  var id = qn(m[1]);
+  var open = m.index + m[0].length - 1;
+  var close = matchParen(raw, open);
+  var body = raw.slice(open + 1, close);
+  var after = stripMarks(raw.slice(close + 1));
+  var tbl = M.tables[id];
+  if (!tbl) { tbl = newTable(id, file); M.tables[id] = tbl; M.order.push(id); }
+  else M.warnings.push('Duplicate CREATE TABLE ' + id + ' in ' + file);
+  tbl.desc = cleanLead(st.lead);
+  var pm = /PARTITION\s+BY\s+(\w+)\s*\(([\s\S]*?)\)\s*$/i.exec(after.trim());
+  if (pm) tbl.partition = pm[1].toUpperCase() + ' (' + niceExpr(pm[2]) + ')';
+  bodyItems(body).forEach(function (it) {
+    var T = tokenize(it.text);
+    if (!T.length || T[0].k !== 'w') return;
+    if (!T[0].quoted && TC_START[up(T[0])]) { parseTableConstraint(T, tbl, 'table'); return; }
+    var col = parseColumn(T, tbl, 'inline');
+    col.note = it.notes.filter(Boolean).join(' · ');
+    tbl.cols.push(col); tbl.colMap[col.name] = col;
+    if (col.pk) tbl.pk = [col.name];
+  });
+}
+
+function parseAlter(M, raw, file) {
+  var t = stripMarks(raw).trim();
+  var m = RX.alter.exec(t);
+  if (!m) return;
+  var id = qn(m[1]);
+  var tbl = M.tables[id];
+  var ghost = !tbl;
+  if (ghost) tbl = newTable(id, file);
+  splitTop(m[2], ',').forEach(function (a) {
+    var T = tokenize(a.trim());
+    if (up(T[0]) !== 'ADD') return;
+    var rest = T.slice(1);
+    if (up(rest[0]) === 'COLUMN') rest = rest.slice(1);
+    if (up(rest[0]) === 'IF' && up(rest[1]) === 'NOT') rest = rest.slice(3);
+    if (!rest.length || rest[0].k !== 'w') return;
+    if (!rest[0].quoted && TC_START[up(rest[0])]) parseTableConstraint(rest, tbl, 'alter:' + file);
+    else if (!ghost) { var col = parseColumn(rest, tbl, 'alter:' + file); tbl.cols.push(col); tbl.colMap[col.name] = col; }
+  });
+  if (ghost) {
+    if (tbl._fks.length) M.warnings.push('ALTER TABLE on unknown table ' + id + ' (' + file + ')');
+    M.fks = M.fks.concat(tbl._fks.map(function (fk) { fk.orphan = true; return fk; }));
+  }
+}
+
+function parseFunction(M, t, m, st, file) {
+  var id = qn(m[2]), p = id.split('.');
+  var open = m.index + m[0].length - 1, close = matchParen(t, open);
+  var args = niceExpr(t.slice(open + 1, close));
+  var rest = t.slice(close + 1);
+  var rm = /^\s*RETURNS\s+([\s\S]*?)(?=\s+(?:LANGUAGE|AS|SECURITY|STABLE|IMMUTABLE|VOLATILE|STRICT|PARALLEL|COST|ROWS|SET|CALLED|LEAKPROOF|WINDOW|SUPPORT)\b|\s*\$\$|\s*$)/i.exec(rest);
+  var fn = { id: id, schema: p[0], name: p[1], args: args, returns: rm ? niceExpr(rm[1]) : (m[1].toUpperCase() === 'PROCEDURE' ? 'procedure' : ''),
+    lead: cleanLead(st.lead), desc: '', file: file, api: /(^|\/)api\//i.test(file), table: null, kind: 'other', action: '' };
+  if (M.funcById[id]) { var o = M.funcById[id]; if (!o.lead && fn.lead) o.lead = fn.lead; return; }
+  M.funcById[id] = fn; M.funcs.push(fn);
+}
+
+function sqlStr(s) { return s.slice(1, -1).replace(/''/g, "'"); }
+function sqlLit(x) {
+  x = String(x || '').trim();
+  if (x[0] === "'") return sqlStr(x);
+  if (/^[eE]'/.test(x)) return sqlStr(x.slice(1));
+  if (/^NULL$/i.test(x)) return null;
+  if (/^TRUE$/i.test(x)) return true;
+  if (/^FALSE$/i.test(x)) return false;
+  if (/^[-+]?\d+(\.\d+)?$/.test(x)) return Number(x);
+  var a = /^ARRAY\s*\[([\s\S]*)\]$/i.exec(x);
+  if (a) return a[1].trim() ? splitTop(a[1], ',').map(sqlLit) : [];
+  var c = /^([\s\S]+?)::[\w\[\] ]+$/.exec(x);
+  if (c) return sqlLit(c[1]);
+  return x;
+}
+function parseInsert(M, t, m, tid) {
+  var open = m.index + m[0].length - 1, close = matchParen(t, open);
+  var cols = splitCols(t.slice(open + 1, close));
+  var rest = t.slice(close + 1), vm = /^\s*VALUES\s*/i.exec(rest);
+  if (!vm) return;
+  var pos = close + 1 + vm[0].length, n = t.length;
+  while (pos < n) {
+    var c = t[pos];
+    if (c === ' ' || c === '\n' || c === '\r' || c === '\t' || c === ',') { pos++; continue; }
+    if (c !== '(') break;
+    var e = matchParen(t, pos);
+    var vals = splitTop(t.slice(pos + 1, e), ',').map(sqlLit), row = {};
+    cols.forEach(function (k, i) { row[k] = vals[i] === undefined ? null : vals[i]; });
+    pos = e + 1;
+    if (tid === LOOKUP_VALUES) {
+      var ty = row.lookupType; if (!ty) continue;
+      if (!M.lookups[ty]) { M.lookups[ty] = []; M.lookupTypes.push(ty); }
+      M.lookups[ty].push({ code: row.code, label: row.label, tone: row.tone || 'neutral', sortOrder: row.sortOrder, isSystem: row.isSystem,
+        parentCodes: Array.isArray(row.parentCodes) ? row.parentCodes : (row.parentCodes == null ? null : [row.parentCodes]) });
+    } else {
+      if (!row.schemaName || !row.tableName || !row.columnName) continue;
+      var tbl = row.schemaName + '.' + row.tableName;
+      var reg = { table: tbl, column: row.columnName, type: row.lookupType, allowTenant: !!row.allowTenantValues, dependsOn: row.dependsOnColumn || null };
+      (M.lookupCols[tbl] = M.lookupCols[tbl] || {})[row.columnName] = reg;
+      M.lookupColList.push(reg);
+    }
+  }
+}
+
+function parseComment(M, t) {
+  var m = RX.comment.exec(t);
+  if (!m || /^NULL$/i.test(m[4])) return;
+  var kind = m[1].toUpperCase().replace(/\s+/g, ' '), val = sqlStr(m[4]), p = identParts(m[2]);
+  if (kind === 'SCHEMA') { M.schemaDesc[p[p.length - 1]] = val; return; }
+  if (kind === 'TABLE') { var tb = M.tables[qn(m[2])]; if (tb) tb.comment = val; return; }
+  if (kind === 'COLUMN') {
+    var colName = p.pop(), tid = p.length === 1 ? 'public.' + p[0] : p.slice(-2).join('.');
+    var t2 = M.tables[tid]; if (t2 && t2.colMap[colName]) t2.colMap[colName].comment = val;
+    return;
+  }
+  if (kind === 'FUNCTION' || kind === 'PROCEDURE') { var fn = M.funcById[qn(m[2])]; if (fn) fn.desc = val; return; }
+  var v = M.views.filter(function (x) { return x.id === qn(m[2]); })[0]; if (v) v.desc = val;
+}
+
+/* function -> entity table: "-- SalesInvoices: ..." comment above it, else the name */
+function plural(s) { return /(s|x|ch|sh)$/.test(s) ? s + 'es' : /[^aeiou]y$/.test(s) ? s.slice(0, -1) + 'ies' : s + 's'; }
+function linkFunction(M, fn) {
+  var n = fn.name, ent = null, lm = /^([A-Z][A-Za-z0-9]*):\s*([\s\S]*)$/.exec(String(fn.lead || '').split('\n').pop());
+  if (/AddUpdate$/.test(n)) { fn.kind = 'save'; ent = n.slice(0, -9); }
+  else if (/^get[A-Z]\w*Info$/.test(n)) { fn.kind = 'get'; ent = n.slice(3, -4); }
+  else if (/^trigger[A-Z]/.test(n)) fn.kind = 'trigger';
+  else if (/[a-z][A-Z][a-z]+Entries$/.test(n)) { fn.kind = 'posting'; fn.action = n.replace(/^.*?([A-Z][a-z]+)Entries$/, '$1'); ent = n.replace(/[A-Z][a-z]+Entries$/, ''); }
+  else if (fn.api && lm) {
+    var am = /^(\w+)/.exec(lm[2]); fn.kind = 'action'; fn.action = am ? am[1] : '';
+    ent = n.replace(/[A-Z][a-z0-9]*$/, '');
+  }
+  var tid = null;
+  if (lm && M.tables[fn.schema + '.' + lm[1]]) tid = fn.schema + '.' + lm[1];
+  if (!tid && ent && fn.kind !== 'trigger') {
+    var e = ent.charAt(0).toUpperCase() + ent.slice(1);
+    [e, plural(e)].forEach(function (x) { if (!tid && M.tables[fn.schema + '.' + x]) tid = fn.schema + '.' + x; });
+    if (!tid) {
+      var el = e.toLowerCase(), hit = (M.bySchemaTmp[fn.schema] || []).filter(function (id) { var nm = id.split('.')[1].toLowerCase(); return nm === el || nm === plural(el); });
+      if (hit.length === 1) tid = hit[0];
+    }
+  }
+  if (tid) { fn.table = tid; M.tables[tid].funcs.push(fn); }
+  if (fn.kind === 'other' && fn.api && tid) fn.kind = 'action';
+}
+
+function finalize(M) {
+  M.order.forEach(function (id) { var t = M.tables[id]; M.fks = M.fks.concat(t._fks); t._fks = []; });
+  M.fks = M.fks.filter(function (fk) { return !fk.orphan; });
+  M.idL = {};
+  M.order.forEach(function (id) { M.idL[id.toLowerCase()] = id; });
+  M.views.forEach(function (v) { if (!M.idL[v.id.toLowerCase()]) M.idL[v.id.toLowerCase()] = v.id; });
+  M.fks.forEach(function (fk, i) {
+    fk.i = i;
+    if (!M.tables[fk.to] && M.idL[fk.to.toLowerCase()]) fk.to = M.idL[fk.to.toLowerCase()];
+    var from = M.tables[fk.from], to = M.tables[fk.to];
+    var main = fk.cols.filter(function (c) { return !TENANT_COLS[c]; })[0] || fk.cols[0];
+    fk.col = main;
+    fk.composite = fk.cols.length > 1;
+    if (!fk.toCols) fk.toCols = to && to.pk.length ? to.pk.slice() : ['id'];
+    var idx = fk.cols.indexOf(main);
+    fk.toCol = fk.toCols[idx] || fk.toCols[fk.toCols.length - 1] || 'id';
+    fk.missing = !to;
+    fk.isTenant = !!TENANT_COLS[fk.col] && !!TENANT_TABLES[fk.to];
+    fk.cross = modOf(fk.from) !== modOf(fk.to);
+    from.fksOut.push(fk);
+    if (to) to.fksIn.push(fk);
+    var c = from.colMap[main];
+    if (c) c.fks.push(fk);
+  });
+  M.order.forEach(function (id) {
+    var t = M.tables[id];
+    t.pk.forEach(function (c) { if (t.colMap[c]) t.colMap[c].pk = true; });
+    t.constraints.forEach(function (k) { if (k.kind === 'UNIQUE' && k.cols.length === 1 && t.colMap[k.cols[0]]) t.colMap[k.cols[0]].unique = true; });
+  });
+  M.views.forEach(function (v) {
+    var seen = {}, m, re = new RegExp(RX.qref.source, 'g');
+    v.reads = [];
+    while ((m = re.exec(v.body))) {
+      var id = qn(m[1]); if (!M.tables[id]) id = M.idL[id.toLowerCase()];
+      if (id && M.tables[id] && !seen[id]) { seen[id] = 1; v.reads.push(id); M.tables[id].views.push(v.id); }
+      re.lastIndex = m.index + m[0].length;
+    }
+    v.bodyL = String(v.body || '').toLowerCase(); delete v.body;
+  });
+  M.bySchema = {}; M.bySchemaTmp = {};
+  M.order.forEach(function (id) { var s = M.tables[id].schema; (M.bySchema[s] = M.bySchema[s] || []).push(M.tables[id]); (M.bySchemaTmp[s] = M.bySchemaTmp[s] || []).push(id); });
+  M.funcs.forEach(function (fn) { linkFunction(M, fn); });
+  delete M.bySchemaTmp;
+  M.apiCount = M.funcs.filter(function (f) { return f.api; }).length;
+  // lookups: attach the registry to the columns
+  M.lookupTypes.sort();
+  M.lookupTypes.forEach(function (ty) { M.lookups[ty].sort(function (a, b) { return (a.sortOrder || 0) - (b.sortOrder || 0); }); });
+  M.lookupUse = {};
+  M.lookupColList.forEach(function (r) {
+    (M.lookupUse[r.type] = M.lookupUse[r.type] || []).push(r);
+    var t = M.tables[r.table];
+    if (!t) { M.lookupIssues.push('registry: table ' + r.table + ' not in DDL'); return; }
+    var c = t.colMap[r.column];
+    if (!c) { M.lookupIssues.push('registry: column ' + r.table + '.' + r.column + ' not in DDL'); return; }
+    c.lookup = r;
+    if (!M.lookups[r.type]) M.lookupIssues.push('registry: ' + r.table + '.' + r.column + ' uses list ' + r.type + ' with no values');
+  });
+  Object.keys(M.bySchema).forEach(function (s) {
+    if (!MOD[s]) { MOD[s] = { key: s, label: s, color: '#8A978F', i: MODULES.length }; MODULES.push([s, s, '#8A978F']); }
+  });
+  M.colCount = M.order.reduce(function (a, id) { return a + M.tables[id].cols.length; }, 0);
+}
+
+/* ======================================================================
+   State
+   ====================================================================== */
+var state = { model: null, screens: {}, view: 'overview', module: null, keysOnly: false, showTenant: false,
+  selected: null, adhoc: false, embedded: [], layout: null, bounds: null };
+var view = { s: 1, tx: 0, ty: 0 };
+var svg = $('svg'), vp = $('vp');
+
+function loadEmbedded() {
+  var files = [];
+  Array.prototype.forEach.call(document.querySelectorAll('script.ddl'), function (s) {
+    files.push({ file: s.getAttribute('data-file') || 'file.sql',
+      text: s.textContent.replace(/<\\\/(script)/gi, '</$1').replace(/<\\!--/g, '<!--') });
+  });
+  try { var sc = $('screens'); state.screens = sc ? JSON.parse(sc.textContent || '{}') : {}; } catch (e) { state.screens = {}; }
+  try { var df = $('docfuncs'); state.docFuncs = df ? JSON.parse(df.textContent || '{}') : {}; } catch (e) { state.docFuncs = {}; }
+  return files;
+}
+
+function screenCount() {
+  var r = {};
+  Object.keys(state.screens).forEach(function (k) { (state.screens[k] || []).forEach(function (s) { r[s.route] = 1; }); });
+  return Object.keys(r).length;
+}
+
+function setModel(files, adhoc) {
+  state.model = parseSql(files);
+  state.adhoc = !!adhoc;
+  buildIndex();
+  renderHeader();
+  renderMods();
+  var empty = !state.model.order.length;
+  $('empty').classList.toggle('show', empty);
+  $('tools').style.display = empty ? 'none' : '';
+  if (state.model.warnings.length && window.console) console.warn('ERD parser warnings:\n' + state.model.warnings.join('\n'));
+}
+
+/* ======================================================================
+   Header, module strip
+   ====================================================================== */
+function renderHeader() {
+  var M = state.model;
+  var ed = (document.body.getAttribute('data-edition') || '').toUpperCase();
+  if (!ed || ed.indexOf('__') === 0) ed = 'TEMPLATE';
+  var b = $('edition');
+  b.textContent = state.adhoc ? 'AD HOC' : ed;
+  b.className = 'badge' + (state.adhoc ? ' adhoc' : '');
+  b.title = state.adhoc ? 'Viewing dropped files: ' + M.files.join(', ') : 'Built ' + (document.body.getAttribute('data-built') || '');
+  var fkN = M.fks.length;
+  $('stats').innerHTML =
+    '<span class="stat"><b>' + fmt(M.order.length) + '</b> tables</span>' +
+    '<span class="stat"><b>' + fmt(M.colCount) + '</b> columns</span>' +
+    '<span class="stat"><b>' + fmt(fkN) + '</b> FKs</span>' +
+    (M.apiCount ? '<span class="stat" title="API functions (database/api)"><b>' + fmt(M.apiCount) + '</b> functions</span>' : '') +
+    (M.lookupTypes.length ? '<button class="stat" id="btnLists" style="cursor:pointer" title="' + fmt(M.lookupColList.length) + ' columns take their values from ' + fmt(M.lookupTypes.length) + ' lookup lists. Click for the lists."><b>' + fmt(M.lookupTypes.length) + '</b> lists</button>' : '') +
+    '<span class="stat"><b>' + fmt(screenCount()) + '</b> screens</span>' +
+    (state.adhoc && state.embedded.length ? '<button class="stat lnk" id="btnReset">reset to embedded</button>' : '');
+  var r = $('btnReset'); if (r) r.onclick = function () { setModel(state.embedded, false); go({ view: 'overview' }); };
+  var bl = $('btnLists'); if (bl) bl.onclick = function () { showLookupIndex(); };
+  $('viewCount').textContent = M.views.length ? '(' + M.views.length + ')' : '';
+}
+function renderMods() {
+  var M = state.model, h = '<button class="mod' + (state.view === 'overview' ? ' act' : '') + '" data-mod="">Overview</button>';
+  MODULES.forEach(function (m) {
+    var n = (M.bySchema[m[0]] || []).length;
+    h += '<button class="mod' + (state.module === m[0] && state.view === 'module' ? ' act' : '') + (n ? '' : ' zero') + '" data-mod="' + m[0] + '"><i style="background:' + m[2] + '"></i>' + esc(m[0]) + ' <span>' + n + '</span></button>';
+  });
+  $('mods').innerHTML = h;
+}
+$('mods').addEventListener('click', function (e) {
+  var b = e.target.closest('.mod'); if (!b) return;
+  var m = b.getAttribute('data-mod');
+  if (!m) go({ view: 'overview' }); else go({ view: 'module', module: m });
+});
+
+/* ======================================================================
+   Overview
+   ====================================================================== */
+function overviewLayout() {
+  var cx = 560, cy = 400, pos = {};
+  pos.Platform = [470, 400]; pos.Company = [650, 400];
+  pos.Lookups = [1062, 712];   // utility module: small bubble in the corner, off the ring
+  var ring = ['Accounting', 'BankCash', 'Tax', 'Sales', 'Distribution', 'Inventory', 'Purchases', 'FixedAssets', 'Reports', 'EmployeeSelfService', 'Payroll', 'HumanResources'];
+  MODULES.forEach(function (m) { if (!pos[m[0]] && ring.indexOf(m[0]) < 0) ring.push(m[0]); });
+  ring.forEach(function (k, i) {
+    var a = -Math.PI / 2 + (i / ring.length) * Math.PI * 2;
+    pos[k] = [cx + Math.cos(a) * 440, cy + Math.sin(a) * 300];
+  });
+  return { pos: pos, cx: cx, cy: cy };
+}
+function renderOverview() {
+  var M = state.model, L = overviewLayout(), pos = L.pos;
+  var R = {};
+  MODULES.forEach(function (m) { var n = (M.bySchema[m[0]] || []).length; R[m[0]] = UTILITY_MODS[m[0]] ? 30 : n ? Math.min(78, 26 + 7.5 * Math.sqrt(n)) : 24; });
+  var w = {};
+  M.fks.forEach(function (fk) {
+    if (!fk.cross) return;
+    if (fk.isTenant && !state.showTenant) return;
+    var a = modOf(fk.from), b = modOf(fk.to);
+    if (!pos[a] || !pos[b]) return;
+    var k = a < b ? a + '|' + b : b + '|' + a;
+    w[k] = (w[k] || 0) + 1;
+  });
+  var edges = '', labels = '';
+  Object.keys(w).forEach(function (k) {
+    var ab = k.split('|'), p1 = pos[ab[0]], p2 = pos[ab[1]], n = w[k];
+    var mx = (p1[0] + p2[0]) / 2, my = (p1[1] + p2[1]) / 2;
+    var qx = mx + (L.cx - mx) * 0.28, qy = my + (L.cy - my) * 0.28;
+    var sw = Math.min(14, 1.2 + 1.5 * Math.sqrt(n));
+    edges += '<g class="ov-edge-g" data-a="' + ab[0] + '" data-b="' + ab[1] + '"><path class="ov-edge" stroke-width="' + sw.toFixed(1) + '" stroke-opacity=".55" d="M' + p1[0] + ' ' + p1[1] + ' Q' + qx.toFixed(1) + ' ' + qy.toFixed(1) + ' ' + p2[0] + ' ' + p2[1] + '"/>';
+    var lx = 0.25 * p1[0] + 0.5 * qx + 0.25 * p2[0], ly = 0.25 * p1[1] + 0.5 * qy + 0.25 * p2[1];
+    var tw = String(n).length * 6.5 + 12;
+    labels += '<g class="ov-lbl ov-edge-g" data-a="' + ab[0] + '" data-b="' + ab[1] + '"><rect x="' + (lx - tw / 2).toFixed(1) + '" y="' + (ly - 9).toFixed(1) + '" width="' + tw + '" height="18" rx="9"/><text x="' + lx.toFixed(1) + '" y="' + (ly + 3.8).toFixed(1) + '" text-anchor="middle">' + n + '</text></g>';
+    edges += '</g>';
+  });
+  var bubs = '';
+  MODULES.forEach(function (m) {
+    var k = m[0], p = pos[k]; if (!p) return;
+    var n = (M.bySchema[k] || []).length, r = R[k];
+    var cls = 'bub' + (n ? '' : ' empty');
+    bubs += '<g class="' + cls + '" data-mod="' + k + '" transform="translate(' + p[0].toFixed(1) + ',' + p[1].toFixed(1) + ')">' +
+      '<circle class="bub-halo" r="' + (r + 9) + '" fill="' + m[2] + '"/>' +
+      (n ? '<circle r="' + r + '" fill="' + m[2] + '"/>'
+         : '<circle r="' + r + '" fill="var(--surface)" stroke="' + m[2] + '" stroke-width="1.5" stroke-dasharray="4 3"/>') +
+      '<text class="bub-name" text-anchor="middle" y="' + (r > 34 ? -1 : 4) + '" style="font-size:' + Math.min(14, (2 * r - 10) / (k.length * 0.62)).toFixed(1) + 'px">' + esc(k) + '</text>' +
+      (r > 34 ? '<text class="bub-cnt" text-anchor="middle" y="15">' + n + ' tables</text>'
+              : '<text class="bub-out" text-anchor="middle" y="' + (r + 24) + '">' + n + ' tables' + (UTILITY_MODS[k] && M.lookupTypes.length ? ' · ' + M.lookupTypes.length + ' lists' : '') + '</text>') +
+      '</g>';
+  });
+  vp.innerHTML = '<g class="ov" id="ovg">' + edges + labels + bubs + '</g>';
+  state.bounds = { x: 0, y: 30, w: 1120, h: 750 };
+  $('title').innerHTML = '<h2>Module overview</h2><p>' + MODULES.filter(function (m) { return (M.bySchema[m[0]] || []).length; }).length +
+    ' of ' + MODULES.length + ' modules have tables. Bubble size = table count; edge weight = cross-module FKs' + (state.showTenant ? ' (incl. tenantId)' : '') + '. Click a bubble.</p>';
+}
+function ovHover(mod) {
+  var g = $('ovg'); if (!g) return;
+  g.classList.toggle('ovdim', !!mod);
+  Array.prototype.forEach.call(g.querySelectorAll('.ov-edge-g,.bub'), function (el) {
+    var on = !!mod && (el.getAttribute('data-a') === mod || el.getAttribute('data-b') === mod || el.getAttribute('data-mod') === mod);
+    if (el.classList.contains('bub') && mod) {
+      var nb = g.querySelector('.ov-edge-g[data-a="' + mod + '"][data-b="' + el.getAttribute('data-mod') + '"],.ov-edge-g[data-b="' + mod + '"][data-a="' + el.getAttribute('data-mod') + '"]');
+      on = on || !!nb;
+    }
+    el.classList.toggle('on', on);
+  });
+}
+svg.addEventListener('mouseover', function (e) {
+  if (state.view !== 'overview') return;
+  var b = e.target.closest && e.target.closest('.bub'); ovHover(b ? b.getAttribute('data-mod') : null);
+});
+
+/* ======================================================================
+   Module view
+   ====================================================================== */
+function visibleCols(t) {
+  if (!state.keysOnly) return t.cols;
+  var r = t.cols.filter(function (c) { return c.pk || c.fks.length || c.unique; });
+  return r.length ? r : t.cols.slice(0, 1);
+}
+function layoutModule(schema) {
+  var M = state.model, tables = (M.bySchema[schema] || []).slice();
+  var ids = {}; tables.forEach(function (t, i) { ids[t.id] = i; });
+  var deps = {}, rdeps = {};
+  tables.forEach(function (t) { deps[t.id] = []; rdeps[t.id] = []; });
+  tables.forEach(function (t) {
+    t.fksOut.forEach(function (fk) {
+      if (fk.to !== t.id && ids[fk.to] != null && deps[t.id].indexOf(fk.to) < 0) { deps[t.id].push(fk.to); rdeps[fk.to].push(t.id); }
+    });
+  });
+  var layer = {}, visiting = {};
+  function L(id) {
+    if (layer[id] != null) return layer[id];
+    if (visiting[id]) return 0;
+    visiting[id] = 1;
+    var v = 0; deps[id].forEach(function (d) { v = Math.max(v, L(d) + 1); });
+    visiting[id] = 0;
+    return (layer[id] = v);
+  }
+  tables.forEach(function (t) { L(t.id); });
+  var maxL = 0; tables.forEach(function (t) { maxL = Math.max(maxL, layer[t.id]); });
+  var layers = []; for (var i = 0; i <= maxL; i++) layers.push([]);
+  tables.forEach(function (t) { layers[layer[t.id]].push(t); });
+  var rank = {};
+  function assign() { layers.forEach(function (ly) { ly.forEach(function (t, k) { rank[t.id] = k / Math.max(1, ly.length - 1); }); }); }
+  assign();
+  function bary(list, nb) {
+    list.forEach(function (t) {
+      var ns = nb[t.id].filter(function (x) { return rank[x] != null; });
+      t._b = ns.length ? ns.reduce(function (a, x) { return a + rank[x]; }, 0) / ns.length : rank[t.id];
+    });
+    list.sort(function (a, b) { return a._b - b._b; });
+  }
+  for (var sweep = 0; sweep < 3; sweep++) {
+    for (var a = 1; a < layers.length; a++) { bary(layers[a], deps); assign(); }
+    for (var b = layers.length - 2; b >= 0; b--) { bary(layers[b], rdeps); assign(); }
+  }
+  var heights = {}, total = 0;
+  tables.forEach(function (t) { var h = HEAD + visibleCols(t).length * ROW + PADB; heights[t.id] = h; total += h + GAPY; });
+  var Hmax = Math.max(900, Math.sqrt(total * (W + GAPX)) * 0.9);
+  // 1) each layer -> one or more sub-columns no taller than Hmax
+  var columns = [];
+  layers.forEach(function (ly) {
+    if (!ly.length) return;
+    var col = { items: [], h: 0 };
+    ly.forEach(function (t) {
+      var h = heights[t.id];
+      if (col.items.length && col.h + h > Hmax) { columns.push(col); col = { items: [], h: 0 }; }
+      col.items.push({ t: t, y: col.h, h: h }); col.h += h + GAPY;
+    });
+    columns.push(col);
+  });
+  // 2) wrap the left-to-right column sequence into rows for a ~1.6:1 canvas
+  var best = null;
+  for (var k = 1; k <= Math.max(1, columns.length); k++) {
+    var ww = k * (W + GAPX), hh = 0;
+    for (var r0 = 0; r0 < columns.length; r0 += k) {
+      var mh = 0; for (var c0 = r0; c0 < Math.min(columns.length, r0 + k); c0++) mh = Math.max(mh, columns[c0].h);
+      hh += mh + 90;
+    }
+    var sc = Math.abs(Math.log((ww / Math.max(1, hh)) / 1.6));
+    if (!best || sc < best.sc - 1e-9) best = { k: k, sc: sc };
+  }
+  var per = best ? best.k : 1, pos = {}, maxX = 0, yOff = 0;
+  for (var r1 = 0; r1 < columns.length; r1 += per) {
+    var rowH = 0;
+    for (var c1 = r1; c1 < Math.min(columns.length, r1 + per); c1++) {
+      var x = (c1 - r1) * (W + GAPX);
+      columns[c1].items.forEach(function (it) { pos[it.t.id] = { x: x, y: yOff + it.y, h: it.h }; });
+      rowH = Math.max(rowH, columns[c1].h); maxX = Math.max(maxX, x + W);
+    }
+    yOff += rowH + 90;
+  }
+  return { pos: pos, w: Math.max(W, maxX), h: Math.max(0, yOff - 90 - GAPY), tables: tables };
+}
+
+function keyIcon(x, y) {
+  return '<g class="c-key"><circle cx="' + (x + 3) + '" cy="' + y + '" r="2.8"/><path d="M' + (x + 5.8) + ' ' + y + 'h6m-2 0v2.6m-2.2-2.6v2"/></g>';
+}
+function linkIcon(x, y) {
+  return '<g class="c-lnk"><rect x="' + (x) + '" y="' + (y - 2.6) + '" width="7" height="5.2" rx="2.6"/><rect x="' + (x + 4.6) + '" y="' + (y - 2.6) + '" width="7" height="5.2" rx="2.6"/></g>';
+}
+function cardSvg(t, p) {
+  var cols = visibleCols(t), color = modColor(t.schema);
+  var nPk = t.pk.length, nFk = t.fksOut.length, nUq = t.constraints.filter(function (k) { return k.kind === 'UNIQUE'; }).length + t.cols.filter(function (c) { return c.unique; }).length;
+  var s = '<g class="card" data-id="' + esc(t.id) + '" transform="translate(' + p.x + ',' + p.y + ')">' +
+    '<rect class="c-body" width="' + W + '" height="' + p.h + '" rx="14"/>' +
+    '<path class="c-head" d="M0.5 14a13.5 13.5 0 0 1 13.5-13.5h' + (W - 28) + 'a13.5 13.5 0 0 1 13.5 13.5v' + (HEAD - 14.5) + 'h-' + (W - 1) + 'z"/>' +
+    '<line class="c-sep" x1="0" x2="' + W + '" y1="' + HEAD + '" y2="' + HEAD + '"/>' +
+    '<rect x="12" y="11" width="10" height="10" rx="3" fill="' + color + '"/>' +
+    '<text class="c-title" x="30" y="20.5">' + esc(fit(t.name, W - 44, F_TITLE)) + '</text>';
+  var bx = 12;
+  function pill(cls, label) {
+    var w = textW(label, '700 9.5px ' + FONT) + 12;
+    var r = '<g class="' + cls + '"><rect class="c-pill" x="' + bx + '" y="29" width="' + w.toFixed(1) + '" height="14" rx="7"/><text class="c-pilltx" x="' + (bx + 6) + '" y="39">' + label + '</text></g>';
+    bx += w + 5; return r;
+  }
+  if (nPk) s += pill('c-pk', 'PK ' + nPk);
+  if (nFk) s += pill('c-fk', 'FK ' + nFk);
+  if (nUq) s += pill('', 'UQ ' + nUq);
+  s += pill('', t.cols.length + ' cols');
+  if (t.partition) s += pill('', 'PARTITIONED');
+  cols.forEach(function (c, i) {
+    var y0 = HEAD + i * ROW, yc = y0 + ROW / 2 + 3;
+    if (i % 2 === 1) s += '<rect class="c-zebra" x="1" y="' + y0 + '" width="' + (W - 2) + '" height="' + ROW + '"/>';
+    if (c.pk) s += keyIcon(10, y0 + ROW / 2);
+    else if (c.fks.length) s += linkIcon(9, y0 + ROW / 2);
+    var lk = c.lookup, tyTxt = fit(lk ? lk.type : c.type, lk ? 104 : 92, F_TYPE);
+    var tyW = textW(tyTxt, F_TYPE), lkW = lk ? 24 : 0;
+    var key = c.pk || c.fks.length;
+    s += '<text class="c-col' + (key ? ' k' : '') + '" x="28" y="' + yc + '">' + esc(fit(c.name, W - 28 - tyW - 26 - lkW, key ? F_COLB : F_COL)) + '</text>';
+    if (lk) {
+      var lx = W - 18 - tyW - 24;
+      s += '<g class="c-lk" data-lookup="' + esc(lk.type) + '"><title>' + esc(c.name + ' takes its values from list ' + lk.type + ' (click for values)') + '</title><rect x="' + lx.toFixed(1) + '" y="' + (y0 + 5) + '" width="20" height="11" rx="5.5"/><text x="' + (lx + 10).toFixed(1) + '" y="' + (y0 + 13.2) + '" text-anchor="middle">list</text></g>';
+    }
+    s += '<text class="c-type' + (lk ? ' c-lkty' : '') + '" x="' + (W - 18) + '" y="' + yc + '" text-anchor="end">' + esc(tyTxt) + '</text>';
+    if (c.notNull) s += '<circle class="c-nn" cx="' + (W - 10) + '" cy="' + (y0 + ROW / 2) + '" r="2.4"/>';
+  });
+  return s + '</g>';
+}
+function rowY(t, p, colName) {
+  var cols = visibleCols(t);
+  for (var i = 0; i < cols.length; i++) if (cols[i].name === colName) return p.y + HEAD + i * ROW + ROW / 2;
+  return p.y + HEAD / 2;
+}
+function edgeSvg(fk, L) {
+  var a = L.pos[fk.from], b = L.pos[fk.to], ft = state.model.tables[fk.from], tt = state.model.tables[fk.to];
+  var yS = rowY(ft, a, fk.col), yT = rowY(tt, b, fk.toCol);
+  var col = ft.colMap[fk.col], nullable = col ? !col.notNull : false;
+  var xS, xT, ds, dt, d;
+  if (fk.from === fk.to) {
+    xS = a.x + W; xT = a.x + W; ds = 1; dt = 1;
+    d = 'M' + xS + ' ' + yS + 'C' + (xS + 60) + ' ' + yS + ' ' + (xT + 60) + ' ' + yT + ' ' + xT + ' ' + yT;
+  } else {
+    if (b.x + W < a.x) { xS = a.x; ds = -1; xT = b.x + W; dt = 1; }
+    else if (b.x > a.x + W) { xS = a.x + W; ds = 1; xT = b.x; dt = -1; }
+    else { xS = a.x + W; ds = 1; xT = b.x + W; dt = 1; }
+    var k = Math.max(50, Math.abs(xT - xS) / 2);
+    if (ds === dt) k = 70 + Math.abs(yT - yS) * 0.05;
+    d = 'M' + xS + ' ' + yS + 'C' + (xS + ds * k) + ' ' + yS + ' ' + (xT + dt * k) + ' ' + yT + ' ' + xT + ' ' + yT;
+  }
+  // crow's foot (many) at FK side, one (|| or |o) at referenced side
+  var mk = 'M' + (xS + ds * 13) + ' ' + yS + 'L' + xS + ' ' + (yS - 6) + 'M' + (xS + ds * 13) + ' ' + yS + 'L' + xS + ' ' + (yS + 6) +
+    'M' + (xS + ds * 16) + ' ' + (yS - 6) + 'v12';
+  mk += 'M' + (xT + dt * 7) + ' ' + (yT - 6) + 'v12';
+  var circ = '';
+  if (nullable) circ = '<circle class="emk" cx="' + (xT + dt * 14) + '" cy="' + yT + '" r="3.6" fill="var(--surface)"/>';
+  else mk += 'M' + (xT + dt * 11) + ' ' + (yT - 6) + 'v12';
+  return '<g class="edge-g" data-a="' + esc(fk.from) + '" data-b="' + esc(fk.to) + '"><path class="edge" d="' + d + '"/><path class="emk" d="' + mk + '"/>' + circ + '</g>';
+}
+function renderModule(schema) {
+  var M = state.model, L = layoutModule(schema);
+  state.layout = L;
+  var edges = '', cards = '', stubs = '', maxStub = 0;
+  L.tables.forEach(function (t) {
+    var p = L.pos[t.id];
+    cards += cardSvg(t, p);
+    var used = {};
+    t.fksOut.forEach(function (fk) {
+      if (L.pos[fk.to]) { edges += edgeSvg(fk, L); return; }
+      if (fk.isTenant && !state.showTenant) return;
+      var key = fk.col + '>' + fk.to; if (used[key]) return; used[key] = 1;
+      var y = rowY(t, p, fk.col);
+      var label = '→ ' + fk.to;
+      var lw = Math.min(190, textW(label, F_STUB) + 16);
+      label = fit(label, lw - 14, F_STUB);
+      var x0 = p.x + W + 14;
+      maxStub = Math.max(maxStub, 14 + lw);
+      stubs += '<g class="stub' + (fk.missing ? ' missing' : '') + '" data-from="' + esc(t.id) + '" data-jump="' + esc(fk.to) + '"><title>' + esc(fk.col + ' → ' + fk.to + '(' + fk.toCol + ')' + (fk.missing ? ' (table not in DDL yet)' : '')) + '</title>' +
+        '<line x1="' + (p.x + W) + '" x2="' + x0 + '" y1="' + y + '" y2="' + y + '"/>' +
+        '<rect x="' + x0 + '" y="' + (y - 9) + '" width="' + lw.toFixed(1) + '" height="18" rx="9"/>' +
+        '<text x="' + (x0 + 8) + '" y="' + (y + 3.6) + '">' + esc(label) + '</text></g>';
+    });
+  });
+  vp.innerHTML = '<g id="modg"><g class="edges">' + edges + '</g><g class="cards">' + cards + '</g><g class="stubs">' + stubs + '</g></g>';
+  state.bounds = { x: -30, y: -30, w: L.w + 60 + maxStub, h: L.h + 60 };
+  var m = MOD[schema] || { label: schema, color: '#8A978F' };
+  var desc = M.schemaDesc[schema] || '';
+  $('title').innerHTML = '<h2><i style="background:' + m.color + '"></i>' + esc(schema) + ' <span style="font-weight:500;color:var(--muted);font-size:14px">' + L.tables.length + ' tables</span></h2>' +
+    '<p>' + esc(desc || m.label) + '</p>';
+  if (!L.tables.length) $('title').innerHTML += '<p>No tables in this module' + (M.order.length ? ' yet' : '') + '.</p>';
+  applyHighlight();
+}
+function applyHighlight() {
+  var g = $('modg'); if (!g) return;
+  var sel = state.selected && state.layout && state.layout.pos[state.selected] ? state.selected : null;
+  g.classList.toggle('dim', !!sel);
+  var nb = {};
+  Array.prototype.forEach.call(g.querySelectorAll('.edge-g'), function (e) {
+    var a = e.getAttribute('data-a'), b = e.getAttribute('data-b');
+    var on = !!sel && (a === sel || b === sel);
+    e.classList.toggle('on', on);
+    if (on) { nb[a] = 1; nb[b] = 1; }
+  });
+  Array.prototype.forEach.call(g.querySelectorAll('.stub'), function (e) { e.classList.toggle('on', !!sel && e.getAttribute('data-from') === sel); });
+  Array.prototype.forEach.call(g.querySelectorAll('.card'), function (c) {
+    var id = c.getAttribute('data-id');
+    c.classList.toggle('sel', id === sel);
+    c.classList.toggle('nb', !!sel && id !== sel && !!nb[id]);
+  });
+}
+
+/* ======================================================================
+   Pan / zoom
+   ====================================================================== */
+function applyView() { vp.setAttribute('transform', 'translate(' + view.tx.toFixed(2) + ',' + view.ty.toFixed(2) + ') scale(' + view.s.toFixed(4) + ')'); }
+function zoomAt(cx, cy, ns) {
+  ns = Math.max(0.05, Math.min(3, ns));
+  var wx = (cx - view.tx) / view.s, wy = (cy - view.ty) / view.s;
+  view.s = ns; view.tx = cx - wx * ns; view.ty = cy - wy * ns; applyView();
+}
+function viewport() {
+  var r = svg.getBoundingClientRect(), w = r.width, h = r.height;
+  var dr = $('drawer').classList.contains('open');
+  if (dr) { if (w > 720) w -= 480; else h *= 0.28; }
+  return { w: Math.max(100, w), h: Math.max(100, h), top: state.view === 'module' ? 70 : 60 };
+}
+function fitView() {
+  var b = state.bounds; if (!b) return;
+  var v = viewport(), availH = v.h - v.top - 70;
+  var s = Math.min((v.w - 40) / b.w, availH / b.h, state.view === 'overview' ? 1.3 : 1.1);
+  s = Math.max(0.05, s);
+  view.s = s; view.tx = (v.w - b.w * s) / 2 - b.x * s; view.ty = v.top + (availH - b.h * s) / 2 - b.y * s; applyView();
+}
+function focusTable(id) {
+  var L = state.layout, p = L && L.pos[id]; if (!p) return;
+  var v = viewport();
+  var s = Math.max(view.s, 0.85); if (s > 1.3) s = 1.3;
+  view.s = s;
+  var cx = p.x + W / 2, cy = p.y + Math.min(p.h, 380) / 2;
+  view.tx = v.w / 2 - cx * s; view.ty = Math.max(v.top, v.h / 2 - Math.min(p.h, 380) * s / 2) - (p.y) * s;
+  applyView();
+}
+svg.addEventListener('wheel', function (e) {
+  e.preventDefault();
+  var r = svg.getBoundingClientRect();
+  var dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+  zoomAt(e.clientX - r.left, e.clientY - r.top, view.s * Math.exp(-dy * 0.0016));
+}, { passive: false });
+var pointers = {}, drag = null, pinch = null;
+function pcount() { return Object.keys(pointers).length; }
+svg.addEventListener('pointerdown', function (e) {
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+  try { svg.setPointerCapture(e.pointerId); } catch (x) {}
+  if (pcount() === 1) drag = { x: e.clientX, y: e.clientY, tx: view.tx, ty: view.ty, moved: false, target: e.target };
+  else if (pcount() === 2) {
+    var ps = Object.keys(pointers).map(function (k) { return pointers[k]; });
+    pinch = { d: Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y), s: view.s };
+    drag = null;
+  }
+});
+svg.addEventListener('pointermove', function (e) {
+  if (!pointers[e.pointerId]) return;
+  pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+  if (pinch && pcount() === 2) {
+    var ps = Object.keys(pointers).map(function (k) { return pointers[k]; });
+    var d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y), r = svg.getBoundingClientRect();
+    zoomAt((ps[0].x + ps[1].x) / 2 - r.left, (ps[0].y + ps[1].y) / 2 - r.top, pinch.s * d / Math.max(1, pinch.d));
+    return;
+  }
+  if (!drag) return;
+  var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  if (!drag.moved && Math.abs(dx) + Math.abs(dy) > 4) { drag.moved = true; svg.classList.add('grabbing'); }
+  if (drag.moved) { view.tx = drag.tx + dx; view.ty = drag.ty + dy; applyView(); }
+});
+function endPointer(e) {
+  delete pointers[e.pointerId];
+  if (pcount() < 2) pinch = null;
+  if (drag && pcount() === 0) {
+    var d = drag; drag = null; svg.classList.remove('grabbing');
+    if (!d.moved && e.type === 'pointerup') handleClick(d.target);
+  }
+}
+svg.addEventListener('pointerup', endPointer);
+svg.addEventListener('pointercancel', endPointer);
+function handleClick(target) {
+  if (!target || !target.closest) return;
+  var lkb = target.closest('.c-lk');
+  if (lkb) {
+    var cd = lkb.closest('.card'), tid = cd ? cd.getAttribute('data-id') : null;
+    if (tid) { state.selected = tid; applyHighlight(); setHash(); }
+    showLookup(lkb.getAttribute('data-lookup'), tid);
+    return;
+  }
+  var bub = target.closest('.bub');
+  if (bub) { go({ view: 'module', module: bub.getAttribute('data-mod') }); return; }
+  var stub = target.closest('.stub');
+  if (stub) { var to = stub.getAttribute('data-jump'); openTable(to, true); return; }
+  var card = target.closest('.card');
+  if (card) { var id = card.getAttribute('data-id'); state.selected = id; applyHighlight(); openDrawer(id); setHash(); return; }
+  if (state.view === 'module' && state.selected) { state.selected = null; applyHighlight(); closeDrawer(); setHash(); }
+}
+
+/* ======================================================================
+   Navigation / hash
+   ====================================================================== */
+function render() {
+  renderMods();
+  $('btnOverview').style.display = state.view === 'overview' ? 'none' : '';
+  $('btnKeys').style.display = state.view === 'overview' ? 'none' : '';
+  $('btnKeys').classList.toggle('on', state.keysOnly);
+  $('btnTenant').classList.toggle('on', state.showTenant);
+  if (state.view === 'overview') { state.layout = null; renderOverview(); }
+  else renderModule(state.module);
+}
+function go(o) {
+  state.view = o.view;
+  if (o.view === 'module') state.module = o.module;
+  state.selected = o.table || null;
+  if (!o.table) closeDrawer();
+  render();
+  fitView();
+  if (o.view === 'module' && view.s < 0.42 && state.bounds) {
+    // keep the first screen readable; Fit shows everything
+    var v = viewport(), b = state.bounds;
+    view.s = 0.42; view.tx = 16 - b.x * view.s; view.ty = v.top - b.y * view.s; applyView();
+  }
+  if (o.table) { openDrawer(o.table); focusTable(o.table); }
+  setHash();
+}
+function openTable(id, focus) {
+  var t = state.model.tables[id];
+  if (!t) { if (MOD[modOf(id)] || state.model.bySchema[modOf(id)]) go({ view: 'module', module: modOf(id) }); return; }
+  go({ view: 'module', module: t.schema, table: id });
+}
+function setHash() {
+  var h = state.view === 'overview' ? 'overview' : state.selected ? 'table=' + state.selected : 'module=' + state.module;
+  if (state.keysOnly) h += '&keys=1';
+  try { history.replaceState(null, '', '#' + h); } catch (e) {}
+}
+function readHash() {
+  var h = (location.hash || '').replace(/^#/, ''), p = {};
+  h.split('&').forEach(function (kv) { var i = kv.indexOf('='); if (kv) p[decodeURIComponent(i < 0 ? kv : kv.slice(0, i))] = i < 0 ? '1' : decodeURIComponent(kv.slice(i + 1)); });
+  if (p.keys) state.keysOnly = p.keys === '1';
+  if (p.debug) dumpModel();
+  if (p.theme === 'dark' || p.theme === 'light') setTheme(p.theme, false);
+  if (p.views) { go({ view: 'overview' }); showViews(); return; }
+  if (p.lookup || p.lists) {
+    var lt = resolveLookup(p.lookup || '');
+    go({ view: 'module', module: 'Lookups' });
+    if (lt) showLookup(lt, null); else showLookupIndex();
+    return;
+  }
+  if (p.table) {
+    openTable(resolveId(p.table), true);
+    if (p.sec) {
+      // &sec=functions : scroll the drawer to that section
+      var hs = $('dBody').querySelectorAll('.sec h4'), want = String(p.sec).toLowerCase();
+      for (var i = 0; i < hs.length; i++) if (hs[i].textContent.toLowerCase().indexOf(want) === 0) { $('dBody').scrollTop += hs[i].getBoundingClientRect().top - $('dBody').getBoundingClientRect().top - 8; break; }
+    }
+    return;
+  }
+  if (p.module) { go({ view: 'module', module: modKey(p.module) }); return; }
+  if (p.q) { $('q').value = p.q; doSearch(); }
+  go({ view: 'overview' });
+}
+window.addEventListener('hashchange', readHash);
+function resolveId(id) {
+  // Schema.Table, case-insensitive; quotes allowed
+  var v = String(id || '').replace(/"/g, ''), M = state.model;
+  if (M.tables[v]) return v;
+  return M.idL[v.toLowerCase()] || v;
+}
+function resolveLookup(ty) {
+  var M = state.model; if (!ty) return null;
+  if (M.lookups[ty]) return ty;
+  var l = ty.toLowerCase();
+  for (var i = 0; i < M.lookupTypes.length; i++) if (M.lookupTypes[i].toLowerCase() === l) return M.lookupTypes[i];
+  return null;
+}
+function dumpModel() {
+  var M = state.model, o = { stats: { tables: M.order.length, columns: M.colCount, fks: M.fks.length, views: M.views.length, functions: M.funcs.length, apiFunctions: M.apiCount,
+      apiFunctionsLinked: M.funcs.filter(function (f) { return f.api && f.table; }).length, lookupTypes: M.lookupTypes.length,
+      lookupValues: M.lookupTypes.reduce(function (a, t) { return a + M.lookups[t].length; }, 0), lookupColumns: M.lookupColList.length,
+      lookupColumnsAttached: M.order.reduce(function (a, id) { return a + M.tables[id].cols.filter(function (c) { return c.lookup; }).length; }, 0), warnings: M.warnings.length },
+    lookupIssues: M.lookupIssues, apiUnlinked: M.funcs.filter(function (f) { return f.api && !f.table; }).map(function (f) { return f.id; }),
+    tables: {}, fks: [], views: M.views.map(function (v) { return { id: v.id, file: v.file, reads: v.reads }; }), warnings: M.warnings, screens: screenCount() };
+  M.order.forEach(function (id) {
+    var t = M.tables[id];
+    o.tables[id] = { desc: t.desc, comment: t.comment, pk: t.pk, partition: t.partition, partitions: t.partitions, constraints: t.constraints,
+      cols: t.cols.map(function (c) { return [c.name, c.type, c.notNull ? 'NN' : '', c.def, c.pk ? 'PK' : '', c.unique ? 'UQ' : '', c.gen, c.checks.join(' | '), c.note, c.comment || '', c.lookup ? 'LIST ' + c.lookup.type : ''].join(' ~ '); }),
+      funcs: t.funcs.map(function (f) { return f.kind + ' ' + f.id; }) };
+  });
+  M.fks.forEach(function (fk) { o.fks.push(fk.from + '.' + fk.col + ' -> ' + fk.to + '.' + fk.toCol + ' [' + fk.cols.join(',') + '] ' + (fk.name || '') + ' ' + fk.src + (fk.missing ? ' MISSING' : '') + (fk.isTenant ? ' TENANT' : '')); });
+  var pre = document.getElementById('erd-debug') || document.createElement('pre');
+  pre.id = 'erd-debug'; pre.hidden = true; pre.textContent = JSON.stringify(o, null, 1);
+  document.body.appendChild(pre);
+}
+
+/* ======================================================================
+   Drawer
+   ====================================================================== */
+function tLink(id, extra) {
+  var ex = !!state.model.tables[id];
+  return '<button class="lnk' + (ex ? '' : ' missing') + '" data-open="' + esc(id) + '" title="' + (ex ? 'Open ' : 'Not in DDL yet: ') + esc(id) + '">' + esc(id) + (extra || '') + '</button>';
+}
+function openDrawer(id) {
+  var M = state.model, t = M.tables[id]; if (!t) return;
+  var color = modColor(t.schema);
+  $('drawer').setAttribute('data-table', id);
+  $('dTitle').innerHTML = '<div class="sch"><i style="background:' + color + '"></i>' + esc(t.schema) + '</div><h3>' + esc(t.name) + '</h3>';
+  var h = '';
+  var desc = [t.comment, t.desc].filter(Boolean).join('\n\n');
+  h += '<div class="sec"><div class="desc">' + (desc ? esc(desc) : '<span class="none">No description comment above the CREATE TABLE.</span>') + '</div>';
+  h += '<div class="meta"><span class="chip">file <b>' + esc(t.file) + '</b></span>' +
+    '<span class="chip">PK <b>' + esc(t.pk.join(', ') || '—') + '</b></span>' +
+    (t.cols.some(function (c) { return TENANT_COLS[c.name]; }) ? '<span class="chip">tenant-scoped</span>' : '<span class="chip">global</span>') +
+    (t.cols.some(function (c) { return c.lookup; }) ? '<span class="chip"><b>' + t.cols.filter(function (c) { return c.lookup; }).length + '</b> list columns</span>' : '') +
+    (t.partition ? '<span class="chip">partition by <b>' + esc(t.partition) + '</b></span>' : '') +
+    (t.partitions.length ? '<span class="chip"><b>' + t.partitions.length + '</b> partitions</span>' : '') + '</div></div>';
+
+  h += '<div class="sec"><h4>Columns <span>' + t.cols.length + '</span></h4><table class="cols"><thead><tr><th>Name</th><th>Type</th><th title="NOT NULL">NN</th><th>Default</th><th>FK target</th></tr></thead><tbody>';
+  t.cols.forEach(function (c) {
+    var lk = c.lookup;
+    var tags = (c.pk ? '<span class="k pk">PK</span>' : '') + (c.fks.length ? '<span class="k fk">FK</span>' : '') + (c.unique ? '<span class="k uq">UQ</span>' : '') +
+      (lk ? '<button class="k lk" data-lookup="' + esc(lk.type) + '" title="Values from list ' + esc(lk.type) + '">list</button>' : '');
+    var note = c.comment || c.note || '';
+    var fkh = c.fks.map(function (fk) { return tLink(fk.to) + '<div class="ck">(' + esc(fk.toCol) + ')' + (fk.composite ? ' composite' : '') + '</div>'; }).join('');
+    h += '<tr><td class="n">' + tags + esc(c.name) + (note ? '<small>' + esc(note) + '</small>' : '') + '</td><td class="ty">' + esc(c.type) +
+      (lk ? '<button class="lkt" data-lookup="' + esc(lk.type) + '" title="Show the values">' + esc(lk.type) + (lk.dependsOn ? ' ← ' + esc(lk.dependsOn) : '') + '</button>' : '') +
+      (c.gen ? '<div>GENERATED ' + esc(c.gen) + '</div>' : '') +
+      '</td><td>' + (c.notNull ? '<span class="nn" title="NOT NULL"></span>' : '') + '</td><td class="df">' + esc(c.def == null ? '' : c.def) + '</td><td>' + fkh + '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+
+  var cons = [];
+  t.constraints.forEach(function (k) {
+    if (k.kind === 'PRIMARY KEY') return;
+    cons.push('<li><b>' + esc(k.kind) + '</b>' + (k.name ? ' <span class="ck">' + esc(k.name) + '</span>' : '') +
+      '<div class="ck">' + esc(k.cols ? '(' + k.cols.join(', ') + ')' : k.expr) + '</div></li>');
+  });
+  t.cols.forEach(function (c) {
+    c.checks.forEach(function (x) { cons.push('<li><b>CHECK</b> <span class="ck">' + esc(c.name) + '</span><div class="ck">' + esc(x) + '</div></li>'); });
+  });
+  h += '<div class="sec"><h4>Constraints &amp; checks <span>' + cons.length + '</span></h4>' + (cons.length ? '<ul class="lst">' + cons.join('') + '</ul>' : '<div class="none">None</div>') + '</div>';
+
+  function fkLi(fk, dirOut) {
+    var other = dirOut ? fk.to : fk.from;
+    return '<li>' + (dirOut ? '<b>' + esc(fk.col) + '</b> → ' + tLink(other) + ' <span class="ck">(' + esc(fk.toCol) + ')</span>'
+      : tLink(other) + ' <span class="ck">.' + esc(fk.col) + '</span>') +
+      '<small>' + esc([fk.name, fk.composite ? 'composite (' + fk.cols.join(', ') + ') → (' + fk.toCols.join(', ') + ')' : '', fk.actions, fk.src.indexOf('alter:') === 0 ? 'ALTER in ' + fk.src.slice(6) : fk.src].filter(Boolean).join(' · ')) + '</small></li>';
+  }
+  var outs = t.fksOut.filter(function (fk) { return !fk.isTenant; }), ten = t.fksOut.length - outs.length;
+  h += '<div class="sec"><h4>References <span>' + t.fksOut.length + '</span></h4>' + (outs.length ? '<ul class="lst">' + outs.map(function (fk) { return fkLi(fk, true); }).join('') + '</ul>' : '') +
+    (ten ? '<div class="none">+ tenantId → Platform.Tenants</div>' : (outs.length ? '' : '<div class="none">None</div>')) + '</div>';
+  h += '<div class="sec"><h4>Referenced by <span>' + t.fksIn.length + '</span></h4>' + (t.fksIn.length ? '<ul class="lst">' + t.fksIn.slice(0, 400).map(function (fk) { return fkLi(fk, false); }).join('') + '</ul>' +
+    (t.fksIn.length > 400 ? '<div class="none">… and ' + (t.fksIn.length - 400) + ' more</div>' : '') : '<div class="none">None</div>') + '</div>';
+
+  h += funcSection(t);
+  if (id === LOOKUP_VALUES && M.lookupTypes.length) h += '<div class="sec"><h4>Lists <span>' + M.lookupTypes.length + '</span></h4>' + lookupChips(M.lookupTypes) + '</div>';
+  if (id === LOOKUP_COLUMNS && M.lookupColList.length) h += '<div class="sec"><h4>Registered columns <span>' + M.lookupColList.length + '</span></h4><button class="btn" data-lists="1">Browse lists and their columns</button></div>';
+
+  var scr = state.screens[id] || [];
+  h += '<div class="sec"><h4>Used by screens <span>' + scr.length + '</span></h4>' + (scr.length ? '<ul class="lst">' + scr.map(function (s) {
+    return '<li><b>' + esc(s.title) + '</b><small class="mono">' + esc(s.route) + ' · ' + esc(s.file) + '</small></li>';
+  }).join('') + '</ul>' : '<div class="none">No entity doc mentions this table yet.</div>') + '</div>';
+  if (t.views.length) h += '<div class="sec"><h4>Read by views <span>' + t.views.length + '</span></h4><ul class="lst">' + t.views.map(function (v) { return '<li class="mono">' + esc(v) + '</li>'; }).join('') + '</ul></div>';
+  $('dBody').innerHTML = h;
+  $('dBody').scrollTop = 0;
+  $('drawer').classList.add('open');
+}
+var FN_ORDER = { save: 0, get: 1, action: 2, posting: 3, other: 4, trigger: 5 };
+var FN_LABEL = { save: 'save', get: 'get', action: 'action', posting: 'posting', other: 'fn', trigger: 'trigger' };
+function funcSection(t) {
+  var fs = t.funcs.filter(function (f) { return f.kind !== 'trigger'; }).slice();
+  fs.sort(function (a, b) { return (FN_ORDER[a.kind] - FN_ORDER[b.kind]) || (a.name < b.name ? -1 : 1); });
+  var docFn = state.docFuncs || {};
+  var h = '<div class="sec"><h4>Functions <span>' + fs.length + '</span></h4>';
+  if (!fs.length) return h + '<div class="none">No API function for this table in database/api.</div></div>';
+  return h + '<ul class="lst">' + fs.map(function (f) {
+    var scr = docFn[f.id] || [];
+    var sub = [(f.kind === 'action' || f.kind === 'posting') && f.lead ? f.lead.split('\n').pop().replace(/^[A-Z]\w*:\s*/, '') : f.desc || '', f.returns ? 'returns ' + f.returns : '', f.file,
+      scr.length ? 'on ' + scr.length + ' screen' + (scr.length === 1 ? '' : 's') : ''].filter(Boolean).join(' · ');
+    return '<li><div class="fn"><span class="fk ' + f.kind + '">' + FN_LABEL[f.kind] + '</span><b>' + esc(f.id) + '(' + esc(f.args.replace(/\s+DEFAULT\s+[^,]+/gi, '')) + ')</b></div>' +
+      (sub ? '<small>' + esc(sub) + '</small>' : '') + '</li>';
+  }).join('') + '</ul></div>';
+}
+function lookupChips(types) {
+  var M = state.model;
+  return '<div class="lchips">' + types.map(function (ty) {
+    return '<button class="lchip" data-lookup="' + esc(ty) + '">' + esc(ty) + ' <span>' + (M.lookups[ty] ? M.lookups[ty].length : 0) + '</span></button>';
+  }).join('') + '</div>';
+}
+function showLookup(ty, fromTable) {
+  var M = state.model, vals = M.lookups[ty] || [], use = M.lookupUse[ty] || [];
+  $('dTitle').innerHTML = '<div class="sch"><i style="background:' + modColor('Lookups') + '"></i>Lookup list</div><h3 class="mono">' + esc(ty) + '</h3>';
+  var h = '';
+  if (fromTable) h += '<div class="back"><button class="btn" data-open="' + esc(fromTable) + '">← ' + esc(fromTable) + '</button></div>';
+  var tenant = use.some(function (u) { return u.allowTenant; }), deps = uniqArr(use.map(function (u) { return u.dependsOn; }).filter(Boolean));
+  h += '<div class="sec"><div class="meta" style="margin-top:0"><span class="chip"><b>' + vals.length + '</b> values</span><span class="chip">stored in <b>Lookups.Lookups</b></span>' +
+    (tenant ? '<span class="chip">tenants may add values</span>' : '<span class="chip">global values only</span>') +
+    (deps.length ? '<span class="chip">depends on <b>' + esc(deps.join(', ')) + '</b></span>' : '') + '</div></div>';
+  var hasParent = vals.some(function (v) { return v.parentCodes && v.parentCodes.length; });
+  h += '<div class="sec"><h4>Values <span>' + vals.length + '</span></h4>' + (vals.length ? '<table class="lv"><thead><tr><th>Code</th><th>Label</th><th>Tone</th>' + (hasParent ? '<th>Parent codes</th>' : '') + '</tr></thead><tbody>' +
+    vals.map(function (v) {
+      return '<tr><td class="c">' + esc(v.code) + (v.isSystem ? '' : ' <span class="k uq" title="Not a system value">custom</span>') + '</td><td>' + esc(v.label) + '</td><td><span class="tone" style="background:' + toneColor(v.tone) + '"></span>' + esc(v.tone) + '</td>' +
+        (hasParent ? '<td class="p">' + esc((v.parentCodes || []).join(', ') || 'any') + '</td>' : '') + '</tr>';
+    }).join('') + '</tbody></table>' : '<div class="none">No values inserted for this list in 92-lookups.sql.</div>') + '</div>';
+  h += '<div class="sec"><h4>Used by columns <span>' + use.length + '</span></h4>' + (use.length ? '<ul class="lst">' + use.map(function (u) {
+    return '<li>' + tLink(u.table, '<span style="font-weight:500">.' + esc(u.column) + '</span>') + (u.dependsOn || u.allowTenant ? '<small>' + esc([u.dependsOn ? 'depends on ' + u.dependsOn : '', u.allowTenant ? 'tenant values allowed' : ''].filter(Boolean).join(' · ')) + '</small>' : '') + '</li>';
+  }).join('') + '</ul>' : '<div class="none">No column is registered for this list.</div>') + '</div>';
+  $('dBody').innerHTML = h;
+  $('dBody').scrollTop = 0;
+  $('drawer').classList.add('open');
+}
+function showLookupIndex() {
+  var M = state.model;
+  $('dTitle').innerHTML = '<div class="sch"><i style="background:' + modColor('Lookups') + '"></i>Lookups</div><h3>Lookup lists (' + M.lookupTypes.length + ')</h3>';
+  $('drawer').setAttribute('data-table', '');
+  var h = '<div class="sec"><div class="desc">Every enumeration lives in <b>Lookups.Lookups</b>; <b>Lookups.LookupColumns</b> registers which column uses which list (' + M.lookupColList.length + ' columns). Click a list for its values.</div></div>';
+  h += '<div class="sec"><h4>Lists <span>' + M.lookupTypes.length + '</span></h4>' + lookupChips(M.lookupTypes) + '</div>';
+  $('dBody').innerHTML = h;
+  $('dBody').scrollTop = 0;
+  $('drawer').classList.add('open');
+}
+function uniqArr(a) { var s = {}, o = []; a.forEach(function (x) { if (!s[x]) { s[x] = 1; o.push(x); } }); return o; }
+function closeDrawer() { $('drawer').classList.remove('open'); }
+function showViews() {
+  var M = state.model;
+  $('dTitle').innerHTML = '<div class="sch">database</div><h3>Views (' + M.views.length + ')</h3>';
+  var by = {};
+  M.views.forEach(function (v) { var s = v.id.split('.')[0]; (by[s] = by[s] || []).push(v); });
+  var h = M.views.length ? '' : '<div class="sec none">No CREATE VIEW statements in the embedded DDL yet (90-views.sql comes later).</div>';
+  Object.keys(by).sort().forEach(function (s) {
+    h += '<div class="sec"><h4>' + esc(s) + ' <span>' + by[s].length + '</span></h4><ul class="lst">' + by[s].map(function (v) {
+      return '<li><b class="mono">' + esc(v.id) + '</b>' + (v.materialized ? ' <span class="k uq">MAT</span>' : '') + (v.desc ? '<small>' + esc(v.desc) + '</small>' : '') +
+        (v.reads.length ? '<small>reads: ' + v.reads.map(function (r) { return tLink(r); }).join(', ') + '</small>' : '') + '</li>';
+    }).join('') + '</ul></div>';
+  });
+  $('dBody').innerHTML = h;
+  $('drawer').classList.add('open');
+}
+$('dClose').onclick = function () { closeDrawer(); if (state.selected) { state.selected = null; applyHighlight(); setHash(); } };
+$('dBody').addEventListener('click', function (e) {
+  var lk = e.target.closest('[data-lookup]');
+  if (lk) { showLookup(lk.getAttribute('data-lookup'), $('drawer').getAttribute('data-table') || null); return; }
+  if (e.target.closest('[data-lists]')) { showLookupIndex(); return; }
+  var b = e.target.closest('[data-open]'); if (b) openTable(b.getAttribute('data-open'), true);
+});
+$('btnViews').onclick = showViews;
+
+/* ======================================================================
+   Search (fuzzy)
+   ====================================================================== */
+var index = [];
+function buildIndex() {
+  index = [];
+  var M = state.model;
+  M.order.forEach(function (id) {
+    var t = M.tables[id];
+    index.push({ k: 'table', id: id, label: id, l: id.toLowerCase(), extra: t.cols.length + ' cols' });
+    t.cols.forEach(function (c) { index.push({ k: 'column', id: id, col: c.name, label: id + '.' + c.name, l: (id + '.' + c.name).toLowerCase(), extra: c.lookup ? 'list ' + c.lookup.type : c.type }); });
+  });
+  M.funcs.forEach(function (f) { if (f.api) index.push({ k: 'function', id: f.table || f.id, fn: f.id, label: f.id, l: f.id.toLowerCase(), extra: f.table ? '→ ' + f.table : f.returns }); });
+  M.lookupTypes.forEach(function (ty) { index.push({ k: 'list', id: 'Lookups.' + ty, lookup: ty, label: ty, l: ('lookups.' + ty).toLowerCase(), extra: M.lookups[ty].length + ' values' }); });
+}
+function score(q, s) {
+  var i = s.indexOf(q);
+  if (i >= 0) {
+    var sc = 1000 - i * 2 - (s.length - q.length) * 0.5;
+    if (i === 0 || /[._]/.test(s[i - 1])) sc += 200;
+    if (i + q.length === s.length) sc += 120;
+    return sc;
+  }
+  var si = 0, last = -2, total = 0;
+  for (var k = 0; k < q.length; k++) {
+    var f = s.indexOf(q[k], si); if (f < 0) return -1;
+    total += f === last + 1 ? 8 : (/[._]/.test(s[f - 1] || '.') ? 5 : 1);
+    last = f; si = f + 1;
+  }
+  return total * 4 - s.length * 0.3;
+}
+var results = [], act = 0, sTimer = null;
+function doSearch() {
+  var q = $('q').value.trim().toLowerCase(), box = $('results');
+  if (!q) { box.classList.remove('open'); results = []; return; }
+  var terms = q.split(/\s+/), out = [];
+  for (var i = 0; i < index.length; i++) {
+    var e = index[i], tot = 0;
+    for (var j = 0; j < terms.length; j++) { var s = score(terms[j], e.l); if (s < 0) { tot = -1; break; } tot += s; }
+    if (tot < 0) continue;
+    if (e.k === 'table') tot += 60;
+    out.push({ e: e, s: tot });
+  }
+  out.sort(function (a, b) { return b.s - a.s; });
+  results = out.slice(0, 40).map(function (x) { return x.e; }); act = 0;
+  box.innerHTML = results.length ? results.map(function (e, i) {
+    return '<div class="res' + (i === act ? ' act' : '') + '" data-i="' + i + '"><span class="dot" style="background:' + modColor(modOf(e.id)) + '"></span><span class="nm">' + esc(e.label) + '</span><span class="ty">' + esc(e.extra) + '</span><span class="kd">' + e.k + '</span></div>';
+  }).join('') : '<div class="res"><span class="none">No matches</span></div>';
+  box.classList.add('open');
+}
+function pick(i) {
+  var e = results[i]; if (!e) return;
+  $('results').classList.remove('open'); $('q').blur();
+  if (e.k === 'list') { go({ view: 'module', module: 'Lookups' }); showLookup(e.lookup, null); return; }
+  if (e.k === 'function' && !state.model.tables[e.id]) { go({ view: 'module', module: modOf(e.fn) }); return; }
+  openTable(e.id, true);
+}
+$('q').addEventListener('input', function () { clearTimeout(sTimer); sTimer = setTimeout(doSearch, 60); });
+$('q').addEventListener('focus', function () { if ($('q').value.trim()) doSearch(); });
+$('q').addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault(); if (!results.length) return;
+    act = (act + (e.key === 'ArrowDown' ? 1 : -1) + results.length) % results.length;
+    Array.prototype.forEach.call($('results').children, function (c, i) { c.classList.toggle('act', i === act); if (i === act) c.scrollIntoView({ block: 'nearest' }); });
+  } else if (e.key === 'Enter') { pick(act); }
+  else if (e.key === 'Escape') { $('results').classList.remove('open'); $('q').blur(); }
+});
+$('results').addEventListener('mousedown', function (e) { var r = e.target.closest('[data-i]'); if (r) { e.preventDefault(); pick(+r.getAttribute('data-i')); } });
+document.addEventListener('click', function (e) { if (!e.target.closest('.search')) $('results').classList.remove('open'); });
+document.addEventListener('keydown', function (e) {
+  if (e.key === '/' && document.activeElement !== $('q')) { e.preventDefault(); $('q').focus(); }
+  else if (e.key === 'Escape' && document.activeElement !== $('q')) { closeDrawer(); if (state.selected) { state.selected = null; applyHighlight(); setHash(); } }
+});
+
+/* ======================================================================
+   Toolbar, theme, export, drag-drop
+   ====================================================================== */
+$('btnOverview').onclick = function () { go({ view: 'overview' }); };
+$('btnFit').onclick = fitView;
+function zoomBy(f) { var r = svg.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, view.s * f); }
+$('btnZoomIn').onclick = function () { zoomBy(1.25); };
+$('btnZoomOut').onclick = function () { zoomBy(0.8); };
+$('btnKeys').onclick = function () {
+  state.keysOnly = !state.keysOnly; var sel = state.selected; render(); fitView();
+  if (sel) { state.selected = sel; applyHighlight(); focusTable(sel); } setHash();
+};
+$('btnTenant').onclick = function () { state.showTenant = !state.showTenant; var sel = state.selected; render(); if (sel) { state.selected = sel; applyHighlight(); } };
+
+function setTheme(t, persist) {
+  document.documentElement.setAttribute('data-theme', t);
+  if (persist) { try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }
+}
+(function initTheme() {
+  var t = null;
+  try { t = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  setTheme(t, false);
+})();
+$('btnTheme').onclick = function () { setTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true); };
+
+$('btnExport').onclick = function () {
+  var b = state.bounds; if (!b) return;
+  var cs = getComputedStyle(document.documentElement);
+  var css = SVG_CSS.replace(/var\(--([\w-]+)\)/g, function (_, n) { return cs.getPropertyValue('--' + n).trim() || '#888'; });
+  var inner = vp.innerHTML.replace(/var\(--([\w-]+)\)/g, function (_, n) { return cs.getPropertyValue('--' + n).trim() || '#888'; });
+  var name = state.view === 'overview' ? 'overview' : state.module;
+  var out = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + [b.x, b.y, b.w, b.h].join(' ') + '" width="' + Math.round(b.w) + '" height="' + Math.round(b.h) + '">' +
+    '<title>Finsoft ERD - ' + esc(name) + '</title><style>' + css + '</style><rect x="' + b.x + '" y="' + b.y + '" width="' + b.w + '" height="' + b.h + '" fill="' + cs.getPropertyValue('--bg').trim() + '"/>' + inner + '</svg>';
+  var url = URL.createObjectURL(new Blob([out], { type: 'image/svg+xml' }));
+  var a = document.createElement('a'); a.href = url; a.download = 'finsoft-erd-' + name + '.svg';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+};
+
+function readFiles(list) {
+  var fs = Array.prototype.filter.call(list, function (f) { return /\.(sql|txt)$/i.test(f.name) || !f.type || f.type.indexOf('text') === 0; });
+  if (!fs.length) return;
+  Promise.all(fs.map(function (f) {
+    return new Promise(function (res) { var r = new FileReader(); r.onload = function () { res({ file: f.name, text: String(r.result) }); }; r.onerror = function () { res({ file: f.name, text: '' }); }; r.readAsText(f); });
+  })).then(function (files) {
+    files.sort(function (a, b) { return a.file < b.file ? -1 : a.file > b.file ? 1 : 0; });
+    setModel(files, true);
+    var mods = Object.keys(state.model.bySchema);
+    if (mods.length === 1) go({ view: 'module', module: mods[0] }); else go({ view: 'overview' });
+  });
+}
+$('btnOpen').onclick = $('btnPick').onclick = function () { $('file').click(); };
+$('file').onchange = function () { readFiles(this.files); this.value = ''; };
+var dragDepth = 0;
+window.addEventListener('dragenter', function (e) { if (e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], 'Files') >= 0) { dragDepth++; $('dropover').classList.add('show'); } });
+window.addEventListener('dragleave', function () { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('dropover').classList.remove('show'); });
+window.addEventListener('dragover', function (e) { e.preventDefault(); });
+window.addEventListener('drop', function (e) { e.preventDefault(); dragDepth = 0; $('dropover').classList.remove('show'); if (e.dataTransfer && e.dataTransfer.files.length) readFiles(e.dataTransfer.files); });
+window.addEventListener('resize', function () { if (state.view === 'overview') fitView(); });
+
+/* ======================================================================
+   Boot
+   ====================================================================== */
+var st = document.createElement('style'); st.textContent = SVG_CSS; document.head.appendChild(st);
+state.embedded = loadEmbedded();
+setModel(state.embedded, false);
+readHash();
+window.__erd = state;
+})();
+</script>
+</body>
+</html>
