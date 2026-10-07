@@ -358,15 +358,16 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 13, title: "Talent & policy setup", portal: "workspace", kind: "MASTER",
+    no: 13, title: "Talent & policy setup", portal: "workspace", kind: "MASTER", status: "in-progress",
     objective: "Templates and programmes that onboarding, performance and training transactions use, plus company policies.",
     entities: [
       E("onboarding-templates", "Onboarding Templates", ["HumanResources.OnboardingTemplates", "HumanResources.OnboardingTemplateTasks"], {
         tpl: ["app/hr/onboarding"], api: "hr/onboarding-templates", perm: ["emp"],
       }),
-      E("performance-cycles", "Performance Cycles & Competencies", ["HumanResources.PerformanceCycles", "HumanResources.CompetencyRatings", "HumanResources.KeyResults"], {
+      E("performance-cycles", "Performance Cycles", ["HumanResources.PerformanceCycles"], {
         tpl: ["app/hr/performance"], api: "hr/performance-cycles", perm: ["emp"],
-        x: ["POST /hr/performance-cycles/:id/open|close"],
+        x: ["POST /hr/performance-cycles/:id/open|advance|close"],
+        rules: ["One ACTIVE cycle per company; stages advance in order; a CLOSED cycle is read-only"],
       }),
       E("training-programs", "Training Programs", ["HumanResources.TrainingPrograms"], {
         tpl: ["app/hr/training"], api: "hr/training-programs", perm: ["emp"],
@@ -379,8 +380,8 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 14, title: "Distribution setup", portal: "workspace", kind: "MASTER",
-    objective: "Shop areas, routes with stops and visit days, vans, commission slabs and order templates.",
+    no: 14, title: "Distribution setup", portal: "workspace", kind: "MASTER", status: "in-progress",
+    objective: "Shop areas, routes with stops and visit days, vans and commission slabs.",
     entities: [
       E("shop-areas", "Shop Areas", ["Distribution.ShopAreas"], {
         tpl: ["app/wholesale/routes"], api: "distribution/shop-areas", perm: ["route"],
@@ -400,37 +401,29 @@ export const masters: Phase[] = [
         rules: ["Slabs contiguous and ascending"],
         open: ["Commission slabs have no dedicated template"],
       }),
-      E("order-templates", "Order Templates", ["Distribution.OrderTemplates", "Distribution.OrderTemplateLines"], {
-        tpl: ["app/wholesale/bookings"], api: "distribution/order-templates", perm: ["booking"], deps: ["customers", "products"],
-      }),
     ],
   },
   {
-    no: 15, title: "Self-service & reporting setup", portal: "workspace", kind: "MASTER",
-    objective: "Helpdesk, announcements/presence, polls & surveys, and saved report definitions.",
+    no: 15, title: "Self-service & reporting setup", portal: "workspace", kind: "MASTER", status: "in-progress",
+    objective: "Helpdesk, company announcements, polls & surveys, and saved report definitions with a live preview.",
     entities: [
       E("helpdesk-setup", "Helpdesk Categories & FAQs", ["EmployeeSelfService.HelpdeskCategories", "EmployeeSelfService.HelpdeskFaqs"], {
         tpl: ["app/profile/helpdesk"], api: "helpdesk/categories", perm: ["emp"],
         x: ["CRUD /helpdesk/faqs"],
       }),
-      E("announcements", "Company Announcements & Presence", ["EmployeeSelfService.CompanyAnnouncements", "EmployeeSelfService.CompanyAnnouncementReads", "EmployeeSelfService.PresenceStatuses"], {
+      E("announcements", "Company Announcements", ["EmployeeSelfService.CompanyAnnouncements"], {
         tpl: ["app/profile/directory"], api: "company/announcements", perm: ["emp", "dir"],
-        x: ["POST /company/announcements/:id/publish", "POST /company/announcements/:id/read", "PUT /me/presence"],
+        x: ["POST /company/announcements/:id/publish|archive|pin"],
       }),
       E("surveys", "Polls & Pulse Surveys", ["EmployeeSelfService.Polls", "EmployeeSelfService.PollOptions", "EmployeeSelfService.PulseSurveys", "EmployeeSelfService.PulseSurveyQuestions"], {
         tpl: ["app/profile/kudos"], api: "company/surveys", perm: ["emp", "mykudos"],
         x: ["POST /company/polls/:id/open|close", "POST /company/pulse-surveys/:id/open|close"],
         rules: ["Anonymous surveys never expose respondent identity in results"],
       }),
-      E("sign-in-recovery", "Sign-in Recovery & MFA", ["Company.UserInvites", "Company.UserMfaMethods", "Company.TrustedDevices", "Company.PasswordResets"], {
-        tpl: ["login/mfa", "login/forgot"], api: "me/mfa", perm: [],
-        x: ["POST /settings/users/invite (email/WhatsApp link) + accept page", "POST /me/mfa/enrol|verify|disable", "DELETE /me/trusted-devices/:id", "POST /auth/forgot, POST /auth/reset"],
-        rules: ["Deferred from Phase 2: needs mail/SMS delivery", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
-        deps: ["users", "account-security"],
-      }),
       E("saved-reports", "Saved Reports", ["Reports.SavedReports", "Reports.SavedReportColumns", "Reports.SavedReportShares", "Reports.ReportSchedules"], {
         tpl: ["app/reports/studio"], api: "reports/saved", perm: ["rpt"],
-        x: ["PUT /reports/saved/:id/columns", "PUT /reports/saved/:id/shares", "CRUD /reports/saved/:id/schedules"],
+        x: ["PUT /reports/saved/:id/columns", "PUT /reports/saved/:id/shares", "CRUD /reports/saved/:id/schedules", "POST /reports/preview (allow-listed fields; needs the source's own view permission)"],
+        rules: ["Schedules are stored now; sending starts with report runs (Phase 35)"],
       }),
     ],
   },

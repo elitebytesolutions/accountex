@@ -254,6 +254,10 @@ export const transactions: Phase[] = [
         x: ["POST /distribution/bookings/:id/approve|cancel", "Order Booker sees own route bookings only"],
         deps: ["routes", "order-templates", "price-tiers"],
       }),
+      E("order-templates", "Order Templates", ["Distribution.OrderTemplates", "Distribution.OrderTemplateLines"], {
+        tpl: ["app/wholesale/entry"], api: "distribution/order-templates", perm: ["booking"], deps: ["customers", "products"],
+        x: ["Templates dropdown and 'Save as template' on Quick Wholesale Entry"],
+      }),
       E("held-bills", "Quick Wholesale Entry (Held Bills)", ["Distribution.HeldBills", "Distribution.HeldBillLines"], {
         tpl: ["app/wholesale/entry"], api: "distribution/held-bills", perm: ["wsentry"],
         x: ["POST /distribution/held-bills/:id/convert-to-invoice"], deps: ["sales-invoices"],
@@ -373,6 +377,12 @@ export const transactions: Phase[] = [
         x: ["GET /work/today (Company.getTodayDueItems, getTodayKpis)", "CRUD /work/tasks", "GET /me/notifications, POST /me/notifications/read-all"],
         rules: ["Own tasks/notifications only unless assigned"], deps: ["users"],
       }),
+      E("sign-in-recovery", "Sign-in Recovery & MFA", ["Company.UserInvites", "Company.UserMfaMethods", "Company.TrustedDevices", "Company.PasswordResets"], {
+        tpl: ["login/mfa", "login/forgot"], api: "me/mfa", perm: [],
+        x: ["POST /settings/users/invite (email/WhatsApp link) + accept page", "POST /me/mfa/enrol|verify|disable", "DELETE /me/trusted-devices/:id", "POST /auth/forgot, POST /auth/reset"],
+        rules: ["Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs in this phase)", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
+        deps: ["users", "account-security"],
+      }),
     ],
   },
   {
@@ -466,7 +476,7 @@ export const transactions: Phase[] = [
         tpl: ["app/hr/recruitment"], api: "hr/recruitment", perm: ["emp"],
         x: ["POST /hr/recruitment/candidates/:id/move-stage", "POST /hr/recruitment/candidates/:id/hire (creates employee + onboarding)"], deps: ["designations", "onboardings"],
       }),
-      E("performance", "Performance", ["HumanResources.PerformanceReviews", "HumanResources.Goals", "HumanResources.PerformanceFeedback", "HumanResources.OneOnOneMeetings"], {
+      E("performance", "Performance", ["HumanResources.PerformanceReviews", "HumanResources.Goals", "HumanResources.PerformanceFeedback", "HumanResources.OneOnOneMeetings", "HumanResources.CompetencyRatings", "HumanResources.KeyResults"], {
         tpl: ["app/hr/performance", "app/profile/goals"], api: "hr/performance", perm: ["emp", "mygoal"],
         x: ["POST /me/goals, POST /me/reviews/:id/self-assessment", "POST /hr/performance/reviews/:id/calibrate|finalise"], deps: ["performance-cycles", "employees"],
       }),
@@ -498,10 +508,10 @@ export const transactions: Phase[] = [
         tpl: ["app/profile/helpdesk"], api: "helpdesk/tickets", perm: ["myhelp"],
         x: ["POST /helpdesk/tickets/:id/messages", "POST /helpdesk/tickets/:id/assign|resolve|reopen"], deps: ["helpdesk-setup"],
       }),
-      E("engagement", "Kudos & Survey Responses", ["EmployeeSelfService.Kudos", "EmployeeSelfService.KudosReactions", "EmployeeSelfService.PollVotes", "EmployeeSelfService.PulseSurveyResponses"], {
-        tpl: ["app/profile/kudos"], api: "me/engagement", perm: ["mykudos"],
-        x: ["POST /me/kudos, POST /me/kudos/:id/react", "POST /me/polls/:id/vote", "POST /me/pulse-surveys/:id/respond"],
-        rules: ["One vote/response per user per poll/survey"], deps: ["surveys"],
+      E("engagement", "Kudos, Survey Responses, Reads & Presence", ["EmployeeSelfService.Kudos", "EmployeeSelfService.KudosReactions", "EmployeeSelfService.PollVotes", "EmployeeSelfService.PulseSurveyResponses", "EmployeeSelfService.CompanyAnnouncementReads", "EmployeeSelfService.PresenceStatuses"], {
+        tpl: ["app/profile/kudos", "app/profile/directory"], api: "me/engagement", perm: ["mykudos", "dir"],
+        x: ["POST /me/kudos, POST /me/kudos/:id/react", "POST /me/polls/:id/vote", "POST /me/pulse-surveys/:id/respond", "POST /company/announcements/:id/read (RSVP)", "PUT /me/presence"],
+        rules: ["One vote/response per user per poll/survey"], deps: ["surveys", "announcements", "employees"],
       }),
       E("policy-acknowledgements", "Policy Acknowledgements", ["EmployeeSelfService.PolicyAcknowledgements"], {
         tpl: ["app/profile/onboarding", "app/profile/team"], api: "me/policy-acknowledgements", perm: ["myonb", "myteam"],

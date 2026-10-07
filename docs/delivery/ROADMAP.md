@@ -3,7 +3,7 @@
 > Generated from `docs/delivery/roadmap/*.ts` by `npm run delivery:roadmap`. Edit the data files, not this document.
 > Phase progress is the `status` of each phase in the data files (planned / in-progress / done), updated when a phase is accepted.
 
-**44 phases** · **186 entities** (84 masters, 102 transactional) · 423 tables assigned · 21 tables deliberately not entities · checked against the live DB and `template/src`.
+**44 phases** · **186 entities** (82 masters, 104 transactional) · 423 tables assigned · 21 tables deliberately not entities · checked against the live DB and `template/src`.
 
 Say **"next phase"** to plan the next pending phase (skill `next-phase`). Nothing is implemented without approval of that phase's plan.
 
@@ -56,9 +56,9 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 10 | Organisation | Masters | workspace | done | Departments · Designations · Grades · Work Shifts · Holidays |
 | 11 | HR policies & people | Masters | workspace | in-progress | Leave Types & Eligibility · Overtime Policies · Biometric Devices · Employees |
 | 12 | Payroll setup | Masters | workspace | planned | Salary Components · Salary Structures · Pay Groups · Salary Tax Slabs · Employee Salaries |
-| 13 | Talent & policy setup | Masters | workspace | planned | Onboarding Templates · Performance Cycles & Competencies · Training Programs · Company Policies |
-| 14 | Distribution setup | Masters | workspace | planned | Shop Areas · Routes · Vans · Commission Slabs · Order Templates |
-| 15 | Self-service & reporting setup | Masters | workspace | planned | Helpdesk Categories & FAQs · Company Announcements & Presence · Polls & Pulse Surveys · Sign-in Recovery & MFA · Saved Reports |
+| 13 | Talent & policy setup | Masters | workspace | in-progress | Onboarding Templates · Performance Cycles · Training Programs · Company Policies |
+| 14 | Distribution setup | Masters | workspace | in-progress | Shop Areas · Routes · Vans · Commission Slabs |
+| 15 | Self-service & reporting setup | Masters | workspace | in-progress | Helpdesk Categories & FAQs · Company Announcements · Polls & Pulse Surveys · Saved Reports |
 | 16 | General ledger | Transactions | workspace | planned | Approvals Inbox · Journal Vouchers · Opening Balances · Recurring Vouchers |
 | 17 | Banking | Transactions | workspace | planned | Bank Transactions · Statement Imports · Bank Reconciliation · Cheques & Batches |
 | 18 | Cash | Transactions | workspace | planned | Cash Book Entries · Cash Day Close · Petty Cash Vouchers & Replenishment · Expense Claims |
@@ -68,16 +68,16 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 22 | Stock vouchers & demand | Transactions | workspace | planned | Stock Vouchers · Assembly Vouchers · Goods Demands · Principal Claims & Targets · Bulk Price Updates |
 | 23 | Sales documents | Transactions | workspace | planned | Quotations · Sales Orders · Delivery Challans · Sales Invoices |
 | 24 | Sales completion | Transactions | workspace | planned | Sales Returns · Credit Notes · Customer Receipts · Recurring Invoices · POS Shifts & Payments |
-| 25 | Wholesale | Transactions | workspace | planned | Order Bookings · Quick Wholesale Entry (Held Bills) · Bulk Invoice Runs · Back-orders |
+| 25 | Wholesale | Transactions | workspace | planned | Order Bookings · Order Templates · Quick Wholesale Entry (Held Bills) · Bulk Invoice Runs · Back-orders |
 | 26 | Distribution | Transactions | workspace | planned | Load Sheets & Delivery · Route Settlements · Recovery Sheets · Salesman Targets & Commissions · Credit Control |
 | 27 | Assets & budgets | Transactions | workspace | planned | Fixed Asset Register · Depreciation · Asset Transfers & Disposals · Budgets |
 | 28 | Tax compliance | Transactions | workspace | planned | Sales Tax Returns · WHT Deductions & Challans · WHT Certificates & Statements · FBR Submissions |
-| 29 | Period close & work queue | Transactions | workspace | planned | Period Reopen Requests · Year-End Close · Payment Reminder Runs · Tasks & Notifications |
+| 29 | Period close & work queue | Transactions | workspace | planned | Period Reopen Requests · Year-End Close · Payment Reminder Runs · Tasks & Notifications · Sign-in Recovery & MFA |
 | 30 | Time & attendance | Transactions | workspace | planned | Attendance · Regularisation Requests · Rosters & Shift Swaps · Overtime Claims |
 | 31 | Leave & lifecycle | Transactions | workspace | planned | Leave Requests · Leave Balances · Onboardings · Offboardings |
 | 32 | Payroll | Transactions | workspace | planned | Payroll Runs · Payroll Adjustments · Loans & Advances · Payslips & Salary Payments · Tax Declarations |
 | 33 | Talent & exits | Transactions | workspace | planned | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
-| 34 | Self-service requests | Transactions | workspace | planned | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos & Survey Responses · Policy Acknowledgements |
+| 34 | Self-service requests | Transactions | workspace | planned | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
 | 35 | Data & collaboration | Transactions | workspace | planned | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
 | 36 | Plans & catalogue | Masters | admin | planned | Subscription Plans · Platform Modules · Add-ons · Coupons |
 | 37 | Seed templates & tax master | Masters | admin | planned | COA Templates · Tenant Seed Templates · Tax Master · Communication Templates |
@@ -1190,10 +1190,10 @@ _User-attributed row history for every insert/update/delete from the application
   - `DELETE /api/hr/onboarding-templates/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/hr/onboarding-templates/:id/history`: audit trail (Company.AuditTrailEntries)
 
-### 13.2 Performance Cycles & Competencies `performance-cycles`
+### 13.2 Performance Cycles `performance-cycles`
 
-- **Tables:** `HumanResources.PerformanceCycles`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`
-- **Audit trigger:** missing on `HumanResources.PerformanceCycles`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`; add it in this phase
+- **Tables:** `HumanResources.PerformanceCycles`
+- **Audit trigger:** missing on `HumanResources.PerformanceCycles`; add it in this phase
 - **Template:** `app/hr/performance` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/performance` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -1205,7 +1205,8 @@ _User-attributed row history for every insert/update/delete from the application
   - `POST /api/hr/performance-cycles/:id/deactivate | /activate`
   - `DELETE /api/hr/performance-cycles/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/hr/performance-cycles/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/hr/performance-cycles/:id/open|close
+  - POST /api/hr/performance-cycles/:id/open|advance|close
+- **Business rules:** One ACTIVE cycle per company; stages advance in order; a CLOSED cycle is read-only.
 
 ### 13.3 Training Programs `training-programs`
 
@@ -1243,7 +1244,7 @@ _User-attributed row history for every insert/update/delete from the application
 
 ## Phase 14: Distribution setup
 
-**Masters** · workspace · 5 entities. Shop areas, routes with stops and visit days, vans, commission slabs and order templates.
+**Masters** · workspace · 4 entities. Shop areas, routes with stops and visit days, vans and commission slabs.
 
 ### 14.1 Shop Areas `shop-areas`
 
@@ -1317,26 +1318,9 @@ _User-attributed row history for every insert/update/delete from the application
 - **Business rules:** Slabs contiguous and ascending.
 - **Open questions:** Commission slabs have no dedicated template
 
-### 14.5 Order Templates `order-templates`
-
-- **Tables:** `Distribution.OrderTemplates`, `Distribution.OrderTemplateLines`
-- **Audit trigger:** missing on `Distribution.OrderTemplates`, `Distribution.OrderTemplateLines`; add it in this phase
-- **Template:** `app/wholesale/bookings` — `template/src/4D-wholesale.html`
-- **Pages:** `/wholesale/bookings` (list/screen)
-- **Permissions:** `booking`: view, create, edit, approve, delete, export
-- **API:**
-  - `GET /api/distribution/order-templates?search&status&page&pageSize&sort`: list → { items, total }
-  - `GET /api/distribution/order-templates/:id`: detail
-  - `POST /api/distribution/order-templates`: create
-  - `PATCH /api/distribution/order-templates/:id`: update with rowVersion (409 when stale)
-  - `POST /api/distribution/order-templates/:id/deactivate | /activate`
-  - `DELETE /api/distribution/order-templates/:id`: only when unreferenced (409 *_IN_USE)
-  - `GET /api/distribution/order-templates/:id/history`: audit trail (Company.AuditTrailEntries)
-- **Depends on:** `customers` (phase 7), `products` (phase 8)
-
 ## Phase 15: Self-service & reporting setup
 
-**Masters** · workspace · 5 entities. Helpdesk, announcements/presence, polls & surveys, and saved report definitions.
+**Masters** · workspace · 4 entities. Helpdesk, company announcements, polls & surveys, and saved report definitions with a live preview.
 
 ### 15.1 Helpdesk Categories & FAQs `helpdesk-setup`
 
@@ -1355,10 +1339,10 @@ _User-attributed row history for every insert/update/delete from the application
   - `GET /api/helpdesk/categories/:id/history`: audit trail (Company.AuditTrailEntries)
   - CRUD /api/helpdesk/faqs
 
-### 15.2 Company Announcements & Presence `announcements`
+### 15.2 Company Announcements `announcements`
 
-- **Tables:** `EmployeeSelfService.CompanyAnnouncements`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`
-- **Audit trigger:** missing on `EmployeeSelfService.CompanyAnnouncements`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`; add it in this phase
+- **Tables:** `EmployeeSelfService.CompanyAnnouncements`
+- **Audit trigger:** missing on `EmployeeSelfService.CompanyAnnouncements`; add it in this phase
 - **Template:** `app/profile/directory` — `template/src/6A-ess.html`
 - **Pages:** `/profile/directory` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `dir`: view
@@ -1370,9 +1354,7 @@ _User-attributed row history for every insert/update/delete from the application
   - `POST /api/company/announcements/:id/deactivate | /activate`
   - `DELETE /api/company/announcements/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/company/announcements/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/company/announcements/:id/publish
-  - POST /api/company/announcements/:id/read
-  - PUT /api/me/presence
+  - POST /api/company/announcements/:id/publish|archive|pin
 
 ### 15.3 Polls & Pulse Surveys `surveys`
 
@@ -1393,29 +1375,7 @@ _User-attributed row history for every insert/update/delete from the application
   - POST /api/company/pulse-surveys/:id/open|close
 - **Business rules:** Anonymous surveys never expose respondent identity in results.
 
-### 15.4 Sign-in Recovery & MFA `sign-in-recovery`
-
-- **Tables:** `Company.UserInvites`, `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`
-- **Audit trigger:** missing on `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`; add it in this phase
-- **Template:** `login/mfa` — `template/src/30-entry-admin.html`; `login/forgot` — `template/src/30-entry-admin.html`
-- **Pages:** `/login/mfa` (list/screen), `/login/forgot` (list/screen)
-- **Permissions:** none: own data or Super Admin (portal-wide)
-- **API:**
-  - `GET /api/me/mfa?search&status&page&pageSize&sort`: list → { items, total }
-  - `GET /api/me/mfa/:id`: detail
-  - `POST /api/me/mfa`: create
-  - `PATCH /api/me/mfa/:id`: update with rowVersion (409 when stale)
-  - `POST /api/me/mfa/:id/deactivate | /activate`
-  - `DELETE /api/me/mfa/:id`: only when unreferenced (409 *_IN_USE)
-  - `GET /api/me/mfa/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/settings/users/invite (email/WhatsApp link) + accept page
-  - POST /api/me/mfa/enrol|verify|disable
-  - DELETE /api/me/trusted-devices/:id
-  - POST /api/auth/forgot, POST /api/auth/reset
-- **Business rules:** Deferred from Phase 2: needs mail/SMS delivery; Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
-- **Depends on:** `users` (phase 2), `account-security` (phase 2)
-
-### 15.5 Saved Reports `saved-reports`
+### 15.4 Saved Reports `saved-reports`
 
 - **Tables:** `Reports.SavedReports`, `Reports.SavedReportColumns`, `Reports.SavedReportShares`, `Reports.ReportSchedules`
 - **Audit trigger:** missing on `Reports.SavedReportColumns`; add it in this phase
@@ -1433,6 +1393,8 @@ _User-attributed row history for every insert/update/delete from the application
   - PUT /api/reports/saved/:id/columns
   - PUT /api/reports/saved/:id/shares
   - CRUD /api/reports/saved/:id/schedules
+  - POST /api/reports/preview (allow-listed fields; needs the source's own view permission)
+- **Business rules:** Schedules are stored now; sending starts with report runs (Phase 35).
 
 ## Phase 16: General ledger
 
@@ -2183,7 +2145,7 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
 
 ## Phase 25: Wholesale
 
-**Transactions** · workspace · 4 entities. Order bookings from the field, quick wholesale entry, bulk invoicing and back-orders.
+**Transactions** · workspace · 5 entities. Order bookings from the field, quick wholesale entry, bulk invoicing and back-orders.
 
 ### 25.1 Order Bookings `order-bookings`
 
@@ -2201,9 +2163,26 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
   - `GET /api/distribution/bookings/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/distribution/bookings/:id/approve|cancel
   - Order Booker sees own route bookings only
-- **Depends on:** `routes` (phase 14), `order-templates` (phase 14), `price-tiers` (phase 9)
+- **Depends on:** `routes` (phase 14), `order-templates` (phase 25), `price-tiers` (phase 9)
 
-### 25.2 Quick Wholesale Entry (Held Bills) `held-bills`
+### 25.2 Order Templates `order-templates`
+
+- **Tables:** `Distribution.OrderTemplates`, `Distribution.OrderTemplateLines`
+- **Audit trigger:** missing on `Distribution.OrderTemplates`, `Distribution.OrderTemplateLines`; add it in this phase
+- **Template:** `app/wholesale/entry` — `template/src/4D-wholesale.html`
+- **Pages:** `/wholesale/entry` (list/screen)
+- **Permissions:** `booking`: view, create, edit, approve, delete, export
+- **API:**
+  - `GET /api/distribution/order-templates?search&status&page&pageSize&sort`: list → { items, total }
+  - `GET /api/distribution/order-templates/:id`: detail
+  - `POST /api/distribution/order-templates`: create (draft)
+  - `PATCH /api/distribution/order-templates/:id`: update with rowVersion (409 when stale); drafts only
+  - `DELETE /api/distribution/order-templates/:id`: drafts only; posted documents are reversed, never deleted
+  - `GET /api/distribution/order-templates/:id/history`: audit trail (Company.AuditTrailEntries)
+  - Templates dropdown and 'Save as template' on Quick Wholesale Entry
+- **Depends on:** `customers` (phase 7), `products` (phase 8)
+
+### 25.3 Quick Wholesale Entry (Held Bills) `held-bills`
 
 - **Tables:** `Distribution.HeldBills`, `Distribution.HeldBillLines`
 - **Audit trigger:** missing on `Distribution.HeldBills`, `Distribution.HeldBillLines`; add it in this phase
@@ -2220,7 +2199,7 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
   - POST /api/distribution/held-bills/:id/convert-to-invoice
 - **Depends on:** `sales-invoices` (phase 23)
 
-### 25.3 Bulk Invoice Runs `bulk-invoicing`
+### 25.4 Bulk Invoice Runs `bulk-invoicing`
 
 - **Tables:** `Distribution.BulkInvoiceRuns`, `Distribution.BulkInvoiceRunCells`, `Distribution.BulkInvoiceSkippedShops`
 - **Audit trigger:** missing on `Distribution.BulkInvoiceRunCells`, `Distribution.BulkInvoiceSkippedShops`; add it in this phase
@@ -2238,7 +2217,7 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
 - **Business rules:** Run is atomic per shop; skipped shops recorded with reason.
 - **Depends on:** `order-bookings` (phase 25), `sales-invoices` (phase 23)
 
-### 25.4 Back-orders `back-orders`
+### 25.5 Back-orders `back-orders`
 
 - **Tables:** `Distribution.BackOrders`, `Distribution.BackOrderAllocations`, `Distribution.BackOrderCancellations`
 - **Audit trigger:** present on all tables
@@ -2520,7 +2499,7 @@ Read-only reports delivered with this phase: Budget vs Actual, Asset Register re
 
 ## Phase 29: Period close & work queue
 
-**Transactions** · workspace · 4 entities. Period reopen, year-end close, reminder runs, tasks and notifications; completes the financial statements.
+**Transactions** · workspace · 5 entities. Period reopen, year-end close, reminder runs, tasks and notifications; completes the financial statements.
 
 Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash Flow, Workspace Dashboard.
 
@@ -2598,6 +2577,27 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
   - GET /api/me/notifications, POST /api/me/notifications/read-all
 - **Business rules:** Own tasks/notifications only unless assigned.
 - **Depends on:** `users` (phase 2)
+
+### 29.5 Sign-in Recovery & MFA `sign-in-recovery`
+
+- **Tables:** `Company.UserInvites`, `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`
+- **Audit trigger:** missing on `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`; add it in this phase
+- **Template:** `login/mfa` — `template/src/30-entry-admin.html`; `login/forgot` — `template/src/30-entry-admin.html`
+- **Pages:** `/login/mfa` (list/screen), `/login/forgot` (list/screen)
+- **Permissions:** none: own data or Super Admin (portal-wide)
+- **API:**
+  - `GET /api/me/mfa?search&status&page&pageSize&sort`: list → { items, total }
+  - `GET /api/me/mfa/:id`: detail
+  - `POST /api/me/mfa`: create (draft)
+  - `PATCH /api/me/mfa/:id`: update with rowVersion (409 when stale); drafts only
+  - `DELETE /api/me/mfa/:id`: drafts only; posted documents are reversed, never deleted
+  - `GET /api/me/mfa/:id/history`: audit trail (Company.AuditTrailEntries)
+  - POST /api/settings/users/invite (email/WhatsApp link) + accept page
+  - POST /api/me/mfa/enrol|verify|disable
+  - DELETE /api/me/trusted-devices/:id
+  - POST /api/auth/forgot, POST /api/auth/reset
+- **Business rules:** Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs in this phase); Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
+- **Depends on:** `users` (phase 2), `account-security` (phase 2)
 
 ## Phase 30: Time & attendance
 
@@ -2900,8 +2900,8 @@ Read-only reports delivered with this phase: HR Reports.
 
 ### 33.3 Performance `performance`
 
-- **Tables:** `HumanResources.PerformanceReviews`, `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`
-- **Audit trigger:** missing on `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`; add it in this phase
+- **Tables:** `HumanResources.PerformanceReviews`, `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`
+- **Audit trigger:** missing on `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`; add it in this phase
 - **Template:** `app/hr/performance` — `template/src/51-hr-pay-talent.html`; `app/profile/goals` — `template/src/6A-ess.html`
 - **Pages:** `/hr/performance` (list/screen), `/profile/goals` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `mygoal`: view, edit
@@ -3012,13 +3012,13 @@ Read-only reports delivered with this phase: My Day (getMyDay), My Team (getMyTe
   - POST /api/helpdesk/tickets/:id/assign|resolve|reopen
 - **Depends on:** `helpdesk-setup` (phase 15)
 
-### 34.4 Kudos & Survey Responses `engagement`
+### 34.4 Kudos, Survey Responses, Reads & Presence `engagement`
 
-- **Tables:** `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`
-- **Audit trigger:** missing on `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`; add it in this phase
-- **Template:** `app/profile/kudos` — `template/src/6A-ess.html`
-- **Pages:** `/profile/kudos` (list/screen)
-- **Permissions:** `mykudos`: view, create
+- **Tables:** `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`
+- **Audit trigger:** missing on `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`; add it in this phase
+- **Template:** `app/profile/kudos` — `template/src/6A-ess.html`; `app/profile/directory` — `template/src/6A-ess.html`
+- **Pages:** `/profile/kudos` (list/screen), `/profile/directory` (list/screen)
+- **Permissions:** `mykudos`: view, create; `dir`: view
 - **API:**
   - `GET /api/me/engagement?search&status&page&pageSize&sort`: list → { items, total }
   - `GET /api/me/engagement/:id`: detail
@@ -3029,8 +3029,10 @@ Read-only reports delivered with this phase: My Day (getMyDay), My Team (getMyTe
   - POST /api/me/kudos, POST /api/me/kudos/:id/react
   - POST /api/me/polls/:id/vote
   - POST /api/me/pulse-surveys/:id/respond
+  - POST /api/company/announcements/:id/read (RSVP)
+  - PUT /api/me/presence
 - **Business rules:** One vote/response per user per poll/survey.
-- **Depends on:** `surveys` (phase 15)
+- **Depends on:** `surveys` (phase 15), `announcements` (phase 15), `employees` (phase 11)
 
 ### 34.5 Policy Acknowledgements `policy-acknowledgements`
 
