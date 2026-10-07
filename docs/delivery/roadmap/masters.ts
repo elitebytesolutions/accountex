@@ -303,7 +303,7 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 11, title: "HR policies & people", portal: "workspace", kind: "MASTER", status: "in-progress",
+    no: 11, title: "HR policies & people", portal: "workspace", kind: "MASTER", status: "done",
     objective: "Leave and overtime policies, biometric devices and the employee master (linked to Company.Users.employeeId).",
     entities: [
       E("leave-types", "Leave Types & Eligibility", ["HumanResources.LeaveTypes", "HumanResources.LeaveEligibilityRules"], {
@@ -329,36 +329,35 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 12, title: "Payroll setup", portal: "workspace", kind: "MASTER",
+    no: 12, title: "Payroll setup", portal: "workspace", kind: "MASTER", status: "done",
     objective: "Salary components and structures, pay groups, tax slabs and each employee's salary.",
     entities: [
       E("salary-components", "Salary Components", ["Payroll.SalaryComponents"], {
         tpl: ["app/hr/payroll/structures"], api: "payroll/components", perm: ["prun"],
         x: ["POST /payroll/components/import-template: from Platform templates"],
-        rules: ["Formula components validated (no cycles)"], deps: ["chart-of-accounts"],
+        rules: ["Formula components validated (no cycles)", "The template's 17 components seeded per company with GL from its chart; Platform templates are empty so no import endpoint (decided 2026-10-07)"], deps: ["chart-of-accounts"],
       }),
       E("salary-structures", "Salary Structures", ["Payroll.SalaryStructures", "Payroll.SalaryStructureComponents", "Payroll.SalaryStructureCommissionTiers"], {
         tpl: ["app/hr/payroll/structures"], api: "payroll/structures", perm: ["prun"], deps: ["salary-components"],
       }),
       E("pay-groups", "Pay Groups", ["Payroll.PayGroups"], {
-        tpl: ["app/hr/payroll"], api: "payroll/pay-groups", perm: ["prun"],
-        open: ["Pay groups have no dedicated template: confirm placement on Payroll Overview"],
+        tpl: ["app/hr/payroll/structures"], api: "payroll/pay-groups", perm: ["prun"],
+        rules: ["Added 'Pay groups' tab on /hr/payroll/structures (no template); STAFF and MANAGEMENT seeded; Payroll Overview waits for payroll runs (decided 2026-10-07)"],
       }),
       E("tax-slabs", "Salary Tax Slabs", ["Payroll.SalaryTaxSlabs"], {
         tpl: ["app/hr/payroll/structures"], api: "payroll/tax-slabs", perm: ["prun"],
         x: ["POST /payroll/tax-slabs/import-master: from Platform Tax Master salary slabs"],
-        rules: ["Slabs contiguous per tax year"],
-        open: ["Tax slab screen placement to be confirmed"],
+        rules: ["Slabs contiguous per tax year", "Added 'Tax slabs' tab on /hr/payroll/structures; Finance Act 2025 slabs seeded for 2025-26 and copied as 2026-27 to verify (decided 2026-10-07)"],
       }),
       E("employee-salaries", "Employee Salaries", ["Payroll.EmployeeSalaries"], {
         tpl: ["app/hr/employees/view"], api: "payroll/employee-salaries", perm: ["prun", "emp"],
         x: ["POST /payroll/employee-salaries/:employeeId/revise: effective-dated revision"],
-        rules: ["Effective-dated history; never overwrite a past salary"], deps: ["employees", "salary-structures", "pay-groups"],
+        rules: ["Effective-dated history; never overwrite a past salary", "prun:approve users save salaries directly (recorded as approver); previous salary closed the day before (decided 2026-10-07)"], deps: ["employees", "salary-structures", "pay-groups"],
       }),
     ],
   },
   {
-    no: 13, title: "Talent & policy setup", portal: "workspace", kind: "MASTER", status: "in-progress",
+    no: 13, title: "Talent & policy setup", portal: "workspace", kind: "MASTER", status: "done",
     objective: "Templates and programmes that onboarding, performance and training transactions use, plus company policies.",
     entities: [
       E("onboarding-templates", "Onboarding Templates", ["HumanResources.OnboardingTemplates", "HumanResources.OnboardingTemplateTasks"], {
@@ -380,7 +379,7 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 14, title: "Distribution setup", portal: "workspace", kind: "MASTER", status: "in-progress",
+    no: 14, title: "Distribution setup", portal: "workspace", kind: "MASTER", status: "done",
     objective: "Shop areas, routes with stops and visit days, vans and commission slabs.",
     entities: [
       E("shop-areas", "Shop Areas", ["Distribution.ShopAreas"], {
@@ -404,7 +403,7 @@ export const masters: Phase[] = [
     ],
   },
   {
-    no: 15, title: "Self-service & reporting setup", portal: "workspace", kind: "MASTER", status: "in-progress",
+    no: 15, title: "Self-service & reporting setup", portal: "workspace", kind: "MASTER", status: "done",
     objective: "Helpdesk, company announcements, polls & surveys, and saved report definitions with a live preview.",
     entities: [
       E("helpdesk-setup", "Helpdesk Categories & FAQs", ["EmployeeSelfService.HelpdeskCategories", "EmployeeSelfService.HelpdeskFaqs"], {

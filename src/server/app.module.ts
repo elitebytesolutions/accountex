@@ -21,14 +21,18 @@ import { AssetsModule } from './modules/assets/assets.module.js';
 import { InventoryModule } from './modules/inventory/inventory.module.js';
 import { PartiesModule } from './modules/parties/parties.module.js';
 import { HrModule } from './modules/hr/hr.module.js';
+import { PayrollModule } from './modules/payroll/payroll.module.js';
 import { ReceivablesModule } from './modules/receivables/receivables.module.js';
 import { SalesSetupModule } from './modules/sales-setup/sales-setup.module.js';
+import { DistributionModule } from './modules/distribution/distribution.module.js';
 import { MeModule } from './modules/me/me.module.js';
 import { HistoryModule } from './modules/history/history.module.js';
 import { LookupsModule } from './modules/lookups/lookups.module.js';
 import { PlatformAdminModule } from './modules/platform-admin/platform-admin.module.js';
 import { SettingsModule } from './modules/settings/settings.module.js';
 import { UsersModule } from './modules/users/users.module.js';
+import { SelfServiceModule } from './modules/self-service/self-service.module.js';
+import { ReportsModule } from './modules/reports/reports.module.js';
 
 @Module({
   imports: [
@@ -53,8 +57,12 @@ import { UsersModule } from './modules/users/users.module.js';
     InventoryModule,
     PartiesModule,
     SalesSetupModule,
+    DistributionModule,
     ReceivablesModule,
     HrModule,
+    PayrollModule,
+    SelfServiceModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [

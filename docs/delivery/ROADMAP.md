@@ -54,12 +54,12 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 8 | Products | Masters | workspace | done | Products · Kits & Bundles · Barcode Labels · Reorder Rules |
 | 9 | Pricing & collections setup | Masters | workspace | done | Price Lists · Sales Schemes · Payment Reminder Setup · Price Tiers |
 | 10 | Organisation | Masters | workspace | done | Departments · Designations · Grades · Work Shifts · Holidays |
-| 11 | HR policies & people | Masters | workspace | in-progress | Leave Types & Eligibility · Overtime Policies · Biometric Devices · Employees |
-| 12 | Payroll setup | Masters | workspace | planned | Salary Components · Salary Structures · Pay Groups · Salary Tax Slabs · Employee Salaries |
-| 13 | Talent & policy setup | Masters | workspace | in-progress | Onboarding Templates · Performance Cycles · Training Programs · Company Policies |
-| 14 | Distribution setup | Masters | workspace | in-progress | Shop Areas · Routes · Vans · Commission Slabs |
-| 15 | Self-service & reporting setup | Masters | workspace | in-progress | Helpdesk Categories & FAQs · Company Announcements · Polls & Pulse Surveys · Saved Reports |
-| 16 | General ledger | Transactions | workspace | planned | Approvals Inbox · Journal Vouchers · Opening Balances · Recurring Vouchers |
+| 11 | HR policies & people | Masters | workspace | done | Leave Types & Eligibility · Overtime Policies · Biometric Devices · Employees |
+| 12 | Payroll setup | Masters | workspace | done | Salary Components · Salary Structures · Pay Groups · Salary Tax Slabs · Employee Salaries |
+| 13 | Talent & policy setup | Masters | workspace | done | Onboarding Templates · Performance Cycles · Training Programs · Company Policies |
+| 14 | Distribution setup | Masters | workspace | done | Shop Areas · Routes · Vans · Commission Slabs |
+| 15 | Self-service & reporting setup | Masters | workspace | done | Helpdesk Categories & FAQs · Company Announcements · Polls & Pulse Surveys · Saved Reports |
+| 16 | General ledger | Transactions | workspace | in-progress | Approvals Inbox · Journal Vouchers · Opening Balances · Recurring Vouchers |
 | 17 | Banking | Transactions | workspace | planned | Bank Transactions · Statement Imports · Bank Reconciliation · Cheques & Batches |
 | 18 | Cash | Transactions | workspace | planned | Cash Book Entries · Cash Day Close · Petty Cash Vouchers & Replenishment · Expense Claims |
 | 19 | Purchasing | Transactions | workspace | planned | Purchase Orders · Goods Received Notes · Vendor Bills · Landed Cost |
@@ -1095,7 +1095,7 @@ _User-attributed row history for every insert/update/delete from the application
   - `DELETE /api/payroll/components/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/payroll/components/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/payroll/components/import-template: from Platform templates
-- **Business rules:** Formula components validated (no cycles).
+- **Business rules:** Formula components validated (no cycles); The template's 17 components seeded per company with GL from its chart; Platform templates are empty so no import endpoint (decided 2026-10-07).
 - **Depends on:** `chart-of-accounts` (phase 3)
 
 ### 12.2 Salary Structures `salary-structures`
@@ -1118,9 +1118,9 @@ _User-attributed row history for every insert/update/delete from the application
 ### 12.3 Pay Groups `pay-groups`
 
 - **Tables:** `Payroll.PayGroups`
-- **Audit trigger:** missing on `Payroll.PayGroups`; add it in this phase
-- **Template:** `app/hr/payroll` — `template/src/48-dash-stock.html`
-- **Pages:** `/hr/payroll` (list/screen)
+- **Audit trigger:** present on all tables
+- **Template:** `app/hr/payroll/structures` — `template/src/51-hr-pay-talent.html`
+- **Pages:** `/hr/payroll/structures` (list/screen)
 - **Permissions:** `prun`: view, create, edit, approve, post, export
 - **API:**
   - `GET /api/payroll/pay-groups?search&status&page&pageSize&sort`: list → { items, total }
@@ -1130,7 +1130,7 @@ _User-attributed row history for every insert/update/delete from the application
   - `POST /api/payroll/pay-groups/:id/deactivate | /activate`
   - `DELETE /api/payroll/pay-groups/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/payroll/pay-groups/:id/history`: audit trail (Company.AuditTrailEntries)
-- **Open questions:** Pay groups have no dedicated template: confirm placement on Payroll Overview
+- **Business rules:** Added 'Pay groups' tab on /hr/payroll/structures (no template); STAFF and MANAGEMENT seeded; Payroll Overview waits for payroll runs (decided 2026-10-07).
 
 ### 12.4 Salary Tax Slabs `tax-slabs`
 
@@ -1148,8 +1148,7 @@ _User-attributed row history for every insert/update/delete from the application
   - `DELETE /api/payroll/tax-slabs/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/payroll/tax-slabs/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/payroll/tax-slabs/import-master: from Platform Tax Master salary slabs
-- **Business rules:** Slabs contiguous per tax year.
-- **Open questions:** Tax slab screen placement to be confirmed
+- **Business rules:** Slabs contiguous per tax year; Added 'Tax slabs' tab on /hr/payroll/structures; Finance Act 2025 slabs seeded for 2025-26 and copied as 2026-27 to verify (decided 2026-10-07).
 
 ### 12.5 Employee Salaries `employee-salaries`
 
@@ -1167,7 +1166,7 @@ _User-attributed row history for every insert/update/delete from the application
   - `DELETE /api/payroll/employee-salaries/:id`: only when unreferenced (409 *_IN_USE)
   - `GET /api/payroll/employee-salaries/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/payroll/employee-salaries/:employeeId/revise: effective-dated revision
-- **Business rules:** Effective-dated history; never overwrite a past salary.
+- **Business rules:** Effective-dated history; never overwrite a past salary; prun:approve users save salaries directly (recorded as approver); previous salary closed the day before (decided 2026-10-07).
 - **Depends on:** `employees` (phase 11), `salary-structures` (phase 12), `pay-groups` (phase 12)
 
 ## Phase 13: Talent & policy setup
@@ -1177,7 +1176,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 13.1 Onboarding Templates `onboarding-templates`
 
 - **Tables:** `HumanResources.OnboardingTemplates`, `HumanResources.OnboardingTemplateTasks`
-- **Audit trigger:** missing on `HumanResources.OnboardingTemplates`, `HumanResources.OnboardingTemplateTasks`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/onboarding` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/onboarding` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -1193,7 +1192,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 13.2 Performance Cycles `performance-cycles`
 
 - **Tables:** `HumanResources.PerformanceCycles`
-- **Audit trigger:** missing on `HumanResources.PerformanceCycles`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/performance` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/performance` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -1249,7 +1248,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 14.1 Shop Areas `shop-areas`
 
 - **Tables:** `Distribution.ShopAreas`
-- **Audit trigger:** missing on `Distribution.ShopAreas`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/wholesale/routes` — `template/src/4E-distribution.html`
 - **Pages:** `/wholesale/routes` (list/screen)
 - **Permissions:** `route`: view, create, edit, delete, export
@@ -1265,7 +1264,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 14.2 Routes `routes`
 
 - **Tables:** `Distribution.Routes`, `Distribution.RouteStops`, `Distribution.RouteVisitDays`, `Distribution.ShopRouteProfiles`
-- **Audit trigger:** missing on `Distribution.RouteStops`, `Distribution.RouteVisitDays`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/wholesale/routes` — `template/src/4E-distribution.html`
 - **Pages:** `/wholesale/routes` (list/screen)
 - **Permissions:** `route`: view, create, edit, delete, export
@@ -1325,7 +1324,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 15.1 Helpdesk Categories & FAQs `helpdesk-setup`
 
 - **Tables:** `EmployeeSelfService.HelpdeskCategories`, `EmployeeSelfService.HelpdeskFaqs`
-- **Audit trigger:** missing on `EmployeeSelfService.HelpdeskCategories`, `EmployeeSelfService.HelpdeskFaqs`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/profile/helpdesk` — `template/src/6A-ess.html`
 - **Pages:** `/profile/helpdesk` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -1342,7 +1341,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 15.2 Company Announcements `announcements`
 
 - **Tables:** `EmployeeSelfService.CompanyAnnouncements`
-- **Audit trigger:** missing on `EmployeeSelfService.CompanyAnnouncements`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/profile/directory` — `template/src/6A-ess.html`
 - **Pages:** `/profile/directory` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `dir`: view
@@ -1359,7 +1358,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 15.3 Polls & Pulse Surveys `surveys`
 
 - **Tables:** `EmployeeSelfService.Polls`, `EmployeeSelfService.PollOptions`, `EmployeeSelfService.PulseSurveys`, `EmployeeSelfService.PulseSurveyQuestions`
-- **Audit trigger:** missing on `EmployeeSelfService.Polls`, `EmployeeSelfService.PollOptions`, `EmployeeSelfService.PulseSurveys`, `EmployeeSelfService.PulseSurveyQuestions`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/profile/kudos` — `template/src/6A-ess.html`
 - **Pages:** `/profile/kudos` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `mykudos`: view, create
@@ -1378,7 +1377,7 @@ _User-attributed row history for every insert/update/delete from the application
 ### 15.4 Saved Reports `saved-reports`
 
 - **Tables:** `Reports.SavedReports`, `Reports.SavedReportColumns`, `Reports.SavedReportShares`, `Reports.ReportSchedules`
-- **Audit trigger:** missing on `Reports.SavedReportColumns`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/reports/studio` — `template/src/42-acc-reports.html`
 - **Pages:** `/reports/studio` (list/screen)
 - **Permissions:** `rpt`: view, create, edit, delete, export
@@ -1405,7 +1404,7 @@ Read-only reports delivered with this phase: Trial Balance, General Ledger, Day 
 ### 16.1 Approvals Inbox `approvals`
 
 - **Tables:** `Company.Approvals`, `Company.ApprovalActions`
-- **Audit trigger:** missing on `Company.ApprovalActions`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/approvals` — `template/src/4A-company-plus.html`
 - **Pages:** `/approvals` (list/screen)
 - **Permissions:** `wf`: view, create, edit, delete, export
@@ -1419,13 +1418,13 @@ Read-only reports delivered with this phase: Trial Balance, General Ledger, Day 
   - GET /api/approvals/inbox (Company.getApprovalsInbox)
   - POST /api/approvals/:id/approve|reject|request-changes|delegate
   - POST /api/approvals/bulk
-- **Business rules:** Engine used by every later document type; Requester cannot approve own document (segregation of duties); Every action is an ApprovalActions row.
+- **Business rules:** Engine used by every later document type; Requester cannot approve own document (segregation of duties); Every action is an ApprovalActions row; Full Phase 2 workflow steps (role/user/line manager, ANY/ALL, amount thresholds, delegation); inbox open to every signed-in user for their own items; SLA reminders later (decided 2026-10-07).
 - **Depends on:** `approval-workflows` (phase 2), `users` (phase 2)
 
 ### 16.2 Journal Vouchers `vouchers`
 
 - **Tables:** `Accounting.Vouchers`, `Accounting.VoucherLines`, `Accounting.VoucherActivities`
-- **Audit trigger:** missing on `Accounting.VoucherActivities`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/accounting/vouchers` — `template/src/40-acc-core.html`; `app/accounting/vouchers/new` — `template/src/44-purchase-docs.html`; `app/accounting/vouchers/view` — `template/src/40-acc-core.html`
 - **Pages:** `/accounting/vouchers` (list/screen), `/accounting/vouchers/new` (create), `/accounting/vouchers/[id]` (detail)
 - **Permissions:** `vch`: view, create, edit, approve, post, delete, export
@@ -1439,7 +1438,7 @@ Read-only reports delivered with this phase: Trial Balance, General Ledger, Day 
   - POST /api/accounting/vouchers/:id/submit|post|reverse
   - POST /api/accounting/vouchers/:id/duplicate
   - GET /api/accounting/vouchers/:id/pdf
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Debits equal credits; Postings only into open periods and postable accounts.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Debits equal credits; Postings only into open periods and postable accounts; No matching workflow: vch:post posts directly; tests run in a separate Test Co; PDF = browser print (decided 2026-10-07).
 - **Depends on:** `chart-of-accounts` (phase 3), `fiscal-periods` (phase 3), `cost-centres` (phase 3), `numbering-series` (phase 1), `approvals` (phase 16)
 
 ### 16.3 Opening Balances `opening-balances`
@@ -1464,7 +1463,7 @@ Read-only reports delivered with this phase: Trial Balance, General Ledger, Day 
 ### 16.4 Recurring Vouchers `recurring-vouchers`
 
 - **Tables:** `Accounting.RecurringVoucherTemplates`, `Accounting.RecurringVoucherTemplateLines`, `Accounting.RecurringVoucherRuns`
-- **Audit trigger:** missing on `Accounting.RecurringVoucherRuns`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/accounting/recurring` — `template/src/40-acc-core.html`
 - **Pages:** `/accounting/recurring` (list/screen)
 - **Permissions:** `vch`: view, create, edit, approve, post, delete, export
@@ -1478,7 +1477,7 @@ Read-only reports delivered with this phase: Trial Balance, General Ledger, Day 
   - POST /api/accounting/recurring-vouchers/:id/run-now
   - POST /api/accounting/recurring-vouchers/:id/pause|resume
   - Scheduled job creates vouchers (actor = SERVICE)
-- **Business rules:** Each run creates a draft or posted voucher per template setting; runs are history.
+- **Business rules:** Each run creates a draft or posted voucher per template setting; runs are history; Hourly in-app job + Run now (decided 2026-10-07).
 - **Depends on:** `vouchers` (phase 16)
 
 ## Phase 17: Banking

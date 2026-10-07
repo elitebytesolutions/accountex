@@ -9,7 +9,7 @@ import { HistoryTab } from "@/features/history/components/history-tab";
  * The template's add / edit modal (hrc-add-*) for one HR record, with what the template leaves out: History, activate /
  * deactivate and delete (asked for confirmation). The caller owns the form and its save.
  */
-export function RecordModal({ open, onClose, title, subtitle, wide, xl, history, active, canSave, canToggle, canDelete, busy, saveLabel, onSave, onToggle, onDelete, deleteNote, children }: {
+export function RecordModal({ open, onClose, title, subtitle, wide, xl, history, active, canSave, canToggle, canDelete, busy, saveLabel, onSave, onToggle, toggleLabels, onDelete, deleteNote, extra, children }: {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -26,6 +26,10 @@ export function RecordModal({ open, onClose, title, subtitle, wide, xl, history,
   saveLabel: string;
   onSave: () => void;
   onToggle?: () => void;
+  /** [label when active, label when inactive]; defaults to Deactivate / Activate. */
+  toggleLabels?: [string, string];
+  /** Extra footer buttons (left of Cancel). */
+  extra?: ReactNode;
   onDelete?: () => Promise<void> | void;
   deleteNote?: string;
   children: ReactNode;
@@ -40,7 +44,8 @@ export function RecordModal({ open, onClose, title, subtitle, wide, xl, history,
             {history && <button type="button" className="btn ghost" onClick={() => setTab("history")}><History />History</button>}
             {history && canDelete && onDelete && <button type="button" className="btn ghost" onClick={() => setConfirm(true)}><Trash2 />Delete</button>}
             <span className="spacer" />
-            {history && canToggle && onToggle && <button type="button" className="btn secondary" disabled={busy} onClick={onToggle}>{active ? <><PowerOff />Deactivate</> : <><Power />Activate</>}</button>}
+            {extra}
+            {history && canToggle && onToggle && <button type="button" className="btn secondary" disabled={busy} onClick={onToggle}>{active ? <><PowerOff />{toggleLabels?.[0] ?? "Deactivate"}</> : <><Power />{toggleLabels?.[1] ?? "Activate"}</>}</button>}
             <button type="button" className="btn secondary" onClick={onClose}>{canSave ? "Cancel" : "Close"}</button>
             {canSave && <button type="button" className="btn primary" disabled={busy} onClick={onSave}>{busy ? "Saving…" : saveLabel}</button>}
           </>

@@ -1,0 +1,172 @@
+/* Wholesale › Routes & Salesmen (Phase 14). Copied from template/src/1I-distribution.css (shared bits + "4. Routes & salesmen"
+   + its responsive rules), followed by the template-style additions for vans, areas and commission bands. Prefix: ds-. */
+@layer components {
+.ds-boot{display:grid;gap:14px;padding:6px 0}
+.ds-boot span{display:block;height:120px;border-radius:var(--r-card);background:linear-gradient(90deg,var(--surface-2) 0,var(--surface-3) 50%,var(--surface-2) 100%);background-size:200% 100%;animation:shimmer 1.1s linear infinite}
+.ds-boot span:first-child{height:64px;width:48%}
+.ds-rt{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:7px;background:color-mix(in srgb,var(--rt,var(--primary)) 14%,var(--surface));color:var(--rt,var(--primary));font-size:11px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.ds-sku{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:700;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);padding:2px 7px;border-radius:7px}
+.ds-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 12px;color:var(--muted);text-align:center}
+.ds-empty svg{width:28px;height:28px;color:var(--muted-2)}
+.ds-empty b{color:var(--ink);font-size:14px}
+.ds-spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:inline-block;animation:dsSpin .7s linear infinite;flex:none}
+.ds-spin.sm{width:11px;height:11px;border-width:1.6px}
+@keyframes dsSpin{to{transform:rotate(360deg)}}
+.ds-busy{pointer-events:none}
+.ds-flash{animation:dsFlash 1s var(--ease)}
+@keyframes dsFlash{0%{background:color-mix(in srgb,var(--lime) 40%,transparent)}100%{background:transparent}}
+.ds-shake{animation:dsShake .45s var(--ease)}
+@keyframes dsShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.ds-glow{animation:dsGlow 1.2s var(--ease)}
+@keyframes dsGlow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--lime) 70%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+.ds-pop{animation:dsPop .35s var(--ease-spring)}
+@keyframes dsPop{0%{transform:scale(1)}45%{transform:scale(1.16)}100%{transform:scale(1)}}
+/* ---------- 4. Routes & salesmen ---------- */
+.ds-rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:16px}
+.ds-rcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:18px;cursor:pointer;transition:border-color .25s,box-shadow .25s,transform .25s var(--ease);animation:fadeUp .45s var(--ease) both;animation-delay:calc(var(--i)*60ms);overflow:hidden;min-width:0}
+.ds-rcard::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--rt);opacity:.35;transition:opacity .25s}
+.ds-rcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-1);border-color:var(--line-2)}
+.ds-rcard:focus-visible{outline:0;box-shadow:var(--ring)}
+.ds-rcard.sel{border-color:color-mix(in srgb,var(--rt) 60%,var(--line));box-shadow:0 0 0 3px color-mix(in srgb,var(--rt) 14%,transparent)}
+.ds-rcard.sel::before{opacity:1}
+.ds-rc-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ds-rc-head b{flex:1;font-size:14.5px;letter-spacing:-.02em;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-rc-head .ds-rt{background:color-mix(in srgb,var(--rt) 14%,var(--surface));color:var(--rt)}
+.ds-nr-days{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.ds-daychips{display:flex;gap:4px;flex-wrap:wrap}
+.ds-daychips button{height:26px;min-width:38px;padding:0 6px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:11px;font-weight:700;transition:background-color .2s,color .2s,border-color .2s,transform .2s var(--ease-spring)}
+.ds-daychips button:hover{border-color:var(--line-2);color:var(--ink)}
+.ds-daychips button.on{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.ds-rc-people{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin:14px 0;padding:12px;border-radius:13px;background:var(--surface-2)}
+.ds-rc-people small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.ds-rc-people b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ds-rc-foot{display:grid;grid-template-columns:auto 1fr 110px;gap:14px;align-items:end}
+.ds-rc-foot small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.ds-rc-foot b{font-size:18px;letter-spacing:-.03em;white-space:nowrap}
+.ds-rc-sales em{font-style:normal;font-size:11px;font-weight:700;padding:1px 6px;border-radius:99px;vertical-align:3px}
+.ds-rc-sales em.up{background:var(--good-soft);color:var(--good)}
+.ds-rc-sales em.down{background:var(--danger-soft);color:var(--danger)}
+.ds-spark{width:100%;height:36px;overflow:visible}
+.ds-spark .ar{fill:color-mix(in srgb,var(--rt,var(--primary)) 12%,transparent)}
+.ds-spark .ln{fill:none;stroke:var(--rt,var(--primary));stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:dsDraw 1.1s var(--ease) .2s forwards;vector-effect:non-scaling-stroke}
+.ds-spark circle{fill:var(--rt,var(--primary));stroke:var(--surface);stroke-width:1.5}
+@keyframes dsDraw{to{stroke-dashoffset:0}}
+.ds-mapwrap{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:stretch}
+.ds-map{border-radius:16px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line);min-width:0}
+.ds-mapsvg{display:block;width:100%;height:auto}
+.ds-mapsvg .blocks rect{fill:var(--surface-3);opacity:.7}
+.ds-mapsvg .canal{fill:none;stroke:var(--info-soft);stroke-width:16;stroke-linecap:round}
+.ds-mapsvg .roads path{fill:none;stroke:var(--surface);stroke-width:9;stroke-linecap:round}
+.ds-mapsvg .mlabels text{font-size:10px;font-weight:800;letter-spacing:1.6px;fill:var(--muted-2);opacity:.8}
+.ds-mapsvg .route-glow{fill:none;stroke:var(--rt);stroke-width:12;opacity:.13;stroke-linecap:round}
+.ds-mapsvg .route{fill:none;stroke:var(--rt);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:dsDraw 1.6s var(--ease) forwards}
+.ds-mapsvg .truck circle{fill:var(--lime);stroke:var(--ink);stroke-width:1.5}
+.ds-mapsvg .truck path{fill:var(--lime-ink)}
+.ds-mapsvg .wh rect{fill:var(--night);stroke:var(--lime);stroke-width:2}
+.ds-mapsvg .wh path{fill:none;stroke:var(--lime);stroke-width:1.8;stroke-linejoin:round}
+.ds-mapsvg .wh text{font-size:10.5px;font-weight:800;fill:var(--ink-2)}
+.ds-mapsvg .pin{cursor:pointer;outline:none;animation:dsPinIn .45s var(--ease-spring) both;animation-delay:calc(.5s + var(--i)*70ms)}
+.ds-mapsvg .pin .dot{fill:var(--rt);stroke:var(--surface);stroke-width:3;transition:transform .2s var(--ease-spring)}
+.ds-mapsvg .pin .halo{fill:var(--rt);opacity:0;transition:opacity .2s}
+.ds-mapsvg .pin text{font-size:11px;font-weight:800;fill:var(--primary-ink);pointer-events:none}
+.ds-mapsvg .pin:hover .dot,.ds-mapsvg .pin:focus .dot{transform:scale(1.2)}
+.ds-mapsvg .pin:hover .halo,.ds-mapsvg .pin:focus .halo{opacity:.2}
+.ds-mapsvg .pin.ds-ping .halo{animation:dsHalo .9s var(--ease) 2}
+.ds-mapsvg .empty{font-size:14px;font-weight:700;fill:var(--muted)}
+@keyframes dsPinIn{from{opacity:0;transform-origin:center;scale:.2}to{opacity:1;scale:1}}
+@keyframes dsHalo{0%{opacity:.45;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+.ds-stops{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;max-height:430px;overflow:auto;counter-reset:none}
+.ds-stops li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:11px;cursor:pointer;transition:background-color .15s;animation:fadeUp .35s var(--ease) both;animation-delay:calc(var(--i)*35ms)}
+.ds-stops li:hover,.ds-stops li.hot{background:var(--surface-2)}
+.ds-stops li.hot span{background:var(--lime);color:var(--lime-ink)}
+.ds-stops li span{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--primary-soft);color:var(--primary);font-size:11.5px;font-weight:800;transition:.2s}
+.ds-stops li>div{min-width:0}
+.ds-stops li b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-stops li small{font-size:11.5px;color:var(--muted)}
+.ds-stops li em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.ds-stops li.nil{display:block;color:var(--muted);cursor:default;font-size:13px;padding:10px}
+.ds-stops li.nil:hover{background:none}
+.ds-board{display:grid;grid-template-columns:repeat(var(--cols,3),minmax(250px,1fr));gap:14px;overflow-x:auto;padding-bottom:4px}
+.ds-col{border:1px solid var(--line);border-radius:16px;background:var(--surface-2);padding:12px;display:flex;flex-direction:column;min-width:0;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.ds-col.over{border-color:var(--rt);background:color-mix(in srgb,var(--rt) 7%,var(--surface-2));box-shadow:0 0 0 3px color-mix(in srgb,var(--rt) 15%,transparent)}
+.ds-col-head{display:flex;align-items:center;gap:8px}
+.ds-col-head .ds-rt{background:color-mix(in srgb,var(--rt) 14%,var(--surface));color:var(--rt)}
+.ds-col-head b{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ds-col-n{min-width:26px;height:24px;padding:0 7px;border-radius:99px;background:var(--ink);color:var(--surface);font-size:12px;font-weight:800;display:inline-grid;place-items:center}
+.ds-col-sub{font-size:11.5px;color:var(--muted);margin:4px 0 10px}
+.ds-col-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;min-height:80px;max-height:460px;overflow:auto;flex:1}
+.ds-shopcard{display:grid;grid-template-columns:14px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 8px 8px 6px;border-radius:12px;background:var(--surface);border:1px solid var(--line);cursor:grab;transition:transform .2s var(--ease),box-shadow .2s,border-color .2s,opacity .2s;animation:fadeUp .3s var(--ease) both;animation-delay:calc(var(--i)*18ms)}
+.ds-shopcard:hover{border-color:var(--line-2);box-shadow:var(--shadow-1)}
+.ds-shopcard:active{cursor:grabbing}
+.ds-shopcard.dragging{opacity:.4;transform:scale(.98)}
+.ds-shopcard.ds-landed{animation:dsLand .7s var(--ease-spring);border-color:var(--rt);box-shadow:0 0 0 3px color-mix(in srgb,var(--rt) 18%,transparent)}
+@keyframes dsLand{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.03);opacity:1}100%{transform:scale(1)}}
+.ds-shopcard .grip{width:14px;height:14px;color:var(--muted-2)}
+.ds-shopcard>div{min-width:0}
+.ds-shopcard b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-shopcard small{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ds-sc-due{font-size:11.5px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ds-shopcard .icon-btn-sm{width:26px;height:26px}
+.ds-shopcard .icon-btn-sm svg{width:12px;height:12px}
+.ds-dropzone{display:none;align-items:center;justify-content:center;height:44px;border:1.5px dashed var(--line-2);border-radius:12px;color:var(--muted);font-size:12px;font-weight:600}
+.ds-board.dragging .ds-dropzone{display:flex}
+.ds-col.over .ds-dropzone{border-color:var(--rt);color:var(--rt)}
+.ds-people-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:8px 2px 12px}
+.ds-people-head h3{margin:0;font-size:17px;letter-spacing:-.02em}
+.ds-people{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.ds-person{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:18px;min-width:0;transition:transform .25s var(--ease),box-shadow .25s;animation:fadeUp .45s var(--ease) both;animation-delay:calc(var(--i)*60ms)}
+.ds-person:hover{transform:translateY(-2px);box-shadow:var(--shadow-1)}
+.ds-pp-top{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.ds-pp-top>div{min-width:0}
+.ds-pp-top b{font-size:15px;letter-spacing:-.02em}
+.ds-roles{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.ds-roles .badge{font-size:10.5px;padding:2px 8px}
+.ds-target{padding:12px;border-radius:13px;background:var(--surface-2);margin-bottom:12px}
+.ds-tg-top{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);font-weight:600;margin-bottom:8px}
+.ds-tg-top b{font-size:16px;color:var(--ink)}
+.ds-tg-top b.up{color:var(--good)}
+.ds-tg-track{position:relative;height:9px;border-radius:99px;background:var(--surface-3);margin-bottom:7px}
+.ds-tg-track i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--mint));animation:dsGrow 1s var(--ease) both .2s}
+.ds-tg-track em{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);border-radius:2px}
+.ds-target small{font-size:11.5px;color:var(--muted)}
+@keyframes dsGrow{from{width:0}}
+.ds-pp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ds-pp-stats small{display:block;font-size:10.5px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ds-pp-stats b{font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ds-pp-stats em{display:block;font-style:normal;font-size:10.5px;color:var(--primary);font-weight:700}
+.ds-pp-bottom{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.ds-leader{display:grid;gap:8px}
+.ds-lb{display:grid;grid-template-columns:34px 30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border-radius:13px;border:1px solid var(--line);animation:fadeUp .4s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
+.ds-lb.r1{background:color-mix(in srgb,var(--lime) 16%,var(--surface));border-color:color-mix(in srgb,var(--lime) 50%,var(--line))}
+.ds-lb-rank{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font-weight:800;color:var(--muted)}
+@media(max-width:1440px){.ds-people{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.ds-mapwrap{grid-template-columns:1fr}.ds-stops{max-height:260px}.ds-pp-bottom{grid-template-columns:1fr}}
+@media(max-width:780px){.ds-people{grid-template-columns:1fr}.ds-board{grid-template-columns:repeat(var(--cols,3),minmax(240px,82vw))}[data-route="app/wholesale/routes"] .head-actions .tagline{display:none}}
+@media(prefers-reduced-motion:reduce){.ds-spark .ln,.ds-mapsvg .route{stroke-dashoffset:0;animation:none}.ds-mapsvg .pin{animation:none}}
+
+/* ---------- template-style additions (no template screen): area chips, stop editing, vans panel, band editor ---------- */
+.ds-areabar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.ds-areabar .chips{min-width:0}
+.ds-col.ds-col-free{--rt:var(--muted)}
+.ds-col-search{margin:0 0 8px}
+.ds-col-search input{height:34px;font-size:12.5px}
+.ds-stops li .ds-stop-act{display:flex;gap:2px;align-items:center}
+.ds-stops li .ds-stop-act .icon-btn-sm{width:24px;height:24px}
+.ds-stops li .ds-stop-act .icon-btn-sm svg{width:12px;height:12px}
+.ds-stops.ds-editing li{grid-template-columns:26px minmax(0,1fr) auto;cursor:default}
+.ds-stop-fields{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.ds-stop-fields select,.ds-stop-fields input{height:30px;font-size:12px;padding:0 8px;width:auto;min-width:0}
+.ds-stops-foot{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap}
+.ds-staffnote{grid-column:1/-1;font-size:11.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.ds-staffnote svg{width:14px;height:14px;flex:none}
+.ds-vans .tbl td{vertical-align:middle}
+.ds-slab-period{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ds-bands{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.ds-band{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr)) 32px;gap:8px;align-items:end;animation:fadeUp .3s var(--ease) both}
+.ds-band label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:600;color:var(--muted);min-width:0}
+.ds-band input{height:36px}
+.ds-bands-msg{font-size:12px;font-weight:600;margin-top:8px}
+.ds-bands-msg.bad{color:var(--danger)}
+.ds-bands-msg.ok{color:var(--good)}
+@media(max-width:780px){.ds-band{grid-template-columns:1fr 1fr}.ds-band label:first-child{grid-column:1/-1}}
+}

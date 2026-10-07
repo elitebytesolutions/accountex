@@ -95,7 +95,7 @@ export function WarehousesScreen({ can }: { can: Can }) {
     setBusy(true);
     setErrs({});
     const body = {
-      name: form.name, code: form.code, description: form.description || null, type: form.type, branchId: form.branchId, managerUserId: form.managerUserId || null,
+      name: form.name, code: form.code, description: form.description || null, type: form.type === "VAN" ? undefined : form.type, branchId: form.branchId, managerUserId: form.managerUserId || null,
       address: form.address || null, city: form.city || null, capacityPallets: form.capacityPallets.trim() || null, inventoryAccountId: form.inventoryAccountId || null,
       blockNegativeStock: form.blockNegativeStock, isPrimary: form.isPrimary,
     };
@@ -175,7 +175,7 @@ export function WarehousesScreen({ can }: { can: Can }) {
                 <span className="icon-well"><WarehouseIcon /></span>
                 <div><b>{w.name}</b><small className="muted" style={{ display: "block" }}>{w.code}{w.description ? ` · ${w.description}` : ""}</small></div>
                 <span className="spacer" />
-                {w.status !== "ACTIVE" ? <span className="badge neutral">Inactive</span> : w.isPrimary ? <span className="badge good">Primary</span> : <span className="badge info">{w.type === "SHOP" ? "Shop" : "Branch"}</span>}
+                {w.status !== "ACTIVE" ? <span className="badge neutral">Inactive</span> : w.isPrimary ? <span className="badge good">Primary</span> : <span className="badge info">{w.type === "SHOP" ? "Shop" : w.type === "VAN" ? "Van" : "Branch"}</span>}
               </div>
               <p className="small muted mt">{[w.address, w.city].filter(Boolean).join(", ") || w.branch?.name || "—"}</p>
               <div className="row mt"><span className="small">Capacity</span><span className="spacer" /><span className="small">{w.capacityPallets ? <><b>{w.capacityPallets.toLocaleString("en-US")}</b> pallets</> : "—"}</span></div>
@@ -226,8 +226,10 @@ export function WarehousesScreen({ can }: { can: Can }) {
                   {row?.manager && !options.managers.some((u) => u.id === row.manager!.id) && <option value={row.manager.id}>{row.manager.name} (inactive)</option>}
                 </select>
               </Field>
-              <Field label="Type" error={errs.type} hint="Vans arrive with Distribution">
-                <select value={form.type} disabled={!writable} onChange={(e) => set("type", e.target.value)}>{WAREHOUSE_TYPES.map((t) => <option key={t} value={t}>{labelOf(lookups, "WarehouseType", t)}</option>)}</select>
+              <Field label="Type" error={errs.type} hint={form.type === "VAN" ? "A van's stock location (Distribution › Vans)" : "Van stock locations are made from Distribution › Vans"}>
+                {form.type === "VAN"
+                  ? <select value="VAN" disabled><option value="VAN">{labelOf(lookups, "WarehouseType", "VAN")}</option></select>
+                  : <select value={form.type} disabled={!writable} onChange={(e) => set("type", e.target.value)}>{WAREHOUSE_TYPES.map((t) => <option key={t} value={t}>{labelOf(lookups, "WarehouseType", t)}</option>)}</select>}
               </Field>
               <Field label="Description" error={errs.description}><input value={form.description} placeholder="e.g. Main distribution centre" disabled={!writable} onChange={(e) => set("description", e.target.value)} /></Field>
               <Field label="Address" full error={errs.address}><input value={form.address} disabled={!writable} onChange={(e) => set("address", e.target.value)} /></Field>

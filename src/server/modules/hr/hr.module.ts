@@ -39,6 +39,23 @@ import { ShiftStore } from './shifts/application/shift-store.js';
 import { ShiftsService } from './shifts/application/shifts.service.js';
 import { PrismaShiftStore } from './shifts/infrastructure/prisma-shift.store.js';
 import { ShiftsController } from './shifts/presentation/shifts.controller.js';
+// Phase 13: talent & policy setup
+import { OnboardingTemplateStore } from './onboarding-templates/application/onboarding-template-store.js';
+import { OnboardingTemplatesService } from './onboarding-templates/application/onboarding-templates.service.js';
+import { PrismaOnboardingTemplateStore } from './onboarding-templates/infrastructure/prisma-onboarding-template.store.js';
+import { OnboardingTemplatesController } from './onboarding-templates/presentation/onboarding-templates.controller.js';
+import { PerformanceCycleStore } from './performance-cycles/application/performance-cycle-store.js';
+import { PerformanceCyclesService } from './performance-cycles/application/performance-cycles.service.js';
+import { PrismaPerformanceCycleStore } from './performance-cycles/infrastructure/prisma-performance-cycle.store.js';
+import { PerformanceCyclesController } from './performance-cycles/presentation/performance-cycles.controller.js';
+import { TrainingProgramStore } from './training-programs/application/training-program-store.js';
+import { TrainingProgramsService } from './training-programs/application/training-programs.service.js';
+import { PrismaTrainingProgramStore } from './training-programs/infrastructure/prisma-training-program.store.js';
+import { TrainingProgramsController } from './training-programs/presentation/training-programs.controller.js';
+import { PolicyStore } from './policies/application/policy-store.js';
+import { PoliciesService } from './policies/application/policies.service.js';
+import { PrismaPolicyStore } from './policies/infrastructure/prisma-policy.store.js';
+import { PoliciesController } from './policies/presentation/policies.controller.js';
 
 /**
  * HR: organisation (Phase 10: departments, designations, grades, work shifts, holidays, org chart) and policies & people
@@ -48,6 +65,7 @@ import { ShiftsController } from './shifts/presentation/shifts.controller.js';
   controllers: [
     OrgController, DepartmentsController, DesignationsController, GradesController, ShiftsController, HolidaysController,
     EmployeesController, LeaveTypesController, OvertimeController, DevicesController,
+    OnboardingTemplatesController, PerformanceCyclesController, TrainingProgramsController, PoliciesController, // Phase 13
   ],
   providers: [
     DepartmentsService, { provide: DepartmentStore, useClass: PrismaDepartmentStore },
@@ -60,6 +78,10 @@ import { ShiftsController } from './shifts/presentation/shifts.controller.js';
     LeaveTypesService, { provide: LeaveTypeStore, useClass: PrismaLeaveTypeStore },
     OvertimeService, { provide: OvertimeStore, useClass: PrismaOvertimeStore },
     DevicesService, { provide: DeviceStore, useClass: PrismaDeviceStore },
+    OnboardingTemplatesService, { provide: OnboardingTemplateStore, useClass: PrismaOnboardingTemplateStore },
+    PerformanceCyclesService, { provide: PerformanceCycleStore, useClass: PrismaPerformanceCycleStore },
+    TrainingProgramsService, { provide: TrainingProgramStore, useClass: PrismaTrainingProgramStore },
+    PoliciesService, { provide: PolicyStore, useClass: PrismaPolicyStore },
   ],
 })
 export class HrModule {}

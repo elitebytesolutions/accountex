@@ -55,3 +55,6 @@ export * from './sales/reminder.ts';
 export * from './hr/organisation.ts';
 export * from './hr/people.ts';
 export * from './hr/policies.ts';
+export * from './hr/talent.ts';
+export * from './payroll/setup.ts';
+export * from './finance/gl.ts';

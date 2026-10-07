@@ -49,6 +49,10 @@ export class WarehousesService {
   async update(user: SessionUser, meta: RequestMeta, id: string, input: WarehouseUpdate): Promise<Warehouse> {
     const w = await this.current(user, id, input.rowVersion);
     if (input.code && input.code !== w.code) await this.checkCode(user, input.code);
+    // A van stock location (made by Distribution › Vans) keeps its type: its van needs a VAN-type warehouse.
+    if (w.type === 'VAN' && input.type) {
+      throw new ValidationError('A van stock location stays of type Van.', { type: ['Van warehouses keep their type'] }, { code: 'VAN_WAREHOUSE_TYPE' });
+    }
     await this.checkLinks(user, input);
     await this.unitOfWork.run(actorContext(user, meta), async () => {
       if (input.isPrimary && !w.isPrimary) await this.clearPrimary(user);

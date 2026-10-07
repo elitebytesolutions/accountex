@@ -1,4 +1,7 @@
 import { Banknote, Boxes, Building2, CalendarCheck, Clock, HandCoins, ShoppingCart, Users, Landmark, LayoutGrid, Package, Percent, Plane, Rocket, Settings, Wallet, Warehouse, type LucideIcon } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { Route as RouteIcon } from "lucide-react";
+import { ChartPie, HeartHandshake } from "lucide-react";
 
 /**
  * Workspace sidebar (template NAV.app in template/src/90-nav.js). Only screens that exist are listed;
@@ -144,6 +147,18 @@ export const GROUPS: NavGroup[] = [
     ],
   },
   {
+    title: "Wholesale & Distribution",
+    modules: [
+      {
+        label: "Distribution",
+        desc: "Routes, vans & recovery",
+        href: "/wholesale/routes",
+        icon: RouteIcon,
+        children: [{ label: "Routes & Salesmen", href: "/wholesale/routes", permission: "route:view" }],
+      },
+    ],
+  },
+  {
     title: "Workforce",
     modules: [
       {
@@ -176,6 +191,48 @@ export const GROUPS: NavGroup[] = [
         href: "/hr/leave/policies",
         icon: Plane,
         children: [{ label: "Leave Policies", href: "/hr/leave/policies", permission: "lv:view" }],
+      },
+      {
+        label: "Payroll",
+        desc: "Salaries, payslips & loans",
+        href: "/hr/payroll/structures",
+        icon: Wallet,
+        children: [{ label: "Salary Structures", href: "/hr/payroll/structures", permission: "prun:view" }],
+      },
+      {
+        label: "Talent",
+        desc: "Onboarding, reviews & training",
+        href: "/hr/onboarding",
+        icon: Sparkles,
+        children: [
+          { label: "Onboarding", href: "/hr/onboarding", permission: "emp:view" },
+          { label: "Performance", href: "/hr/performance", permission: "emp:view" },
+          { label: "Training", href: "/hr/training", permission: "emp:view" },
+          { label: "Policies", href: "/hr/policies", permission: "emp:view" },
+        ],
+      },
+      {
+        label: "Employee engagement",
+        desc: "Helpdesk, announcements & pulse",
+        href: "/hr/helpdesk-setup",
+        icon: HeartHandshake,
+        children: [
+          { label: "Helpdesk setup", href: "/hr/helpdesk-setup", permission: "emp:view" },
+          { label: "Announcements", href: "/hr/announcements", permission: "emp:view" },
+          { label: "Polls & surveys", href: "/hr/engagement", permission: "emp:view" },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Insights",
+    modules: [
+      {
+        label: "Analytics",
+        desc: "HR reports & report studio",
+        href: "/reports/studio",
+        icon: ChartPie,
+        children: [{ label: "Report Studio", href: "/reports/studio", permission: "rpt:view" }],
       },
     ],
   },
