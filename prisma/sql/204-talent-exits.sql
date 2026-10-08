@@ -1,0 +1,4 @@
+-- 204-talent-exits.sql
+-- Placeholder created when Phase 33 rev 2 was approved (2026-10-08); filled in by the phase implementation.
+-- Idempotent: safe to run repeatedly via npm run db:sql.
+SELECT 1;
