@@ -117,7 +117,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 41, title: "Platform billing", portal: "admin", kind: "TRANSACTIONAL",
+    no: 41, title: "Platform billing", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Platform invoices and payments, dunning, and reseller payouts.",
     entities: [
       E("platform-invoices", "Platform Invoices", ["Platform.PlatformInvoices", "Platform.PlatformInvoiceLines"], {
@@ -140,7 +140,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 42, title: "Growth & support", portal: "admin", kind: "TRANSACTIONAL",
+    no: 42, title: "Growth & support", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Leads, support tickets, announcements/broadcasts and the communication log.",
     entities: [
       E("leads", "Leads", ["Platform.PlatformLeads", "Platform.PlatformLeadActivities"], {
@@ -163,7 +163,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 43, title: "Platform operations", portal: "admin", kind: "TRANSACTIONAL",
+    no: 43, title: "Platform operations", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Incidents and status, flag change requests, privacy requests and the entitlement change log.",
     reports: ["System Health", "Platform Audit Log"],
     entities: [
