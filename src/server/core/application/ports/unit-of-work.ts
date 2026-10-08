@@ -12,10 +12,12 @@ export type AuditContext = {
   sessionId?: string;
   /** Who acted when there is no signed-in user, e.g. "seed.ts" or "login attempt". */
   actorLabel?: string;
+  /** Phase 40: "Super Admin <email>" while the Super Admin works in the company through a support session. */
+  impersonatedBy?: string;
 };
 
 /** Facts about the HTTP request that every audit entry and error log carries. */
-export type RequestMeta = Pick<AuditContext, 'correlationId' | 'clientIp' | 'userAgent' | 'sessionId'>;
+export type RequestMeta = Pick<AuditContext, 'correlationId' | 'clientIp' | 'userAgent' | 'sessionId' | 'impersonatedBy'>;
 
 /**
  * Port: runs work in one database transaction that carries the AuditContext.

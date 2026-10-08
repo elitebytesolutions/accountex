@@ -35,6 +35,8 @@ export * from './treasury/banking.ts';
 export * from './treasury/cash-ops.ts';
 // Phase 19: purchasing
 export * from './purchases/purchasing.ts';
+// Phase 20: payables
+export * from './purchases/payables.ts';
 export * from './assets/category.ts';
 export * from './tax/fbr.ts';
 export * from './access/sod-rule.ts';
@@ -48,6 +50,8 @@ export * from './inventory/batch.ts';
 export * from './inventory/kit.ts';
 export * from './inventory/label.ts';
 export * from './inventory/reorder.ts';
+// Phase 21: stock operations
+export * from './inventory/stock-ops.ts';
 export * from './parties/common.ts';
 export * from './parties/customer-group.ts';
 export * from './parties/customer.ts';
@@ -66,6 +70,11 @@ export * from './hr/attendance.ts';
 export * from './hr/regularisation.ts';
 export * from './hr/roster.ts';
 export * from './hr/overtime-claim.ts';
+// Phase 31: leave & lifecycle
+export * from './hr/leave-request.ts';
+export * from './hr/leave-balance.ts';
+export * from './hr/onboarding.ts';
+export * from './hr/offboarding.ts';
 export * from './payroll/setup.ts';
 export * from './finance/gl.ts';
 export * from './platform/history.ts';

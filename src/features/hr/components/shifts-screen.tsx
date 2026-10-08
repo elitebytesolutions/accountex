@@ -13,6 +13,8 @@ import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treas
 import { ApiError } from "@/lib/api/errors";
 import { createShift, deleteShift, listShifts, makeShiftDefault, setShiftActive, updateShift } from "../api";
 import { RecordModal } from "./record-modal";
+import { OpenShiftsPanel, publishWeek, RosterPanel, SwapsPanel } from "./roster-panels";
+import type { RosterWeek } from "@/shared";
 
 type Can = { create: boolean; edit: boolean; remove: boolean };
 const LOOKUPS = ["WorkShiftColour", "WeeklyOff", "Season"];
@@ -30,17 +32,19 @@ const fromShift = (s: Shift): Record<string, string | boolean> => ({
   prayerBreakNote: s.prayerBreakNote ?? "", isSeasonal: s.isSeasonal, season: s.season ?? "", validFrom: s.validFrom ?? "", validTo: s.validTo ?? "",
 });
 
-/** Template app/hr/shifts (50-hr-core.html): shift definitions and the "New shift" modal. The weekly roster comes with attendance (Phase 12). */
-export function ShiftsScreen({ can, canDelete }: { can: Can; canDelete: boolean }) {
+/** Template app/hr/shifts (50-hr-core.html): shift definitions and the "New shift" modal, the weekly roster (Phase 30) with swaps and open shifts. */
+export function ShiftsScreen({ can, canDelete, canPublish = false }: { can: Can; canDelete: boolean; canPublish?: boolean }) {
   const toast = useToast();
   const lookups = useLookups(LOOKUPS);
   const [rows, setRows] = useState<Shift[] | null>(null);
+  const assigned = rows?.reduce((n, x) => n + x.employees, 0) ?? 0;
   const [error, setError] = useState<{ message: string; reference?: string } | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [edit, setEdit] = useState<Shift | "new" | null>(null);
   const [f, setF] = useState<Record<string, string | boolean>>(blank);
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [roster, setRoster] = useState<{ week: RosterWeek | null; department: string; n: number }>({ week: null, department: "", n: 0 });
 
   useEffect(() => {
     let cancelled = false;
@@ -73,11 +77,11 @@ export function ShiftsScreen({ can, canDelete }: { can: Can; canDelete: boolean 
     <>
       <PageHead eyebrow="HR / Attendance" title="Shifts & Roster" description="Shift timings, grace rules and the weekly duty roster."
         actions={<>
-          <button className="btn secondary" type="button" disabled title="Rosters arrive with attendance (Phase 12)"><Send />Publish roster</button>
+          {canPublish && <button className="btn secondary" type="button" disabled={busy || !roster.week?.unpublished} title={roster.week?.unpublished ? undefined : "Nothing to publish this week"} onClick={() => roster.week && run(() => publishWeek(roster.week!.weekStart, roster.department), "Roster published to My Profile").then(() => setRoster((r) => ({ ...r, n: r.n + 1 })))}><Send />Publish roster</button>}
           {can.create && <button className="btn primary" type="button" onClick={() => open("new")}><Plus />New shift</button>}
         </>} />
       <div className="panel flush mb">
-        <div className="panel-head"><div><h3>Shift definitions</h3><p>{rows ? `${rows.length} shift${rows.length === 1 ? "" : "s"} · employees are assigned in Phase 11` : "Loading…"}</p></div></div>
+        <div className="panel-head"><div><h3>Shift definitions</h3><p>{rows ? `${rows.length} shift${rows.length === 1 ? "" : "s"} · ${assigned} employee${assigned === 1 ? "" : "s"} assigned` : "Loading…"}</p></div></div>
         <div className="table-wrap"><table className="tbl">
           <thead><tr><th>Shift</th><th>Code</th><th>Timing</th><th className="num">Hours</th><th className="num">Grace (min)</th><th>Break</th><th>Half-day after</th><th>Weekly off</th><th className="num">Employees</th><th>Status</th><th /></tr></thead>
           <tbody>
@@ -100,11 +104,9 @@ export function ShiftsScreen({ can, canDelete }: { can: Can; canDelete: boolean 
         </table></div>
       </div>
 
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Weekly roster</h3><p>Duty roster by team and week</p></div></div>
-        <EmptyState icon={<CalendarClock />} title="Rosters arrive with attendance" description="Once employees (Phase 11) and attendance (Phase 12) exist, the weekly duty roster is planned here from these shifts." />
-        <div className="table-foot"><div className="legend">{rows?.filter((x) => x.status === "ACTIVE").map((x) => <span key={x.id}><i style={{ background: COLOUR[x.colour] ?? "var(--primary)" }} />{x.name}</span>)}</div></div>
-      </div>
+      <RosterPanel refresh={roster.n} can={{ edit: can.edit }} onWeek={(w, department) => setRoster((r) => ({ ...r, week: w, department }))} />
+      <SwapsPanel can={{ approve: canPublish }} />
+      <OpenShiftsPanel can={{ edit: can.edit }} />
 
       {edit && (
         <RecordModal open wide onClose={() => setEdit(null)} busy={busy} title={row ? `Edit ${row.name}` : "New shift"} subtitle="Grace, break and half-day rules drive late marks and payroll deductions."

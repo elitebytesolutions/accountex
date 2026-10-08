@@ -8,11 +8,14 @@ import type { SessionUser } from "@/shared";
 import { logout } from "@/features/auth/api";
 import { initialsOf } from "@/features/auth/initials";
 import { crumbsFor, navFor, navPathFor } from "@/features/workspace-nav/nav";
+import { setCompanyTimeZone } from "@/lib/company-time";
 import { ShellFrame } from "./shell-frame";
 import { SupportAccessBanner } from "./support-access-banner";
 
 /** Template shell (20-shell-open.html) for the company workspace: NAV.app sidebar, TOP.app top bar. */
 export function AppShell({ user, children }: { user: SessionUser; children: ReactNode }) {
+  // Clock times across the workspace are shown in the company's time zone; set before the pages render.
+  setCompanyTimeZone(user.timeZone);
   const pathname = usePathname();
   const router = useRouter();
   // An admin-set password must be replaced first; the API refuses everything else meanwhile (AUTH_PASSWORD_CHANGE_REQUIRED).

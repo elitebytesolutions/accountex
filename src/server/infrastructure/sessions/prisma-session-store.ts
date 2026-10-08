@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 const columns = {
   id: true, tenantId: true, userId: true, deviceLabel: true, clientType: true, ipAddress: true,
-  signedInAt: true, lastActiveAt: true, expiresAt: true, revokedAt: true,
+  signedInAt: true, lastActiveAt: true, expiresAt: true, revokedAt: true, authMethod: true,
 } as const;
 
 @Injectable()

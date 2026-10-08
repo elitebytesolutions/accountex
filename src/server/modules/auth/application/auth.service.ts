@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
-import type { LoginInput, SessionUser } from '../../../../shared/index.js';
+import { TENANT_SIGN_IN_STATUSES, type LoginInput, type SessionUser } from '../../../../shared/index.js';
 import { PasswordHasher } from '../../../core/application/ports/password-hasher.js';
 import { SessionStore } from '../../../core/application/ports/session-store.js';
 import { TokenService } from '../../../core/application/ports/token-service.js';
@@ -45,6 +45,13 @@ export class AuthService {
         code: 'AUTH_INVALID_CREDENTIALS',
         log: { companyCode: input.companyCode, attemptedEmail: input.email, accountFound: Boolean(candidate), status: candidate?.status },
       });
+    }
+    // Phase 40: only live companies sign in (the password is checked first, so a suspended company can't be probed).
+    if (candidate.tenantStatus === 'SUSPENDED') {
+      throw new ForbiddenError('This company is suspended', undefined, { code: 'TENANT_SUSPENDED', log: { userId: candidate.id } });
+    }
+    if (!TENANT_SIGN_IN_STATUSES.includes(candidate.tenantStatus)) {
+      throw new ForbiddenError('This company is not active', undefined, { code: 'TENANT_INACTIVE', log: { userId: candidate.id, status: candidate.tenantStatus } });
     }
     if (!withinLoginHours({ hours: candidate.loginHours, from: candidate.loginFrom, to: candidate.loginTo }, now, candidate.timeZone)) {
       throw new ForbiddenError('Outside allowed login hours', undefined, { code: 'AUTH_OUTSIDE_LOGIN_HOURS', log: { userId: candidate.id } });

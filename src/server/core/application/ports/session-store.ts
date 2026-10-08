@@ -10,6 +10,8 @@ export type SessionRecord = {
   lastActiveAt: Date;
   expiresAt: Date;
   revokedAt: Date | null;
+  /** PASSWORD, SSO_*, or IMPERSONATION (Phase 40: a Super Admin support session). */
+  authMethod: string;
 };
 
 export type NewSession = {

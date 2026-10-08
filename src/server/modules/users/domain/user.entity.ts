@@ -13,5 +13,7 @@ export class User {
     readonly mustChangePassword: boolean,
     /** Idle minutes before the session ends (Users.sessionTimeoutMin). */
     readonly sessionTimeoutMin: number,
+    /** The company's IANA time zone (Platform.Tenants.timezone), for showing clock times. */
+    readonly timeZone: string = 'Asia/Karachi',
   ) {}
 }

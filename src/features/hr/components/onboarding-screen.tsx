@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ArrowDown, ArrowUp, CalendarCheck, CircleCheck, DoorOpen, GripVertical, ListChecks, Pencil, Plus, Star, Trash2, UserPlus } from "lucide-react";
+import { AlertTriangle, ArrowDown, ArrowUp, GripVertical, ListChecks, Pencil, Plus, Star, Trash2, UserPlus } from "lucide-react";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { TASK_GROUPS, type OnboardingTemplate, type OnboardingTemplateTask } from "@/shared";
 import { cn } from "@/components/ui/cn";
@@ -13,6 +13,7 @@ import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treas
 import { ApiError } from "@/lib/api/errors";
 import { createOnboardingTemplate, deleteOnboardingTemplate, listOnboardingTemplates, onboardingTemplateAction, updateOnboardingTemplate } from "../talent-api";
 import { RecordModal } from "./record-modal";
+import { JoinerDrawer, NewJoinersTable, OnboardingKpis, OpenTasksPanel, StartOnboardingModal, useOnboardingBoard } from "./onboarding-joiners";
 
 type Can = { create: boolean; edit: boolean; remove: boolean };
 type TaskRow = { key: string; id?: string; taskGroup: string; title: string; ownerFunction: string; dueOffsetDays: string; actionKind: string; description: string | null };
@@ -26,8 +27,8 @@ const dueText = (d: number) => (d === 0 ? "Day 1" : d < 0 ? `${-d} day${d === -1
 
 /**
  * Template app/hr/onboarding (51-hr-pay-talent.html): KPIs, New Joiners, the Checklist Template panel and Open Tasks.
- * New joiners and tasks arrive with onboardings (Phase 31). Added in template style: a template picker and the template
- * editor (the template's "Edit" is only a toast).
+ * New joiners and open tasks come from onboardings (Phase 31: onboarding-joiners.tsx). Added in template style: a template
+ * picker, the template editor (the template's "Edit" is only a toast), the start-onboarding modal and the joiner drawer.
  */
 export function OnboardingScreen({ can }: { can: Can }) {
   const toast = useToast();
@@ -42,6 +43,9 @@ export function OnboardingScreen({ can }: { can: Can }) {
   const [drag, setDrag] = useState<number | null>(null);
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const { board, reload: reloadBoard } = useOnboardingBoard();
+  const [starting, setStarting] = useState(false);
+  const [joiner, setJoiner] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -96,20 +100,15 @@ export function OnboardingScreen({ can }: { can: Can }) {
       <PageHead eyebrow="Workforce / Talent / Onboarding" title="Onboarding" description="Pre-joining and first-30-day tasks for new joiners, assigned to HR, IT, Admin and Finance."
         actions={<>
           {(can.edit || can.create) && <button className="btn secondary" type="button" disabled={!rows} onClick={() => (shown && can.edit ? open(shown) : open("new"))}><ListChecks />Edit template</button>}
-          <button className="btn primary" type="button" disabled title="New joiners are onboarded from Phase 31"><UserPlus />Add new joiner</button>
+          {can.create && <button className="btn primary" type="button" onClick={() => setStarting(true)}><UserPlus />Add new joiner</button>}
         </>} />
 
-      <div className="kpi-grid mb">
-        <div className="kpi"><div className="kpi-top"><span>In Onboarding</span><span className="icon-well"><DoorOpen /></span></div><strong>0</strong><small>Onboardings start in Phase 31</small></div>
-        <div className="kpi teal"><div className="kpi-top"><span>Tasks Completed</span><span className="icon-well"><CircleCheck /></span></div><strong>0 / 0</strong><small>No open onboardings</small></div>
-        <div className="kpi red"><div className="kpi-top"><span>Overdue Tasks</span><span className="icon-well"><AlertTriangle /></span></div><strong>0</strong><small>Nothing overdue</small></div>
-        <div className="kpi violet"><div className="kpi-top"><span>Probation Reviews Due</span><span className="icon-well"><CalendarCheck /></span></div><strong>0</strong><small>Next 30 days</small></div>
-      </div>
+      <OnboardingKpis board={board} />
 
       <div className="split mb">
         <div className="panel flush">
           <div className="panel-head"><div><h3>New Joiners</h3><p>{shown ? `Template: ${shown.name} (${shown.tasks.length} task${shown.tasks.length === 1 ? "" : "s"})` : "No template yet"}</p></div></div>
-          <EmptyState icon={<UserPlus />} title="No new joiners in onboarding" description="Joiners appear here once onboardings start from a template (Phase 31)." />
+          <NewJoinersTable board={board} onOpen={setJoiner} />
         </div>
         <div className="panel">
           <div className="panel-head">
@@ -142,10 +141,10 @@ export function OnboardingScreen({ can }: { can: Can }) {
         </div>
       </div>
 
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Open Tasks</h3><p>Across all new joiners</p></div><div className="panel-actions"><div className="chips"><button type="button" className="active">All <i>0</i></button><button type="button">Overdue <i>0</i></button><button type="button">Mine <i>0</i></button></div></div></div>
-        <EmptyState icon={<CircleCheck />} title="No open tasks" description="Tasks are created for each new joiner from the checklist template (Phase 31)." />
-      </div>
+      <OpenTasksPanel board={board} canEdit={can.edit} onChanged={reloadBoard} />
+
+      {starting && <StartOnboardingModal open={starting} onClose={() => setStarting(false)} onDone={(o) => { reloadBoard(); setJoiner(o.id); }} />}
+      <JoinerDrawer key={joiner ?? "none"} id={joiner} onClose={() => setJoiner(null)} canEdit={can.edit} onChanged={reloadBoard} />
 
       {edit && (
         <RecordModal open xl onClose={() => setEdit(null)} busy={busy} title={row ? `Edit ${row.name}` : "New onboarding template"}

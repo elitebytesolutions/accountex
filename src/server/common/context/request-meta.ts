@@ -11,6 +11,8 @@ export function requestMetaOf(req: Request): RequestMeta {
     userAgent: req.header('user-agent')?.slice(0, 500),
     // Set by JwtAuthGuard, so every change made in this request is tied to the signed-in session.
     sessionId: (req as Request & { sessionId?: string }).sessionId,
+    // Phase 40: set by JwtAuthGuard for a Super Admin support session.
+    impersonatedBy: (req as Request & { impersonatedBy?: string }).impersonatedBy,
   };
 }
 

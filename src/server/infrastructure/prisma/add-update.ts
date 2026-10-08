@@ -97,6 +97,13 @@ const FUNCTIONS = {
   goodsReceivedNoteAddUpdate: 'Purchases',
   vendorBillAddUpdate: 'Purchases',
   landedCostShipmentAddUpdate: 'Purchases',
+  purchaseReturnAddUpdate: 'Purchases',
+  debitNoteAddUpdate: 'Purchases',
+  vendorPaymentAddUpdate: 'Purchases',
+  stockInOutEntryAddUpdate: 'Inventory',
+  stockTransferAddUpdate: 'Inventory',
+  stockAdjustmentAddUpdate: 'Inventory',
+  stockCountAddUpdate: 'Inventory',
   fbrSettingAddUpdate: 'Tax',
   segregationOfDutiesRuleAddUpdate: 'Company',
   onboardingTemplateAddUpdate: 'HumanResources',
@@ -152,6 +159,13 @@ const FUNCTIONS = {
   shiftRosterEntryAddUpdate: 'HumanResources',
   shiftSwapRequestAddUpdate: 'EmployeeSelfService',
   openShiftAddUpdate: 'EmployeeSelfService',
+  // Phase 31: leave & lifecycle
+  leaveRequestAddUpdate: 'HumanResources',
+  leaveAdjustmentAdd: 'HumanResources',
+  leaveYearEndClosingAddUpdate: 'HumanResources',
+  onboardingFromTemplate: 'HumanResources',
+  onboardingAddUpdate: 'HumanResources',
+  offboardingAddUpdate: 'HumanResources',
 } as const;
 export type AddUpdateFunction = keyof typeof FUNCTIONS;
 

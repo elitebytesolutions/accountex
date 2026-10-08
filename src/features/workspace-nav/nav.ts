@@ -2,6 +2,8 @@ import { Banknote, Boxes, Building2, CalendarCheck, Clock, HandCoins, ShoppingCa
 import { Sparkles } from "lucide-react";
 import { Route as RouteIcon } from "lucide-react";
 import { ChartPie, HeartHandshake } from "lucide-react";
+import { ChartColumn, Inbox, ReceiptText } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 /**
  * Workspace sidebar (template NAV.app in template/src/90-nav.js). Only screens that exist are listed;
@@ -19,7 +21,10 @@ export const MENU: NavModule[] = [{ label: "Dashboard", href: "/dashboard", icon
 export const GROUPS: NavGroup[] = [
   {
     title: "Workspace",
-    modules: [{ label: "Setup Guide", desc: "Finish onboarding", href: "/setup", icon: Rocket, permission: "comp:view" }],
+    modules: [
+      { label: "Approvals Inbox", desc: "Everything waiting on you", href: "/approvals", icon: Inbox },
+      { label: "Setup Guide", desc: "Finish onboarding", href: "/setup", icon: Rocket, permission: "comp:view" },
+    ],
   },
   {
     title: "Finance",
@@ -32,7 +37,19 @@ export const GROUPS: NavGroup[] = [
         children: [
           { label: "Chart of Accounts", href: "/accounting/coa", permission: "coa:view" },
           { label: "Account Ledger", href: "/accounting/ledger", permission: "coa:view" },
+          { label: "Opening Balances", href: "/accounting/opening", permission: "vch:view" },
           { label: "Cost Centres & Projects", href: "/accounting/cost-centres", permission: "coa:view" },
+        ],
+      },
+      {
+        label: "Voucher Management",
+        desc: "Create and manage vouchers",
+        href: "/accounting/vouchers",
+        icon: ReceiptText,
+        children: [
+          { label: "Voucher Register", href: "/accounting/vouchers", permission: "vch:view" },
+          { label: "New Voucher", href: "/accounting/vouchers/new", permission: "vch:create" },
+          { label: "Recurring Templates", href: "/accounting/recurring", permission: "vch:view" },
         ],
       },
       {
@@ -42,16 +59,25 @@ export const GROUPS: NavGroup[] = [
         icon: Building2,
         children: [
           { label: "Bank Accounts", href: "/bank/accounts", permission: "bank:view" },
+          { label: "Bank Transactions", href: "/bank/transactions", permission: "bank:view" },
+          { label: "Receive & Issue Cheques", href: "/bank/cheques", permission: "bank:view" },
+          { label: "Cheque Voucher (Bulk)", href: "/bank/cheque-voucher", permission: "bank:view" },
+          { label: "Cheque Register & PDC", href: "/bank/cheque-register", permission: "bank:view" },
+          { label: "Bank Reconciliation", href: "/bank/reconciliation", permission: "recon:view" },
+          { label: "Bank Book", href: "/bank/book", permission: "bank:view" },
           { label: "Bank Rules & Import", href: "/bank/rules", permission: "bank:view" },
         ],
       },
       {
         label: "Cash",
         desc: "Cash book & petty cash",
-        href: "/cash/setup",
+        href: "/cash/book",
         icon: Banknote,
         children: [
+          { label: "Cash Book", href: "/cash/book", permission: "cash:view" },
+          { label: "Cash Ledger", href: "/cash/ledger", permission: "cash:view" },
           { label: "Petty Cash", href: "/cash/petty", permission: "cash:view" },
+          { label: "Expense Claims", href: "/cash/expenses", permission: "cash:view" },
           { label: "Cash Setup", href: "/cash/setup", permission: "cash:view" },
         ],
       },
@@ -107,11 +133,31 @@ export const GROUPS: NavGroup[] = [
     title: "Purchases & Payables",
     modules: [
       {
+        label: "Purchases",
+        desc: "Orders and vendor bills",
+        href: "/purchases/orders",
+        icon: ShoppingBag,
+        children: [
+          { label: "Purchase Voucher", href: "/purchases/voucher", permission: "bill:create" },
+          { label: "Purchase Orders", href: "/purchases/orders", permission: "po:view" },
+          { label: "Goods Received (GRN)", href: "/purchases/grn", permission: "grn:view" },
+          { label: "Vendor Bills", href: "/purchases/bills", permission: "bill:view" },
+          { label: "New Bill", href: "/purchases/bills/new", permission: "bill:create" },
+          { label: "Purchase Returns", href: "/purchases/returns", permission: "grn:view" },
+          { label: "Debit Notes", href: "/purchases/debit-notes", permission: "bill:view" },
+          { label: "Landed Cost", href: "/purchases/landed-cost", permission: "bill:view" },
+        ],
+      },
+      {
         label: "Payables",
         desc: "Vendors, bills & payments",
         href: "/vendors",
         icon: Wallet,
-        children: [{ label: "Vendors", href: "/vendors", permission: "vend:view" }],
+        children: [
+          { label: "Vendors", href: "/vendors", permission: "vend:view" },
+          { label: "Payments & Allocation", href: "/payables/payments", permission: "vpay:view" },
+          { label: "AP Ageing & Reports", href: "/payables/ageing", permission: "vpay:view" },
+        ],
       },
     ],
   },
@@ -179,6 +225,9 @@ export const GROUPS: NavGroup[] = [
         href: "/hr/shifts",
         icon: Clock,
         children: [
+          { label: "Attendance Today", href: "/hr/attendance", permission: "att:view" },
+          { label: "Attendance Register", href: "/hr/attendance/register", permission: "att:view" },
+          { label: "Regularisation", href: "/hr/attendance/requests", permission: "att:view" },
           { label: "Shifts & Rosters", href: "/hr/shifts", permission: "att:view" },
           { label: "Holidays", href: "/hr/holidays", permission: "att:view" },
           { label: "Overtime", href: "/hr/overtime", permission: "att:view" },
@@ -190,7 +239,12 @@ export const GROUPS: NavGroup[] = [
         desc: "Requests, balances & policies",
         href: "/hr/leave/policies",
         icon: Plane,
-        children: [{ label: "Leave Policies", href: "/hr/leave/policies", permission: "lv:view" }],
+        children: [
+          { label: "Leave Overview", href: "/hr/leave", permission: "lv:view" }, // Phase 31
+          { label: "Leave Requests", href: "/hr/leave/requests", permission: "lv:view" },
+          { label: "Leave Balances", href: "/hr/leave/balances", permission: "lv:view" },
+          { label: "Leave Policies", href: "/hr/leave/policies", permission: "lv:view" },
+        ],
       },
       {
         label: "Payroll",
@@ -206,6 +260,7 @@ export const GROUPS: NavGroup[] = [
         icon: Sparkles,
         children: [
           { label: "Onboarding", href: "/hr/onboarding", permission: "emp:view" },
+          { label: "Offboarding", href: "/hr/offboarding", permission: "emp:view" }, // Phase 31
           { label: "Performance", href: "/hr/performance", permission: "emp:view" },
           { label: "Training", href: "/hr/training", permission: "emp:view" },
           { label: "Policies", href: "/hr/policies", permission: "emp:view" },
@@ -227,6 +282,17 @@ export const GROUPS: NavGroup[] = [
   {
     title: "Insights",
     modules: [
+      {
+        label: "Financial Statements",
+        desc: "Reports and statements",
+        href: "/reports/trial-balance",
+        icon: ChartColumn,
+        children: [
+          { label: "Trial Balance", href: "/reports/trial-balance", permission: "vch:view" },
+          { label: "General Ledger", href: "/reports/gl", permission: "vch:view" },
+          { label: "Day Book", href: "/reports/day-book", permission: "vch:view" },
+        ],
+      },
       {
         label: "Analytics",
         desc: "HR reports & report studio",
@@ -278,7 +344,9 @@ const OTHER_PAGES: Record<string, { trail: string[]; title: string }> = {
 };
 
 /** Detail pages under a sidebar page (/customers/<id>): their title; the trail ends with the list page. */
-const DETAIL_TITLES: Record<string, string> = { "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile" };
+const DETAIL_TITLES: Record<string, string> = { "/accounting/vouchers": "Voucher Detail", "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile", "/purchases/bills": "Vendor Bill" };
+/** Edit pages (<list>/<id>/edit): their title. */
+const EDIT_TITLES: Record<string, string> = { "/accounting/vouchers": "Edit Voucher" };
 /** Detail pages whose parent path is not the list page's path. */
 const DETAIL_LIST: Record<string, string> = { "/inventory/products": "/inventory/items" };
 
@@ -297,6 +365,12 @@ export function crumbsFor(pathname: string): { trail: string[]; title: string } 
       for (const c of m.children ?? []) if (c.href === pathname) return { trail: [g.title, m.label], title: c.label };
       if (m.href === pathname) return { trail: [g.title], title: m.label };
     }
+  // An edit page under a detail page (/accounting/vouchers/<id>/edit).
+  const edit = pathname.match(/^(.*)\/[^/]+\/edit$/);
+  if (edit && EDIT_TITLES[edit[1]!]) {
+    const base = crumbsFor(edit[1]!);
+    if (base) return { trail: [...base.trail, base.title], title: EDIT_TITLES[edit[1]!]! };
+  }
   // A detail page (/customers/<id>) only when no sidebar page has this exact path (/hr/employees/new stays "Add Employee").
   const parent = pathname.replace(/\/[^/]+$/, "");
   if (DETAIL_TITLES[parent]) {

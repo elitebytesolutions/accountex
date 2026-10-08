@@ -90,7 +90,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 40, title: "Tenant lifecycle", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 40, title: "Tenant lifecycle", portal: "admin", kind: "TRANSACTIONAL", status: "done",
     objective: "Onboard and manage tenants, their subscriptions and usage, and audited impersonation.",
     reports: ["Platform Overview (admin/dashboard)", "SaaS Analytics"],
     entities: [

@@ -59,12 +59,12 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 13 | Talent & policy setup | Masters | workspace | done | Onboarding Templates · Performance Cycles · Training Programs · Company Policies |
 | 14 | Distribution setup | Masters | workspace | done | Shop Areas · Routes · Vans · Commission Slabs |
 | 15 | Self-service & reporting setup | Masters | workspace | done | Helpdesk Categories & FAQs · Company Announcements · Polls & Pulse Surveys · Saved Reports |
-| 16 | General ledger | Transactions | workspace | in-progress | Approvals Inbox · Journal Vouchers · Opening Balances · Recurring Vouchers |
-| 17 | Banking | Transactions | workspace | planned | Bank Transactions · Statement Imports · Bank Reconciliation · Cheques & Batches |
-| 18 | Cash | Transactions | workspace | planned | Cash Book Entries · Cash Day Close · Petty Cash Vouchers & Replenishment · Expense Claims |
-| 19 | Purchasing | Transactions | workspace | planned | Purchase Orders · Goods Received Notes · Vendor Bills · Landed Cost |
-| 20 | Payables | Transactions | workspace | planned | Purchase Returns · Debit Notes · Vendor Payments |
-| 21 | Stock operations | Transactions | workspace | planned | Stock In/Out · Stock Transfers · Stock Adjustments · Stock Counts |
+| 16 | General ledger | Transactions | workspace | done | Approvals Inbox · Journal Vouchers · Opening Balances · Recurring Vouchers |
+| 17 | Banking | Transactions | workspace | done | Bank Transactions · Statement Imports · Bank Reconciliation · Cheques & Batches |
+| 18 | Cash | Transactions | workspace | done | Cash Book Entries · Cash Day Close · Petty Cash Vouchers & Replenishment · Expense Claims |
+| 19 | Purchasing | Transactions | workspace | done | Purchase Orders · Goods Received Notes · Vendor Bills · Landed Cost |
+| 20 | Payables | Transactions | workspace | done | Purchase Returns · Debit Notes · Vendor Payments |
+| 21 | Stock operations | Transactions | workspace | in-progress | Stock In/Out · Stock Transfers · Stock Adjustments · Stock Counts |
 | 22 | Stock vouchers & demand | Transactions | workspace | planned | Stock Vouchers · Assembly Vouchers · Goods Demands · Principal Claims & Targets · Bulk Price Updates |
 | 23 | Sales documents | Transactions | workspace | planned | Quotations · Sales Orders · Delivery Challans · Sales Invoices |
 | 24 | Sales completion | Transactions | workspace | planned | Sales Returns · Credit Notes · Customer Receipts · Recurring Invoices · POS Shifts & Payments |
@@ -73,17 +73,17 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 27 | Assets & budgets | Transactions | workspace | planned | Fixed Asset Register · Depreciation · Asset Transfers & Disposals · Budgets |
 | 28 | Tax compliance | Transactions | workspace | planned | Sales Tax Returns · WHT Deductions & Challans · WHT Certificates & Statements · FBR Submissions |
 | 29 | Period close & work queue | Transactions | workspace | planned | Period Reopen Requests · Year-End Close · Payment Reminder Runs · Tasks & Notifications · Sign-in Recovery & MFA |
-| 30 | Time & attendance | Transactions | workspace | planned | Attendance · Regularisation Requests · Rosters & Shift Swaps · Overtime Claims |
-| 31 | Leave & lifecycle | Transactions | workspace | planned | Leave Requests · Leave Balances · Onboardings · Offboardings |
+| 30 | Time & attendance | Transactions | workspace | done | Attendance · Regularisation Requests · Rosters & Shift Swaps · Overtime Claims |
+| 31 | Leave & lifecycle | Transactions | workspace | done | Leave Requests · Leave Balances · Onboardings · Offboardings |
 | 32 | Payroll | Transactions | workspace | planned | Payroll Runs · Payroll Adjustments · Loans & Advances · Payslips & Salary Payments · Tax Declarations |
 | 33 | Talent & exits | Transactions | workspace | planned | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
 | 34 | Self-service requests | Transactions | workspace | planned | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
 | 35 | Data & collaboration | Transactions | workspace | planned | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
-| 36 | Plans & catalogue | Masters | admin | planned | Subscription Plans · Platform Modules · Add-ons · Coupons |
-| 37 | Seed templates & tax master | Masters | admin | planned | COA Templates · Tenant Seed Templates · Tax Master · Communication Templates |
-| 38 | Platform configuration | Masters | admin | planned | Dunning Policies · Tenant Segments · Resellers · Platform Security & Backups |
-| 39 | Feature flags & alerting | Masters | admin | planned | Feature Flags · Maintenance Windows · Usage Alert Rules · Audit Alert Rules |
-| 40 | Tenant lifecycle | Transactions | admin | planned | Tenants · Subscriptions · Usage · Impersonation Sessions |
+| 36 | Plans & catalogue | Masters | admin | done | Subscription Plans · Platform Modules · Add-ons · Coupons |
+| 37 | Seed templates & tax master | Masters | admin | done | COA Templates · Tenant Seed Templates · Tax Master · Communication Templates |
+| 38 | Platform configuration | Masters | admin | done | Dunning Policies · Tenant Segments · Resellers · Platform Security & Backups |
+| 39 | Feature flags & alerting | Masters | admin | done | Feature Flags · Maintenance Windows · Usage Alert Rules · Audit Alert Rules |
+| 40 | Tenant lifecycle | Transactions | admin | done | Tenants · Subscriptions · Usage · Impersonation Sessions |
 | 41 | Platform billing | Transactions | admin | planned | Platform Invoices · Platform Payments · Dunning Cases · Reseller Payouts |
 | 42 | Growth & support | Transactions | admin | planned | Leads · Support Tickets · Announcements & Broadcasts · Communication Logs |
 | 43 | Platform operations | Transactions | admin | planned | Service Incidents · Flag Change Requests · Privacy Requests · Entitlement Change Log |
@@ -1502,7 +1502,7 @@ Read-only reports delivered with this phase: Bank Book.
   - `GET /api/bank/transactions/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/bank/transactions/:id/categorise
   - POST /api/bank/transactions/:id/post|reverse
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Generated from posted vouchers on a bank GL account and from categorised statement lines (BPV/BRV); never typed (decided 2026-10-07).
 - **Depends on:** `bank-accounts` (phase 4), `vouchers` (phase 16)
 
 ### 17.2 Statement Imports `statement-imports`
@@ -1521,7 +1521,7 @@ Read-only reports delivered with this phase: Bank Book.
   - `GET /api/bank/statement-imports/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/bank/statement-imports (CSV/XLSX upload)
   - POST /api/bank/statement-imports/:id/apply-rules
-- **Business rules:** Duplicate statement lines detected by date+amount+reference.
+- **Business rules:** Duplicate statement lines detected by date+amount+reference; CSV with a saved column mapping per bank account; Excel / MT940 later (decided 2026-10-07).
 - **Depends on:** `bank-rules` (phase 5)
 
 ### 17.3 Bank Reconciliation `bank-reconciliation`
@@ -1546,7 +1546,7 @@ Read-only reports delivered with this phase: Bank Book.
 
 ### 17.4 Cheques & Batches `cheques`
 
-- **Tables:** `BankCash.Cheques`, `BankCash.ChequeAllocations`, `BankCash.ChequeBounces`, `BankCash.ChequeBatches`, `BankCash.ChequeBatchLines`
+- **Tables:** `BankCash.Cheques`, `BankCash.ChequeBounces`, `BankCash.ChequeBatches`, `BankCash.ChequeBatchLines`
 - **Audit trigger:** present on all tables
 - **Template:** `app/bank/cheques` — `template/src/40-acc-core.html`; `app/bank/cheque-register` — `template/src/40-acc-core.html`; `app/bank/cheque-voucher` — `template/src/44-purchase-docs.html`
 - **Pages:** `/bank/cheques` (list/screen), `/bank/cheque-register` (list/screen), `/bank/cheque-voucher` (list/screen)
@@ -1561,7 +1561,7 @@ Read-only reports delivered with this phase: Bank Book.
   - POST /api/bank/cheques/:id/deposit|clear|bounce|cancel
   - POST /api/bank/cheque-batches (bulk cheque voucher)
   - GET /api/bank/cheques/pdc?maturing=
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Cheque state machine: received → deposited → cleared | bounced; Issued leaf numbers come from cheque books.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Cheque state machine: received → deposited → cleared | bounced; Issued leaf numbers come from cheque books; Clearing accounts: received Dr Cheques in hand / Cr customer, cleared Dr Bank / Cr Cheques in hand; issued Dr vendor / Cr PDC payable, cleared Dr PDC payable / Cr Bank; invoice / bill allocation in Phase 24 (decided 2026-10-07).
 - **Depends on:** `bank-accounts` (phase 4), `cheque-books` (phase 4), `customers` (phase 7), `vendors` (phase 7)
 
 ## Phase 18: Cash
@@ -1585,13 +1585,13 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `DELETE /api/cash/entries/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/cash/entries/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/cash/entries/:id/post|reverse
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Quick entry: cash in/out, bank in/out, transfer and cheque mode; each entry is a voucher under the normal approval rules (decided 2026-10-07).
 - **Depends on:** `cash-accounts` (phase 4), `vouchers` (phase 16)
 
 ### 18.2 Cash Day Close `cash-day-close`
 
 - **Tables:** `BankCash.CashDayCloses`, `BankCash.CashDayCloseDenominations`
-- **Audit trigger:** missing on `BankCash.CashDayCloseDenominations`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/cash/book` — `template/src/47-books.html`
 - **Pages:** `/cash/book` (list/screen)
 - **Permissions:** `cash`: view, create, edit, approve, post, delete, export
@@ -1622,13 +1622,13 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `GET /api/cash/petty/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/cash/petty/vouchers/:id/post
   - POST /api/cash/petty/funds/:id/replenish
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Vouchers cannot exceed fund balance.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Vouchers cannot exceed fund balance; Receipts: count + missing flag; files with document storage in Phase 35 (decided 2026-10-07).
 - **Depends on:** `petty-cash-funds` (phase 5), `expense-categories` (phase 4)
 
 ### 18.4 Expense Claims `expense-claims`
 
 - **Tables:** `BankCash.ExpenseClaims`, `BankCash.ExpenseClaimLines`, `BankCash.ExpenseClaimActions`
-- **Audit trigger:** missing on `BankCash.ExpenseClaimActions`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/cash/expenses` — `template/src/40-acc-core.html`; `app/profile/expenses` — `template/src/6A-ess.html`
 - **Pages:** `/cash/expenses` (list/screen), `/profile/expenses` (list/screen)
 - **Permissions:** `cash`: view, create, edit, approve, post, delete, export; `myexp`: view, create, edit
@@ -1641,7 +1641,7 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `GET /api/cash/expense-claims/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/cash/expense-claims/:id/submit|approve|reject|pay
   - Own claims: GET/POST /api/me/expense-claims (myexp)
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Employee sees only own claims; receipts as attachments.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Employee sees only own claims; receipts as attachments; Approval engine with a seeded editable workflow Line manager → Finance; paid by cash or bank now, with payroll later; receipt files in Phase 35 (decided 2026-10-07).
 - **Depends on:** `expense-categories` (phase 4), `employees` (phase 11), `approvals` (phase 16)
 
 ## Phase 19: Purchasing
@@ -1664,7 +1664,7 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `GET /api/purchases/orders/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/purchases/orders/:id/submit|approve|close|cancel
   - GET /api/purchases/orders/:id/pdf
-- **Business rules:** Ordered ≥ received ≥ billed quantities enforced.
+- **Business rules:** Ordered ≥ received ≥ billed quantities enforced; Approval engine when a PO workflow exists, else po:approve approves directly; nothing seeded (decided 2026-10-08).
 - **Depends on:** `vendors` (phase 7), `products` (phase 8), `warehouses` (phase 6), `approvals` (phase 16)
 
 ### 19.2 Goods Received Notes `grn`
@@ -1683,7 +1683,7 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `GET /api/purchases/grns/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/purchases/grns/:id/post (stock in: StockMovements/StockBalances)
   - POST /api/purchases/grns/:id/reverse
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Batch/expiry captured for batch-tracked products.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Batch/expiry captured for batch-tracked products (fields added beyond the template, decided 2026-10-08).
 - **Depends on:** `purchase-orders` (phase 19), `warehouses` (phase 6)
 
 ### 19.3 Vendor Bills `vendor-bills`
@@ -1702,7 +1702,7 @@ Read-only reports delivered with this phase: Cash Book, Cash Ledger.
   - `GET /api/purchases/bills/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/purchases/bills/:id/submit|approve|post|void
   - POST /api/purchases/bills/from-grn/:grnId
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Vendor invoice number unique per vendor (billVendorInvoiceIdx); WHT computed from tax codes.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Vendor invoice number unique per vendor (billVendorInvoiceIdx); WHT computed from tax codes; Purchase voucher = counter bill with pay-now; approval engine or bill:approve; bill payments in Phase 20 (decided 2026-10-08).
 - **Depends on:** `grn` (phase 19), `tax-codes` (phase 4)
 
 ### 19.4 Landed Cost `landed-cost`
@@ -1762,8 +1762,8 @@ Read-only reports delivered with this phase: AP Ageing, Vendor Statement.
   - `PATCH /api/purchases/debit-notes/:id`: update with rowVersion (409 when stale); drafts only
   - `DELETE /api/purchases/debit-notes/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/purchases/debit-notes/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/purchases/debit-notes/:id/post|void
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit.
+  - POST /api/purchases/debit-notes/:id/post|void|refund|apply
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Refund-requested notes get a refund-received step (decided 2026-10-08).
 - **Depends on:** `vendor-bills` (phase 19), `purchase-returns` (phase 20)
 
 ### 20.3 Vendor Payments `vendor-payments`
@@ -1783,7 +1783,7 @@ Read-only reports delivered with this phase: AP Ageing, Vendor Statement.
   - POST /api/payables/payments/:id/submit|approve|post|void
   - PUT /api/payables/payments/:id/allocations
   - GET /api/payables/open-items?vendor=
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Allocations ≤ open bill amounts; WHT deducted at payment.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Allocations ≤ open bill amounts; WHT deducted at payment; Approval engine when a Vendor payment workflow exists, else vpay:post posts directly; nothing seeded (decided 2026-10-08); Cheques via PDC payable clearing, cleared in the cheque register; purchase-voucher cheque pay-now aligned (decided 2026-10-08); Payment run: bills of many vendors → one payment per vendor; Vendor Bills 'Pay selected' opens it (decided 2026-10-08); AP Ageing + Vendor Statement on the Payables studio; other studio tabs disabled (decided 2026-10-08).
 - **Depends on:** `vendor-bills` (phase 19), `bank-accounts` (phase 4), `cheques` (phase 17)
 
 ## Phase 21: Stock operations
@@ -1825,7 +1825,7 @@ Read-only reports delivered with this phase: Whole Stock, Stock In View, Stock M
   - `DELETE /api/inventory/transfers/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/inventory/transfers/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/inventory/transfers/:id/dispatch|receive|reverse
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; In-transit stock tracked between dispatch and receipt.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; In-transit stock tracked between dispatch and receipt; Two-step dispatch → receive; receipt variance to stock loss / gain (decided 2026-10-08).
 - **Depends on:** `warehouses` (phase 6), `products` (phase 8)
 
 ### 21.3 Stock Adjustments `stock-adjustments`
@@ -1843,7 +1843,7 @@ Read-only reports delivered with this phase: Whole Stock, Stock In View, Stock M
   - `DELETE /api/inventory/adjustments/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/inventory/adjustments/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/inventory/adjustments/:id/submit|approve|post|reverse
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Write-offs need approval.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Write-offs need approval; Approval engine when a Stock adjustment workflow exists, else adj:post / cnt:approve posts directly; nothing seeded (decided 2026-10-08).
 - **Depends on:** `movement-reasons` (phase 6), `approvals` (phase 16)
 
 ### 21.4 Stock Counts `stock-counts`
@@ -1981,7 +1981,7 @@ Read-only reports delivered with this phase: Inventory Reports.
   - `GET /api/sales/quotations/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/sales/quotations/:id/send|accept|reject|convert-to-order
   - GET /api/sales/quotations/:id/pdf
-- **Depends on:** `customers` (phase 7), `products` (phase 8), `price-lists` (phase 9), `sales-schemes` (phase 9)
+- **Depends on:** `customers` (phase 7), `products` (phase 8), `price-lists` (phase 9), `sales-schemes` (phase 9), `approvals` (phase 16)
 
 ### 23.2 Sales Orders `sales-orders`
 
@@ -2000,7 +2000,7 @@ Read-only reports delivered with this phase: Inventory Reports.
   - POST /api/sales/orders/:id/submit|approve|close|cancel
   - POST /api/sales/orders/:id/reserve-stock
 - **Business rules:** Credit limit checked on approval (override needs permission); Stock reservation via StockReservations.
-- **Depends on:** `quotations` (phase 23)
+- **Depends on:** `quotations` (phase 23), `approvals` (phase 16)
 
 ### 23.3 Delivery Challans `delivery-challans`
 
@@ -2040,7 +2040,7 @@ Read-only reports delivered with this phase: Inventory Reports.
   - GET /api/sales/invoices/:id/pdf
   - Posting submits to FBR when enabled (FbrInvoiceSubmissions; retries in Phase 28)
 - **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Tax from tax codes; scheme free items as zero-price lines.
-- **Depends on:** `delivery-challans` (phase 23), `tax-codes` (phase 4), `fbr-settings` (phase 5)
+- **Depends on:** `delivery-challans` (phase 23), `tax-codes` (phase 4), `fbr-settings` (phase 5), `approvals` (phase 16)
 
 ## Phase 24: Sales completion
 
@@ -2086,7 +2086,7 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
 
 ### 24.3 Customer Receipts `customer-receipts`
 
-- **Tables:** `Sales.CustomerReceipts`, `Sales.CustomerReceiptAllocations`
+- **Tables:** `Sales.CustomerReceipts`, `Sales.CustomerReceiptAllocations`, `BankCash.ChequeAllocations`
 - **Audit trigger:** present on all tables
 - **Template:** `app/receivables/receipts` — `template/src/41-acc-trade.html`
 - **Pages:** `/receivables/receipts` (list/screen)
@@ -2101,7 +2101,7 @@ Read-only reports delivered with this phase: AR Ageing, Customer Statement.
   - POST /api/receivables/receipts/:id/post|void
   - PUT /api/receivables/receipts/:id/allocations
   - GET /api/receivables/open-items?customer=
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Allocations ≤ open invoice amounts.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Allocations ≤ open invoice amounts; Cheque allocations to invoices / bills and Raast-IBFT invoice matching moved here from Phase 17 (decided 2026-10-07).
 - **Depends on:** `sales-invoices` (phase 23), `bank-accounts` (phase 4), `cash-accounts` (phase 4), `cheques` (phase 17)
 
 ### 24.4 Recurring Invoices `recurring-invoices`
@@ -2643,7 +2643,7 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
 ### 30.3 Rosters & Shift Swaps `rosters`
 
 - **Tables:** `HumanResources.ShiftRosters`, `EmployeeSelfService.ShiftSwapRequests`, `EmployeeSelfService.OpenShifts`, `EmployeeSelfService.OpenShiftClaims`
-- **Audit trigger:** missing on `HumanResources.ShiftRosters`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/shifts` — `template/src/50-hr-core.html`; `app/profile/shifts` — `template/src/6A-ess.html`
 - **Pages:** `/hr/shifts` (list/screen), `/profile/shifts` (list/screen)
 - **Permissions:** `att`: view, create, edit, approve, export; `myshift`: view, create
@@ -2723,7 +2723,7 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
 ### 31.3 Onboardings `onboardings`
 
 - **Tables:** `HumanResources.Onboardings`, `HumanResources.OnboardingTasks`
-- **Audit trigger:** missing on `HumanResources.Onboardings`, `HumanResources.OnboardingTasks`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/onboarding` — `template/src/51-hr-pay-talent.html`; `app/profile/onboarding` — `template/src/6A-ess.html`
 - **Pages:** `/hr/onboarding` (list/screen), `/profile/onboarding` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `myonb`: view, edit
@@ -2741,7 +2741,7 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
 ### 31.4 Offboardings `offboardings`
 
 - **Tables:** `HumanResources.Offboardings`, `HumanResources.ClearanceItems`, `HumanResources.ExitInterviews`
-- **Audit trigger:** missing on `HumanResources.ClearanceItems`, `HumanResources.ExitInterviews`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/offboarding` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/offboarding` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -3157,7 +3157,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 36.1 Subscription Plans `subscription-plans`
 
 - **Tables:** `Platform.SubscriptionPlans`, `Platform.SubscriptionPlanFeatures`, `Platform.SubscriptionPlanLimits`
-- **Audit trigger:** missing on `Platform.SubscriptionPlans`, `Platform.SubscriptionPlanFeatures`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/plans` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/plans` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3194,7 +3194,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 36.3 Add-ons `addons`
 
 - **Tables:** `Platform.Addons`, `Platform.AddonPlans`
-- **Audit trigger:** missing on `Platform.AddonPlans`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/plans` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/plans` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3211,7 +3211,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 36.4 Coupons `coupons`
 
 - **Tables:** `Platform.SubscriptionCoupons`, `Platform.SubscriptionCouponPlans`, `Platform.SubscriptionCouponRedemptions`
-- **Audit trigger:** missing on `Platform.SubscriptionCouponPlans`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/partners` — `template/src/3A-admin-plus.html`
 - **Pages:** `/admin/partners` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3234,7 +3234,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 37.1 COA Templates `coa-templates`
 
 - **Tables:** `Platform.ChartOfAccountsTemplates`, `Platform.ChartOfAccountsTemplateAccounts`
-- **Audit trigger:** missing on `Platform.ChartOfAccountsTemplates`, `Platform.ChartOfAccountsTemplateAccounts`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/templates` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/templates` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3252,7 +3252,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 37.2 Tenant Seed Templates `seed-templates`
 
 - **Tables:** `Platform.TemplateLeaveTypes`, `Platform.TemplateSalaryComponents`, `Platform.TemplateTaxCodes`, `Platform.SystemRoleGrants`
-- **Audit trigger:** missing on `Platform.TemplateLeaveTypes`, `Platform.TemplateSalaryComponents`, `Platform.TemplateTaxCodes`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/templates` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/templates` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3268,7 +3268,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 37.3 Tax Master `tax-master`
 
 - **Tables:** `Platform.TaxMasterAuthorities`, `Platform.TaxMasterSalesTaxRates`, `Platform.TaxMasterWithholdingRates`, `Platform.TaxMasterSalarySlabs`
-- **Audit trigger:** present on all tables
+- **Audit trigger:** missing on `Platform.TaxMasterAuthorities`; add it in this phase
 - **Template:** `admin/tax-master` — `template/src/3A-admin-plus.html`
 - **Pages:** `/admin/tax-master` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3342,7 +3342,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 38.3 Resellers `resellers`
 
 - **Tables:** `Platform.Resellers`
-- **Audit trigger:** present on all tables
+- **Audit trigger:** missing on `Platform.Resellers`; add it in this phase
 - **Template:** `admin/partners` — `template/src/3A-admin-plus.html`
 - **Pages:** `/admin/partners` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3358,7 +3358,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 38.4 Platform Security & Backups `platform-security`
 
 - **Tables:** `Platform.PlatformSecuritySettings`, `Platform.PlatformAllowedIps`, `Platform.PlatformApiKeys`, `Platform.WebhookEndpoints`, `Platform.WebhookDeliveries`, `Platform.BackupRuns`
-- **Audit trigger:** missing on `Platform.WebhookDeliveries`; add it in this phase
+- **Audit trigger:** missing on `Platform.PlatformApiKeys`, `Platform.WebhookEndpoints`, `Platform.WebhookDeliveries`; add it in this phase
 - **Template:** `admin/security` — `template/src/3A-admin-plus.html`; `admin/integrations` — `template/src/3A-admin-plus.html`; `admin/system` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/security` (list/screen), `/admin/integrations` (list/screen), `/admin/system` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3382,7 +3382,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 39.1 Feature Flags `feature-flags`
 
 - **Tables:** `Platform.FeatureFlags`, `Platform.FlagEnvironments`, `Platform.FlagVariations`, `Platform.FlagRules`, `Platform.FlagTargets`, `Platform.FlagPrerequisites`, `Platform.FlagDefaultRules`, `Platform.FlagSdkKeys`
-- **Audit trigger:** present on all tables
+- **Audit trigger:** missing on `Platform.FlagSdkKeys`; add it in this phase
 - **Template:** `admin/features` — `template/src/3B-flags.html`; `admin/features/view` — `template/src/3B-flags.html`
 - **Pages:** `/admin/features` (list/screen), `/admin/features/[id]` (detail)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3434,7 +3434,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 39.4 Audit Alert Rules `audit-alert-rules`
 
 - **Tables:** `Platform.AuditAlertRules`
-- **Audit trigger:** missing on `Platform.AuditAlertRules`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/audit` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/audit` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3456,7 +3456,7 @@ Read-only reports delivered with this phase: Platform Overview (admin/dashboard)
 ### 40.1 Tenants `tenants`
 
 - **Tables:** `Platform.Tenants`, `Platform.TenantContacts`, `Platform.TenantModules`, `Platform.TenantAddons`, `Platform.TenantNotes`
-- **Audit trigger:** missing on `Platform.Tenants`, `Platform.TenantContacts`, `Platform.TenantModules`, `Platform.TenantNotes`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/tenants` — `template/src/3A-admin-plus.html`; `admin/tenants/new` — `template/src/30-entry-admin.html`; `admin/tenants/view` — `template/src/3A-admin-plus.html`
 - **Pages:** `/admin/tenants` (list/screen), `/admin/tenants/new` (create), `/admin/tenants/[id]` (detail)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3476,7 +3476,7 @@ Read-only reports delivered with this phase: Platform Overview (admin/dashboard)
 ### 40.2 Subscriptions `subscriptions`
 
 - **Tables:** `Platform.Subscriptions`, `Platform.SubscriptionEvents`
-- **Audit trigger:** missing on `Platform.SubscriptionEvents`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/subscriptions` — `template/src/30-entry-admin.html`
 - **Pages:** `/admin/subscriptions` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3495,7 +3495,7 @@ Read-only reports delivered with this phase: Platform Overview (admin/dashboard)
 ### 40.3 Usage `usage`
 
 - **Tables:** `Platform.UsageMeters`, `Platform.UsageSnapshots`, `Platform.UsageLimitOverrides`
-- **Audit trigger:** missing on `Platform.UsageMeters`, `Platform.UsageSnapshots`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `admin/usage` — `template/src/3A-admin-plus.html`
 - **Pages:** `/admin/usage` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)

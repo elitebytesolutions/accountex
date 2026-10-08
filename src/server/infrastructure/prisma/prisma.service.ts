@@ -14,6 +14,8 @@ const SETTINGS: [setting: string, key: keyof AuditContext][] = [
   ['app.userAgent', 'userAgent'],
   ['app.sessionId', 'sessionId'],
   ['app.actorLabel', 'actorLabel'],
+  // Phase 40: support access, named next to the user in row history (Company.writeAuditEntry)
+  ['app.impersonatedBy', 'impersonatedBy'],
 ];
 
 @Injectable()

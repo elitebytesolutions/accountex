@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import { SessionStore } from '../../core/application/ports/session-store.js';
+import { TenantAccess } from '../../core/application/ports/tenant-access.js';
 import { TokenService } from '../../core/application/ports/token-service.js';
 import { ForbiddenError, UnauthorizedError } from '../../core/domain/errors.js';
 import { toSessionUser } from '../../modules/auth/application/session-user.mapper.js';
@@ -16,6 +17,11 @@ export const AUTH_COOKIE = 'access_token';
 /** While a new password is required, only these API paths open (own account, sign-out, select lists). */
 const PASSWORD_CHANGE_PATHS = /^\/api\/(auth|me|lookups)(\/|$)/;
 
+/** Requests that never change data (allowed for READ_ONLY companies and read-only support sessions). */
+const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+/** Phase 40: ending a support session is always allowed, even when the session is read-only. */
+const ALWAYS_ALLOWED = /^\/api\/me\/support-access\/end$/;
+
 /**
  * Global guard: every tenant API route requires a valid session unless marked @Public() or @AdminRoute().
  * The token must name a Company.UserSessions row that is not revoked, expired or idle past the user's timeout.
@@ -27,6 +33,7 @@ export class JwtAuthGuard implements CanActivate {
     private readonly tokens: TokenService,
     private readonly sessions: SessionStore,
     private readonly users: UserRepository,
+    private readonly access: TenantAccess,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -56,8 +63,27 @@ export class JwtAuthGuard implements CanActivate {
       throw new ForbiddenError('Set a new password to continue', undefined, { code: 'AUTH_PASSWORD_CHANGE_REQUIRED' });
     }
 
+    // Phase 40: the company must be live, and a READ_ONLY company (or a read-only support session) can only read.
+    const status = await this.access.tenantStatus(session.tenantId);
+    if (status === 'SUSPENDED') throw new ForbiddenError('This company is suspended', undefined, { code: 'TENANT_SUSPENDED' });
+    if (!status || status === 'CHURNED' || status === 'PROVISIONING') throw new ForbiddenError('This company is not active', undefined, { code: 'TENANT_INACTIVE' });
+    const writes = !SAFE_METHODS.has(request.method) && !ALWAYS_ALLOWED.test(request.path);
+    let impersonatedBy: string | undefined;
+    if (session.authMethod === 'IMPERSONATION') {
+      const support = await this.access.supportSession(session.id);
+      if (!support || support.endedAt) throw new UnauthorizedError('The support session has ended', undefined, { code: 'IMPERSONATION_ENDED' });
+      if (support.expiresAt.getTime() <= now) {
+        await this.access.expire(support.id, session.id);
+        throw new UnauthorizedError('The support session has ended', undefined, { code: 'IMPERSONATION_ENDED' });
+      }
+      if (support.isReadOnly && writes) throw new ForbiddenError('This support session is read-only', undefined, { code: 'IMPERSONATION_READ_ONLY' });
+      impersonatedBy = support.staffLabel;
+    }
+    if (status === 'READ_ONLY' && writes) throw new ForbiddenError('This company is read-only', undefined, { code: 'TENANT_READ_ONLY' });
+
     request.user = toSessionUser(user);
     request.sessionId = session.id;
+    (request as Request & { impersonatedBy?: string }).impersonatedBy = impersonatedBy;
     return true;
   }
 }

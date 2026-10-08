@@ -11,4 +11,5 @@ export const toSessionUser = (user: User): SessionUser => ({
   roles: user.roles,
   permissions: user.permissions,
   mustChangePassword: user.mustChangePassword,
+  timeZone: user.timeZone,
 });

@@ -1,4 +1,4 @@
-import type { ChangePassword, MyPreferences, MyPreferencesResponse, MyProfile, MyProfileUpdateFields, UserActivity, UserSession } from "@/shared";
+import type { ChangePassword, ImpersonationSession, MyPreferences, MyPreferencesResponse, MyProfile, MyProfileUpdateFields, UserActivity, UserSession } from "@/shared";
 import { apiRequest } from "@/lib/api/client";
 
 /** Browser clients for /api/me: the signed-in user's own account. */
@@ -11,3 +11,5 @@ export const getMyActivity = () => apiRequest<UserActivity[]>("/me/activity");
 export const getMyPreferences = () => apiRequest<MyPreferencesResponse>("/me/preferences");
 export const saveMyPreferences = (body: MyPreferences & { rowVersion?: number }) =>
   apiRequest<MyPreferencesResponse>("/me/preferences", { method: "PATCH", body });
+// Phase 40: the company's support-access history (Accountex Super Admin sessions); needs aud:view.
+export const listSupportAccess = () => apiRequest<ImpersonationSession[]>("/me/support-access");

@@ -4,20 +4,20 @@ import { E, POST_RULES, type Phase } from "./types";
 
 export const transactions: Phase[] = [
   {
-    no: 16, title: "General ledger", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 16, title: "General ledger", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "The approval engine and the core journal: vouchers, opening balances and recurring vouchers.",
     reports: ["Trial Balance", "General Ledger", "Day Book", "Account Ledger"],
     entities: [
       E("approvals", "Approvals Inbox", ["Company.Approvals", "Company.ApprovalActions"], {
         tpl: ["app/approvals"], api: "approvals", perm: ["wf"],
         x: ["GET /approvals/inbox (Company.getApprovalsInbox)", "POST /approvals/:id/approve|reject|request-changes|delegate", "POST /approvals/bulk"],
-        rules: ["Engine used by every later document type", "Requester cannot approve own document (segregation of duties)", "Every action is an ApprovalActions row"],
+        rules: ["Engine used by every later document type", "Requester cannot approve own document (segregation of duties)", "Every action is an ApprovalActions row", "Full Phase 2 workflow steps (role/user/line manager, ANY/ALL, amount thresholds, delegation); inbox open to every signed-in user for their own items; SLA reminders later (decided 2026-10-07)"],
         deps: ["approval-workflows", "users"],
       }),
       E("vouchers", "Journal Vouchers", ["Accounting.Vouchers", "Accounting.VoucherLines", "Accounting.VoucherActivities"], {
         tpl: ["app/accounting/vouchers", "app/accounting/vouchers/new", "app/accounting/vouchers/view"], api: "accounting/vouchers", perm: ["vch"],
         x: ["POST /accounting/vouchers/:id/submit|post|reverse", "POST /accounting/vouchers/:id/duplicate", "GET /accounting/vouchers/:id/pdf"],
-        rules: [...POST_RULES, "Debits equal credits", "Postings only into open periods and postable accounts"],
+        rules: [...POST_RULES, "Debits equal credits", "Postings only into open periods and postable accounts", "No matching workflow: vch:post posts directly; tests run in a separate Test Co; PDF = browser print (decided 2026-10-07)"],
         deps: ["chart-of-accounts", "fiscal-periods", "cost-centres", "numbering-series", "approvals"],
       }),
       E("opening-balances", "Opening Balances", ["Accounting.OpeningBalances", "Accounting.OpeningBalanceLines"], {
@@ -29,47 +29,47 @@ export const transactions: Phase[] = [
       E("recurring-vouchers", "Recurring Vouchers", ["Accounting.RecurringVoucherTemplates", "Accounting.RecurringVoucherTemplateLines", "Accounting.RecurringVoucherRuns"], {
         tpl: ["app/accounting/recurring"], api: "accounting/recurring-vouchers", perm: ["vch"],
         x: ["POST /accounting/recurring-vouchers/:id/run-now", "POST /accounting/recurring-vouchers/:id/pause|resume", "Scheduled job creates vouchers (actor = SERVICE)"],
-        rules: ["Each run creates a draft or posted voucher per template setting; runs are history"],
+        rules: ["Each run creates a draft or posted voucher per template setting; runs are history", "Hourly in-app job + Run now (decided 2026-10-07)"],
         deps: ["vouchers"],
       }),
     ],
   },
   {
-    no: 17, title: "Banking", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 17, title: "Banking", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Bank transactions, statement import, reconciliation and cheques (received, issued, bounced, batched).",
     reports: ["Bank Book"],
     entities: [
       E("bank-transactions", "Bank Transactions", ["BankCash.BankTransactions"], {
         tpl: ["app/bank/transactions"], api: "bank/transactions", perm: ["bank"],
         x: ["POST /bank/transactions/:id/categorise", "POST /bank/transactions/:id/post|reverse"],
-        rules: POST_RULES, deps: ["bank-accounts", "vouchers"],
+        rules: [...POST_RULES, "Generated from posted vouchers on a bank GL account and from categorised statement lines (BPV/BRV); never typed (decided 2026-10-07)"], deps: ["bank-accounts", "vouchers"],
       }),
       E("statement-imports", "Statement Imports", ["BankCash.BankStatementImports", "BankCash.BankStatementLines"], {
         tpl: ["app/bank/rules"], api: "bank/statement-imports", perm: ["bank"],
         x: ["POST /bank/statement-imports (CSV/XLSX upload)", "POST /bank/statement-imports/:id/apply-rules"],
-        rules: ["Duplicate statement lines detected by date+amount+reference"], deps: ["bank-rules"],
+        rules: ["Duplicate statement lines detected by date+amount+reference", "CSV with a saved column mapping per bank account; Excel / MT940 later (decided 2026-10-07)"], deps: ["bank-rules"],
       }),
       E("bank-reconciliation", "Bank Reconciliation", ["BankCash.BankReconciliations", "BankCash.BankReconciliationMatches"], {
         tpl: ["app/bank/reconciliation"], api: "bank/reconciliations", perm: ["recon"],
         x: ["POST /bank/reconciliations/:id/match|unmatch", "POST /bank/reconciliations/:id/auto-match", "POST /bank/reconciliations/:id/complete"],
         rules: ["Completed reconciliation is locked; difference must be zero"], deps: ["bank-transactions", "statement-imports"],
       }),
-      E("cheques", "Cheques & Batches", ["BankCash.Cheques", "BankCash.ChequeAllocations", "BankCash.ChequeBounces", "BankCash.ChequeBatches", "BankCash.ChequeBatchLines"], {
+      E("cheques", "Cheques & Batches", ["BankCash.Cheques", "BankCash.ChequeBounces", "BankCash.ChequeBatches", "BankCash.ChequeBatchLines"], {
         tpl: ["app/bank/cheques", "app/bank/cheque-register", "app/bank/cheque-voucher"], api: "bank/cheques", perm: ["bank"],
         x: ["POST /bank/cheques/:id/deposit|clear|bounce|cancel", "POST /bank/cheque-batches (bulk cheque voucher)", "GET /bank/cheques/pdc?maturing="],
-        rules: [...POST_RULES, "Cheque state machine: received → deposited → cleared | bounced", "Issued leaf numbers come from cheque books"],
+        rules: [...POST_RULES, "Cheque state machine: received → deposited → cleared | bounced", "Issued leaf numbers come from cheque books", "Clearing accounts: received Dr Cheques in hand / Cr customer, cleared Dr Bank / Cr Cheques in hand; issued Dr vendor / Cr PDC payable, cleared Dr PDC payable / Cr Bank; invoice / bill allocation in Phase 24 (decided 2026-10-07)"],
         deps: ["bank-accounts", "cheque-books", "customers", "vendors"],
       }),
     ],
   },
   {
-    no: 18, title: "Cash", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 18, title: "Cash", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Cash book, daily cash close, petty cash and expense claims (also used by My Profile › Expense Claims).",
     reports: ["Cash Book", "Cash Ledger"],
     entities: [
       E("cash-book", "Cash Book Entries", ["BankCash.CashBookEntries"], {
         tpl: ["app/cash/book", "app/cash/ledger"], api: "cash/entries", perm: ["cash"],
-        x: ["POST /cash/entries/:id/post|reverse"], rules: POST_RULES, deps: ["cash-accounts", "vouchers"],
+        x: ["POST /cash/entries/:id/post|reverse"], rules: [...POST_RULES, "Quick entry: cash in/out, bank in/out, transfer and cheque mode; each entry is a voucher under the normal approval rules (decided 2026-10-07)"], deps: ["cash-accounts", "vouchers"],
       }),
       E("cash-day-close", "Cash Day Close", ["BankCash.CashDayCloses", "BankCash.CashDayCloseDenominations"], {
         tpl: ["app/cash/book"], api: "cash/day-closes", perm: ["cash"],
@@ -79,33 +79,33 @@ export const transactions: Phase[] = [
       E("petty-cash", "Petty Cash Vouchers & Replenishment", ["BankCash.PettyCashVouchers", "BankCash.PettyCashReplenishments"], {
         tpl: ["app/cash/petty"], api: "cash/petty", perm: ["cash"],
         x: ["POST /cash/petty/vouchers/:id/post", "POST /cash/petty/funds/:id/replenish"],
-        rules: [...POST_RULES, "Vouchers cannot exceed fund balance"], deps: ["petty-cash-funds", "expense-categories"],
+        rules: [...POST_RULES, "Vouchers cannot exceed fund balance", "Receipts: count + missing flag; files with document storage in Phase 35 (decided 2026-10-07)"], deps: ["petty-cash-funds", "expense-categories"],
       }),
       E("expense-claims", "Expense Claims", ["BankCash.ExpenseClaims", "BankCash.ExpenseClaimLines", "BankCash.ExpenseClaimActions"], {
         tpl: ["app/cash/expenses", "app/profile/expenses"], api: "cash/expense-claims", perm: ["cash", "myexp"],
         x: ["POST /cash/expense-claims/:id/submit|approve|reject|pay", "Own claims: GET/POST /me/expense-claims (myexp)"],
-        rules: [...POST_RULES, "Employee sees only own claims; receipts as attachments"], deps: ["expense-categories", "employees", "approvals"],
+        rules: [...POST_RULES, "Employee sees only own claims; receipts as attachments", "Approval engine with a seeded editable workflow Line manager → Finance; paid by cash or bank now, with payroll later; receipt files in Phase 35 (decided 2026-10-07)"], deps: ["expense-categories", "employees", "approvals"],
       }),
     ],
   },
   {
-    no: 19, title: "Purchasing", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 19, title: "Purchasing", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Purchase orders through goods receipt and vendor bills, with landed cost.",
     entities: [
       E("purchase-orders", "Purchase Orders", ["Purchases.PurchaseOrders", "Purchases.PurchaseOrderLines"], {
         tpl: ["app/purchases/orders"], api: "purchases/orders", perm: ["po"],
         x: ["POST /purchases/orders/:id/submit|approve|close|cancel", "GET /purchases/orders/:id/pdf"],
-        rules: ["Ordered ≥ received ≥ billed quantities enforced"], deps: ["vendors", "products", "warehouses", "approvals"],
+        rules: ["Ordered ≥ received ≥ billed quantities enforced", "Approval engine when a PO workflow exists, else po:approve approves directly; nothing seeded (decided 2026-10-08)"], deps: ["vendors", "products", "warehouses", "approvals"],
       }),
       E("grn", "Goods Received Notes", ["Purchases.GoodsReceivedNotes", "Purchases.GoodsReceivedNoteLines"], {
         tpl: ["app/purchases/grn", "app/purchases/voucher"], api: "purchases/grns", perm: ["grn"],
         x: ["POST /purchases/grns/:id/post (stock in: StockMovements/StockBalances)", "POST /purchases/grns/:id/reverse"],
-        rules: [...POST_RULES, "Batch/expiry captured for batch-tracked products"], deps: ["purchase-orders", "warehouses"],
+        rules: [...POST_RULES, "Batch/expiry captured for batch-tracked products (fields added beyond the template, decided 2026-10-08)"], deps: ["purchase-orders", "warehouses"],
       }),
       E("vendor-bills", "Vendor Bills", ["Purchases.VendorBills", "Purchases.VendorBillLines"], {
         tpl: ["app/purchases/bills", "app/purchases/bills/new"], api: "purchases/bills", perm: ["bill"],
         x: ["POST /purchases/bills/:id/submit|approve|post|void", "POST /purchases/bills/from-grn/:grnId"],
-        rules: [...POST_RULES, "Vendor invoice number unique per vendor (billVendorInvoiceIdx)", "WHT computed from tax codes"],
+        rules: [...POST_RULES, "Vendor invoice number unique per vendor (billVendorInvoiceIdx)", "WHT computed from tax codes", "Purchase voucher = counter bill with pay-now; approval engine or bill:approve; bill payments in Phase 20 (decided 2026-10-08)"],
         deps: ["grn", "tax-codes"],
       }),
       E("landed-cost", "Landed Cost", ["Purchases.LandedCostShipments", "Purchases.LandedCostItems", "Purchases.LandedCostCharges"], {
@@ -116,7 +116,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 20, title: "Payables", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 20, title: "Payables", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Purchase returns, debit notes and vendor payments with allocation.",
     reports: ["AP Ageing", "Vendor Statement"],
     entities: [
@@ -126,17 +126,17 @@ export const transactions: Phase[] = [
       }),
       E("debit-notes", "Debit Notes", ["Purchases.DebitNotes", "Purchases.DebitNoteLines"], {
         tpl: ["app/purchases/debit-notes"], api: "purchases/debit-notes", perm: ["bill"],
-        x: ["POST /purchases/debit-notes/:id/post|void"], rules: POST_RULES, deps: ["vendor-bills", "purchase-returns"],
+        x: ["POST /purchases/debit-notes/:id/post|void|refund|apply"], rules: [...POST_RULES, "Refund-requested notes get a refund-received step (decided 2026-10-08)"], deps: ["vendor-bills", "purchase-returns"],
       }),
       E("vendor-payments", "Vendor Payments", ["Purchases.VendorPayments", "Purchases.VendorPaymentAllocations"], {
         tpl: ["app/payables/payments"], api: "payables/payments", perm: ["vpay"],
         x: ["POST /payables/payments/:id/submit|approve|post|void", "PUT /payables/payments/:id/allocations", "GET /payables/open-items?vendor="],
-        rules: [...POST_RULES, "Allocations ≤ open bill amounts; WHT deducted at payment"], deps: ["vendor-bills", "bank-accounts", "cheques"],
+        rules: [...POST_RULES, "Allocations ≤ open bill amounts; WHT deducted at payment", "Approval engine when a Vendor payment workflow exists, else vpay:post posts directly; nothing seeded (decided 2026-10-08)", "Cheques via PDC payable clearing, cleared in the cheque register; purchase-voucher cheque pay-now aligned (decided 2026-10-08)", "Payment run: bills of many vendors → one payment per vendor; Vendor Bills 'Pay selected' opens it (decided 2026-10-08)", "AP Ageing + Vendor Statement on the Payables studio; other studio tabs disabled (decided 2026-10-08)"], deps: ["vendor-bills", "bank-accounts", "cheques"],
       }),
     ],
   },
   {
-    no: 21, title: "Stock operations", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 21, title: "Stock operations", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Manual stock in/out, transfers, adjustments and stock counts. The stock ledger (StockMovements, StockBalances, StockReservations) is produced by posting.",
     reports: ["Whole Stock", "Stock In View", "Stock Movements"],
     entities: [
@@ -147,11 +147,11 @@ export const transactions: Phase[] = [
       E("stock-transfers", "Stock Transfers", ["Inventory.StockTransfers", "Inventory.StockTransferLines", "Inventory.StockTransferReceiptLines"], {
         tpl: ["app/inventory/transfer"], api: "inventory/transfers", perm: ["xfer"],
         x: ["POST /inventory/transfers/:id/dispatch|receive|reverse"],
-        rules: [...POST_RULES, "In-transit stock tracked between dispatch and receipt"], deps: ["warehouses", "products"],
+        rules: [...POST_RULES, "In-transit stock tracked between dispatch and receipt", "Two-step dispatch → receive; receipt variance to stock loss / gain (decided 2026-10-08)"], deps: ["warehouses", "products"],
       }),
       E("stock-adjustments", "Stock Adjustments", ["Inventory.StockAdjustments", "Inventory.StockAdjustmentLines"], {
         tpl: ["app/inventory/adjustments"], api: "inventory/adjustments", perm: ["adj"],
-        x: ["POST /inventory/adjustments/:id/submit|approve|post|reverse"], rules: [...POST_RULES, "Write-offs need approval"], deps: ["movement-reasons", "approvals"],
+        x: ["POST /inventory/adjustments/:id/submit|approve|post|reverse"], rules: [...POST_RULES, "Write-offs need approval", "Approval engine when a Stock adjustment workflow exists, else adj:post / cnt:approve posts directly; nothing seeded (decided 2026-10-08)"], deps: ["movement-reasons", "approvals"],
       }),
       E("stock-counts", "Stock Counts", ["Inventory.StockCounts", "Inventory.StockCountLines"], {
         tpl: ["app/inventory/count"], api: "inventory/counts", perm: ["cnt"],
@@ -198,12 +198,12 @@ export const transactions: Phase[] = [
       E("quotations", "Quotations", ["Sales.Quotations", "Sales.QuotationLines"], {
         tpl: ["app/sales/quotations"], api: "sales/quotations", perm: ["quo"],
         x: ["POST /sales/quotations/:id/send|accept|reject|convert-to-order", "GET /sales/quotations/:id/pdf"],
-        deps: ["customers", "products", "price-lists", "sales-schemes"],
+        deps: ["customers", "products", "price-lists", "sales-schemes", "approvals"],
       }),
       E("sales-orders", "Sales Orders", ["Sales.SalesOrders", "Sales.SalesOrderLines"], {
         tpl: ["app/sales/orders"], api: "sales/orders", perm: ["quo"],
         x: ["POST /sales/orders/:id/submit|approve|close|cancel", "POST /sales/orders/:id/reserve-stock"],
-        rules: ["Credit limit checked on approval (override needs permission)", "Stock reservation via StockReservations"], deps: ["quotations"],
+        rules: ["Credit limit checked on approval (override needs permission)", "Stock reservation via StockReservations"], deps: ["quotations", "approvals"],
       }),
       E("delivery-challans", "Delivery Challans", ["Sales.DeliveryChallans", "Sales.DeliveryChallanLines"], {
         tpl: ["app/sales/challans"], api: "sales/challans", perm: ["sinv"],
@@ -212,7 +212,7 @@ export const transactions: Phase[] = [
       E("sales-invoices", "Sales Invoices", ["Sales.SalesInvoices", "Sales.SalesInvoiceLines"], {
         tpl: ["app/sales/invoices", "app/sales/invoices/new", "app/sales/invoices/view", "app/sales/voucher"], api: "sales/invoices", perm: ["sinv"],
         x: ["POST /sales/invoices/:id/submit|approve|post|void", "POST /sales/invoices/from-challan/:id", "GET /sales/invoices/:id/pdf", "Posting submits to FBR when enabled (FbrInvoiceSubmissions; retries in Phase 28)"],
-        rules: [...POST_RULES, "Tax from tax codes; scheme free items as zero-price lines"], deps: ["delivery-challans", "tax-codes", "fbr-settings"],
+        rules: [...POST_RULES, "Tax from tax codes; scheme free items as zero-price lines"], deps: ["delivery-challans", "tax-codes", "fbr-settings", "approvals"],
       }),
     ],
   },
@@ -229,10 +229,10 @@ export const transactions: Phase[] = [
         tpl: ["app/sales/credit-notes"], api: "sales/credit-notes", perm: ["sinv"],
         x: ["POST /sales/credit-notes/:id/post|void"], rules: POST_RULES, deps: ["sales-invoices", "sales-returns"],
       }),
-      E("customer-receipts", "Customer Receipts", ["Sales.CustomerReceipts", "Sales.CustomerReceiptAllocations"], {
+      E("customer-receipts", "Customer Receipts", ["Sales.CustomerReceipts", "Sales.CustomerReceiptAllocations", "BankCash.ChequeAllocations"], {
         tpl: ["app/receivables/receipts"], api: "receivables/receipts", perm: ["rcpt"],
         x: ["POST /receivables/receipts/:id/post|void", "PUT /receivables/receipts/:id/allocations", "GET /receivables/open-items?customer="],
-        rules: [...POST_RULES, "Allocations ≤ open invoice amounts"], deps: ["sales-invoices", "bank-accounts", "cash-accounts", "cheques"],
+        rules: [...POST_RULES, "Allocations ≤ open invoice amounts", "Cheque allocations to invoices / bills and Raast-IBFT invoice matching moved here from Phase 17 (decided 2026-10-07)"], deps: ["sales-invoices", "bank-accounts", "cash-accounts", "cheques"],
       }),
       E("recurring-invoices", "Recurring Invoices", ["Sales.RecurringInvoices", "Sales.RecurringInvoiceLines"], {
         tpl: ["app/sales/recurring"], api: "sales/recurring-invoices", perm: ["sinv"],
@@ -386,7 +386,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 30, title: "Time & attendance", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 30, title: "Time & attendance", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Punches and the attendance register, regularisation, rosters and shift swaps, overtime; also My Profile › Attendance/Shifts.",
     entities: [
       E("attendance", "Attendance", ["HumanResources.AttendancePunches", "HumanResources.AttendanceRegister"], {
@@ -409,7 +409,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 31, title: "Leave & lifecycle", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 31, title: "Leave & lifecycle", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Leave requests and balances, onboarding and offboarding; also My Profile › Leave.",
     entities: [
       E("leave-requests", "Leave Requests", ["HumanResources.LeaveRequests"], {

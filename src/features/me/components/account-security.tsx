@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/toast";
 import { lookupOptions, useLookups } from "@/features/settings/use-lookups";
 import { ApiError } from "@/lib/api/errors";
 import { changeMyPassword, getMyActivity, getMyPreferences, getMyProfile, listMySessions, revokeMySession, saveMyPreferences, updateMyProfile } from "../api";
+import { SupportAccessHistory } from "./support-access-history";
 
 type Tab = "profile" | "security" | "prefs";
 const VERB: Record<string, string> = { INSERT: "Created", UPDATE: "Updated", DELETE: "Deleted" };
@@ -214,6 +215,7 @@ function SecurityTab({ mustChange }: { mustChange: boolean }) {
           </div>
         )}
       </Panel>
+      <SupportAccessHistory />
     </>
   );
 }

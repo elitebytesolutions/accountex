@@ -10,7 +10,7 @@ export default async function ShiftsPage() {
   return (
     <Screen route="app/hr/shifts">
       {/* There is no att:delete permission; deleting a shift needs att:approve. */}
-      <ShiftsScreen can={{ create: has("att:create"), edit: has("att:edit"), remove: has("att:approve") }} canDelete={has("att:approve")} />
+      <ShiftsScreen can={{ create: has("att:create"), edit: has("att:edit"), remove: has("att:approve") }} canDelete={has("att:approve")} canPublish={has("att:approve")} />
     </Screen>
   );
 }

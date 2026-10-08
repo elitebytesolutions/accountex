@@ -6,7 +6,7 @@ import { UserRepository } from '../domain/user.repository.js';
 const userColumns = {
   id: true,
   tenantId: true,
-  Tenants: { select: { displayName: true } },
+  Tenants: { select: { displayName: true, timezone: true } },
   email: true,
   fullName: true,
   mustChangePassword: true,
@@ -23,7 +23,7 @@ const active = { status: 'ACTIVE', deletedAt: null } as const;
 type UserRow = {
   id: string;
   tenantId: string;
-  Tenants: { displayName: string };
+  Tenants: { displayName: string; timezone: string };
   email: string;
   fullName: string;
   mustChangePassword: boolean;
@@ -45,6 +45,6 @@ export class PrismaUserRepository extends UserRepository {
   private toEntity(row: UserRow): User {
     const roles = row.UserRoles.map(({ Roles }) => Roles.systemKey ?? Roles.id);
     const permissions = new Set(row.UserRoles.flatMap(({ Roles }) => Roles.RolePermissions.map((p) => p.permissionCode)));
-    return new User(row.id, row.tenantId, row.Tenants.displayName, row.email, row.fullName, roles, [...permissions].sort(), row.mustChangePassword, row.sessionTimeoutMin);
+    return new User(row.id, row.tenantId, row.Tenants.displayName, row.email, row.fullName, roles, [...permissions].sort(), row.mustChangePassword, row.sessionTimeoutMin, row.Tenants.timezone);
   }
 }

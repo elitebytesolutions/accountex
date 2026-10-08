@@ -12,7 +12,7 @@ export class PrismaSignInStore extends SignInStore {
 
   async findCandidate(companyCode: string, email: string): Promise<SignInCandidate | null> {
     const db = this.prisma.db();
-    const tenant = await db.tenants.findFirst({ where: { code: companyCode, status: 'ACTIVE' }, select: { id: true } });
+    const tenant = await db.tenants.findFirst({ where: { code: companyCode }, select: { id: true, status: true } });
     if (!tenant) return null;
     const user = await db.users.findFirst({
       where: { tenantId: tenant.id, email, status: { not: 'REMOVED' }, deletedAt: null },
@@ -20,7 +20,7 @@ export class PrismaSignInStore extends SignInStore {
     });
     if (!user) return null;
     const settings = await db.companySettings.findFirst({ where: { tenantId: tenant.id }, select: { timezone: true } });
-    return { ...user, loginFrom: hhmm(user.loginFrom), loginTo: hhmm(user.loginTo), timeZone: settings?.timezone ?? 'Asia/Karachi' };
+    return { ...user, loginFrom: hhmm(user.loginFrom), loginTo: hhmm(user.loginTo), timeZone: settings?.timezone ?? 'Asia/Karachi', tenantStatus: tenant.status };
   }
 
   async ipAllowed(userId: string, ip: string | undefined) {

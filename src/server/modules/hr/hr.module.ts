@@ -57,15 +57,56 @@ import { PoliciesService } from './policies/application/policies.service.js';
 import { PrismaPolicyStore } from './policies/infrastructure/prisma-policy.store.js';
 import { PoliciesController } from './policies/presentation/policies.controller.js';
 
+// Phase 30: time & attendance
+import { ApprovalsModule } from '../approvals/approvals.module.js';
+import { AttendanceStore } from './attendance/application/attendance-store.js';
+import { AttendanceService } from './attendance/application/attendance.service.js';
+import { PrismaAttendanceStore } from './attendance/infrastructure/prisma-attendance.store.js';
+import { AttendanceController, MyAttendanceController } from './attendance/presentation/attendance.controller.js';
+import { RegularisationStore } from './regularisation/application/regularisation-store.js';
+import { RegularisationService } from './regularisation/application/regularisation.service.js';
+import { PrismaRegularisationStore } from './regularisation/infrastructure/prisma-regularisation.store.js';
+import { MyRegularisationController, RegularisationController } from './regularisation/presentation/regularisation.controller.js';
+import { RosterStore } from './rosters/application/roster-store.js';
+import { RostersService } from './rosters/application/rosters.service.js';
+import { PrismaRosterStore } from './rosters/infrastructure/prisma-roster.store.js';
+import { MyShiftsController, OpenShiftsController, RostersController, ShiftSwapsController } from './rosters/presentation/rosters.controller.js';
+import { OvertimeClaimStore } from './overtime-claims/application/overtime-claim-store.js';
+import { OvertimeClaimsService } from './overtime-claims/application/overtime-claims.service.js';
+import { PrismaOvertimeClaimStore } from './overtime-claims/infrastructure/prisma-overtime-claim.store.js';
+import { OvertimeClaimsController } from './overtime-claims/presentation/overtime-claims.controller.js';
+// Phase 31: leave & lifecycle
+import { LeaveRequestStore } from './leave-requests/application/leave-request-store.js';
+import { LeaveRequestsService } from './leave-requests/application/leave-requests.service.js';
+import { PrismaLeaveRequestStore } from './leave-requests/infrastructure/prisma-leave-request.store.js';
+import { LeaveRequestsController, MyLeaveController } from './leave-requests/presentation/leave-requests.controller.js';
+import { LeaveBalanceStore } from './leave-balances/application/leave-balance-store.js';
+import { LeaveBalancesService } from './leave-balances/application/leave-balances.service.js';
+import { PrismaLeaveBalanceStore } from './leave-balances/infrastructure/prisma-leave-balance.store.js';
+import { LeaveAdjustmentsController, LeaveBalancesController, LeaveYearEndController } from './leave-balances/presentation/leave-balances.controller.js';
+import { OnboardingStore } from './onboardings/application/onboarding-store.js';
+import { OnboardingsService } from './onboardings/application/onboardings.service.js';
+import { PrismaOnboardingStore } from './onboardings/infrastructure/prisma-onboarding.store.js';
+import { MyOnboardingController, OnboardingsController } from './onboardings/presentation/onboardings.controller.js';
+import { OffboardingStore } from './offboardings/application/offboarding-store.js';
+import { OffboardingsService } from './offboardings/application/offboardings.service.js';
+import { PrismaOffboardingStore } from './offboardings/infrastructure/prisma-offboarding.store.js';
+import { OffboardingsController } from './offboardings/presentation/offboardings.controller.js';
+
 /**
  * HR: organisation (Phase 10: departments, designations, grades, work shifts, holidays, org chart) and policies & people
  * (Phase 11: employees, leave types, overtime policy, biometric devices, branch HR settings).
  */
 @Module({
+  imports: [ApprovalsModule],
   controllers: [
     OrgController, DepartmentsController, DesignationsController, GradesController, ShiftsController, HolidaysController,
     EmployeesController, LeaveTypesController, OvertimeController, DevicesController,
     OnboardingTemplatesController, PerformanceCyclesController, TrainingProgramsController, PoliciesController, // Phase 13
+    AttendanceController, MyAttendanceController, RegularisationController, MyRegularisationController, // Phase 30
+    RostersController, ShiftSwapsController, OpenShiftsController, MyShiftsController, OvertimeClaimsController,
+    LeaveRequestsController, MyLeaveController, LeaveBalancesController, LeaveAdjustmentsController, LeaveYearEndController, // Phase 31
+    OnboardingsController, MyOnboardingController, OffboardingsController,
   ],
   providers: [
     DepartmentsService, { provide: DepartmentStore, useClass: PrismaDepartmentStore },
@@ -82,6 +123,14 @@ import { PoliciesController } from './policies/presentation/policies.controller.
     PerformanceCyclesService, { provide: PerformanceCycleStore, useClass: PrismaPerformanceCycleStore },
     TrainingProgramsService, { provide: TrainingProgramStore, useClass: PrismaTrainingProgramStore },
     PoliciesService, { provide: PolicyStore, useClass: PrismaPolicyStore },
+    AttendanceService, { provide: AttendanceStore, useClass: PrismaAttendanceStore }, // Phase 30
+    RegularisationService, { provide: RegularisationStore, useClass: PrismaRegularisationStore },
+    RostersService, { provide: RosterStore, useClass: PrismaRosterStore },
+    OvertimeClaimsService, { provide: OvertimeClaimStore, useClass: PrismaOvertimeClaimStore },
+    LeaveRequestsService, { provide: LeaveRequestStore, useClass: PrismaLeaveRequestStore }, // Phase 31
+    LeaveBalancesService, { provide: LeaveBalanceStore, useClass: PrismaLeaveBalanceStore },
+    OnboardingsService, { provide: OnboardingStore, useClass: PrismaOnboardingStore },
+    OffboardingsService, { provide: OffboardingStore, useClass: PrismaOffboardingStore },
   ],
 })
 export class HrModule {}
