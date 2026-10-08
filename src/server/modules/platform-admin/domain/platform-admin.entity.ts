@@ -5,5 +5,7 @@ export class PlatformAdmin {
     readonly email: string,
     readonly name: string,
     readonly passwordHash: string,
+    /** The Platform.PlatformStaff mirror row (Phase 36): who platform history names. */
+    readonly staffId: string | null = null,
   ) {}
 }

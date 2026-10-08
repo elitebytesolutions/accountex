@@ -165,15 +165,18 @@ END $function$;
 -- ---------------------------------------------------------------------------
 -- 4. Standard chart of accounts template: Pakistan trading & distribution.
 --    Level, class and parent come from the code (same functions as the account checks).
+--    Insert-only (Phase 37): the Super Admin maintains the template in /admin/templates, so a re-run never
+--    overwrites it. The accounts are added only while the template has none (first install).
 -- ---------------------------------------------------------------------------
 SELECT set_config('app.actorLabel', '009-finance-structure.sql', true);
 
 INSERT INTO "Platform"."ChartOfAccountsTemplates" ("code", "name", "industry", "version", "status", "description", "icon")
 VALUES ('PK_TRADING', 'Pakistan trading & distribution', 'TRADING_DISTRIBUTION', 1, 'DEFAULT',
         'Standard chart for trading and distribution companies in Pakistan: sales tax, withholding and statutory accounts, with every posting role mapped.', 'list-tree')
-ON CONFLICT ("code") DO UPDATE SET "name" = EXCLUDED."name", "industry" = EXCLUDED."industry", "description" = EXCLUDED."description", "icon" = EXCLUDED."icon";
+ON CONFLICT ("code") DO NOTHING;
 
-WITH t AS (SELECT id FROM "Platform"."ChartOfAccountsTemplates" WHERE "code" = 'PK_TRADING'),
+WITH t AS (SELECT id FROM "Platform"."ChartOfAccountsTemplates" ct WHERE ct."code" = 'PK_TRADING'
+             AND NOT EXISTS (SELECT 1 FROM "Platform"."ChartOfAccountsTemplateAccounts" a WHERE a."templateId" = ct.id)),
 rows ("code", "name", "nature", "subType", "defaultRole") AS (VALUES
   ('1000','Assets','DR',NULL,NULL),
   ('1100','Current assets','DR',NULL,NULL),
@@ -360,9 +363,7 @@ SELECT t.id, r."code", r."name",
        "Accounting"."getAccountLevel"(r."code"), substr(r."code", 1, 1)::smallint, r."nature", r."subType",
        "Accounting"."getAccountLevel"(r."code") = 4, r."defaultRole"
   FROM rows r CROSS JOIN t
-ON CONFLICT ("templateId", "code") DO UPDATE SET "name" = EXCLUDED."name", "parentCode" = EXCLUDED."parentCode", "level" = EXCLUDED."level",
-  "accountClass" = EXCLUDED."accountClass", "nature" = EXCLUDED."nature", "subType" = EXCLUDED."subType",
-  "isPostable" = EXCLUDED."isPostable", "defaultRole" = EXCLUDED."defaultRole";
+ON CONFLICT ("templateId", "code") DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 5. Apply a template to the current company: accounts level by level, then the default mappings.

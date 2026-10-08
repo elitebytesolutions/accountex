@@ -4,7 +4,7 @@ import { E, POST_RULES, type Phase } from "./types";
 
 export const admin: Phase[] = [
   {
-    no: 36, title: "Plans & catalogue", portal: "admin", kind: "MASTER", status: "in-progress",
+    no: 36, title: "Plans & catalogue", portal: "admin", kind: "MASTER", status: "done",
     objective: "What tenants can buy: plans with features/limits, modules, add-ons and coupons.",
     entities: [
       E("subscription-plans", "Subscription Plans", ["Platform.SubscriptionPlans", "Platform.SubscriptionPlanFeatures", "Platform.SubscriptionPlanLimits"], {
@@ -26,7 +26,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 37, title: "Seed templates & tax master", portal: "admin", kind: "MASTER", status: "in-progress",
+    no: 37, title: "Seed templates & tax master", portal: "admin", kind: "MASTER", status: "done",
     objective: "Data copied into a new tenant at onboarding, and the national tax master.",
     entities: [
       E("coa-templates", "COA Templates", ["Platform.ChartOfAccountsTemplates", "Platform.ChartOfAccountsTemplateAccounts"], {
@@ -48,7 +48,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 38, title: "Platform configuration", portal: "admin", kind: "MASTER", status: "in-progress",
+    no: 38, title: "Platform configuration", portal: "admin", kind: "MASTER", status: "done",
     objective: "Dunning policy, tenant segments, resellers and platform security/backups.",
     entities: [
       E("dunning-policies", "Dunning Policies", ["Platform.DunningPolicies"], {
@@ -70,7 +70,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 39, title: "Feature flags & alerting", portal: "admin", kind: "MASTER", status: "in-progress",
+    no: 39, title: "Feature flags & alerting", portal: "admin", kind: "MASTER", status: "done",
     objective: "Feature flags with targeting, maintenance windows and alert rules.",
     entities: [
       E("feature-flags", "Feature Flags", ["Platform.FeatureFlags", "Platform.FlagEnvironments", "Platform.FlagVariations", "Platform.FlagRules", "Platform.FlagTargets", "Platform.FlagPrerequisites", "Platform.FlagDefaultRules", "Platform.FlagSdkKeys"], {
@@ -90,7 +90,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 40, title: "Tenant lifecycle", portal: "admin", kind: "TRANSACTIONAL",
+    no: 40, title: "Tenant lifecycle", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Onboard and manage tenants, their subscriptions and usage, and audited impersonation.",
     reports: ["Platform Overview (admin/dashboard)", "SaaS Analytics"],
     entities: [

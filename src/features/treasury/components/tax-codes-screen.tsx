@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import { Download, History, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { TaxCode, TaxCodeCreateFields } from "@/shared";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/toast";
 import { HistoryTab } from "@/features/history/components/history-tab";
 import { labelOf, lookupOptions, useLookups } from "@/features/settings/use-lookups";
 import { ApiError } from "@/lib/api/errors";
-import { createTaxCode, deleteTaxCode, listTaxCodes, setTaxCodeActive, updateTaxCode } from "../api";
+import { createTaxCode, deleteTaxCode, importTaxMaster, listTaxCodes, setTaxCodeActive, updateTaxCode } from "../api";
 import { AccountOptions, apiFieldErrors, apiMessage, usePostableAccounts } from "./treasury-ui";
 
 type Can = { create: boolean; edit: boolean };
@@ -132,6 +132,20 @@ export function TaxCodesScreen({ can }: { can: Can }) {
     }
   };
 
+  // Phase 37: published Tax Master rates → new codes or new rate periods on existing ones.
+  const importMaster = async () => {
+    setBusy(true);
+    try {
+      const r = await importTaxMaster();
+      toast(`Tax Master imported: ${r.created.length} code${r.created.length === 1 ? "" : "s"} created, ${r.ratesAdded.length} rate${r.ratesAdded.length === 1 ? "" : "s"} added${r.skipped.length ? `, ${r.skipped.length} skipped` : ""}`, { tone: "good" });
+      reload();
+    } catch (e) {
+      toast(apiMessage(e, "Could not import the Tax Master"), { tone: "danger" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const all = rows ?? [];
   const needle = q.trim().toLowerCase();
   const shown = all.filter(
@@ -148,7 +162,12 @@ export function TaxCodesScreen({ can }: { can: Can }) {
         eyebrow="Tax & Compliance / Tax Codes"
         title="Tax Codes"
         description="Sales tax and income tax withholding codes applied on invoices, bills and payments — mapped to GL accounts."
-        actions={can.create && <Button variant="primary" icon={<Plus />} onClick={() => open("new")}>New Tax Code</Button>}
+        actions={can.create && (
+          <>
+            <Button icon={<Download />} disabled={busy} onClick={importMaster}>Import from Tax Master</Button>
+            <Button variant="primary" icon={<Plus />} onClick={() => open("new")}>New Tax Code</Button>
+          </>
+        )}
       />
       {error && <ErrorState message={error.message} reference={error.reference} onRetry={reload} />}
       <div className="panel flush">

@@ -15,6 +15,9 @@
 @import "./styles/finsoft-bank-rules.css" layer(components);
 @import "./styles/finsoft-products.css" layer(components);
 @import "./styles/finsoft-stock-ops.css" layer(components);
+/* Super Admin portal (Phase 36 foundation, shared by Phases 36-39): .ap-* and .ff-* from the template. */
+@import "./styles/finsoft-admin-plus.css" layer(components);
+@import "./styles/finsoft-flags.css" layer(components);
 
 /* `dark:` follows the app's theme toggle (html[data-theme=dark], as in the template), not the OS setting. */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

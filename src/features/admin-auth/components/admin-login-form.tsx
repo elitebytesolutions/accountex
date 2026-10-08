@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginSchema, type LoginInput } from "@/shared";
+import { AdminLoginSchema, type AdminLoginInput } from "@/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -8,7 +8,7 @@ import type { z } from "zod";
 import { ApiError } from "@/lib/api/errors";
 import { adminLogin } from "../api";
 
-type LoginFields = z.input<typeof LoginSchema>;
+type LoginFields = z.input<typeof AdminLoginSchema>;
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -17,9 +17,9 @@ export function AdminLoginForm() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFields, unknown, LoginInput>({ resolver: zodResolver(LoginSchema) });
+  } = useForm<LoginFields, unknown, AdminLoginInput>({ resolver: zodResolver(AdminLoginSchema) });
 
-  async function onSubmit(values: LoginInput) {
+  async function onSubmit(values: AdminLoginInput) {
     try {
       await adminLogin(values);
       router.replace("/admin/dashboard");

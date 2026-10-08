@@ -53,7 +53,10 @@ await prisma.$transaction(
     await tx.platformAdmin.upsert({ where: { singleton: true }, update: admin, create: admin });
     console.log(`Seeded platform admin ${adminEmail}`);
 
-    // --- Default grants per system role (prisma/catalog.ts → Platform.SystemRoleGrants), applied by difference ---
+    // --- Default grants per system role (prisma/catalog.ts → Platform.SystemRoleGrants) ---
+    // The database is the source of truth (Phase 37: the Super Admin edits the grants in /admin/templates). The seed
+    // only adds the catalogue defaults of permissions or system roles the grants have never seen (no row now and none
+    // in the platform log), so it never deletes, re-adds or overwrites an admin's edit.
     const permissions = await tx.permissions.findMany({ select: { code: true, resource: true, action: true } });
     const grantRows = Object.entries(SYSTEM_ROLE_GRANTS).flatMap(([systemKey, grants]) => {
       const g: Record<string, string[]> = grants;
@@ -62,16 +65,19 @@ await prisma.$transaction(
         .map((p) => ({ systemKey, permissionCode: p.code }));
     });
     const keys = grantRows.map((r) => `${r.systemKey}|${r.permissionCode}`);
-    await tx.$executeRaw`
-      delete from "Platform"."SystemRoleGrants"
-      where not ("systemKey" || '|' || "permissionCode" = any(${keys}::text[]))`;
-    await tx.$executeRaw`
+    const added = await tx.$executeRaw`
+      with k as (select split_part(k, '|', 1) as "systemKey", split_part(k, '|', 2) as "permissionCode" from unnest(${keys}::text[]) as k),
+      seen as (
+        select "systemKey", "permissionCode" from "Platform"."SystemRoleGrants"
+        union
+        select l."rowData" ->> 'systemKey', l."rowData" ->> 'permissionCode' from "Platform"."PlatformAuditLogs" l
+         where l.action like 'SystemRoleGrants.%')
       insert into "Platform"."SystemRoleGrants" ("systemKey", "permissionCode")
-      select split_part(k, '|', 1), split_part(k, '|', 2) from unnest(${keys}::text[]) as k
+      select k."systemKey", k."permissionCode" from k
+       where not exists (select 1 from seen s where s."permissionCode" = k."permissionCode")
+          or not exists (select 1 from seen s where s."systemKey" = k."systemKey")
       on conflict do nothing`;
-    for (const key of Object.keys(SYSTEM_ROLE_GRANTS)) {
-      console.log(`  ${key.padEnd(20)} ${grantRows.filter((r) => r.systemKey === key).length} permissions`);
-    }
+    console.log(`  ${added} new default grants added (existing grants are kept as edited)`);
 
     // --- Demo tenant: created only through provisionTenant ----------------------
     let tenant = await tx.tenants.findUnique({ where: { code } });
@@ -87,11 +93,7 @@ await prisma.$transaction(
         select ${tenant.id}::uuid, l."code", l."label", l."description", true from "Lookups"."Lookups" l
         where l."lookupType" = 'SystemKey' and l."tenantId" is null and l."isActive"
           and not exists (select 1 from "Company"."Roles" r where r."tenantId" = ${tenant.id}::uuid and r."systemKey" = l."code")`;
-      // System role grants follow Platform.SystemRoleGrants (by difference, so unchanged grants leave no history).
-      await tx.$executeRaw`
-        delete from "Company"."RolePermissions" rp using "Company"."Roles" r
-        where rp."roleId" = r."id" and r."tenantId" = ${tenant.id}::uuid and r."isSystem"
-          and not exists (select 1 from "Platform"."SystemRoleGrants" g where g."systemKey" = r."systemKey" and g."permissionCode" = rp."permissionCode")`;
+      // System roles get any missing Platform.SystemRoleGrants (added only: the company's own role edits are kept).
       await tx.$executeRaw`
         insert into "Company"."RolePermissions" ("tenantId", "roleId", "permissionCode")
         select ${tenant.id}::uuid, r."id", g."permissionCode" from "Company"."Roles" r

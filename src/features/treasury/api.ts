@@ -44,6 +44,8 @@ export const createTaxCode = (body: TaxCodeCreateFields) => apiRequest<TaxCode>(
 export const updateTaxCode = (id: string, body: Partial<TaxCodeCreateFields> & { rowVersion: number }) => apiRequest<TaxCode>(`/tax/codes/${id}`, { method: "PATCH", body });
 export const setTaxCodeActive = (id: string, on: boolean, rowVersion: number) => act<TaxCode>(`/tax/codes/${id}/${on ? "activate" : "deactivate"}`, rowVersion);
 export const deleteTaxCode = (id: string, rowVersion: number) => del(`/tax/codes/${id}`, rowVersion);
+/** Phase 37: copy the published Tax Master rates into the company's tax codes. */
+export const importTaxMaster = () => apiRequest<{ created: string[]; ratesAdded: string[]; skipped: string[] }>("/tax/codes/import-master", { method: "POST" });
 
 // Banks
 export const listBanks = () => apiRequest<Bank[]>("/bank/banks");

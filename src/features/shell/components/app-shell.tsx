@@ -1,34 +1,17 @@
 "use client";
 
+import { CircleUser } from "lucide-react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
-import { cn } from "@/components/ui/cn";
+import { useEffect, useMemo, type ReactNode } from "react";
 import type { SessionUser } from "@/shared";
-import { Sidebar } from "./sidebar";
-import { Topbar } from "./topbar";
+import { logout } from "@/features/auth/api";
+import { initialsOf } from "@/features/auth/initials";
+import { crumbsFor, navFor, navPathFor } from "@/features/workspace-nav/nav";
+import { ShellFrame } from "./shell-frame";
+import { SupportAccessBanner } from "./support-access-banner";
 
-// Collapsed rail preference, same storage key as the template ("fs-collapsed").
-const COLLAPSED_KEY = "fs-collapsed";
-const collapsedListeners = new Set<() => void>();
-const readCollapsed = () => {
-  try {
-    return localStorage.getItem(COLLAPSED_KEY) === "true";
-  } catch {
-    return false;
-  }
-};
-const subscribeCollapsed = (onChange: () => void) => {
-  collapsedListeners.add(onChange);
-  return () => collapsedListeners.delete(onChange);
-};
-const writeCollapsed = (value: boolean) => {
-  try {
-    localStorage.setItem(COLLAPSED_KEY, String(value));
-  } catch {}
-  collapsedListeners.forEach((l) => l());
-};
-
-/** Template shell (20-shell-open.html): sidebar, mobile scrim, top bar, content, footer. */
+/** Template shell (20-shell-open.html) for the company workspace: NAV.app sidebar, TOP.app top bar. */
 export function AppShell({ user, children }: { user: SessionUser; children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -37,32 +20,43 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
   useEffect(() => {
     if (mustChange) router.replace("/profile/security?tab=security");
   }, [mustChange, router]);
-  // Server renders expanded; the client then applies the saved preference.
-  const collapsed = useSyncExternalStore(subscribeCollapsed, readCollapsed, () => false);
-
-  // The mobile menu closes whenever the route changes (adjusted during render, no effect).
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [openedOn, setOpenedOn] = useState(pathname);
-  if (openedOn !== pathname) {
-    setOpenedOn(pathname);
-    setMobileOpen(false);
-  }
+  const nav = useMemo(() => navFor(user.permissions), [user.permissions]);
 
   return (
-    <div className={cn("shell", collapsed && "collapsed", mobileOpen && "mobile-open")}>
-      <Sidebar permissions={user.permissions} tenantName={user.tenantName} onCollapse={() => writeCollapsed(!collapsed)} />
-      <button className="mobile-scrim" type="button" aria-label="Close menu" onClick={() => setMobileOpen(false)} />
-      <main className="main">
-        <Topbar name={user.name} email={user.email} onMenu={() => setMobileOpen(true)} />
-        <div className="content">{children}</div>
-      </main>
-      <footer className="app-footer">
-        <b>Accountex</b>
-        <span>·</span>
-        <span>{user.tenantName}</span>
-        <span>·</span>
-        <span>Financial Accounting &amp; HRMS</span>
-      </footer>
-    </div>
+    <ShellFrame
+      sidebar={{
+        nav,
+        homeHref: "/dashboard",
+        workspace: { initials: initialsOf(user.tenantName), name: user.tenantName, sub: "Company workspace" },
+        navPath: navPathFor,
+      }}
+      topbar={{
+        name: user.name,
+        email: user.email,
+        homeHref: "/dashboard",
+        homeLabel: "Dashboard",
+        rootLabel: "Workspace",
+        crumbsFor,
+        signOut: { run: logout, then: "/login" },
+        menuItems: (close) => (
+          <Link className="pop-item" role="menuitem" href="/profile" onClick={close}>
+            <span className="tone-violet"><CircleUser /></span>
+            <div><b>My Profile</b><small>My day, leave, pay &amp; requests</small></div>
+          </Link>
+        ),
+      }}
+      footer={
+        <>
+          <b>Accountex</b>
+          <span>·</span>
+          <span>{user.tenantName}</span>
+          <span>·</span>
+          <span>Financial Accounting &amp; HRMS</span>
+        </>
+      }
+    >
+      <SupportAccessBanner />
+      {children}
+    </ShellFrame>
   );
 }

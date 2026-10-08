@@ -3,15 +3,27 @@
 import { Activity, ChevronDown, ChevronRight, PanelLeft, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/components/ui/cn";
-import { navFor, navPathFor, type NavModule } from "@/features/workspace-nav/nav";
-import { initialsOf } from "@/features/auth/initials";
+import type { NavGroup, NavModule } from "@/features/workspace-nav/nav";
+
+export type SidebarProps = {
+  /** The (already permission-filtered) nav: template "Menu" tiles and groups. */
+  nav: { menu: NavModule[]; groups: NavGroup[] };
+  /** Where the logo links. */
+  homeHref: string;
+  /** Template workspace pill (`.sb-ws`). */
+  workspace: { initials: string; name: string; sub: string };
+  /** Maps a page to the sidebar path it belongs to (detail pages whose parent isn't their list). */
+  navPath?: (pathname: string) => string;
+  onCollapse: () => void;
+};
+
+const samePath = (pathname: string) => pathname;
 
 /** Template sidebar (99-app.js renderSidebar + 10-styles.css "SHELL"): brand, workspace pill, menu search, sections. */
-export function Sidebar({ permissions, tenantName, onCollapse }: { permissions: string[]; tenantName: string; onCollapse: () => void }) {
+export function Sidebar({ nav, homeHref, workspace, navPath = samePath, onCollapse }: SidebarProps) {
   const pathname = usePathname();
-  const nav = useMemo(() => navFor(permissions), [permissions]);
   const [query, setQuery] = useState("");
   const [shut, setShut] = useState<string[]>([]);
   const q = query.trim().toLowerCase();
@@ -49,7 +61,7 @@ export function Sidebar({ permissions, tenantName, onCollapse }: { permissions: 
   return (
     <aside className="sidebar" aria-label="Main navigation">
       <div className="sb-top">
-        <Link className="sb-logo" href="/dashboard">
+        <Link className="sb-logo" href={homeHref}>
           <span className="sb-mark"><Activity /></span>
           <b>Accountex</b>
         </Link>
@@ -57,8 +69,8 @@ export function Sidebar({ permissions, tenantName, onCollapse }: { permissions: 
       </div>
       <div className="pop-wrap">
         <div className="sb-ws">
-          <span className="sb-ws-ava">{initialsOf(tenantName)}</span>
-          <div><b>{tenantName}</b><small>Company workspace</small></div>
+          <span className="sb-ws-ava">{workspace.initials}</span>
+          <div><b>{workspace.name}</b><small>{workspace.sub}</small></div>
         </div>
       </div>
       <label className="sb-find">
@@ -76,7 +88,7 @@ export function Sidebar({ permissions, tenantName, onCollapse }: { permissions: 
               </button>
               <div className="sb-sec-b">
                 <div className="sb-sec-in">
-                  {s.modules.map((m) => <ModuleItem key={m.label} module={m} pathname={pathname} forceOpen={Boolean(q)} />)}
+                  {s.modules.map((m) => <ModuleItem key={m.label} module={m} pathname={pathname} navPath={navPath} forceOpen={Boolean(q)} />)}
                 </div>
               </div>
             </div>
@@ -88,9 +100,12 @@ export function Sidebar({ permissions, tenantName, onCollapse }: { permissions: 
   );
 }
 
-function ModuleItem({ module: m, pathname, forceOpen }: { module: NavModule; pathname: string; forceOpen: boolean }) {
-  const here = navPathFor(pathname);
-  const leafActive = (href: string) => here === href || here.startsWith(`${href}/`);
+function ModuleItem({ module: m, pathname, navPath, forceOpen }: { module: NavModule; pathname: string; navPath: (pathname: string) => string; forceOpen: boolean }) {
+  const here = navPath(pathname);
+  const matches = (href: string) => here === href || here.startsWith(`${href}/`);
+  // the most specific child wins (/accounting/vouchers/new is "New Voucher", not also "Voucher Register")
+  const best = (m.children ?? []).filter((c) => matches(c.href)).reduce<string | null>((b, c) => (!b || c.href.length > b.length ? c.href : b), null);
+  const leafActive = (href: string) => href === best;
   const childActive = (m.children ?? []).some((c) => leafActive(c.href));
   const [open, setOpen] = useState(childActive);
   const Icon = m.icon;

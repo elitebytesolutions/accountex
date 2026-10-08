@@ -29,10 +29,21 @@ import { MeModule } from './modules/me/me.module.js';
 import { HistoryModule } from './modules/history/history.module.js';
 import { LookupsModule } from './modules/lookups/lookups.module.js';
 import { PlatformAdminModule } from './modules/platform-admin/platform-admin.module.js';
+import { PlatformCatalogueModule } from './modules/platform-admin/catalogue/catalogue.module.js';
 import { SettingsModule } from './modules/settings/settings.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { SelfServiceModule } from './modules/self-service/self-service.module.js';
 import { ReportsModule } from './modules/reports/reports.module.js';
+import { ApprovalsModule } from './modules/approvals/approvals.module.js';
+import { LedgerModule } from './modules/ledger/ledger.module.js';
+import { BankingModule } from './modules/banking/banking.module.js';
+import { CashModule } from './modules/cash/cash.module.js';
+import { PurchasingModule } from './modules/purchasing/purchasing.module.js';
+import { PlatformFlagsModule } from './modules/platform-admin/flags/platform-flags.module.js';
+import { WorkspaceFlagsModule } from './modules/workspace-flags/workspace-flags.module.js';
+import { PlatformTemplatesModule } from './modules/platform-admin/templates/templates.module.js';
+import { PlatformConfigModule } from './modules/platform-admin/config/platform-config.module.js';
+import { PlatformTenantLifecycleModule } from './modules/platform-admin/tenants/tenant-lifecycle.module.js';
 
 @Module({
   imports: [
@@ -46,16 +57,20 @@ import { ReportsModule } from './modules/reports/reports.module.js';
     UsersModule,
     AuthModule,
     PlatformAdminModule,
+    PlatformCatalogueModule,
     HistoryModule,
     LookupsModule,
     SettingsModule,
     AccessModule,
     MeModule,
     FinanceModule,
+    // before TreasuryModule: its generic /cash/:resource/:id/:action routes would catch Cash's own routes
+    CashModule,
     TreasuryModule,
     AssetsModule,
     InventoryModule,
     PartiesModule,
+    PurchasingModule,
     SalesSetupModule,
     DistributionModule,
     ReceivablesModule,
@@ -63,6 +78,14 @@ import { ReportsModule } from './modules/reports/reports.module.js';
     PayrollModule,
     SelfServiceModule,
     ReportsModule,
+    ApprovalsModule,
+    LedgerModule,
+    BankingModule,
+    PlatformFlagsModule,
+    WorkspaceFlagsModule,
+    PlatformTemplatesModule,
+    PlatformConfigModule,
+    PlatformTenantLifecycleModule,
   ],
   controllers: [AppController],
   providers: [

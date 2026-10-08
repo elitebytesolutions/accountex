@@ -1,16 +1,33 @@
 "use client";
 
-import { ChevronDown, ChevronRight, CircleUser, House, LogOut, Menu, Moon, Sun } from "lucide-react";
+import { ChevronDown, ChevronRight, House, LogOut, Menu, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/components/ui/cn";
-import { logout } from "@/features/auth/api";
 import { initialsOf } from "@/features/auth/initials";
-import { crumbsFor } from "@/features/workspace-nav/nav";
+
+type Crumbs = { trail: string[]; title: string };
+
+export type TopbarProps = {
+  name: string;
+  email: string;
+  /** Breadcrumb root: home icon link, then the portal name (template setCrumbs: "Workspace" / "Platform"). */
+  homeHref: string;
+  homeLabel: string;
+  rootLabel: string;
+  /** Breadcrumb trail and title of a path (null: derived from the URL). */
+  crumbsFor: (pathname: string) => Crumbs | null;
+  /** Template top-bar actions placed before the theme toggle (e.g. the admin Create menu). */
+  actions?: ReactNode;
+  /** User-menu entries above "Sign out". */
+  menuItems?: (close: () => void) => ReactNode;
+  signOut: { run: () => Promise<unknown>; then: string };
+  onMenu: () => void;
+};
 
 /** Template top bar (99-app.js renderTopbar): mobile menu, breadcrumbs, theme toggle, user menu. */
-export function Topbar({ name, email, onMenu }: { name: string; email: string; onMenu: () => void }) {
+export function Topbar({ name, email, homeHref, homeLabel, rootLabel, crumbsFor, actions, menuItems, signOut, onMenu }: TopbarProps) {
   const pathname = usePathname();
   const crumbs = crumbsFor(pathname) ?? fallbackCrumbs(pathname);
 
@@ -18,8 +35,8 @@ export function Topbar({ name, email, onMenu }: { name: string; email: string; o
     <header className="topbar">
       <button className="menu-btn" type="button" aria-label="Open menu" onClick={onMenu}><Menu /></button>
       <nav className="crumbs" aria-label="Breadcrumb">
-        <Link className="crumb-home" href="/dashboard" aria-label="Dashboard"><House /></Link>
-        <span className="c-hide">Workspace</span>
+        <Link className="crumb-home" href={homeHref} aria-label={homeLabel}><House /></Link>
+        <span className="c-hide">{rootLabel}</span>
         {crumbs.trail.map((t) => (
           <span key={t} style={{ display: "contents" }}><ChevronRight /><span>{t}</span></span>
         ))}
@@ -27,8 +44,9 @@ export function Topbar({ name, email, onMenu }: { name: string; email: string; o
         <b>{crumbs.title}</b>
       </nav>
       <div className="top-actions">
+        {actions}
         <ThemeButton />
-        <UserMenu name={name} email={email} />
+        <UserMenu name={name} email={email} menuItems={menuItems} signOut={signOut} />
       </div>
     </header>
   );
@@ -58,8 +76,8 @@ function ThemeButton() {
   );
 }
 
-/** Template user pill + popover: the only way into My Profile. */
-function UserMenu({ name, email }: { name: string; email: string }) {
+/** Template user pill + popover (in the workspace, the only way into My Profile). */
+function UserMenu({ name, email, menuItems, signOut: so }: { name: string; email: string; menuItems?: (close: () => void) => ReactNode; signOut: TopbarProps["signOut"] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -77,8 +95,8 @@ function UserMenu({ name, email }: { name: string; email: string }) {
   }, [open]);
 
   async function signOut() {
-    await logout();
-    router.replace("/login");
+    await so.run();
+    router.replace(so.then);
     router.refresh();
   }
 
@@ -90,11 +108,12 @@ function UserMenu({ name, email }: { name: string; email: string }) {
         <ChevronDown />
       </button>
       <div className={cn("pop", open && "open")} role="menu">
-        <Link className="pop-item" role="menuitem" href="/profile" onClick={() => setOpen(false)}>
-          <span className="tone-violet"><CircleUser /></span>
-          <div><b>My Profile</b><small>My day, leave, pay &amp; requests</small></div>
-        </Link>
-        <div className="pop-sep" />
+        {menuItems && (
+          <>
+            {menuItems(() => setOpen(false))}
+            <div className="pop-sep" />
+          </>
+        )}
         <button className="pop-item" role="menuitem" type="button" onClick={signOut}>
           <span className="tone-red"><LogOut /></span>
           <div><b>Sign out</b></div>
