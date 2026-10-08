@@ -38,6 +38,9 @@ export * from './purchases/purchasing.ts';
 // Phase 20: payables
 export * from './purchases/payables.ts';
 export * from './assets/category.ts';
+// Phase 27: fixed asset register, depreciation, transfers, disposals; budgets
+export * from './assets/register.ts';
+export * from './finance/budget.ts';
 export * from './tax/fbr.ts';
 export * from './access/sod-rule.ts';
 export * from './inventory/unit.ts';
@@ -52,6 +55,8 @@ export * from './inventory/label.ts';
 export * from './inventory/reorder.ts';
 // Phase 21: stock operations
 export * from './inventory/stock-ops.ts';
+// Phase 22: stock vouchers & demand
+export * from './inventory/stock-demand.ts';
 export * from './parties/common.ts';
 export * from './parties/customer-group.ts';
 export * from './parties/customer.ts';
@@ -61,6 +66,10 @@ export * from './sales/price-list.ts';
 export * from './sales/scheme.ts';
 export * from './sales/price-tier.ts';
 export * from './sales/reminder.ts';
+// Phase 23: sales documents
+export * from './sales/documents.ts';
+// Phase 25: wholesale
+export * from './sales/wholesale.ts';
 export * from './hr/organisation.ts';
 export * from './hr/people.ts';
 export * from './hr/policies.ts';
@@ -76,6 +85,11 @@ export * from './hr/leave-balance.ts';
 export * from './hr/onboarding.ts';
 export * from './hr/offboarding.ts';
 export * from './payroll/setup.ts';
+// Phase 32: payroll runs, loans, payslips, tax declarations
+export * from './payroll/run.ts';
+export * from './payroll/loan.ts';
+export * from './payroll/payslip.ts';
+export * from './payroll/tax-declaration.ts';
 export * from './finance/gl.ts';
 export * from './platform/history.ts';
 export * from './platform/plan.ts';
@@ -98,3 +112,23 @@ export * from './platform/tenant.ts';
 export * from './platform/subscription.ts';
 export * from './platform/usage.ts';
 export * from './platform/impersonation.ts';
+// Phase 42: growth & support
+export * from './platform/lead.ts';
+export * from './platform/ticket.ts';
+export * from './platform/announcement.ts';
+export * from './platform/broadcast.ts';
+export * from './platform/comm-log.ts';
+// Phase 41: platform billing
+export * from './platform/invoice.ts';
+export * from './platform/payment.ts';
+export * from './platform/dunning-case.ts';
+export * from './platform/payout.ts';
+// Phase 43: platform operations
+export * from './platform/incident.ts';
+export * from './platform/change-request.ts';
+export * from './platform/privacy-request.ts';
+export * from './platform/entitlement-log.ts';
+// Phase 24: sales completion (returns, credit notes, receipts, recurring invoices, POS, AR reports)
+export * from './sales/receivables.ts';
+// Phase 26: distribution (load sheets, route settlements, recovery, targets & commissions, credit control)
+export * from './sales/distribution-ops.ts';

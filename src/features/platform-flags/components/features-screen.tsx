@@ -4,12 +4,15 @@ import {
   Activity, Archive, ArchiveRestore, Blocks, ClipboardCopy, Clock, CopyPlus, EllipsisVertical, ExternalLink, Flag, FlagOff, GitPullRequest,
   Hourglass, KeyRound, Layers, Link2, Lock, Plus, Power, Search, ShieldCheck, ToggleRight, Zap, Globe,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FlagDetail, FlagEnvironment, FlagListItem, FlagSdkKey, FlagSummary } from "@/shared";
 import { cn } from "@/components/ui/cn";
 import { Menu, type MenuItem } from "@/components/ui/menu";
 import { ConfirmDialog } from "@/components/ui/overlay";
+import { listChangeRequests } from "@/features/platform-ops/api";
+import { RequestChangeModal } from "@/features/platform-ops/components/request-change-modal";
 import { PageHead } from "@/components/ui/page";
 import { ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
@@ -30,7 +33,8 @@ const NO_FILTER: Filter = { q: "", cat: "", type: "", stage: "", owner: "", stal
 /**
  * Template admin/features (3B-flags.html, 9J-flags.js renderFeatures): KPIs, tabs Flags / Core modules / SDK keys,
  * environment switch, filters and chips, the flags table with the per-environment switch, row menu, kill-switch
- * confirm and the "New flag" wizard. Changes apply directly; the change-request path (approvals) is Phase 43.
+ * confirm and the "New flag" wizard. Dev / Staging changes apply directly; Production toggles become change requests
+ * (Phase 43) except kill switches (typed key, emergency path).
  */
 export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
   const toast = useToast();
@@ -47,15 +51,16 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
   const [wizard, setWizard] = useState(!!openNew);
   const [menu, setMenu] = useState<{ anchor: HTMLElement; flag: FlagListItem } | null>(null);
   const [kill, setKill] = useState<{ flag: FlagListItem; want: boolean } | null>(null);
-  const [confirmToggle, setConfirmToggle] = useState<{ flag: FlagListItem; want: boolean } | null>(null);
+  const [request, setRequest] = useState<{ flag: FlagListItem; want: boolean } | null>(null);
+  const [pending, setPending] = useState<Set<string>>(new Set());
   const [confirmArchive, setConfirmArchive] = useState<FlagListItem | null>(null);
   const [busy, setBusy] = useState(false);
   const options = useFlagOptions(attempt);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listFlags(), listFlags({ stage: "ARCHIVED" }), flagSummary(), listSdkKeys().catch(() => [])])
-      .then(([live, arch, s, keys]) => { if (!cancelled) { setFlags(live); setArchived(arch); setSummary(s); setServerKey(keys); setError(null); } })
+    Promise.all([listFlags(), listFlags({ stage: "ARCHIVED" }), flagSummary(), listSdkKeys().catch(() => []), listChangeRequests("PENDING").catch(() => null)])
+      .then(([live, arch, s, keys, crs]) => { if (!cancelled) { setFlags(live); setArchived(arch); setSummary(s); setServerKey(keys); setPending(new Set((crs?.items ?? []).map((c) => `${c.flagId}|${c.environment}`))); setError(null); } })
       .catch((e: unknown) => !cancelled && setError(e instanceof ApiError ? { message: e.message, reference: e.correlationId } : { message: "Could not load flags" }));
     return () => { cancelled = true; };
   }, [attempt]);
@@ -79,7 +84,7 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
     { k: "total", label: "Total flags", icon: <Flag />, tone: "", well: "", v: summary?.totalFlags ?? 0, sub: `${summary?.temporaryFlags ?? 0} temporary · ${summary?.permanentFlags ?? 0} permanent` },
     { k: "prod", label: "Active in Production", icon: <Activity />, tone: "", well: "", v: summary?.activeInProduction ?? 0, sub: `of ${summary?.totalFlags ?? 0} serving in Production` },
     { k: "stale", label: "Stale flags", icon: <Hourglass />, tone: "warn", well: "yellow", v: summary?.staleFlags ?? 0, sub: "Ready to clean up", onClick: () => setFilter((f) => ({ ...f, stale: !f.stale })) },
-    { k: "pending", label: "Pending approvals", icon: <GitPullRequest />, tone: "violet", well: "violet", v: summary?.pendingApprovals ?? 0, sub: "Change requests arrive in Phase 43" },
+    { k: "pending", label: "Pending approvals", icon: <GitPullRequest />, tone: "violet", well: "violet", v: summary?.pendingApprovals ?? 0, sub: "Need a second approver", onClick: () => router.push("/admin/change-requests") },
     { k: "kill", label: "Kill switches", icon: <Power />, tone: "danger", well: "red", v: summary?.killSwitches ?? 0, sub: killFlags.every((f) => f.envs.PRODUCTION.isOn) ? "All armed · traffic flowing" : "A kill switch is OFF", onClick: () => setFilter((f) => ({ ...f, type: f.type === "KILL" ? "" : "KILL" })) },
   ];
 
@@ -87,12 +92,15 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
     setBusy(true);
     try { await fn(); toast(ok, { tone: "good" }); reload(); }
     catch (e) { toast(adminErrorMessage(e, "Could not update the flag"), { tone: "danger" }); }
-    finally { setBusy(false); setKill(null); setConfirmToggle(null); setConfirmArchive(null); }
+    finally { setBusy(false); setKill(null); setConfirmArchive(null); }
   };
   const requestToggle = (f: FlagListItem, want: boolean) => {
     if (f.stage === "ARCHIVED") { toast("Restore the flag before changing it", { tone: "warn" }); return; }
     if (isKill(f)) setKill({ flag: f, want });
-    else if (env === "PRODUCTION") setConfirmToggle({ flag: f, want });
+    else if (env === "PRODUCTION") {
+      if (pending.has(`${f.id}|PRODUCTION`)) { toast(`${f.key} already has a pending change request in Production`, { tone: "warn" }); return; }
+      setRequest({ flag: f, want });
+    }
     else void act(() => toggleFlag(f.id, env, want), `${f.key} ${want ? "ON" : "OFF"} in ${envLabel(env)}`);
   };
   const menuItems = (f: FlagListItem): MenuItem[] => [
@@ -113,7 +121,7 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
         description="Release, kill-switch, ops, experiment and entitlement flags across Dev, Staging and Production."
         actions={<>
           <span className="tagline">ship dark, light it up slowly</span>
-          <button type="button" className="btn secondary" disabled title="Change requests arrive in Phase 43"><GitPullRequest />Change requests</button>
+          <Link className="btn secondary" href="/admin/change-requests"><GitPullRequest />Change requests{summary?.pendingApprovals ? <span className="badge warn">{summary.pendingApprovals}</span> : null}</Link>
           <button type="button" className="btn primary" onClick={() => setWizard(true)}><Plus />New flag</button>
         </>} />
 
@@ -173,7 +181,7 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
               </div>
             </div>
           </div>
-          {env === "PRODUCTION" && <div className="ff-prodnote"><ShieldCheck /><span><b>Production is live.</b> Toggling a flag here applies immediately after you confirm. Kill switches need the key typed. Approvals (change requests) arrive in Phase 43.</span></div>}
+          {env === "PRODUCTION" && <div className="ff-prodnote"><ShieldCheck /><span><b>Production is protected.</b> Toggling a flag here opens a change request for a second approver. Kill switches skip the queue: type the key, and the flip is logged as an emergency change.</span></div>}
           <div className="table-wrap ff-twrap">
             <table className="tbl ff-tbl">
               <thead><tr><th>Flag</th><th>Type</th><th>Lifecycle</th><th title="Dev · Staging · Production">Envs</th><th>Rollout</th><th>Prerequisites</th><th>Owner</th><th>Last evaluated</th><th className="ff-c-sw">{envLabel(env)}</th><th /></tr></thead>
@@ -206,6 +214,7 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
                       <td className="ff-c-sw">
                         <label className={cn("switch ff-bigsw", isKill(f) && "kill")}><input type="checkbox" checked={e.isOn} disabled={busy || f.stage === "ARCHIVED"} aria-label={`${f.key} in ${envLabel(env)}`}
                           onChange={(ev) => requestToggle(f, ev.target.checked)} /><i /></label>
+                        {pending.has(`${f.id}|${env}`) && <span className="badge warn ff-pendb" title="Change request pending approval"><Clock />Pending</span>}
                       </td>
                       <td><button type="button" className="icon-btn-sm" aria-label={`Actions for ${f.key}`} onClick={(ev) => setMenu({ anchor: ev.currentTarget, flag: f })}><EllipsisVertical /></button></td>
                     </tr>
@@ -215,18 +224,15 @@ export function FeaturesScreen({ openNew }: { openNew?: boolean }) {
             </table>
           </div>
           <div className="ff-tfoot"><span>Showing <b>{rows.length}</b> of {live.length} flags{filter.stage === "ARCHIVED" ? " (archived)" : ""}</span>
-            <span className="ff-legend"><span><i className="ff-ed on" />Serving</span><span><i className="ff-ed" />Off</span><span><Clock />Pending (Phase 43)</span><span><Hourglass />Stale</span></span></div>
+            <span className="ff-legend"><span><i className="ff-ed on" />Serving</span><span><i className="ff-ed" />Off</span><span><Clock />Pending approval</span><span><Hourglass />Stale</span></span></div>
         </div>
       )}
 
       {menu && <Menu anchor={menu.anchor} items={menuItems(menu.flag)} onClose={() => setMenu(null)} />}
       {kill && <KillConfirm flagKey={kill.flag.key} env={env} turnOn={kill.want} busy={busy} onClose={() => setKill(null)}
         onConfirm={(key) => void act(() => toggleFlag(kill.flag.id, env, kill.want, key), kill.want ? `${kill.flag.key} restored in ${envLabel(env)}` : `${kill.flag.key} is OFF in ${envLabel(env)}`)} />}
-      <ConfirmDialog open={!!confirmToggle} onClose={() => setConfirmToggle(null)} busy={busy} danger={!confirmToggle?.want}
-        title={confirmToggle ? `${confirmToggle.want ? "Turn on" : "Turn off"} ${confirmToggle.flag.key} in Production?` : ""} confirmLabel={confirmToggle?.want ? "Turn on" : "Turn off"}
-        onConfirm={() => confirmToggle && void act(() => toggleFlag(confirmToggle.flag.id, "PRODUCTION", confirmToggle.want), `${confirmToggle.flag.key} ${confirmToggle.want ? "ON" : "OFF"} in Production`)}>
-        This applies to live tenants immediately and is written to the flag&apos;s audit log.
-      </ConfirmDialog>
+      {request && <RequestChangeModal flag={request.flag} env="PRODUCTION" change={{ kind: "TOGGLE", isOn: request.want }} summary={`Turn targeting ${request.want ? "ON" : "OFF"}`}
+        onClose={() => setRequest(null)} onDone={() => { setRequest(null); reload(); }} />}
       <ConfirmDialog open={!!confirmArchive} onClose={() => setConfirmArchive(null)} busy={busy} danger title={confirmArchive ? `Archive ${confirmArchive.key}?` : ""} confirmLabel="Archive flag"
         onConfirm={() => confirmArchive && void act(() => archiveFlag(confirmArchive.id, confirmArchive.rowVersion), `${confirmArchive.key} archived`)}>
         {confirmArchive?.envs.PRODUCTION.isOn ? "It still serves in Production. Archiving stops evaluations, so remove the code references first." : "Archived flags stop evaluating and are hidden from the list. You can restore them later."}

@@ -29,6 +29,8 @@ type W = {
   fiscalYearStartMonth: 7 | 1 | 4; timezone: string; numberFormat: "SOUTH_ASIAN" | "WESTERN"; dateFormat: string; dataResidency: "PK_LAHORE" | "AE_DUBAI"; coaTemplateId: string;
   seedTaxCodes: boolean; seedHrLists: boolean;
 };
+/** Phase 42: the wizard's values, for pre-filling (lead conversion). */
+export type OnboardWizardValues = W;
 const BLANK: W = {
   displayName: "", legalName: "", ntn: "", strn: "", secpRegNo: "", industry: "", city: "", province: "", address: "", phone: "", email: "", code: "",
   planId: "", billingCycle: "MONTHLY", startTrial: true, modules: [],
@@ -58,6 +60,7 @@ function firstFiscalYear(month: number) {
   return `FY ${month === 1 ? y : `${y}-${String(y + 1).slice(2)}`} (${d(start)} – ${d(end)})`;
 }
 const passwordScore = (p: string) => [p.length >= 10, /[a-z]/.test(p) && /[A-Z]/.test(p), /\d/.test(p), /[^A-Za-z0-9]/.test(p), p.length >= 14].filter(Boolean).length;
+const bodyOf = (w: W) => ({ ...w, coaTemplateId: w.coaTemplateId || null, industry: w.industry || null, province: w.province || null });
 const omitPasswords = (w: W) => ({ ...w, adminPassword: "", adminPasswordConfirm: "" });
 
 /**
@@ -65,10 +68,16 @@ const omitPasswords = (w: W) => ({ ...w, adminPassword: "", adminPasswordConfirm
  * POST /api/admin/tenants provisions the company in one transaction (Platform.provisionTenant → status, owner contact,
  * modules, subscription, seed lists). The Admin User step adds Password + confirm (template-style, plan Q40-2).
  */
-export function OnboardWizard() {
+export function OnboardWizard({ initial, submit, eyebrow }: {
+  /** Phase 42: pre-filled values (converting a lead). */
+  initial?: Partial<W>;
+  /** Phase 42: replaces POST /api/admin/tenants (e.g. POST /api/admin/leads/:id/convert, which onboards and links the lead). */
+  submit?: (body: ReturnType<typeof bodyOf>) => Promise<TenantOnboardResult>;
+  eyebrow?: string;
+} = {}) {
   const toast = useToast();
   const lookups = useAdminLookups(["TenantIndustry", "Province"]);
-  const [w, setW] = useState<W>(BLANK);
+  const [w, setW] = useState<W>(() => ({ ...BLANK, ...initial }));
   const [step, setStep] = useState(0);
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [plans, setPlans] = useState<SubscriptionPlan[] | null>(null);
@@ -114,7 +123,7 @@ export function OnboardWizard() {
   };
   const toggleModule = (key: string, on: boolean) => setW((x) => ({ ...x, modules: on ? [...new Set([...x.modules, key])] : x.modules.filter((m) => m !== key) }));
 
-  const body = () => ({ ...w, coaTemplateId: w.coaTemplateId || null, industry: w.industry || null, province: w.province || null });
+  const body = () => bodyOf(w);
   /** Client check with the shared schema: errors of steps up to `upTo`. */
   const check = (upTo: number) => {
     const r = TenantOnboardSchema.safeParse(body());
@@ -131,7 +140,7 @@ export function OnboardWizard() {
     if (!check(3)) { toast("Fix the highlighted fields first", { tone: "warn" }); return; }
     setBusy(true);
     try {
-      const r = await onboardTenant(body());
+      const r = await (submit ?? onboardTenant)(body());
       setResult(r);
       try { localStorage.removeItem(DRAFT_KEY); } catch { /* storage blocked */ }
       toast(`${r.tenant.displayName} provisioned · ${r.tenant.code.toUpperCase()} can sign in now`, { tone: "good" });
@@ -188,7 +197,7 @@ export function OnboardWizard() {
 
   return (
     <>
-      <PageHead eyebrow="Tenants / Onboard Tenant" title="Onboard a new tenant" description="Create the organisation, choose a plan, set up the first admin and provision an isolated workspace."
+      <PageHead eyebrow={eyebrow ?? "Tenants / Onboard Tenant"} title="Onboard a new tenant" description="Create the organisation, choose a plan, set up the first admin and provision an isolated workspace."
         actions={<>
           <button type="button" className="btn secondary" onClick={saveDraft} disabled={!!result}><Save />Save draft</button>
           <Link className="btn ghost" href="/admin/tenants"><X />Cancel</Link>

@@ -12,8 +12,12 @@ import { useAdminLookups } from "@/features/admin-common/use-admin-lookups";
 import { labelOf, lookupOptions } from "@/features/settings/use-lookups";
 import { createReseller, deleteReseller, listResellers, regenerateInviteCode, setResellerStatus, updateReseller } from "../api";
 import { copyText, Logo, useLoad } from "./config-ui";
+// Phase 41: payouts, statements and reseller–tenant attribution
+import { listPayouts } from "@/features/platform-billing/api";
+import { BILLING_LOOKUPS, fmtDate, rs0 } from "@/features/platform-billing/components/billing-ui";
+import { CalculatePayoutsButton, partnerPayout, StatementDrawer } from "@/features/platform-billing/components/reseller-payouts";
 
-const LOOKUPS = ["Tier", "ResellerStatus", "PayoutMethod"];
+const LOOKUPS = ["Tier", "ResellerStatus", "PayoutMethod", ...BILLING_LOOKUPS];
 const TIER_TONE: Record<string, string> = { PLATINUM: "violet", GOLD: "warn", SILVER: "neutral", BRONZE: "orange" };
 const NEXT_TIER: Record<string, string | null> = { BRONZE: "SILVER", SILVER: "GOLD", GOLD: "PLATINUM", PLATINUM: null };
 const STATUS_TONE: Record<string, string> = { ACTIVE: "good", SUSPENDED: "warn", TERMINATED: "danger" };
@@ -30,14 +34,16 @@ const toForm = (r: Reseller): Form => ({
 
 /**
  * Partners & Coupons › Resellers (template admin/partners Resellers tab, 9B-admin-plus.js 1316+): KPIs and partner cards
- * (tier, tenants, commission, progress to the next tier, payout due). MRR, payouts and statements come with billing
- * (Phase 41). Template-style addition: the reseller create / edit modal and the per-partner invite code.
+ * (tier, tenants, commission, progress to the next tier, payout due). Phase 41 adds MRR, payouts, the Statement drawer
+ * (with "Attribute tenant") and "Calculate payouts". Template-style addition: the reseller create / edit modal and the per-partner invite code.
  * `openNew` opens the New reseller modal (the page's "Partner invite link" button); `onNewClosed` tells the page it closed.
  */
 export function ResellersTab({ openNew = false, onNewClosed }: { openNew?: boolean; onNewClosed?: () => void }) {
   const toast = useToast();
   const lookups = useAdminLookups(LOOKUPS);
   const { data: rows, error, reload } = useLoad(listResellers, "Could not load resellers");
+  const { data: payouts, reload: reloadPayouts } = useLoad(() => listPayouts(), "Could not load payouts");
+  const [statement, setStatement] = useState<Reseller | null>(null);
   const [edit, setEdit] = useState<Reseller | "new" | null>(null);
   const [form, setForm] = useState<Form>(blank);
   const [errs, setErrs] = useState<Record<string, string>>({});
@@ -84,17 +90,18 @@ export function ResellersTab({ openNew = false, onNewClosed }: { openNew?: boole
   return (
     <>
       <div className="row" style={{ justifyContent: "flex-end", marginBottom: 12 }}>
-        <button type="button" className="btn secondary" onClick={() => open("new")}><Plus />New reseller</button>
+        <CalculatePayoutsButton onDone={reloadPayouts} />
+        <button type="button" className="btn secondary" onClick={() => open("new")} style={{ marginLeft: 8 }}><Plus />New reseller</button>
       </div>
       <div className="kpi-grid">
         <div className="kpi"><div className="kpi-top"><span>Partners</span><span className="icon-well"><Handshake /></span></div>
           <strong>{rows ? all.length : "…"}</strong><small>{byTier.length ? byTier.map(([t, n]) => `${n} ${labelOf(lookups, "Tier", t)}`).join(" · ") : "No partners yet"}</small></div>
         <div className="kpi teal"><div className="kpi-top"><span>Tenants via partners</span><span className="icon-well"><Building2 /></span></div>
-          <strong>{rows ? tenants : "…"}</strong><small>Attributed by billing (Phase 41)</small></div>
+          <strong>{rows ? tenants : "…"}</strong><small>Attributed companies</small></div>
         <div className="kpi blue"><div className="kpi-top"><span>Partner-sourced MRR</span><span className="icon-well"><TrendingUp /></span></div>
-          <strong>—</strong><small>With platform billing (Phase 41)</small></div>
+          <strong>{payouts ? rs0(payouts.kpis.partnerMrr) : "—"}</strong><small>From live attributions</small></div>
         <div className="kpi yellow"><div className="kpi-top"><span>Commission due</span><span className="icon-well"><Wallet /></span></div>
-          <strong>—</strong><small>Payout runs arrive with Phase 41</small></div>
+          <strong>{payouts ? rs0(payouts.kpis.commissionDue) : "—"}</strong><small>{payouts ? `${payouts.kpis.dueCount} payout${payouts.kpis.dueCount === 1 ? "" : "s"} due · WHT 12% u/s 233` : "Net of WHT 12% u/s 233"}</small></div>
       </div>
 
       {error && <ErrorState message={error.message} reference={error.reference} onRetry={reload} />}
@@ -106,6 +113,8 @@ export function ResellersTab({ openNew = false, onNewClosed }: { openNew?: boole
           {rows.map((p, i) => {
             const next = NEXT_TIER[p.tier] ?? null;
             const goal = p.nextTierTenants;
+            const mrr = payouts?.commissions.find((c) => c.partnerId === p.id)?.sourcedMrr ?? 0;
+            const po = partnerPayout(payouts, p.id);
             return (
               <div key={p.id} className="card ap-pcard" style={{ ["--i" as string]: i, cursor: "pointer" }} role="button" tabIndex={0}
                 onClick={() => open(p)} onKeyDown={(e) => e.key === "Enter" && open(p)}>
@@ -115,7 +124,7 @@ export function ResellersTab({ openNew = false, onNewClosed }: { openNew?: boole
                 <div className="ap-pstats">
                   <div><small>Tenants</small><b>{p.tenantsCount}</b></div>
                   <div><small>Commission</small><b>{p.commissionPct}%</b></div>
-                  <div><small>Their MRR</small><b>—</b></div>
+                  <div><small>Their MRR</small><b>{payouts ? (mrr >= 1000 ? `${Math.round(mrr / 1000)}k` : Math.round(mrr)) : "—"}</b></div>
                 </div>
                 <div className="ap-ptier">
                   <div className="row">
@@ -131,14 +140,15 @@ export function ResellersTab({ openNew = false, onNewClosed }: { openNew?: boole
                   <button type="button" className="icon-btn-sm" aria-label="New invite code" disabled={busy}
                     onClick={() => run(() => regenerateInviteCode(p.id, p.rowVersion), `New invite code for ${p.name}; the old one stops working`, "Could not regenerate the code")}><RefreshCw /></button>
                 </div>
-                <div className="ap-pdue"><div><small>Payout due</small><b>—</b></div>
-                  <button type="button" className="btn secondary sm" disabled title="Statements arrive with payouts (Phase 41)" onClick={(e) => e.stopPropagation()}><FileText />Statement</button></div>
+                <div className="ap-pdue"><div><small>Payout due</small><b>{po?.status === "DUE" ? rs0(po.netAmount) : po?.status === "PAID" ? <span className="badge good dot">Paid · {fmtDate(po.paidOn)}</span> : "—"}</b></div>
+                  <button type="button" className="btn secondary sm" onClick={(e) => { e.stopPropagation(); setStatement(p); }}><FileText />Statement</button></div>
               </div>
             );
           })}
         </div>
       )}
 
+      <StatementDrawer partner={statement} payouts={payouts} lookups={lookups} onClose={() => setStatement(null)} onChanged={() => { reloadPayouts(); reload(); }} />
       <AdminRecordModal open={edit !== null} onClose={() => close()} title={row ? `Edit ${row.name}` : "New reseller"}
         subtitle={row ? `Invite code ${row.inviteCode ?? "—"}` : "An invite code is generated on save"} wide busy={busy} saveLabel={row ? "Save" : "Create reseller"} onSave={save}
         history={row ? { table: "Resellers", id: row.id } : null}

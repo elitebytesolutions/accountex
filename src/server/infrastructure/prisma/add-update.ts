@@ -64,6 +64,21 @@ const FUNCTIONS = {
   salesSchemeAddUpdate: 'Sales',
   paymentReminderTemplateAddUpdate: 'Sales',
   paymentReminderRuleAddUpdate: 'Sales',
+  // Phase 23: sales documents
+  quotationAddUpdate: 'Sales',
+  salesOrderAddUpdate: 'Sales',
+  deliveryChallanAddUpdate: 'Sales',
+  salesInvoiceAddUpdate: 'Sales',
+  // Phase 25: wholesale
+  orderTemplateAddUpdate: 'Distribution',
+  heldBillAddUpdate: 'Distribution',
+  orderBookingAddUpdate: 'Distribution',
+  bulkInvoiceRunAddUpdate: 'Distribution',
+  // Phase 27: fixed assets
+  fixedAssetAddUpdate: 'FixedAssets',
+  depreciationRunAddUpdate: 'FixedAssets',
+  assetTransferAddUpdate: 'FixedAssets',
+  assetDisposalAddUpdate: 'FixedAssets',
   priceTierAddUpdate: 'Distribution',
   departmentAddUpdate: 'HumanResources',
   designationAddUpdate: 'HumanResources',
@@ -104,6 +119,12 @@ const FUNCTIONS = {
   stockTransferAddUpdate: 'Inventory',
   stockAdjustmentAddUpdate: 'Inventory',
   stockCountAddUpdate: 'Inventory',
+  stockVoucherAddUpdate: 'Inventory',
+  assemblyVoucherAddUpdate: 'Inventory',
+  goodsDemandAddUpdate: 'Inventory',
+  principalClaimAddUpdate: 'Inventory',
+  principalTargetAddUpdate: 'Inventory',
+  bulkPriceUpdateAddUpdate: 'Inventory',
   fbrSettingAddUpdate: 'Tax',
   segregationOfDutiesRuleAddUpdate: 'Company',
   onboardingTemplateAddUpdate: 'HumanResources',
@@ -166,6 +187,38 @@ const FUNCTIONS = {
   onboardingFromTemplate: 'HumanResources',
   onboardingAddUpdate: 'HumanResources',
   offboardingAddUpdate: 'HumanResources',
+  // Phase 32: payroll
+  payrollRunAddUpdate: 'Payroll',
+  loanAddUpdate: 'Payroll',
+  taxDeclarationAddUpdate: 'Payroll',
+  // Phase 42: growth & support (schema Platform; admin writes in adminActorContext, company tickets in actorContext)
+  platformLeadAddUpdate: 'Platform',
+  leadMoveStage: 'Platform',
+  leadConvert: 'Platform',
+  supportTicketAddUpdate: 'Platform',
+  supportTicketReply: 'Platform',
+  announcementAddUpdate: 'Platform',
+  tenantBroadcastAddUpdate: 'Platform',
+  // Phase 41: platform billing (schema Platform; tenantId from the payload, run inside adminActorContext or the billing job)
+  platformInvoiceAddUpdate: 'Platform',
+  dunningCaseAddUpdate: 'Platform',
+  // Phase 43: platform operations (schema Platform; run inside adminActorContext; the timeline / workflow steps use
+  // their own functions: serviceIncidentDeclare / PostUpdate, flagChangeRequestSubmit / Decide, privacyRequest*)
+  serviceIncidentAddUpdate: 'Platform',
+  privacyRequestAddUpdate: 'Platform',
+  // Phase 24: sales completion
+  salesReturnAddUpdate: 'Sales',
+  creditNoteAddUpdate: 'Sales',
+  customerReceiptAddUpdate: 'Sales',
+  recurringInvoiceAddUpdate: 'Sales',
+  posShiftAddUpdate: 'Sales',
+  // Phase 26: distribution
+  loadSheetAddUpdate: 'Distribution',
+  routeSettlementAddUpdate: 'Distribution',
+  recoverySheetAddUpdate: 'Distribution',
+  salesmanTargetAddUpdate: 'Distribution',
+  salesmanCommissionAddUpdate: 'Distribution',
+  creditOverrideAddUpdate: 'Sales',
 } as const;
 export type AddUpdateFunction = keyof typeof FUNCTIONS;
 

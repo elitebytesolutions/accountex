@@ -29,3 +29,6 @@ Thumbs.db
 
 # Phase 38: database backups written by the Super Admin console (BACKUP_DIR)
 /backups/
+
+# Phase 32: uploaded files (UPLOAD_DIR)
+/uploads/

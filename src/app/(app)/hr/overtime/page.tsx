@@ -12,7 +12,7 @@ export default async function OvertimePage({ searchParams }: { searchParams: Pro
   return (
     <Screen route="app/hr/overtime">
       {/* There is no att:delete permission; deleting a policy needs att:approve. */}
-      <OvertimeScreen can={{ create: has("att:create"), edit: has("att:edit"), remove: has("att:approve"), approve: has("att:approve") }} initialId={claim} />
+      <OvertimeScreen can={{ create: has("att:create"), edit: has("att:edit"), remove: has("att:approve"), approve: has("att:approve"), push: has("prun:edit") }} initialId={claim} />
     </Screen>
   );
 }

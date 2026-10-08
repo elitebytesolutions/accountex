@@ -39,4 +39,22 @@ export const ADMIN_HISTORY_TABLES: Record<string, { children?: string[] }> = {
   UsageMeters: {},
   UsageLimitOverrides: {},
   ImpersonationSessions: {},
+  // Phase 42: growth & support
+  PlatformLeads: { children: ['PlatformLeadActivities.leadId'] },
+  SupportTickets: { children: ['SupportTicketMessages.ticketId'] },
+  Announcements: { children: ['AnnouncementTargets.announcementId'] },
+  TenantBroadcasts: { children: ['CommunicationLogs.commBroadcastId'] },
+  CommunicationLogs: {},
+  AnnouncementReceipts: {},
+  // Phase 41: platform billing
+  PlatformInvoices: { children: ['PlatformInvoiceLines.platformInvoiceId', 'PlatformPayments.platformInvoiceId'] },
+  DunningCases: { children: ['DunningAttempts.dunningCaseId'] },
+  ResellerPayouts: {},
+  ResellerTenants: {},
+  // Phase 43: platform operations
+  ServiceIncidents: { children: ['ServiceIncidentUpdates.incidentId'] },
+  FlagChangeRequests: { children: ['FlagChangeRequestApprovers.changeRequestId', 'FlagChangeRequestComments.changeRequestId'] },
+  FlagScheduledChanges: {},
+  PrivacyRequests: {},
+  EntitlementChangeLogs: {},
 };

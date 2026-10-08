@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Check, Eye, Gauge, Info, Layers, Lock, Plus, Search, Tags, TrendingUp, TriangleAlert } from "lucide-react";
+import { ArrowRight, Check, Eye, Gauge, History, Info, Layers, Lock, Plus, Search, Tags, TrendingUp, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Addon, PlatformModule, SubscriptionPlan, UsageMeterOption } from "@/shared";
@@ -13,8 +13,10 @@ import { useToast } from "@/components/ui/toast";
 import { adminErrorMessage } from "@/features/admin-common/errors";
 import { useAdminLookups } from "@/features/admin-common/use-admin-lookups";
 import { labelOf } from "@/features/settings/use-lookups";
+import { saveEntitlements } from "@/features/platform-ops/api";
+import { EntitlementLogTab } from "@/features/platform-ops/components/entitlement-log-tab";
 import { ApiError } from "@/lib/api/errors";
-import { listAddons, listModules, listPlans, listUsageMeters, setModuleEnabled, setModulePlans, setPlanLimits, updateAddon, updateModule } from "../api";
+import { listAddons, listModules, listPlans, listUsageMeters, setModuleEnabled } from "../api";
 import { AddonModal } from "./addon-modal";
 import { activePlans, CatalogueIcon, GROUP_ICONS, PlanPill, plural, rs } from "./catalogue-ui";
 import { ModuleModal } from "./module-modal";
@@ -54,6 +56,8 @@ const limFmt = (v: number | null) => (v === null ? "∞" : v.toLocaleString("en-
  * locks and the limits group, the add-ons panel, the save bar and the "Review changes" drawer. Rows are platform modules
  * (cells = PlatformModulePlans), limits are SubscriptionPlanLimits, add-on prices are Addons. The "Modules by plan" table
  * is the template's admin/features "Core modules" pane, placed here until Phase 39 builds /admin/features.
+ * Phase 43: "Save entitlements" is one change set (POST /api/admin/entitlements/save) that writes EntitlementChangeLogs
+ * rows with the drawer's three switches; the "Change log" tab lists past change sets.
  */
 export function EntitlementsScreen() {
   const toast = useToast();
@@ -69,6 +73,9 @@ export function EntitlementsScreen() {
   const [editModule, setEditModule] = useState<PlatformModule | "new" | null>(null);
   const [editAddon, setEditAddon] = useState<Addon | "new" | null>(null);
   const [turnOff, setTurnOff] = useState<PlatformModule | null>(null);
+  const [view, setView] = useState<"matrix" | "log">("matrix");
+  const [opts, setOpts] = useState({ grandfather: false, email: true, changelog: false });
+  const [logKey, setLogKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -120,29 +127,33 @@ export function EntitlementsScreen() {
   const setLim = (planId: string, meterId: string, v: string) => setCur((d) => d && ({ ...d, lim: { ...d.lim, [planId]: { ...d.lim[planId], [meterId]: v === "" ? null : Math.max(0, Number(v)) } } }));
   const setPrice = (addonId: string, v: string) => setCur((d) => d && ({ ...d, add: { ...d.add, [addonId]: Math.max(0, Number(v) || 0) } }));
 
-  /** One call per changed module / plan / add-on, in order; stops at the first error (already saved parts stay). */
+  /** Phase 43: one change set in one transaction: module cells / minimum plans, plan limits, add-on prices + the log rows. */
   async function saveAll() {
     if (!data || !cur) return;
     setBusy(true);
     try {
       const modIds = [...new Set(changes.filter((c) => c.kind === "feat" || c.kind === "min").map((c) => (c as { moduleId: string }).moduleId))];
-      for (const id of modIds) {
-        const m = moduleOf(id)!;
-        let rowVersion = m.rowVersion;
-        if (cur.min[id] !== m.minPlanId) rowVersion = (await updateModule(id, { minPlanId: cur.min[id] ?? "", rowVersion })).rowVersion;
-        await setModulePlans(id, rowVersion, plans.map((p) => ({ planId: p.id, isIncluded: Boolean(cur.feat[id]?.[p.id]) })));
-      }
       const planIds = [...new Set(changes.filter((c) => c.kind === "lim").map((c) => (c as { planId: string }).planId))];
-      for (const id of planIds) {
-        const p = planOf(id)!;
-        const limits = data.meters
-          .filter((mt) => cur.lim[id]?.[mt.id] !== null || p.limits.some((l) => l.usageMeterId === mt.id))
-          .map((mt) => ({ usageMeterId: mt.id, limitValue: cur.lim[id]?.[mt.id] ?? null, overagePrice: p.limits.find((l) => l.usageMeterId === mt.id)?.overagePrice ?? null }));
-        await setPlanLimits(id, p.rowVersion, limits);
-      }
-      for (const c of changes) if (c.kind === "add") await updateAddon(c.addonId, { price: c.to, rowVersion: addonOf(c.addonId)!.rowVersion });
-      toast(`Entitlements saved · ${plural(changes.length, "change")}`, { tone: "good" });
+      const r = await saveEntitlements({
+        grandfatherUntilRenewal: opts.grandfather, emailOwners: opts.email, postChangelog: opts.changelog,
+        modules: modIds.map((id) => {
+          const m = moduleOf(id)!;
+          return { moduleId: id, rowVersion: m.rowVersion, ...(cur.min[id] !== m.minPlanId ? { minPlanId: cur.min[id] ?? null } : {}), plans: plans.map((p) => ({ planId: p.id, isIncluded: Boolean(cur.feat[id]?.[p.id]) })) };
+        }),
+        limits: planIds.map((id) => {
+          const p = planOf(id)!;
+          return {
+            planId: id, rowVersion: p.rowVersion,
+            limits: data.meters
+              .filter((mt) => cur.lim[id]?.[mt.id] !== null || p.limits.some((l) => l.usageMeterId === mt.id))
+              .map((mt) => ({ usageMeterId: mt.id, limitValue: cur.lim[id]?.[mt.id] ?? null, overagePrice: p.limits.find((l) => l.usageMeterId === mt.id)?.overagePrice ?? null })),
+          };
+        }),
+        addons: changes.flatMap((c) => (c.kind === "add" ? [{ addonId: c.addonId, rowVersion: addonOf(c.addonId)!.rowVersion, price: c.to }] : [])),
+      });
+      toast(`Entitlements saved · ${plural(r.changes || changes.length, "change")} · ${r.tenantsAffected} tenants affected${opts.grandfather ? " (grandfathered)" : ""}`, { tone: "good" });
       setReview(false);
+      setLogKey((n) => n + 1);
       reload();
     } catch (e) {
       toast(adminErrorMessage(e, "Could not save the entitlements"), { tone: "danger" });
@@ -177,10 +188,15 @@ export function EntitlementsScreen() {
         description="What each plan includes: modules, features and limits. These are kept separate from release flags, so a rollout never changes what a customer has paid for."
         actions={<>
           <Link className="btn secondary" href="/admin/plans"><Tags />Plans &amp; pricing</Link>
-          <button className="btn primary" type="button" disabled={!changes.length} onClick={() => setReview(true)}><Eye />Review changes</button>
+          <button className="btn primary" type="button" disabled={!changes.length} onClick={() => { setOpts({ grandfather: losing, email: true, changelog: false }); setReview(true); }}><Eye />Review changes</button>
         </>} />
 
-      {!data || !cur ? <Skeleton style={{ height: 320 }} /> : (
+      <div className="tabs" role="tablist">
+        <button type="button" role="tab" className={cn(view === "matrix" && "active")} onClick={() => setView("matrix")}><Layers />Entitlements</button>
+        <button type="button" role="tab" className={cn(view === "log" && "active")} onClick={() => setView("log")}><History />Change log</button>
+      </div>
+      {view === "log" && <EntitlementLogTab reloadKey={logKey} />}
+      {view === "log" ? null : !data || !cur ? <Skeleton style={{ height: 320 }} /> : (
         <>
           <div className="ff-plancards">
             {plans.map((p, i) => (
@@ -313,7 +329,7 @@ export function EntitlementsScreen() {
               <div><b>{plural(changes.length, "change")}</b><small><b>{affected}</b> tenants affected</small></div>
               <span className="spacer" />
               <button className="btn ghost" type="button" onClick={() => { setCur(base); toast("Changes discarded", { tone: "info", ms: 1800 }); }}>Discard</button>
-              <button className="btn primary" type="button" onClick={() => setReview(true)}><Eye />Preview impact</button>
+              <button className="btn primary" type="button" onClick={() => { setOpts({ grandfather: losing, email: true, changelog: false }); setReview(true); }}><Eye />Preview impact</button>
             </div>
           )}
         </>
@@ -345,6 +361,11 @@ export function EntitlementsScreen() {
                 </div>
               );
             })}
+          </div>
+          <div className="ff-impopts">
+            <Switch label="Grandfather existing tenants until renewal" checked={opts.grandfather} onChange={(e) => setOpts({ ...opts, grandfather: e.target.checked })} />
+            <Switch label="Email affected tenant owners" checked={opts.email} onChange={(e) => setOpts({ ...opts, email: e.target.checked })} />
+            <Switch label="Post to the in-app changelog" checked={opts.changelog} onChange={(e) => setOpts({ ...opts, changelog: e.target.checked })} />
           </div>
         </div>
       </Drawer>

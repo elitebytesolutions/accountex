@@ -6970,3 +6970,3117 @@ model StockCountLines {
   @@unique([tenantId, countId, itemId, batchId], map: "stockCountLineSlotUk")
   @@schema("Inventory")
 }
+
+// ---------------------------------------------------------------- Phase 23: sales documents
+model Quotations {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  docNo          String
+  docDate        DateTime  @db.Date
+  validTill      DateTime  @db.Date
+  customerId     String    @db.Uuid
+  subject        String?
+  salesRepUserId String?   @db.Uuid
+  branchId       String?   @db.Uuid
+  priceListId    String?   @db.Uuid
+  revisionOfId   String?   @db.Uuid
+  currencyCode   String    @default("PKR") @db.Char(3)
+  fxRate         Decimal   @default(1) @db.Decimal(18, 6)
+  grossAmount    Decimal   @default(0) @db.Decimal(18, 2)
+  discountAmount Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  status         String    @default("DRAFT")
+  sentAt         DateTime? @db.Timestamptz(6)
+  acceptedAt     DateTime? @db.Timestamptz(6)
+  remarks        String?
+  terms          String?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model QuotationLines {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  quotationId    String   @db.Uuid
+  lineNo         Int      @db.SmallInt
+  itemId         String?  @db.Uuid
+  description    String
+  qtyCtn         Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose       Decimal  @default(0) @db.Decimal(18, 3)
+  ctnFactor      Decimal  @default(1) @db.Decimal(18, 3)
+  baseQty        Decimal  @db.Decimal(18, 3)
+  rate           Decimal  @db.Decimal(18, 4)
+  grossAmount    Decimal  @db.Decimal(18, 2)
+  discountPct    Decimal  @default(0) @db.Decimal(7, 4)
+  discountAmount Decimal  @default(0) @db.Decimal(18, 2)
+  taxableAmount  Decimal  @db.Decimal(18, 2)
+  taxCodeId      String?  @db.Uuid
+  taxRate        Decimal  @default(0) @db.Decimal(7, 4)
+  taxAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  totalAmount    Decimal  @db.Decimal(18, 2)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, quotationId, lineNo])
+  @@schema("Sales")
+}
+
+model SalesOrders {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String    @db.Uuid
+  docNo                String
+  docDate              DateTime  @db.Date
+  customerId           String    @db.Uuid
+  quotationId          String?   @db.Uuid
+  branchId             String?   @db.Uuid
+  warehouseId          String?   @db.Uuid
+  expectedDeliveryDate DateTime? @db.Date
+  customerPoRef        String?
+  customerPoDate       DateTime? @db.Date
+  salesRepUserId       String?   @db.Uuid
+  priceListId          String?   @db.Uuid
+  paymentTerms         String?
+  reserveStock         Boolean   @default(true)
+  emailConfirmation    Boolean   @default(false)
+  currencyCode         String    @default("PKR") @db.Char(3)
+  fxRate               Decimal   @default(1) @db.Decimal(18, 6)
+  grossAmount          Decimal   @default(0) @db.Decimal(18, 2)
+  discountAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  status               String    @default("CONFIRMED")
+  holdReason           String?
+  confirmedAt          DateTime? @db.Timestamptz(6)
+  cancelledAt          DateTime? @db.Timestamptz(6)
+  cancelReason         String?
+  remarks              String?
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy            String?   @db.Uuid
+  updatedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy            String?   @db.Uuid
+  rowVersion           Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model SalesOrderLines {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String   @db.Uuid
+  salesOrderId    String   @db.Uuid
+  lineNo          Int      @db.SmallInt
+  quotationLineId String?  @db.Uuid
+  itemId          String?  @db.Uuid
+  description     String
+  qtyCtn          Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose        Decimal  @default(0) @db.Decimal(18, 3)
+  ctnFactor       Decimal  @default(1) @db.Decimal(18, 3)
+  baseQty         Decimal  @db.Decimal(18, 3)
+  bonusQty        Decimal  @default(0) @db.Decimal(18, 3)
+  rate            Decimal  @db.Decimal(18, 4)
+  grossAmount     Decimal  @db.Decimal(18, 2)
+  discountPct     Decimal  @default(0) @db.Decimal(7, 4)
+  discountAmount  Decimal  @default(0) @db.Decimal(18, 2)
+  taxableAmount   Decimal  @db.Decimal(18, 2)
+  taxCodeId       String?  @db.Uuid
+  taxRate         Decimal  @default(0) @db.Decimal(7, 4)
+  taxAmount       Decimal  @default(0) @db.Decimal(18, 2)
+  totalAmount     Decimal  @db.Decimal(18, 2)
+  deliveredQty    Decimal  @default(0) @db.Decimal(18, 3)
+  invoicedQty     Decimal  @default(0) @db.Decimal(18, 3)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, salesOrderId, lineNo])
+  @@schema("Sales")
+}
+
+model DeliveryChallans {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  docNo            String
+  docDate          DateTime  @db.Date
+  salesOrderId     String    @db.Uuid
+  customerId       String    @db.Uuid
+  branchId         String?   @db.Uuid
+  warehouseId      String    @db.Uuid
+  vehicleId        String?   @db.Uuid
+  vehicleNo        String
+  driverEmployeeId String?   @db.Uuid
+  driverName       String?
+  deliverySlot     String?
+  eta              DateTime? @db.Timestamptz(6)
+  totalQty         Decimal   @default(0) @db.Decimal(18, 3)
+  costAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  status           String    @default("PACKED")
+  dispatchedAt     DateTime? @db.Timestamptz(6)
+  deliveredAt      DateTime? @db.Timestamptz(6)
+  receivedBy       String?
+  invoiceId        String?   @db.Uuid
+  journalEntryId   String?   @db.Uuid
+  remarks          String?
+  cancelledAt      DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model DeliveryChallanLines {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String   @db.Uuid
+  deliveryChallanId      String   @db.Uuid
+  lineNo                 Int      @db.SmallInt
+  salesOrderLineId       String   @db.Uuid
+  itemId                 String   @db.Uuid
+  batchId                String?  @db.Uuid
+  orderedQty             Decimal  @db.Decimal(18, 3)
+  previouslyDeliveredQty Decimal  @default(0) @db.Decimal(18, 3)
+  qtyCtn                 Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose               Decimal  @default(0) @db.Decimal(18, 3)
+  ctnFactor              Decimal  @default(1) @db.Decimal(18, 3)
+  baseQty                Decimal  @db.Decimal(18, 3)
+  unitCost               Decimal? @db.Decimal(18, 4)
+  costAmount             Decimal  @default(0) @db.Decimal(18, 2)
+  createdAt              DateTime @default(now()) @db.Timestamptz(6)
+  createdBy              String?  @db.Uuid
+  updatedAt              DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy              String?  @db.Uuid
+  rowVersion             Int      @default(0)
+
+  @@unique([tenantId, deliveryChallanId, lineNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model SalesInvoices {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String    @db.Uuid
+  docNo                  String
+  channel                String    @default("STANDARD")
+  taxInvoiceNo           String?
+  docDate                DateTime  @db.Date
+  customerId             String    @db.Uuid
+  branchId               String    @db.Uuid
+  warehouseId            String?   @db.Uuid
+  salesOrderId           String?   @db.Uuid
+  quotationId            String?   @db.Uuid
+  customerPoNo           String?
+  customerPoDate         DateTime? @db.Date
+  salesRepUserId         String?   @db.Uuid
+  priceListId            String?   @db.Uuid
+  paymentTerms           String    @default("NET_30")
+  dueDate                DateTime  @db.Date
+  buyerName              String
+  buyerAddress           String?
+  buyerNtn               String?
+  buyerStrn              String?
+  buyerCnic              String?
+  buyerArea              String?
+  buyerCity              String?
+  shipToAddress          String?
+  contactName            String?
+  contactPhone           String?
+  contactEmail           String?   @db.Citext
+  saleType               String    @default("REGULAR")
+  billBookNo             String?
+  bookerName             String?
+  deliverymanName        String?
+  salesmanName           String?
+  supervisorName         String?
+  deliverySlot           String?
+  currencyCode           String    @default("PKR") @db.Char(3)
+  fxRate                 Decimal   @default(1) @db.Decimal(18, 6)
+  grossAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  discountAmount         Decimal   @default(0) @db.Decimal(18, 2)
+  taxableAmount          Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount              Decimal   @default(0) @db.Decimal(18, 2)
+  furtherTaxAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  advanceTaxRate         Decimal   @default(0) @db.Decimal(7, 4)
+  advanceTaxAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  fbrServiceFee          Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount              Decimal   @default(0) @db.Decimal(18, 2)
+  expectedWhtAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  paidAmount             Decimal   @default(0) @db.Decimal(18, 2)
+  creditAppliedAmount    Decimal   @default(0) @db.Decimal(18, 2)
+  balanceAmount          Decimal?  @default(dbgenerated("((\"netAmount\" - \"paidAmount\") - \"creditAppliedAmount\")")) @db.Decimal(18, 2)
+  costAmount             Decimal   @default(0) @db.Decimal(18, 2)
+  cashTendered           Decimal?  @db.Decimal(18, 2)
+  isHeld                 Boolean   @default(false)
+  heldAt                 DateTime? @db.Timestamptz(6)
+  emailPdf               Boolean   @default(true)
+  submitToFbr            Boolean   @default(true)
+  sendWhatsappLink       Boolean   @default(false)
+  autoReminder           Boolean   @default(true)
+  customerNotes          String?
+  termsConditions        String?
+  remarks                String?
+  status                 String    @default("DRAFT")
+  postedAt               DateTime? @db.Timestamptz(6)
+  postedByUserId         String?   @db.Uuid
+  journalEntryId         String?   @db.Uuid
+  sentAt                 DateTime? @db.Timestamptz(6)
+  viewedAt               DateTime? @db.Timestamptz(6)
+  fbrStatus              String    @default("NOT_REQUIRED")
+  fbrInvoiceNo           String?
+  fbrSubmittedAt         DateTime? @db.Timestamptz(6)
+  fbrError               String?
+  voidReason             String?
+  voidedAt               DateTime? @db.Timestamptz(6)
+  voidedByUserId         String?   @db.Uuid
+  reversalJournalEntryId String?   @db.Uuid
+  priceTier              String?
+  priceTierFactor        Decimal?  @db.Decimal(7, 4)
+  creditOverrideId       String?   @db.Uuid
+  routeId                String?   @db.Uuid
+  bookerEmployeeId       String?   @db.Uuid
+  deliverymanEmployeeId  String?   @db.Uuid
+  salesmanEmployeeId     String?   @db.Uuid
+  supervisorEmployeeId   String?   @db.Uuid
+  posShiftId             String?   @db.Uuid
+  recurringProfileId     String?   @db.Uuid
+  deliveryChallanId      String?   @db.Uuid
+  shipToAddressId        String?   @db.Uuid
+  schemeId               String?   @db.Uuid
+  schemeAmount           Decimal   @default(0) @db.Decimal(18, 2)
+  stockIssueMode         String    @default("AT_POSTING")
+  stockIssuedAt          DateTime? @db.Timestamptz(6)
+  createdAt              DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy              String?   @db.Uuid
+  updatedAt              DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy              String?   @db.Uuid
+  rowVersion             Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id, customerId])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model SalesInvoiceLines {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String    @db.Uuid
+  invoiceId             String    @db.Uuid
+  lineNo                Int       @db.SmallInt
+  salesOrderLineId      String?   @db.Uuid
+  itemId                String?   @db.Uuid
+  description           String
+  hsCode                String?
+  packLabel             String?
+  batchId               String?   @db.Uuid
+  expiryDate            DateTime? @db.Date
+  qtyCtn                Decimal   @default(0) @db.Decimal(18, 3)
+  qtyLoose              Decimal   @default(0) @db.Decimal(18, 3)
+  ctnFactor             Decimal   @default(1) @db.Decimal(18, 3)
+  baseQty               Decimal   @db.Decimal(18, 3)
+  bonusQty              Decimal   @default(0) @db.Decimal(18, 3)
+  rate                  Decimal   @db.Decimal(18, 4)
+  grossAmount           Decimal   @db.Decimal(18, 2)
+  discountPct           Decimal   @default(0) @db.Decimal(7, 4)
+  discountAmount        Decimal   @default(0) @db.Decimal(18, 2)
+  taxableAmount         Decimal   @db.Decimal(18, 2)
+  taxCodeId             String?   @db.Uuid
+  taxRate               Decimal   @default(0) @db.Decimal(7, 4)
+  taxAmount             Decimal   @default(0) @db.Decimal(18, 2)
+  furtherTaxRate        Decimal   @default(0) @db.Decimal(7, 4)
+  furtherTaxAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  totalAmount           Decimal   @db.Decimal(18, 2)
+  revenueAccountId      String?   @db.Uuid
+  unitCost              Decimal?  @db.Decimal(18, 4)
+  costAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  listRate              Decimal?  @db.Decimal(18, 4)
+  isManualRate          Boolean   @default(false)
+  schemeId              String?   @db.Uuid
+  deliveryChallanLineId String?   @db.Uuid
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy             String?   @db.Uuid
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy             String?   @db.Uuid
+  rowVersion            Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, invoiceId, lineNo])
+  @@schema("Sales")
+}
+
+model StockReservations {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  itemId           String    @db.Uuid
+  warehouseId      String    @db.Uuid
+  batchId          String?   @db.Uuid
+  qty              Decimal   @db.Decimal(18, 3)
+  salesOrderId     String?   @db.Uuid
+  salesOrderLineId String?   @db.Uuid
+  status           String    @default("ACTIVE")
+  reservedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  expiresAt        DateTime? @db.Timestamptz(6)
+  closedAt         DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Inventory")
+}
+
+model FbrInvoiceSubmissions {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  fbrConfigId      String    @db.Uuid
+  invoiceId        String?   @db.Uuid
+  creditNoteId     String?   @db.Uuid
+  documentNo       String
+  branchId         String?   @db.Uuid
+  posId            String
+  buyerName        String?
+  buyerNtnCnic     String?
+  amount           Decimal   @db.Decimal(18, 2)
+  status           String    @default("PENDING")
+  attempts         Int       @default(0) @db.SmallInt
+  firstSubmittedAt DateTime? @db.Timestamptz(6)
+  lastAttemptAt    DateTime? @db.Timestamptz(6)
+  nextRetryAt      DateTime? @db.Timestamptz(6)
+  fbrInvoiceNo     String?
+  qrPayload        String?
+  responseCode     String?
+  errorMessage     String?
+  latencyMs        Int?
+  requestPayload   Json?
+  responsePayload  Json?
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Tax")
+}
+
+// ---- Phase 22 — Stock vouchers & demand (stock / assembly vouchers, goods demand, principal claims & targets, bulk price updates)
+model StockVouchers {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String    @db.Uuid
+  voucherType           String
+  docNo                 String
+  docDate               DateTime  @db.Date
+  warehouseId           String    @db.Uuid
+  referenceNo           String?
+  breakageReason        String?
+  employeeId            String?   @db.Uuid
+  recipientName         String?
+  occasion              String?
+  customerId            String?   @db.Uuid
+  salesmanEmployeeId    String?   @db.Uuid
+  isReturnable          Boolean   @default(false)
+  returnDueDate         DateTime? @db.Date
+  departmentId          String?   @db.Uuid
+  costCentreId          String?   @db.Uuid
+  requestedByEmployeeId String?   @db.Uuid
+  expenseAccountId      String    @db.Uuid
+  remarks               String?
+  status                String    @default("DRAFT")
+  totalItems            Int       @default(0)
+  totalQty              Decimal   @default(0) @db.Decimal(18, 3)
+  totalAmount           Decimal   @default(0) @db.Decimal(18, 2)
+  postedAt              DateTime? @db.Timestamptz(6)
+  postedByUserId        String?   @db.Uuid
+  journalEntryId        String?   @db.Uuid
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy             String?   @db.Uuid
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy             String?   @db.Uuid
+  rowVersion            Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, docNo], map: "stockVoucherDocNoUk")
+  @@schema("Inventory")
+}
+
+model StockVoucherLines {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  voucherId   String    @db.Uuid
+  lineNo      Int       @db.SmallInt
+  itemId      String    @db.Uuid
+  batchId     String?   @db.Uuid
+  lotNo       String?
+  expiryMonth DateTime? @db.Date
+  uomId       String    @db.Uuid
+  uomFactor   Decimal   @default(1) @db.Decimal(18, 6)
+  qty         Decimal   @db.Decimal(18, 3)
+  baseQty     Decimal?  @default(dbgenerated("round((qty * \"uomFactor\"), 3)")) @db.Decimal(18, 3)
+  rate        Decimal   @db.Decimal(18, 2)
+  amount      Decimal?  @default(dbgenerated("round((qty * rate), 2)")) @db.Decimal(18, 2)
+  remark      String?
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, voucherId, lineNo], map: "stockVoucherLineNoUk")
+  @@schema("Inventory")
+}
+
+model AssemblyVouchers {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  docNo          String
+  docDate        DateTime  @db.Date
+  kitId          String    @db.Uuid
+  direction      String
+  kitQty         Decimal   @db.Decimal(18, 3)
+  warehouseId    String    @db.Uuid
+  kitUnitCost    Decimal   @default(0) @db.Decimal(18, 4)
+  totalCost      Decimal   @default(0) @db.Decimal(18, 2)
+  status         String    @default("DRAFT")
+  postedAt       DateTime? @db.Timestamptz(6)
+  postedByUserId String?   @db.Uuid
+  journalEntryId String?   @db.Uuid
+  remarks        String?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, docNo], map: "assemblyVoucherDocNoUk")
+  @@schema("Inventory")
+}
+
+model AssemblyVoucherLines {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId   String   @db.Uuid
+  voucherId  String   @db.Uuid
+  lineNo     Int      @db.SmallInt
+  itemId     String   @db.Uuid
+  batchId    String?  @db.Uuid
+  qtyPerKit  Decimal  @db.Decimal(18, 3)
+  qty        Decimal  @db.Decimal(18, 3)
+  unitCost   Decimal  @db.Decimal(18, 4)
+  value      Decimal? @default(dbgenerated("round((qty * \"unitCost\"), 2)")) @db.Decimal(18, 2)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  createdBy  String?  @db.Uuid
+  updatedAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy  String?  @db.Uuid
+  rowVersion Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, voucherId, lineNo], map: "assemblyVoucherLineNoUk")
+  @@schema("Inventory")
+}
+
+model GoodsDemands {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  docNo            String
+  docDate          DateTime  @db.Date
+  manufacturerId   String    @db.Uuid
+  vendorId         String?   @db.Uuid
+  preparedByUserId String    @db.Uuid
+  source           String    @default("MANUAL")
+  notes            String?
+  status           String    @default("DRAFT")
+  totalItems       Int       @default(0)
+  totalQty         Decimal   @default(0) @db.Decimal(18, 3)
+  totalBonus       Decimal   @default(0) @db.Decimal(18, 3)
+  grossAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  discountAmount   Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount        Decimal   @default(0) @db.Decimal(18, 2)
+  purchaseOrderId  String?   @db.Uuid
+  orderedAt        DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, docNo], map: "demandDocNoUk")
+  @@schema("Inventory")
+}
+
+model GoodsDemandLines {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  demandId       String   @db.Uuid
+  lineNo         Int      @db.SmallInt
+  itemId         String   @db.Uuid
+  manufacturerId String?  @db.Uuid
+  ctnSize        Int
+  qtyCtn         Decimal  @default(0) @db.Decimal(18, 3)
+  baseQty        Decimal  @db.Decimal(18, 3)
+  bonusQty       Decimal  @default(0) @db.Decimal(18, 3)
+  rate           Decimal  @default(0) @db.Decimal(18, 2)
+  discountPct    Decimal  @default(0) @db.Decimal(7, 4)
+  grossAmount    Decimal? @default(dbgenerated("round((rate * \"baseQty\"), 2)")) @db.Decimal(18, 2)
+  discountAmount Decimal? @default(dbgenerated("round((((rate * \"baseQty\") * \"discountPct\") / (100)::numeric), 2)")) @db.Decimal(18, 2)
+  netAmount      Decimal? @default(dbgenerated("(round((rate * \"baseQty\"), 2) - round((((rate * \"baseQty\") * \"discountPct\") / (100)::numeric), 2))")) @db.Decimal(18, 2)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, demandId, lineNo], map: "demandLineNoUk")
+  @@schema("Inventory")
+}
+
+model PrincipalClaims {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  claimNo        String
+  manufacturerId String    @db.Uuid
+  claimDate      DateTime  @db.Date
+  claimType      String
+  description    String?
+  itemId         String?   @db.Uuid
+  batchId        String?   @db.Uuid
+  qty            Decimal?  @db.Decimal(18, 3)
+  amount         Decimal   @db.Decimal(18, 2)
+  status         String    @default("PENDING")
+  submittedAt    DateTime? @db.Timestamptz(6)
+  settledDate    DateTime? @db.Date
+  settledAmount  Decimal?  @db.Decimal(18, 2)
+  debitNoteId    String?   @db.Uuid
+  remarks        String?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, claimNo], map: "principalClaimNoUk")
+  @@schema("Inventory")
+}
+
+model PrincipalTargets {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String    @db.Uuid
+  manufacturerId String    @db.Uuid
+  periodType     String    @default("QUARTER")
+  periodStart    DateTime  @db.Date
+  periodEnd      DateTime  @db.Date
+  basis          String    @default("PURCHASE")
+  targetAmount   Decimal   @db.Decimal(18, 2)
+  achievedAmount Decimal   @default(0) @db.Decimal(18, 2)
+  achievedAt     DateTime? @db.Timestamptz(6)
+  notes          String?
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, manufacturerId, periodType, periodStart], map: "principalTargetPeriodUk")
+  @@schema("Inventory")
+}
+
+model BulkPriceUpdates {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String    @db.Uuid
+  docNo           String
+  applyTo         String
+  manufacturerId  String?   @db.Uuid
+  productClassId  String?   @db.Uuid
+  priceField      String
+  changePct       Decimal   @db.Decimal(7, 4)
+  roundTo         Int       @default(1) @db.SmallInt
+  itemCount       Int       @default(0)
+  status          String    @default("DRAFT")
+  appliedAt       DateTime? @db.Timestamptz(6)
+  appliedByUserId String?   @db.Uuid
+  undoneAt        DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, docNo], map: "priceChangeBatchDocNoUk")
+  @@schema("Inventory")
+}
+
+model BulkPriceUpdateLines {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @db.Uuid
+  batchId      String   @db.Uuid
+  itemId       String   @db.Uuid
+  priceField   String
+  oldValue     Decimal  @db.Decimal(18, 2)
+  newValue     Decimal  @db.Decimal(18, 2)
+  changeAmount Decimal? @default(dbgenerated("(\"newValue\" - \"oldValue\")")) @db.Decimal(18, 2)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, batchId, itemId, priceField], map: "priceChangeLineUk")
+  @@schema("Inventory")
+}
+
+// ---- Phase 42 — Growth & support (leads CRM, support tickets, announcements & broadcasts, communication logs)
+model PlatformLeads {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  companyName          String
+  contactPerson        String?
+  phone                String?
+  email                String?   @db.Citext
+  city                 String?
+  source               String
+  partnerId            String?   @db.Uuid
+  ownerStaffId         String    @db.Uuid
+  planInterestId       String?   @db.Uuid
+  expectedMrr          Decimal   @default(0) @db.Decimal(18, 2)
+  stage                String    @default("LEAD")
+  boardPosition        Int       @default(0)
+  notes                String?
+  demoAt               DateTime? @db.Timestamptz(6)
+  trialStartedOn       DateTime? @db.Date
+  trialEndsOn          DateTime? @db.Date
+  trialEngagementScore Int?      @db.SmallInt
+  wonAt                DateTime? @db.Timestamptz(6)
+  churnedAt            DateTime? @db.Timestamptz(6)
+  lostReason           String?
+  tenantId             String?   @db.Uuid
+  createdAt            DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy            String?   @db.Uuid
+  updatedAt            DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy            String?   @db.Uuid
+  rowVersion           Int       @default(0)
+  deletedAt            DateTime? @db.Timestamptz(6)
+
+  @@schema("Platform")
+}
+
+model PlatformLeadActivities {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  leadId       String   @db.Uuid
+  activityType String
+  fromStage    String?
+  toStage      String?
+  note         String?
+  staffUserId  String?  @db.Uuid
+  occurredAt   DateTime @default(now()) @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model SupportTickets {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  docNo           String    @unique
+  tenantId        String    @db.Uuid
+  subject         String
+  category        String    @default("GENERAL")
+  priority        String    @default("NORMAL")
+  status          String    @default("NEW")
+  channel         String    @default("PORTAL")
+  requesterUserId String?   @db.Uuid
+  requesterName   String
+  requesterRole   String?
+  requesterEmail  String?   @db.Citext
+  assigneeStaffId String?   @db.Uuid
+  openedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  firstResponseAt DateTime? @db.Timestamptz(6)
+  slaDueAt        DateTime? @db.Timestamptz(6)
+  resolvedAt      DateTime? @db.Timestamptz(6)
+  closedAt        DateTime? @db.Timestamptz(6)
+  csatRating      Int?      @db.SmallInt
+  csatComment     String?
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@schema("Platform")
+}
+
+model SupportTicketMessages {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticketId       String   @db.Uuid
+  authorKind     String
+  authorStaffId  String?  @db.Uuid
+  authorUserId   String?  @db.Uuid
+  authorName     String
+  body           String
+  isInternalNote Boolean  @default(false)
+  attachments    Json     @default("[]")
+  postedAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model Announcements {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  announcementType    String
+  severity            String    @default("INFO")
+  releaseLabel        String?
+  title               String
+  message             String
+  audience            String    @default("ALL")
+  publishAt           DateTime? @db.Timestamptz(6)
+  status              String    @default("DRAFT")
+  showBanner          Boolean   @default(true)
+  emailAdmins         Boolean   @default(true)
+  viewCount           BigInt    @default(0)
+  clickCount          BigInt    @default(0)
+  maintenanceWindowId String?   @db.Uuid
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@schema("Platform")
+}
+
+model AnnouncementTargets {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  announcementId String   @db.Uuid
+  planId         String?  @db.Uuid
+  moduleKey      String?
+  tenantId       String?  @db.Uuid
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model AnnouncementReceipts {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  announcementId String    @db.Uuid
+  tenantId       String    @db.Uuid
+  userId         String    @db.Uuid
+  viewedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  clickedAt      DateTime? @db.Timestamptz(6)
+  dismissedAt    DateTime? @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy      String?   @db.Uuid
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy      String?   @db.Uuid
+  rowVersion     Int       @default(0)
+
+  @@unique([announcementId, userId], map: "announcementReceiptUq")
+  @@schema("Platform")
+}
+
+model TenantBroadcasts {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commTemplateId   String?  @db.Uuid
+  audience         String
+  audienceValue    String?
+  segmentId        String?  @db.Uuid
+  tenantIds        String[] @db.Uuid
+  languageMode     String   @default("TENANT_PREFERENCE")
+  channels         String[]
+  messageOverride  String?
+  scheduledAt      DateTime @default(now()) @db.Timestamptz(6)
+  status           String   @default("SCHEDULED")
+  recipientsCount  Int?
+  estimatedSmsCost Decimal? @db.Decimal(18, 2)
+  sentByStaffId    String   @db.Uuid
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdBy        String?  @db.Uuid
+  updatedAt        DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy        String?  @db.Uuid
+  rowVersion       Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model CommunicationLogs {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commTemplateId    String?   @db.Uuid
+  commBroadcastId   String?   @db.Uuid
+  tenantId          String?   @db.Uuid
+  recipient         String
+  channel           String
+  language          String    @default("EN")
+  subject           String?
+  body              String?
+  status            String    @default("QUEUED")
+  provider          String?
+  providerMessageId String?
+  errorMessage      String?
+  sentAt            DateTime? @db.Timestamptz(6)
+  deliveredAt       DateTime? @db.Timestamptz(6)
+  openedAt          DateTime? @db.Timestamptz(6)
+  costAmount        Decimal?  @db.Decimal(18, 4)
+  isTest            Boolean   @default(false)
+  retryOfId         String?   @db.Uuid
+  relatedDocType    String?
+  relatedDocId      String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@schema("Platform")
+}
+
+// Phase 41: platform billing (schema Platform). Relation-less like the other Platform models; history via triggerAudit.
+model PlatformInvoices {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  docNo           String?   @unique
+  tenantId        String    @db.Uuid
+  subscriptionId  String?   @db.Uuid
+  invoiceKind     String    @default("SUBSCRIPTION")
+  description     String
+  periodStart     DateTime? @db.Date
+  periodEnd       DateTime? @db.Date
+  issuedOn        DateTime  @db.Date
+  dueOn           DateTime  @db.Date
+  currencyCode    String    @default("PKR") @db.Char(3)
+  grossAmount     Decimal   @db.Decimal(18, 2)
+  discountAmount  Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount       Decimal   @db.Decimal(18, 2)
+  taxAuthorityId  String?   @db.Uuid
+  taxRate         Decimal   @default(0) @db.Decimal(7, 4)
+  taxAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  totalAmount     Decimal   @db.Decimal(18, 2)
+  paidAmount      Decimal   @default(0) @db.Decimal(18, 2)
+  balanceAmount   Decimal?  @default(dbgenerated("(\"totalAmount\" - \"paidAmount\")")) @db.Decimal(18, 2)
+  status          String    @default("OPEN")
+  couponId        String?   @db.Uuid
+  emailedAt       DateTime? @db.Timestamptz(6)
+  lastReminderAt  DateTime? @db.Timestamptz(6)
+  voidedAt        DateTime? @db.Timestamptz(6)
+  voidReason      String?
+  voidedByStaffId String?   @db.Uuid
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@index([issuedOn], map: "platformInvoiceIssuedIdx")
+  @@index([status, dueOn], map: "platformInvoiceStatusIdx")
+  @@index([tenantId, issuedOn(sort: Desc)], map: "platformInvoiceTenantIdx")
+  @@schema("Platform")
+}
+
+model PlatformInvoiceLines {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  platformInvoiceId String    @db.Uuid
+  lineNo            Int       @db.SmallInt
+  lineKind          String
+  description       String
+  planId            String?   @db.Uuid
+  addonId           String?   @db.Uuid
+  usageMeterId      String?   @db.Uuid
+  quantity          Decimal   @default(1) @db.Decimal(18, 3)
+  unitPrice         Decimal   @db.Decimal(18, 4)
+  amount            Decimal   @db.Decimal(18, 2)
+  periodStart       DateTime? @db.Date
+  periodEnd         DateTime? @db.Date
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([platformInvoiceId, lineNo])
+  @@schema("Platform")
+}
+
+model PlatformPayments {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  platformInvoiceId String    @db.Uuid
+  paymentMethod     String
+  paymentRef        String?
+  gatewayTxnRef     String?
+  amount            Decimal   @db.Decimal(18, 2)
+  status            String    @default("PENDING")
+  failureCode       String?
+  failureMessage    String?
+  attemptedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  paidAt            DateTime? @db.Timestamptz(6)
+  refundedAmount    Decimal   @default(0) @db.Decimal(18, 2)
+  refundedAt        DateTime? @db.Timestamptz(6)
+  recordedByStaffId String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@index([platformInvoiceId], map: "platformPaymentInvoiceIdx")
+  @@index([tenantId, attemptedAt(sort: Desc)], map: "platformPaymentTenantIdx")
+  @@schema("Platform")
+}
+
+model DunningCases {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String    @db.Uuid
+  platformInvoiceId      String    @unique @db.Uuid
+  dunningPolicyId        String    @db.Uuid
+  openedAt               DateTime  @default(now()) @db.Timestamptz(6)
+  stage                  String    @default("GRACE")
+  amountDue              Decimal   @db.Decimal(18, 2)
+  paymentMethod          String?
+  attemptsCount          Int       @default(0) @db.SmallInt
+  lastFailureReason      String?
+  nextRetryAt            DateTime? @db.Timestamptz(6)
+  nextRetryMethod        String?
+  retriesPaused          Boolean   @default(false)
+  promiseDate            DateTime? @db.Date
+  promiseAmount          Decimal?  @db.Decimal(18, 2)
+  promiseSource          String?
+  promiseNote            String?
+  promiseLiftReadOnly    Boolean   @default(false)
+  promiseRemindOwner     Boolean   @default(true)
+  promiseLoggedByStaffId String?   @db.Uuid
+  recoveredAt            DateTime? @db.Timestamptz(6)
+  recoveredPaymentId     String?   @db.Uuid
+  closedAt               DateTime? @db.Timestamptz(6)
+  createdAt              DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy              String?   @db.Uuid
+  updatedAt              DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy              String?   @db.Uuid
+  rowVersion             Int       @default(0)
+
+  @@index([tenantId, openedAt(sort: Desc)], map: "dunningCaseTenantIdx")
+  @@schema("Platform")
+}
+
+model DunningAttempts {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dunningCaseId     String    @db.Uuid
+  attemptNo         Int       @db.SmallInt
+  planDay           Int       @db.SmallInt
+  label             String
+  method            String
+  scheduledAt       DateTime  @db.Timestamptz(6)
+  attemptedAt       DateTime? @db.Timestamptz(6)
+  status            String    @default("SCHEDULED")
+  triggeredBy       String    @default("SCHEDULE")
+  platformPaymentId String?   @db.Uuid
+  failureReason     String?
+  staffUserId       String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([dunningCaseId, attemptNo])
+  @@schema("Platform")
+}
+
+model ResellerPayouts {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  partnerId          String    @db.Uuid
+  periodMonth        DateTime  @db.Date
+  tenantsCount       Int       @default(0)
+  sourcedMrr         Decimal   @default(0) @db.Decimal(18, 2)
+  commissionPct      Decimal   @db.Decimal(7, 4)
+  grossAmount        Decimal   @db.Decimal(18, 2)
+  whtSection         String    @default("233")
+  whtRate            Decimal   @default(12) @db.Decimal(7, 4)
+  whtAmount          Decimal   @db.Decimal(18, 2)
+  netAmount          Decimal   @db.Decimal(18, 2)
+  statementLines     Json      @default("[]")
+  status             String    @default("DUE")
+  paidOn             DateTime? @db.Date
+  paymentRef         String?
+  whtCertificateNo   String?
+  statementEmailedAt DateTime? @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([partnerId, periodMonth])
+  @@index([status, periodMonth], map: "partnerPayoutStatusIdx")
+  @@schema("Platform")
+}
+
+model ResellerTenants {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  partnerId             String    @db.Uuid
+  tenantId              String    @unique @db.Uuid
+  attributedOn          DateTime  @db.Date
+  commissionPctOverride Decimal?  @db.Decimal(7, 4)
+  endedOn               DateTime? @db.Date
+  createdAt             DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy             String?   @db.Uuid
+  updatedAt             DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy             String?   @db.Uuid
+  rowVersion            Int       @default(0)
+
+  @@index([partnerId], map: "partnerTenantPartnerIdx")
+  @@schema("Platform")
+}
+
+// Phase 32: payroll runs, adjustments, loans and advances, payslips, tax declarations, salary payment batches, and the
+// attachment rows behind uploads (Company.Attachments). No relations: stores join by id. LoansAndAdvances.outstandingAmount
+// is a generated column and is not mapped (approved or requested, less recovered).
+model PayrollRuns {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String    @db.Uuid
+  docNo                      String
+  runType                    String    @default("REGULAR")
+  payrollMonth               DateTime  @db.Date
+  periodFrom                 DateTime  @db.Date
+  periodTo                   DateTime  @db.Date
+  payDate                    DateTime  @db.Date
+  attendanceCutoffDate       DateTime? @db.Date
+  payGroupId                 String?   @db.Uuid
+  salaryPayableAccountId     String    @db.Uuid
+  includeNoticePeriod        Boolean   @default(true)
+  includeExited              Boolean   @default(false)
+  workingDays                Int?      @db.SmallInt
+  publicHolidays             Int?      @db.SmallInt
+  employeeCount              Int       @default(0)
+  grossAmount                Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount                  Decimal   @default(0) @db.Decimal(18, 2)
+  eobiEmployeeAmount         Decimal   @default(0) @db.Decimal(18, 2)
+  pfEmployeeAmount           Decimal   @default(0) @db.Decimal(18, 2)
+  loanAmount                 Decimal   @default(0) @db.Decimal(18, 2)
+  deductionAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount                  Decimal   @default(0) @db.Decimal(18, 2)
+  employerContributionAmount Decimal   @default(0) @db.Decimal(18, 2)
+  status                     String    @default("DRAFT")
+  wizardStep                 Int       @default(1) @db.SmallInt
+  inputsFrozenAt             DateTime? @db.Timestamptz(6)
+  calculatedAt               DateTime? @db.Timestamptz(6)
+  preparedByUserId           String?   @db.Uuid
+  preparedAt                 DateTime? @db.Timestamptz(6)
+  checkedByUserId            String?   @db.Uuid
+  checkedAt                  DateTime? @db.Timestamptz(6)
+  approvalRequestId          String?   @db.Uuid
+  approvedByUserId           String?   @db.Uuid
+  approvedAt                 DateTime? @db.Timestamptz(6)
+  postedByUserId             String?   @db.Uuid
+  postedAt                   DateTime? @db.Timestamptz(6)
+  paidAt                     DateTime? @db.Timestamptz(6)
+  fiscalPeriodId             String?   @db.Uuid
+  journalEntryId             String?   @db.Uuid
+  reversalJournalEntryId     String?   @db.Uuid
+  emailPayslips              Boolean   @default(true)
+  publishToEss               Boolean   @default(true)
+  smsNetPayAlert             Boolean   @default(false)
+  createDepositReminders     Boolean   @default(true)
+  narration                  String?
+  remarks                    String?
+  createdAt                  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy                  String?   @db.Uuid
+  updatedAt                  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy                  String?   @db.Uuid
+  rowVersion                 Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@index([tenantId, payrollMonth(sort: Desc), runType], map: "payrollRunMonthIdx")
+  @@index([tenantId, status], map: "payrollRunStatusIdx")
+  @@schema("Payroll")
+}
+
+model PayrollRunLines {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                String   @db.Uuid
+  payrollRunId            String   @db.Uuid
+  employeeId              String   @db.Uuid
+  employeeSalaryId        String?  @db.Uuid
+  branchId                String?  @db.Uuid
+  departmentId            String?  @db.Uuid
+  gradeId                 String?  @db.Uuid
+  costCentreId            String?  @db.Uuid
+  structureId             String?  @db.Uuid
+  daysInMonth             Int      @db.SmallInt
+  paidDays                Decimal  @db.Decimal(5, 2)
+  lwpDays                 Decimal  @default(0) @db.Decimal(5, 2)
+  leaveTakenDays          Decimal  @default(0) @db.Decimal(5, 2)
+  overtimeHours           Decimal  @default(0) @db.Decimal(7, 2)
+  basicAmount             Decimal  @default(0) @db.Decimal(18, 2)
+  allowanceAmount         Decimal  @default(0) @db.Decimal(18, 2)
+  grossAmount             Decimal  @db.Decimal(18, 2)
+  taxAmount               Decimal  @default(0) @db.Decimal(18, 2)
+  eobiAmount              Decimal  @default(0) @db.Decimal(18, 2)
+  pfAmount                Decimal  @default(0) @db.Decimal(18, 2)
+  loanAmount              Decimal  @default(0) @db.Decimal(18, 2)
+  otherDeductionAmount    Decimal  @default(0) @db.Decimal(18, 2)
+  deductionAmount         Decimal  @db.Decimal(18, 2)
+  netAmount               Decimal  @db.Decimal(18, 2)
+  employerEobiAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  employerPessiAmount     Decimal  @default(0) @db.Decimal(18, 2)
+  employerPfAmount        Decimal  @default(0) @db.Decimal(18, 2)
+  gratuityProvisionAmount Decimal  @default(0) @db.Decimal(18, 2)
+  taxStatus               String?
+  projectedAnnualSalary   Decimal? @db.Decimal(18, 2)
+  annualExemptAmount      Decimal? @db.Decimal(18, 2)
+  annualTaxableIncome     Decimal? @db.Decimal(18, 2)
+  annualTaxLiability      Decimal? @db.Decimal(18, 2)
+  taxSlabId               String?  @db.Uuid
+  prevNetAmount           Decimal? @db.Decimal(18, 2)
+  variancePct             Decimal? @db.Decimal(9, 4)
+  isNewJoiner             Boolean  @default(false)
+  isRevised               Boolean  @default(false)
+  flags                   String[] @default([])
+  varianceExplanation     String?
+  payMode                 String   @default("BANK_TRANSFER")
+  bankName                String?
+  ibanMasked              String?
+  paymentBatchId          String?  @db.Uuid
+  paymentRef              String?
+  isOnHold                Boolean  @default(false)
+  holdReason              String?
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
+  createdBy               String?  @db.Uuid
+  updatedAt               DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy               String?  @db.Uuid
+  rowVersion              Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, payrollRunId, employeeId])
+  @@index([tenantId, employeeId], map: "payrollLineEmployeeIdx")
+  @@schema("Payroll")
+}
+
+model PayrollRunLineComponents {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  payrollLineId  String   @db.Uuid
+  componentId    String   @db.Uuid
+  componentType  String
+  label          String
+  basisText      String?
+  quantity       Decimal? @db.Decimal(18, 3)
+  rate           Decimal? @db.Decimal(18, 4)
+  amount         Decimal  @db.Decimal(18, 2)
+  isTaxable      Boolean  @default(false)
+  exemptAmount   Decimal  @default(0) @db.Decimal(18, 2)
+  loanId         String?  @db.Uuid
+  payrollInputId String?  @db.Uuid
+  showOnPayslip  Boolean  @default(true)
+  sortOrder      Int      @default(0) @db.SmallInt
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Payroll")
+}
+
+model PayrollRunBranches {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @db.Uuid
+  payrollRunId  String   @db.Uuid
+  branchId      String   @db.Uuid
+  employeeCount Int      @default(0)
+  isIncluded    Boolean  @default(true)
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  createdBy     String?  @db.Uuid
+  updatedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy     String?  @db.Uuid
+  rowVersion    Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, payrollRunId, branchId])
+  @@schema("Payroll")
+}
+
+model PayrollRunChecklistItems {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  payrollRunId String    @db.Uuid
+  itemKey      String
+  label        String
+  sortOrder    Int       @default(0) @db.SmallInt
+  isDone       Boolean   @default(false)
+  doneByUserId String?   @db.Uuid
+  doneAt       DateTime? @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, payrollRunId, itemKey])
+  @@schema("Payroll")
+}
+
+model PayrollAdjustments {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String   @db.Uuid
+  payrollRunId  String   @db.Uuid
+  employeeId    String   @db.Uuid
+  componentId   String   @db.Uuid
+  inputSource   String   @default("MANUAL")
+  quantity      Decimal? @db.Decimal(18, 3)
+  amount        Decimal  @db.Decimal(18, 2)
+  isTaxable     Boolean  @default(true)
+  remarks       String?
+  sourceDocType String?
+  sourceDocId   String?  @db.Uuid
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  createdBy     String?  @db.Uuid
+  updatedAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy     String?  @db.Uuid
+  rowVersion    Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@index([tenantId, payrollRunId, employeeId], map: "payrollInputRunIdx")
+  @@schema("Payroll")
+}
+
+model LoansAndAdvances {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String    @db.Uuid
+  docNo                      String
+  docDate                    DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  employeeId                 String    @db.Uuid
+  loanType                   String
+  purpose                    String    @default("PERSONAL")
+  purposeDetail              String?
+  requestChannel             String    @default("HR")
+  requestedAmount            Decimal   @db.Decimal(18, 2)
+  approvedAmount             Decimal?  @db.Decimal(18, 2)
+  installmentCount           Int       @db.SmallInt
+  installmentAmount          Decimal   @db.Decimal(18, 2)
+  firstDeductionMonth        DateTime  @db.Date
+  markupType                 String    @default("INTEREST_FREE")
+  markupRate                 Decimal?  @db.Decimal(7, 4)
+  grossSalarySnapshot        Decimal?  @db.Decimal(18, 2)
+  installmentPctOfGross      Decimal?  @db.Decimal(7, 4)
+  eligibleLimitAmount        Decimal?  @db.Decimal(18, 2)
+  pfBalanceSnapshot          Decimal?  @db.Decimal(18, 2)
+  isWithinPolicy             Boolean?
+  disbursementDate           DateTime? @db.Date
+  disbursedFromBankAccountId String?   @db.Uuid
+  disbursedFromCashAccountId String?   @db.Uuid
+  disbursementJournalEntryId String?   @db.Uuid
+  recoveredAmount            Decimal   @default(0) @db.Decimal(18, 2)
+  status                     String    @default("PENDING")
+  approvalRequestId          String?   @db.Uuid
+  decisionComment            String?
+  approvedByUserId           String?   @db.Uuid
+  approvedAt                 DateTime? @db.Timestamptz(6)
+  closedAt                   DateTime? @db.Timestamptz(6)
+  remarks                    String?
+  createdAt                  DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy                  String?   @db.Uuid
+  updatedAt                  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy                  String?   @db.Uuid
+  rowVersion                 Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@index([tenantId, employeeId, status], map: "loanEmployeeIdx")
+  @@schema("Payroll")
+}
+
+model LoanInstallments {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  loanId            String    @db.Uuid
+  installmentNo     Int       @db.SmallInt
+  installmentType   String    @default("SCHEDULED")
+  dueMonth          DateTime  @db.Date
+  amount            Decimal   @db.Decimal(18, 2)
+  balanceAfter      Decimal   @db.Decimal(18, 2)
+  status            String    @default("SCHEDULED")
+  payrollLineId     String?   @db.Uuid
+  finalSettlementId String?   @db.Uuid
+  recoveredAt       DateTime? @db.Timestamptz(6)
+  remarks           String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, loanId, installmentNo])
+  @@schema("Payroll")
+}
+
+model Payslips {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  docNo               String
+  payrollRunId        String    @db.Uuid
+  payrollLineId       String    @db.Uuid
+  employeeId          String    @db.Uuid
+  payrollMonth        DateTime  @db.Date
+  grossAmount         Decimal   @db.Decimal(18, 2)
+  deductionAmount     Decimal   @db.Decimal(18, 2)
+  netAmount           Decimal   @db.Decimal(18, 2)
+  netAmountWords      String?
+  status              String    @default("GENERATED")
+  generatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  publishedToEssAt    DateTime? @db.Timestamptz(6)
+  emailTo             String?   @db.Citext
+  emailedAt           DateTime? @db.Timestamptz(6)
+  emailCount          Int       @default(0) @db.SmallInt
+  bounceReason        String?
+  viewedAt            DateTime? @db.Timestamptz(6)
+  printedAt           DateTime? @db.Timestamptz(6)
+  holdReason          String?
+  isPasswordProtected Boolean   @default(true)
+  pdfAttachmentId     String?   @db.Uuid
+  shareToken          String?
+  shareExpiresAt      DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@unique([tenantId, payrollLineId])
+  @@index([tenantId, employeeId, payrollMonth(sort: Desc)], map: "payslipEmployeeIdx")
+  @@schema("Payroll")
+}
+
+model SalaryPaymentBatches {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  payrollRunId       String    @db.Uuid
+  paymentMethod      String
+  bankAccountId      String?   @db.Uuid
+  fileFormat         String?
+  employeeCount      Int       @default(0)
+  totalAmount        Decimal   @default(0) @db.Decimal(18, 2)
+  instructionRef     String?
+  valueDate          DateTime? @db.Date
+  fileAttachmentId   String?   @db.Uuid
+  adviceAttachmentId String?   @db.Uuid
+  generatedAt        DateTime? @db.Timestamptz(6)
+  sentAt             DateTime? @db.Timestamptz(6)
+  status             String    @default("DRAFT")
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Payroll")
+}
+
+model TaxDeclarations {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  employeeId         String    @db.Uuid
+  taxYear            String
+  declarationType    String
+  itoSection         String
+  reliefKind         String
+  amount             Decimal   @db.Decimal(18, 2)
+  paidTo             String?
+  proofAttachmentId  String?   @db.Uuid
+  proofDueDate       DateTime? @db.Date
+  estimatedTaxSaving Decimal?  @db.Decimal(18, 2)
+  status             String    @default("NOT_DECLARED")
+  submittedAt        DateTime? @db.Timestamptz(6)
+  verifiedByUserId   String?   @db.Uuid
+  verifiedAt         DateTime? @db.Timestamptz(6)
+  rejectionReason    String?
+  effectiveFromMonth DateTime? @db.Date
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, employeeId, taxYear, declarationType])
+  @@unique([tenantId, id])
+  @@schema("Payroll")
+}
+
+model Attachments {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  entityType       String?
+  entityId         String?   @db.Uuid
+  purpose          String    @default("DOCUMENT")
+  fileName         String
+  contentType      String
+  sizeBytes        BigInt
+  storageKey       String
+  sha256           Bytes?
+  uploadedByUserId String?   @db.Uuid
+  activityEventId  String?   @db.Uuid
+  commentId        String?   @db.Uuid
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+  deletedAt        DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, storageKey])
+  @@schema("Company")
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Phase 43: platform operations (incidents, flag change requests + scheduled steps, privacy requests, entitlement
+// change log). Scalar-only mappings: the foreign keys live in the database; the code joins by id.
+// ---------------------------------------------------------------------------------------------------------------------
+model ServiceIncidents {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  docNo             String    @unique
+  title             String
+  impact            String
+  components        String[]
+  stage             String    @default("INVESTIGATING")
+  startedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  resolvedAt        DateTime? @db.Timestamptz(6)
+  isPublic          Boolean   @default(true)
+  declaredByStaffId String    @db.Uuid
+  postmortemDueOn   DateTime? @db.Date
+  postmortemRef     String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@schema("Platform")
+}
+
+model ServiceIncidentUpdates {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  incidentId        String   @db.Uuid
+  stage             String
+  message           String
+  postedAt          DateTime @default(now()) @db.Timestamptz(6)
+  postedByStaffId   String   @db.Uuid
+  notifySubscribers Boolean  @default(true)
+  updateBanner      Boolean  @default(true)
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  createdBy         String?  @db.Uuid
+  updatedAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy         String?  @db.Uuid
+  rowVersion        Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model FlagChangeRequests {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  docNo            String    @unique
+  flagId           String    @db.Uuid
+  environment      String    @default("PRODUCTION")
+  requesterStaffId String    @db.Uuid
+  reason           String
+  summary          String
+  beforeState      Json
+  afterState       Json
+  patch            Json
+  applyNotBefore   DateTime? @db.Timestamptz(6)
+  source           String    @default("MANUAL")
+  status           String    @default("PENDING")
+  decidedByStaffId String?   @db.Uuid
+  decidedAt        DateTime? @db.Timestamptz(6)
+  decisionNote     String?
+  appliedAt        DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@schema("Platform")
+}
+
+model FlagChangeRequestApprovers {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  changeRequestId String    @db.Uuid
+  staffUserId     String    @db.Uuid
+  decision        String    @default("WAITING")
+  decidedAt       DateTime? @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy       String?   @db.Uuid
+  updatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy       String?   @db.Uuid
+  rowVersion      Int       @default(0)
+
+  @@unique([changeRequestId, staffUserId])
+  @@schema("Platform")
+}
+
+model FlagChangeRequestComments {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  changeRequestId String   @db.Uuid
+  staffUserId     String   @db.Uuid
+  body            String
+  postedAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@schema("Platform")
+}
+
+model FlagScheduledChanges {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  flagId          String   @db.Uuid
+  environment     String   @default("PRODUCTION")
+  stepDate        DateTime @db.Date
+  rolloutPct      Int      @db.SmallInt
+  status          String   @default("PLANNED")
+  changeRequestId String?  @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@unique([flagId, environment, stepDate])
+  @@schema("Platform")
+}
+
+model PrivacyRequests {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  docNo               String    @unique
+  tenantId            String    @db.Uuid
+  requestType         String
+  requestedByName     String
+  requestedByRole     String?
+  requesterEmail      String?   @db.Citext
+  receivedOn          DateTime  @db.Date
+  dueOn               DateTime  @db.Date
+  step                String    @default("RECEIVED")
+  verifiedByStaffId   String?   @db.Uuid
+  verifiedAt          DateTime? @db.Timestamptz(6)
+  approver1StaffId    String?   @db.Uuid
+  approved1At         DateTime? @db.Timestamptz(6)
+  approver2StaffId    String?   @db.Uuid
+  approved2At         DateTime? @db.Timestamptz(6)
+  rejectedReason      String?
+  rejectedAt          DateTime? @db.Timestamptz(6)
+  completedAt         DateTime? @db.Timestamptz(6)
+  certificateRef      String?
+  exportBackupRunId   String?   @db.Uuid
+  exportLinkExpiresAt DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+  decisionNote        String?
+  fulfilmentSummary   Json?
+
+  @@schema("Platform")
+}
+
+model EntitlementChangeLogs {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  changeSetId             String   @db.Uuid
+  changeKind              String
+  planId                  String?  @db.Uuid
+  platformModuleId        String?  @db.Uuid
+  usageMeterId            String?  @db.Uuid
+  addonId                 String?  @db.Uuid
+  fromValue               Json?
+  toValue                 Json?
+  tenantsAffected         Int      @default(0)
+  impactTone              String?
+  grandfatherUntilRenewal Boolean  @default(false)
+  emailOwners             Boolean  @default(true)
+  postChangelog           Boolean  @default(false)
+  savedByStaffId          String   @db.Uuid
+  savedAt                 DateTime @default(now()) @db.Timestamptz(6)
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
+  createdBy               String?  @db.Uuid
+  updatedAt               DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy               String?  @db.Uuid
+  rowVersion              Int      @default(0)
+
+  @@schema("Platform")
+}
+model SalesReturns {
+  id                                                                      String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                                String                 @db.Uuid
+  docNo                                                                   String
+  docDate                                                                 DateTime               @db.Date
+  returnType                                                              String                 @default("AGAINST_INVOICE")
+  customerId                                                              String                 @db.Uuid
+  invoiceId                                                               String?                @db.Uuid
+  branchId                                                                String?                @db.Uuid
+  warehouseId                                                             String                 @db.Uuid
+  bookerEmployeeId                                                        String?                @db.Uuid
+  deliverymanEmployeeId                                                   String?                @db.Uuid
+  remarks                                                                 String?
+  totalItems                                                              Int                    @default(0)
+  totalQty                                                                Decimal                @default(0) @db.Decimal(18, 3)
+  grossAmount                                                             Decimal                @default(0) @db.Decimal(18, 2)
+  discountAmount                                                          Decimal                @default(0) @db.Decimal(18, 2)
+  valueAmount                                                             Decimal                @default(0) @db.Decimal(18, 2)
+  taxAmount                                                               Decimal                @default(0) @db.Decimal(18, 2)
+  totalAmount                                                             Decimal                @default(0) @db.Decimal(18, 2)
+  costAmount                                                              Decimal                @default(0) @db.Decimal(18, 2)
+  status                                                                  String                 @default("DRAFT")
+  creditNoteId                                                            String?                @db.Uuid
+  replacementInvoiceId                                                    String?                @db.Uuid
+  postedAt                                                                DateTime?              @db.Timestamptz(6)
+  journalEntryId                                                          String?                @db.Uuid
+  cancelledAt                                                             DateTime?              @db.Timestamptz(6)
+  createdAt                                                               DateTime               @default(now()) @db.Timestamptz(6)
+  createdBy                                                               String?                @db.Uuid
+  updatedAt                                                               DateTime               @default(now()) @db.Timestamptz(6)
+  updatedBy                                                               String?                @db.Uuid
+  rowVersion                                                              Int                    @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model SalesReturnLines {
+  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String             @db.Uuid
+  salesReturnId     String             @db.Uuid
+  lineNo            Int                @db.SmallInt
+  invoiceLineId     String?            @db.Uuid
+  itemId            String             @db.Uuid
+  packLabel         String?
+  batchId           String?            @db.Uuid
+  expiryDate        DateTime?          @db.Date
+  rate              Decimal            @db.Decimal(18, 4)
+  soldQty           Decimal?           @db.Decimal(18, 3)
+  qtyCtn            Decimal            @default(0) @db.Decimal(18, 3)
+  qtyLoose          Decimal            @default(0) @db.Decimal(18, 3)
+  ctnFactor         Decimal            @default(1) @db.Decimal(18, 3)
+  baseQty           Decimal            @db.Decimal(18, 3)
+  grossAmount       Decimal            @db.Decimal(18, 2)
+  discountPct       Decimal            @default(0) @db.Decimal(7, 4)
+  discountAmount    Decimal            @default(0) @db.Decimal(18, 2)
+  valueAmount       Decimal            @db.Decimal(18, 2)
+  taxCodeId         String?            @db.Uuid
+  taxRate           Decimal            @default(0) @db.Decimal(7, 4)
+  taxAmount         Decimal            @default(0) @db.Decimal(18, 2)
+  totalAmount       Decimal            @db.Decimal(18, 2)
+  reason            String
+  disposition       String
+  unitCost          Decimal?           @db.Decimal(18, 4)
+  costAmount        Decimal            @default(0) @db.Decimal(18, 2)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  createdBy         String?            @db.Uuid
+  updatedAt         DateTime           @default(now()) @db.Timestamptz(6)
+  updatedBy         String?            @db.Uuid
+  rowVersion        Int                @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, salesReturnId, lineNo])
+  @@schema("Sales")
+}
+
+model CreditNotes {
+  id                                                            String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                      String                       @db.Uuid
+  docNo                                                         String
+  docDate                                                       DateTime                     @db.Date
+  customerId                                                    String                       @db.Uuid
+  invoiceId                                                     String?                      @db.Uuid
+  branchId                                                      String?                      @db.Uuid
+  reason                                                        String
+  reasonNote                                                    String?
+  returnWarehouseId                                             String?                      @db.Uuid
+  treatment                                                     String                       @default("APPLY_TO_INVOICE")
+  currencyCode                                                  String                       @default("PKR") @db.Char(3)
+  fxRate                                                        Decimal                      @default(1) @db.Decimal(18, 6)
+  valueAmount                                                   Decimal                      @default(0) @db.Decimal(18, 2)
+  taxAmount                                                     Decimal                      @default(0) @db.Decimal(18, 2)
+  furtherTaxAmount                                              Decimal                      @default(0) @db.Decimal(18, 2)
+  totalAmount                                                   Decimal                      @default(0) @db.Decimal(18, 2)
+  appliedAmount                                                 Decimal                      @default(0) @db.Decimal(18, 2)
+  refundedAmount                                                Decimal                      @default(0) @db.Decimal(18, 2)
+  balanceAmount                                                 Decimal?                     @default(dbgenerated("((\"totalAmount\" - \"appliedAmount\") - \"refundedAmount\")")) @db.Decimal(18, 2)
+  costAmount                                                    Decimal                      @default(0) @db.Decimal(18, 2)
+  narration                                                     String?
+  status                                                        String                       @default("DRAFT")
+  submittedAt                                                   DateTime?                    @db.Timestamptz(6)
+  approvedByUserId                                              String?                      @db.Uuid
+  approvedAt                                                    DateTime?                    @db.Timestamptz(6)
+  postedAt                                                      DateTime?                    @db.Timestamptz(6)
+  journalEntryId                                                String?                      @db.Uuid
+  refundReference                                               String?
+  cancelledAt                                                   DateTime?                    @db.Timestamptz(6)
+  cancelReason                                                  String?
+  salesReturnId                                                 String?                      @db.Uuid
+  createdAt                                                     DateTime                     @default(now()) @db.Timestamptz(6)
+  createdBy                                                     String?                      @db.Uuid
+  updatedAt                                                     DateTime                     @default(now()) @db.Timestamptz(6)
+  updatedBy                                                     String?                      @db.Uuid
+  rowVersion                                                    Int                          @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id, customerId])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model CreditNoteLines {
+  id                String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String             @db.Uuid
+  creditNoteId      String             @db.Uuid
+  lineNo            Int                @db.SmallInt
+  invoiceLineId     String?            @db.Uuid
+  itemId            String?            @db.Uuid
+  description       String
+  batchId           String?            @db.Uuid
+  invoicedQty       Decimal?           @db.Decimal(18, 3)
+  qtyCtn            Decimal            @default(0) @db.Decimal(18, 3)
+  qtyLoose          Decimal            @default(0) @db.Decimal(18, 3)
+  ctnFactor         Decimal            @default(1) @db.Decimal(18, 3)
+  baseQty           Decimal            @default(0) @db.Decimal(18, 3)
+  rate              Decimal            @db.Decimal(18, 4)
+  valueAmount       Decimal            @db.Decimal(18, 2)
+  taxCodeId         String?            @db.Uuid
+  taxRate           Decimal            @default(0) @db.Decimal(7, 4)
+  taxAmount         Decimal            @default(0) @db.Decimal(18, 2)
+  furtherTaxAmount  Decimal            @default(0) @db.Decimal(18, 2)
+  totalAmount       Decimal            @db.Decimal(18, 2)
+  restock           Boolean            @default(false)
+  unitCost          Decimal?           @db.Decimal(18, 4)
+  costAmount        Decimal            @default(0) @db.Decimal(18, 2)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(6)
+  createdBy         String?            @db.Uuid
+  updatedAt         DateTime           @default(now()) @db.Timestamptz(6)
+  updatedBy         String?            @db.Uuid
+  rowVersion        Int                @default(0)
+
+  @@unique([tenantId, creditNoteId, lineNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model CustomerReceipts {
+  id                                                                String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                          String                      @db.Uuid
+  docNo                                                             String
+  docDate                                                           DateTime                    @db.Date
+  customerId                                                        String                      @db.Uuid
+  branchId                                                          String?                     @db.Uuid
+  method                                                            String
+  bankAccountId                                                     String?                     @db.Uuid
+  cashAccountId                                                     String?                     @db.Uuid
+  chequeId                                                          String?                     @db.Uuid
+  reference                                                         String?
+  currencyCode                                                      String                      @default("PKR") @db.Char(3)
+  fxRate                                                            Decimal                     @default(1) @db.Decimal(18, 6)
+  amountReceived                                                    Decimal                     @db.Decimal(18, 2)
+  whtAmount                                                         Decimal                     @default(0) @db.Decimal(18, 2)
+  whtSection                                                        String?
+  whtCertificateStatus                                              String                      @default("NOT_APPLICABLE")
+  whtCertificateNo                                                  String?
+  whtCertificateDate                                                DateTime?                   @db.Date
+  bankCharges                                                       Decimal                     @default(0) @db.Decimal(18, 2)
+  settledAmount                                                     Decimal?                    @default(dbgenerated("((\"amountReceived\" + \"whtAmount\") + \"bankCharges\")")) @db.Decimal(18, 2)
+  allocatedAmount                                                   Decimal                     @default(0) @db.Decimal(18, 2)
+  unallocatedAmount                                                 Decimal?                    @default(dbgenerated("(((\"amountReceived\" + \"whtAmount\") + \"bankCharges\") - \"allocatedAmount\")")) @db.Decimal(18, 2)
+  salesOrderId                                                      String?                     @db.Uuid
+  memo                                                              String?
+  emailReceipt                                                      Boolean                     @default(true)
+  status                                                            String                      @default("UNALLOCATED")
+  postedAt                                                          DateTime                    @default(now()) @db.Timestamptz(6)
+  journalEntryId                                                    String?                     @db.Uuid
+  bouncedAt                                                         DateTime?                   @db.Timestamptz(6)
+  bounceReason                                                      String?
+  bounceJournalEntryId                                              String?                     @db.Uuid
+  voidedAt                                                          DateTime?                   @db.Timestamptz(6)
+  voidReason                                                        String?
+  posShiftId                                                        String?                     @db.Uuid
+  createdAt                                                         DateTime                    @default(now()) @db.Timestamptz(6)
+  createdBy                                                         String?                     @db.Uuid
+  updatedAt                                                         DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedBy                                                         String?                     @db.Uuid
+  rowVersion                                                        Int                         @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id, customerId])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model CustomerReceiptAllocations {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String           @db.Uuid
+  receiptId        String           @db.Uuid
+  customerId       String           @db.Uuid
+  targetType       String
+  invoiceId        String?          @db.Uuid
+  creditNoteId     String?          @db.Uuid
+  allocatedAmount  Decimal          @db.Decimal(18, 2)
+  allocationDate   DateTime         @default(dbgenerated("CURRENT_DATE")) @db.Date
+  isAutoFifo       Boolean          @default(false)
+  remarks          String?
+  createdAt        DateTime         @default(now()) @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  updatedAt        DateTime         @default(now()) @db.Timestamptz(6)
+  updatedBy        String?          @db.Uuid
+  rowVersion       Int              @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model RecurringInvoices {
+  id                                                                         String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                                   String                  @db.Uuid
+  docNo                                                                      String
+  customerId                                                                 String                  @db.Uuid
+  name                                                                       String
+  branchId                                                                   String?                 @db.Uuid
+  warehouseId                                                                String?                 @db.Uuid
+  paymentTerms                                                               String                  @default("NET_30")
+  frequency                                                                  String
+  everyDays                                                                  Int?
+  startDate                                                                  DateTime                @db.Date
+  nextRunDate                                                                DateTime?               @db.Date
+  runTime                                                                    DateTime                @default(dbgenerated("'06:00:00'::time without time zone")) @db.Time(6)
+  endMode                                                                    String                  @default("NEVER")
+  endDate                                                                    DateTime?               @db.Date
+  maxRuns                                                                    Int?
+  runsCount                                                                  Int                     @default(0)
+  amount                                                                     Decimal                 @default(0) @db.Decimal(18, 2)
+  autoSend                                                                   Boolean                 @default(true)
+  sendEmail                                                                  Boolean                 @default(true)
+  sendWhatsapp                                                               Boolean                 @default(false)
+  saveAsDraft                                                                Boolean                 @default(false)
+  status                                                                     String                  @default("ACTIVE")
+  lastRunAt                                                                  DateTime?               @db.Timestamptz(6)
+  lastInvoiceId                                                              String?                 @db.Uuid
+  createdAt                                                                  DateTime                @default(now()) @db.Timestamptz(6)
+  createdBy                                                                  String?                 @db.Uuid
+  updatedAt                                                                  DateTime                @default(now()) @db.Timestamptz(6)
+  updatedBy                                                                  String?                 @db.Uuid
+  rowVersion                                                                 Int                     @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model RecurringInvoiceLines {
+  id                 String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String            @db.Uuid
+  recurringProfileId String            @db.Uuid
+  lineNo             Int               @db.SmallInt
+  itemId             String?           @db.Uuid
+  description        String
+  qtyCtn             Decimal           @default(0) @db.Decimal(18, 3)
+  qtyLoose           Decimal           @default(0) @db.Decimal(18, 3)
+  ctnFactor          Decimal           @default(1) @db.Decimal(18, 3)
+  baseQty            Decimal           @db.Decimal(18, 3)
+  rate               Decimal           @db.Decimal(18, 4)
+  useCurrentPrice    Boolean           @default(true)
+  taxCodeId          String?           @db.Uuid
+  taxRate            Decimal           @default(0) @db.Decimal(7, 4)
+  taxableAmount      Decimal           @db.Decimal(18, 2)
+  taxAmount          Decimal           @default(0) @db.Decimal(18, 2)
+  totalAmount        Decimal           @db.Decimal(18, 2)
+  createdAt          DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy          String?           @db.Uuid
+  updatedAt          DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy          String?           @db.Uuid
+  rowVersion         Int               @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, recurringProfileId, lineNo])
+  @@schema("Sales")
+}
+
+model PosShifts {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String                  @db.Uuid
+  zReportNo             String?
+  branchId              String                  @db.Uuid
+  warehouseId           String                  @db.Uuid
+  counterName           String
+  cashierUserId         String                  @db.Uuid
+  cashAccountId         String?                 @db.Uuid
+  openedAt              DateTime                @default(now()) @db.Timestamptz(6)
+  closedAt              DateTime?               @db.Timestamptz(6)
+  openingFloat          Decimal                 @default(0) @db.Decimal(18, 2)
+  cashSales             Decimal                 @default(0) @db.Decimal(18, 2)
+  cardSales             Decimal                 @default(0) @db.Decimal(18, 2)
+  walletSales           Decimal                 @default(0) @db.Decimal(18, 2)
+  creditSales           Decimal                 @default(0) @db.Decimal(18, 2)
+  billsCount            Int                     @default(0)
+  expectedCash          Decimal?                @default(dbgenerated("(\"openingFloat\" + \"cashSales\")")) @db.Decimal(18, 2)
+  countedCash           Decimal?                @db.Decimal(18, 2)
+  overShort             Decimal?                @default(dbgenerated("((\"countedCash\" - \"openingFloat\") - \"cashSales\")")) @db.Decimal(18, 2)
+  status                String                  @default("OPEN")
+  zPrintedAt            DateTime?               @db.Timestamptz(6)
+  journalEntryId        String?                 @db.Uuid
+  remarks               String?
+  createdAt             DateTime                @default(now()) @db.Timestamptz(6)
+  createdBy             String?                 @db.Uuid
+  updatedAt             DateTime                @default(now()) @db.Timestamptz(6)
+  updatedBy             String?                 @db.Uuid
+  rowVersion            Int                     @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model PosShiftDenominations {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String    @db.Uuid
+  posShiftId   String    @db.Uuid
+  denomination Decimal   @db.Decimal(18, 2)
+  noteCount    Int       @default(0)
+  amount       Decimal?  @default(dbgenerated("(denomination * (\"noteCount\")::numeric)")) @db.Decimal(18, 2)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy    String?   @db.Uuid
+  updatedAt    DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy    String?   @db.Uuid
+  rowVersion   Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, posShiftId, denomination])
+  @@schema("Sales")
+}
+
+model PosPayments {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String            @db.Uuid
+  posShiftId       String            @db.Uuid
+  invoiceId        String            @db.Uuid
+  tender           String
+  amount           Decimal           @db.Decimal(18, 2)
+  tenderedAmount   Decimal?          @db.Decimal(18, 2)
+  changeAmount     Decimal           @default(0) @db.Decimal(18, 2)
+  reference        String?
+  receiptId        String?           @db.Uuid
+  paidAt           DateTime          @default(now()) @db.Timestamptz(6)
+  createdAt        DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy        String?           @db.Uuid
+  updatedAt        DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy        String?           @db.Uuid
+  rowVersion       Int               @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+
+model ChequeAllocations {
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String         @db.Uuid
+  chequeId      String         @db.Uuid
+  invoiceId     String?        @db.Uuid
+  billId        String?        @db.Uuid
+  amount        Decimal        @db.Decimal(18, 2)
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  createdBy     String?        @db.Uuid
+  updatedAt     DateTime       @default(now()) @db.Timestamptz(6)
+  updatedBy     String?        @db.Uuid
+  rowVersion    Int            @default(0)
+
+  @@unique([tenantId, chequeId, billId])
+  @@unique([tenantId, chequeId, invoiceId])
+  @@unique([tenantId, id])
+  @@schema("BankCash")
+}
+
+
+// ---------------------------------------------------------------- Phase 25: wholesale
+model OrderBookings {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  branchId          String?   @db.Uuid
+  docNo             String
+  docDate           DateTime  @db.Date
+  bookedAt          DateTime  @db.Timestamptz(6)
+  bookerEmployeeId  String    @db.Uuid
+  routeId           String    @db.Uuid
+  customerId        String    @db.Uuid
+  warehouseId       String?   @db.Uuid
+  priceTier         String
+  appOrderRef       String?
+  syncedAt          DateTime? @db.Timestamptz(6)
+  geoLat            Decimal?  @db.Decimal(9, 6)
+  geoLng            Decimal?  @db.Decimal(9, 6)
+  gpsVerified       Boolean   @default(false)
+  gpsOffsetM        Decimal?  @db.Decimal(10, 1)
+  note              String?
+  lineCount         Int       @default(0)
+  grossAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount         Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount         Decimal   @default(0) @db.Decimal(18, 2)
+  status            String    @default("NEW")
+  stockCheck        Json?
+  stockCheckedAt    DateTime? @db.Timestamptz(6)
+  shortLineCount    Int       @default(0)
+  allowPartial      Boolean?
+  invoiceId         String?   @db.Uuid
+  convertedAt       DateTime? @db.Timestamptz(6)
+  convertedByUserId String?   @db.Uuid
+  cancelledAt       DateTime? @db.Timestamptz(6)
+  cancelReason      String?
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model OrderBookingLines {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  orderBookingId String   @db.Uuid
+  lineNo         Int      @db.SmallInt
+  itemId         String   @db.Uuid
+  unitsPerCtn    Decimal  @default(1) @db.Decimal(18, 3)
+  qtyCtn         Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose       Decimal  @default(0) @db.Decimal(18, 3)
+  baseQty        Decimal? @default(dbgenerated("((\"qtyCtn\" * \"unitsPerCtn\") + \"qtyLoose\")")) @db.Decimal(18, 3)
+  rate           Decimal  @db.Decimal(18, 4)
+  taxRate        Decimal  @default(0) @db.Decimal(7, 4)
+  grossAmount    Decimal  @default(0) @db.Decimal(18, 2)
+  taxAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  netAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  availableQty   Decimal? @db.Decimal(18, 3)
+  shortQty       Decimal  @default(0) @db.Decimal(18, 3)
+  invoicedQty    Decimal  @default(0) @db.Decimal(18, 3)
+  backorderQty   Decimal  @default(0) @db.Decimal(18, 3)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, id, orderBookingId])
+  @@unique([tenantId, orderBookingId, lineNo])
+  @@schema("Distribution")
+}
+
+model OrderTemplates {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @db.Uuid
+  name        String
+  icon        String?
+  customerId  String?   @db.Uuid
+  ownerUserId String?   @db.Uuid
+  isShared    Boolean   @default(true)
+  status      String    @default("ACTIVE")
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy   String?   @db.Uuid
+  rowVersion  Int       @default(0)
+  deletedAt   DateTime? @db.Timestamptz(6)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model OrderTemplateLines {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String   @db.Uuid
+  orderTemplateId String   @db.Uuid
+  lineNo          Int      @db.SmallInt
+  itemId          String   @db.Uuid
+  qtyCtn          Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose        Decimal  @default(0) @db.Decimal(18, 3)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, orderTemplateId, itemId])
+  @@unique([tenantId, orderTemplateId, lineNo])
+  @@schema("Distribution")
+}
+
+model HeldBills {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid
+  branchId           String?   @db.Uuid
+  provisionalNo      String?
+  docDate            DateTime  @db.Date
+  customerId         String    @db.Uuid
+  routeId            String?   @db.Uuid
+  salesmanEmployeeId String?   @db.Uuid
+  warehouseId        String?   @db.Uuid
+  priceTier          String
+  rateEntryMode      String    @default("PCS")
+  holdReason         String    @default("MANUAL")
+  lineCount          Int       @default(0)
+  totalCtn           Decimal   @default(0) @db.Decimal(18, 3)
+  totalLoose         Decimal   @default(0) @db.Decimal(18, 3)
+  grossAmount        Decimal   @default(0) @db.Decimal(18, 2)
+  schemeAmount       Decimal   @default(0) @db.Decimal(18, 2)
+  discountAmount     Decimal   @default(0) @db.Decimal(18, 2)
+  taxAmount          Decimal   @default(0) @db.Decimal(18, 2)
+  netAmount          Decimal   @default(0) @db.Decimal(18, 2)
+  status             String    @default("HELD")
+  heldAt             DateTime  @default(now()) @db.Timestamptz(6)
+  heldByUserId       String?   @db.Uuid
+  recalledAt         DateTime? @db.Timestamptz(6)
+  recalledByUserId   String?   @db.Uuid
+  remarks            String?
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy          String?   @db.Uuid
+  updatedAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy          String?   @db.Uuid
+  rowVersion         Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model HeldBillLines {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  heldBillId     String   @db.Uuid
+  lineNo         Int      @db.SmallInt
+  itemId         String   @db.Uuid
+  unitsPerCtn    Decimal  @default(1) @db.Decimal(18, 3)
+  qtyCtn         Decimal  @default(0) @db.Decimal(18, 3)
+  qtyLoose       Decimal  @default(0) @db.Decimal(18, 3)
+  baseQty        Decimal? @default(dbgenerated("((\"qtyCtn\" * \"unitsPerCtn\") + \"qtyLoose\")")) @db.Decimal(18, 3)
+  bonusQty       Decimal  @default(0) @db.Decimal(18, 3)
+  schemeId       String?  @db.Uuid
+  rate           Decimal  @db.Decimal(18, 4)
+  isManualRate   Boolean  @default(false)
+  discountPct    Decimal  @default(0) @db.Decimal(7, 4)
+  taxRate        Decimal  @default(0) @db.Decimal(7, 4)
+  grossAmount    Decimal  @default(0) @db.Decimal(18, 2)
+  discountAmount Decimal  @default(0) @db.Decimal(18, 2)
+  taxAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  netAmount      Decimal  @default(0) @db.Decimal(18, 2)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  createdBy      String?  @db.Uuid
+  updatedAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy      String?  @db.Uuid
+  rowVersion     Int      @default(0)
+
+  @@unique([tenantId, heldBillId, lineNo])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BulkInvoiceRuns {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  branchId          String?   @db.Uuid
+  routeId           String    @db.Uuid
+  docDate           DateTime  @db.Date
+  warehouseId       String?   @db.Uuid
+  mode              String
+  shopsSelected     Int       @default(0)
+  totalCtn          Decimal   @default(0) @db.Decimal(18, 3)
+  creditWarnings    Int       @default(0)
+  totalValue        Decimal   @default(0) @db.Decimal(18, 2)
+  invoiceCount      Int       @default(0)
+  invoicedValue     Decimal   @default(0) @db.Decimal(18, 2)
+  skippedCount      Int       @default(0)
+  firstInvoiceNo    String?
+  lastInvoiceNo     String?
+  status            String    @default("DRAFT")
+  generatedAt       DateTime? @db.Timestamptz(6)
+  generatedByUserId String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BulkInvoiceRunCells {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @db.Uuid
+  bulkInvoiceBatchId String   @db.Uuid
+  customerId         String   @db.Uuid
+  itemId             String   @db.Uuid
+  qtyCtn             Decimal  @db.Decimal(18, 3)
+  unitsPerCtn        Decimal  @default(1) @db.Decimal(18, 3)
+  baseQty            Decimal? @default(dbgenerated("(\"qtyCtn\" * \"unitsPerCtn\")")) @db.Decimal(18, 3)
+  rate               Decimal  @db.Decimal(18, 4)
+  taxRate            Decimal  @default(0) @db.Decimal(7, 4)
+  amount             Decimal  @db.Decimal(18, 2)
+  invoiceId          String?  @db.Uuid
+  invoiceLineId      String?  @db.Uuid
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  createdBy          String?  @db.Uuid
+  updatedAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy          String?  @db.Uuid
+  rowVersion         Int      @default(0)
+
+  @@unique([tenantId, bulkInvoiceBatchId, customerId, itemId])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BulkInvoiceSkippedShops {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @db.Uuid
+  bulkInvoiceBatchId String   @db.Uuid
+  customerId         String   @db.Uuid
+  reasonCode         String   @default("OVER_CREDIT_LIMIT")
+  reason             String
+  billAmount         Decimal  @db.Decimal(18, 2)
+  outstandingAmount  Decimal? @db.Decimal(18, 2)
+  creditLimit        Decimal? @db.Decimal(18, 2)
+  overByAmount       Decimal? @db.Decimal(18, 2)
+  createdAt          DateTime @default(now()) @db.Timestamptz(6)
+  createdBy          String?  @db.Uuid
+  updatedAt          DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy          String?  @db.Uuid
+  rowVersion         Int      @default(0)
+
+  @@unique([tenantId, bulkInvoiceBatchId, customerId])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BackOrders {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String   @db.Uuid
+  branchId             String?  @db.Uuid
+  sourceDocType        String
+  sourceInvoiceId      String?  @db.Uuid
+  sourceOrderBookingId String?  @db.Uuid
+  sourceBookingLineId  String?  @db.Uuid
+  customerId           String   @db.Uuid
+  routeId              String?  @db.Uuid
+  itemId               String   @db.Uuid
+  backorderDate        DateTime @db.Date
+  originalQty          Decimal  @db.Decimal(18, 3)
+  invoicedQty          Decimal  @default(0) @db.Decimal(18, 3)
+  cancelledQty         Decimal  @default(0) @db.Decimal(18, 3)
+  pendingQty           Decimal? @default(dbgenerated("((\"originalQty\" - \"invoicedQty\") - \"cancelledQty\")")) @db.Decimal(18, 3)
+  allocatedQty         Decimal  @default(0) @db.Decimal(18, 3)
+  unitRate             Decimal  @db.Decimal(18, 4)
+  taxRate              Decimal  @default(0) @db.Decimal(7, 4)
+  status               String   @default("WAITING")
+  lastInvoiceId        String?  @db.Uuid
+  createdAt            DateTime @default(now()) @db.Timestamptz(6)
+  createdBy            String?  @db.Uuid
+  updatedAt            DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy            String?  @db.Uuid
+  rowVersion           Int      @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BackOrderAllocations {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  backorderLineId   String    @db.Uuid
+  allocationGroupId String    @db.Uuid
+  grnId             String    @db.Uuid
+  grnLineId         String?   @db.Uuid
+  batchId           String?   @db.Uuid
+  qty               Decimal   @db.Decimal(18, 3)
+  policy            String
+  status            String    @default("ALLOCATED")
+  allocatedAt       DateTime  @default(now()) @db.Timestamptz(6)
+  allocatedByUserId String?   @db.Uuid
+  invoiceId         String?   @db.Uuid
+  invoicedAt        DateTime? @db.Timestamptz(6)
+  releasedAt        DateTime? @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model BackOrderCancellations {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  backorderLineId   String    @db.Uuid
+  cancelledQty      Decimal   @db.Decimal(18, 3)
+  reason            String
+  note              String?
+  smsNotified       Boolean   @default(false)
+  smsSentAt         DateTime? @db.Timestamptz(6)
+  cancelledAt       DateTime  @default(now()) @db.Timestamptz(6)
+  cancelledByUserId String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, backorderLineId])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+// ---------------------------------------------------------------- Phase 27: assets & budgets
+model FixedAssets {
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                  String    @db.Uuid
+  code                      String
+  name                      String
+  description               String?
+  categoryId                String    @db.Uuid
+  branchId                  String    @db.Uuid
+  custodianEmployeeId       String?   @db.Uuid
+  costCentreId              String?   @db.Uuid
+  tagNo                     String?
+  serialNo                  String?
+  acquisitionDate           DateTime  @db.Date
+  cost                      Decimal   @db.Decimal(18, 2)
+  sourceDocType             String?
+  sourceDocId               String?   @db.Uuid
+  sourceDocNo               String?
+  vendorId                  String?   @db.Uuid
+  method                    String
+  ratePct                   Decimal?  @db.Decimal(7, 4)
+  residualValue             Decimal   @default(0) @db.Decimal(18, 2)
+  chargeFullMonthOnPurchase Boolean   @default(true)
+  costAccountId             String    @db.Uuid
+  accumDepAccountId         String?   @db.Uuid
+  depExpenseAccountId       String?   @db.Uuid
+  accumulatedDepreciation   Decimal   @default(0) @db.Decimal(18, 2)
+  nbv                       Decimal?  @default(dbgenerated("(cost - \"accumulatedDepreciation\")")) @db.Decimal(18, 2)
+  depreciatedThrough        DateTime? @db.Date
+  taxWdv                    Decimal?  @db.Decimal(18, 2)
+  registrationNo            String?
+  engineNo                  String?
+  chassisNo                 String?
+  insurer                   String?
+  insurancePolicyNo         String?
+  insurancePremium          Decimal?  @db.Decimal(18, 2)
+  insuranceExpiry           DateTime? @db.Date
+  lastVerifiedOn            DateTime? @db.Date
+  status                    String    @default("NEW")
+  disposedOn                DateTime? @db.Date
+  capitalisedByUserId       String?   @db.Uuid
+  deletedAt                 DateTime? @db.Timestamptz(6)
+  createdAt                 DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy                 String?   @db.Uuid
+  updatedAt                 DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy                 String?   @db.Uuid
+  rowVersion                Int       @default(0)
+  sourceDocLineId           String?   @db.Uuid
+
+  @@unique([tenantId, code], map: "assetCodeUk")
+  @@unique([tenantId, id], map: "assetTenantIdUk")
+  @@schema("FixedAssets")
+}
+
+model DepreciationRuns {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String    @db.Uuid
+  docNo             String
+  fiscalPeriodId    String    @db.Uuid
+  postingDate       DateTime  @db.Date
+  branchId          String?   @db.Uuid
+  categoryId        String?   @db.Uuid
+  status            String    @default("DRAFT")
+  assetsCount       Int       @default(0)
+  skippedCount      Int       @default(0)
+  totalDepreciation Decimal   @default(0) @db.Decimal(18, 2)
+  nbvBefore         Decimal?  @db.Decimal(18, 2)
+  nbvAfter          Decimal?  @db.Decimal(18, 2)
+  computedAt        DateTime? @db.Timestamptz(6)
+  computedByUserId  String?   @db.Uuid
+  emailSummary      Boolean   @default(true)
+  notifyUserId      String?   @db.Uuid
+  journalEntryId    String?   @db.Uuid
+  postedAt          DateTime? @db.Timestamptz(6)
+  postedByUserId    String?   @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy         String?   @db.Uuid
+  updatedAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy         String?   @db.Uuid
+  rowVersion        Int       @default(0)
+
+  @@unique([tenantId, docNo], map: "depreciationRunDocNoUk")
+  @@unique([tenantId, id, fiscalPeriodId], map: "depreciationRunPeriodUk")
+  @@unique([tenantId, id], map: "depreciationRunTenantIdUk")
+  @@schema("FixedAssets")
+}
+
+model DepreciationRunLines {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId          String   @db.Uuid
+  depreciationRunId String   @db.Uuid
+  fiscalPeriodId    String   @db.Uuid
+  assetId           String   @db.Uuid
+  categoryId        String   @db.Uuid
+  branchId          String   @db.Uuid
+  costCentreId      String?  @db.Uuid
+  method            String
+  ratePct           Decimal  @db.Decimal(7, 4)
+  months            Decimal  @default(1) @db.Decimal(5, 2)
+  openingNbv        Decimal  @db.Decimal(18, 2)
+  charge            Decimal  @db.Decimal(18, 2)
+  closingNbv        Decimal? @default(dbgenerated("(\"openingNbv\" - charge)")) @db.Decimal(18, 2)
+  expenseAccountId  String   @db.Uuid
+  accumDepAccountId String   @db.Uuid
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  createdBy         String?  @db.Uuid
+  updatedAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy         String?  @db.Uuid
+  rowVersion        Int      @default(0)
+
+  @@unique([tenantId, assetId, fiscalPeriodId], map: "depreciationRunLineAssetPeriodUk")
+  @@unique([tenantId, id], map: "depreciationRunLineTenantIdUk")
+  @@schema("FixedAssets")
+}
+
+model DepreciationSchedules {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String   @db.Uuid
+  assetId      String   @db.Uuid
+  fiscalYearId String   @db.Uuid
+  openingNbv   Decimal  @db.Decimal(18, 2)
+  months       Int      @db.SmallInt
+  monthsPosted Int      @default(0) @db.SmallInt
+  depreciation Decimal  @db.Decimal(18, 2)
+  accumulated  Decimal  @db.Decimal(18, 2)
+  closingNbv   Decimal? @default(dbgenerated("(\"openingNbv\" - depreciation)")) @db.Decimal(18, 2)
+  status       String
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  createdBy    String?  @db.Uuid
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy    String?  @db.Uuid
+  rowVersion   Int      @default(0)
+
+  @@unique([tenantId, id], map: "depreciationScheduleTenantIdUk")
+  @@unique([tenantId, assetId, fiscalYearId], map: "depreciationScheduleUk")
+  @@schema("FixedAssets")
+}
+
+model AssetTransfers {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                String    @db.Uuid
+  assetId                 String    @db.Uuid
+  fromBranchId            String    @db.Uuid
+  toBranchId              String    @db.Uuid
+  fromCustodianEmployeeId String?   @db.Uuid
+  toCustodianEmployeeId   String?   @db.Uuid
+  effectiveDate           DateTime  @db.Date
+  reason                  String?
+  status                  String    @default("PENDING_APPROVAL")
+  requestedByUserId       String?   @db.Uuid
+  approvedByUserId        String?   @db.Uuid
+  approvedAt              DateTime? @db.Timestamptz(6)
+  completedAt             DateTime? @db.Timestamptz(6)
+  createdAt               DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy               String?   @db.Uuid
+  updatedAt               DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy               String?   @db.Uuid
+  rowVersion              Int       @default(0)
+
+  @@unique([tenantId, id], map: "assetTransferTenantIdUk")
+  @@schema("FixedAssets")
+}
+
+model AssetDisposals {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                String    @db.Uuid
+  docNo                   String
+  assetId                 String    @db.Uuid
+  disposalDate            DateTime  @db.Date
+  disposalType            String
+  buyerName               String?
+  customerId              String?   @db.Uuid
+  cost                    Decimal   @db.Decimal(18, 2)
+  accumulatedDepreciation Decimal   @db.Decimal(18, 2)
+  nbv                     Decimal?  @default(dbgenerated("(cost - \"accumulatedDepreciation\")")) @db.Decimal(18, 2)
+  proceeds                Decimal   @default(0) @db.Decimal(18, 2)
+  taxCodeId               String?   @db.Uuid
+  gstRate                 Decimal   @default(0) @db.Decimal(7, 4)
+  gstAmount               Decimal   @default(0) @db.Decimal(18, 2)
+  gainLoss                Decimal?  @default(dbgenerated("(proceeds - (cost - \"accumulatedDepreciation\"))")) @db.Decimal(18, 2)
+  receiveIntoAccountId    String?   @db.Uuid
+  gainAccountId           String?   @db.Uuid
+  lossAccountId           String?   @db.Uuid
+  outputTaxAccountId      String?   @db.Uuid
+  status                  String    @default("DRAFT")
+  submittedAt             DateTime? @db.Timestamptz(6)
+  approvedByUserId        String?   @db.Uuid
+  approvedAt              DateTime? @db.Timestamptz(6)
+  journalEntryId          String?   @db.Uuid
+  postedAt                DateTime? @db.Timestamptz(6)
+  remarks                 String?
+  createdAt               DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy               String?   @db.Uuid
+  updatedAt               DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy               String?   @db.Uuid
+  rowVersion              Int       @default(0)
+
+  @@unique([tenantId, docNo], map: "assetDisposalDocNoUk")
+  @@unique([tenantId, id], map: "assetDisposalTenantIdUk")
+  @@schema("FixedAssets")
+}
+
+model Budgets {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String    @db.Uuid
+  code                String
+  name                String
+  fiscalYearId        String    @db.Uuid
+  budgetType          String
+  scopeLabel          String?
+  department          String?
+  costCentreId        String?   @db.Uuid
+  projectId           String?   @db.Uuid
+  branchId            String?   @db.Uuid
+  ownerUserId         String?   @db.Uuid
+  seedFrom            String    @default("BLANK")
+  seedUpliftPct       Decimal?  @db.Decimal(7, 4)
+  requiresCeoApproval Boolean   @default(true)
+  currentVersionId    String?   @db.Uuid
+  status              String    @default("DRAFT")
+  approvedByUserId    String?   @db.Uuid
+  approvedAt          DateTime? @db.Timestamptz(6)
+  createdAt           DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy           String?   @db.Uuid
+  updatedAt           DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy           String?   @db.Uuid
+  rowVersion          Int       @default(0)
+
+  @@unique([tenantId, code], map: "budgetCodeUk")
+  @@unique([tenantId, id], map: "budgetTenantIdUk")
+  @@schema("Accounting")
+}
+
+model BudgetVersions {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String    @db.Uuid
+  budgetId         String    @db.Uuid
+  versionNo        Int       @db.SmallInt
+  status           String    @default("DRAFT")
+  notes            String?
+  approvedByUserId String?   @db.Uuid
+  approvedAt       DateTime? @db.Timestamptz(6)
+  createdAt        DateTime  @default(now()) @db.Timestamptz(6)
+  createdBy        String?   @db.Uuid
+  updatedAt        DateTime  @default(now()) @db.Timestamptz(6)
+  updatedBy        String?   @db.Uuid
+  rowVersion       Int       @default(0)
+
+  @@unique([tenantId, budgetId, versionNo], map: "budgetVersionNoUk")
+  @@unique([tenantId, id], map: "budgetVersionTenantIdUk")
+  @@schema("Accounting")
+}
+
+model BudgetVersionLines {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String   @db.Uuid
+  budgetVersionId String   @db.Uuid
+  accountId       String   @db.Uuid
+  costCentreId    String?  @db.Uuid
+  m01             Decimal  @default(0) @db.Decimal(18, 2)
+  m02             Decimal  @default(0) @db.Decimal(18, 2)
+  m03             Decimal  @default(0) @db.Decimal(18, 2)
+  m04             Decimal  @default(0) @db.Decimal(18, 2)
+  m05             Decimal  @default(0) @db.Decimal(18, 2)
+  m06             Decimal  @default(0) @db.Decimal(18, 2)
+  m07             Decimal  @default(0) @db.Decimal(18, 2)
+  m08             Decimal  @default(0) @db.Decimal(18, 2)
+  m09             Decimal  @default(0) @db.Decimal(18, 2)
+  m10             Decimal  @default(0) @db.Decimal(18, 2)
+  m11             Decimal  @default(0) @db.Decimal(18, 2)
+  m12             Decimal  @default(0) @db.Decimal(18, 2)
+  totalAmount     Decimal? @default(dbgenerated("(((((((((((m01 + m02) + m03) + m04) + m05) + m06) + m07) + m08) + m09) + m10) + m11) + m12)")) @db.Decimal(18, 2)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  createdBy       String?  @db.Uuid
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedBy       String?  @db.Uuid
+  rowVersion      Int      @default(0)
+
+  @@unique([tenantId, id], map: "budgetLineTenantIdUk")
+  @@unique([tenantId, budgetVersionId, accountId, costCentreId], map: "budgetLineUk")
+  @@schema("Accounting")
+}
+model LoadSheets {
+  id                                                           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                     String              @db.Uuid
+  branchId                                                     String?             @db.Uuid
+  docNo                                                        String
+  docDate                                                      DateTime            @db.Date
+  routeId                                                      String              @db.Uuid
+  vehicleId                                                    String              @db.Uuid
+  driverEmployeeId                                             String              @db.Uuid
+  salesmanEmployeeId                                           String?             @db.Uuid
+  sourceWarehouseId                                            String              @db.Uuid
+  vanWarehouseId                                               String?             @db.Uuid
+  departureTime                                                DateTime            @db.Time(6)
+  loadSheetNo                                                  String?
+  gatePassNo                                                   String?
+  sealNo                                                       String?
+  returnableCrates                                             Int                 @default(0)
+  invoiceCount                                                 Int                 @default(0)
+  shopCount                                                    Int                 @default(0)
+  skuCount                                                     Int                 @default(0)
+  totalCtn                                                     Decimal             @default(0) @db.Decimal(18, 3)
+  totalLoose                                                   Decimal             @default(0) @db.Decimal(18, 3)
+  totalPcs                                                     Decimal             @default(0) @db.Decimal(18, 3)
+  totalCtnEquiv                                                Decimal             @default(0) @db.Decimal(18, 3)
+  totalKg                                                      Decimal             @default(0) @db.Decimal(18, 3)
+  totalValue                                                   Decimal             @default(0) @db.Decimal(18, 2)
+  capacityCtn                                                  Decimal             @db.Decimal(10, 2)
+  capacityKg                                                   Decimal             @db.Decimal(10, 2)
+  capacityCtnPct                                               Decimal?            @default(dbgenerated("round(((\"totalCtnEquiv\" * (100)::numeric) / \"capacityCtn\"), 4)")) @db.Decimal(9, 4)
+  capacityKgPct                                                Decimal?            @default(dbgenerated("round(((\"totalKg\" * (100)::numeric) / \"capacityKg\"), 4)")) @db.Decimal(9, 4)
+  status                                                       String              @default("LOADING")
+  preparedByUserId                                             String?             @db.Uuid
+  checkedByUserId                                              String?             @db.Uuid
+  loadSheetPrintedAt                                           DateTime?           @db.Timestamptz(6)
+  gatePassPrintedAt                                            DateTime?           @db.Timestamptz(6)
+  stockTransferId                                              String?             @db.Uuid
+  dispatchedAt                                                 DateTime?           @db.Timestamptz(6)
+  dispatchedByUserId                                           String?             @db.Uuid
+  returnedAt                                                   DateTime?           @db.Timestamptz(6)
+  cancelledAt                                                  DateTime?           @db.Timestamptz(6)
+  remarks                                                      String?
+  createdAt                                                    DateTime            @default(now()) @db.Timestamptz(6)
+  createdBy                                                    String?             @db.Uuid
+  updatedAt                                                    DateTime            @default(now()) @db.Timestamptz(6)
+  updatedBy                                                    String?             @db.Uuid
+  rowVersion                                                   Int                 @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model LoadSheetLines {
+  id             String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String          @db.Uuid
+  deliveryRunId  String          @db.Uuid
+  itemId         String          @db.Uuid
+  batchId        String?         @db.Uuid
+  shelfCode      String?
+  unitsPerCtn    Decimal         @default(1) @db.Decimal(18, 3)
+  qtyCtn         Decimal         @default(0) @db.Decimal(18, 3)
+  qtyLoose       Decimal         @default(0) @db.Decimal(18, 3)
+  baseQty        Decimal?        @default(dbgenerated("((\"qtyCtn\" * \"unitsPerCtn\") + \"qtyLoose\")")) @db.Decimal(18, 3)
+  ctnEquiv       Decimal?        @default(dbgenerated("round((((\"qtyCtn\" * \"unitsPerCtn\") + \"qtyLoose\") / \"unitsPerCtn\"), 3)")) @db.Decimal(18, 3)
+  weightKg       Decimal         @default(0) @db.Decimal(18, 3)
+  valueAmount    Decimal         @default(0) @db.Decimal(18, 2)
+  isPicked       Boolean         @default(false)
+  pickedAt       DateTime?       @db.Timestamptz(6)
+  pickedByUserId String?         @db.Uuid
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  createdBy      String?         @db.Uuid
+  updatedAt      DateTime        @default(now()) @db.Timestamptz(6)
+  updatedBy      String?         @db.Uuid
+  rowVersion     Int             @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model LoadSheetInvoices {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String        @db.Uuid
+  deliveryRunId String        @db.Uuid
+  invoiceId     String        @db.Uuid
+  customerId    String        @db.Uuid
+  stopSeq       Int?
+  lineCount     Int           @default(0)
+  ctnEquiv      Decimal       @default(0) @db.Decimal(18, 3)
+  invoiceAmount Decimal       @db.Decimal(18, 2)
+  releasedAt    DateTime?     @db.Timestamptz(6)
+  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+  createdBy     String?       @db.Uuid
+  updatedAt     DateTime      @default(now()) @db.Timestamptz(6)
+  updatedBy     String?       @db.Uuid
+  rowVersion    Int           @default(0)
+
+  @@unique([tenantId, deliveryRunId, invoiceId])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model RouteSettlements {
+  id                        String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                  String                      @db.Uuid
+  branchId                  String?                     @db.Uuid
+  docNo                     String
+  docDate                   DateTime                    @db.Date
+  deliveryRunId             String                      @db.Uuid
+  salesmanEmployeeId        String?                     @db.Uuid
+  cashAccountId             String?                     @db.Uuid
+  invoiceTotal              Decimal                     @default(0) @db.Decimal(18, 2)
+  returnTotal               Decimal                     @default(0) @db.Decimal(18, 2)
+  returnCostTotal           Decimal                     @default(0) @db.Decimal(18, 2)
+  cashExpected              Decimal                     @default(0) @db.Decimal(18, 2)
+  cashCounted               Decimal                     @default(0) @db.Decimal(18, 2)
+  cashShortAmount           Decimal?                    @default(dbgenerated("GREATEST((\"cashExpected\" - \"cashCounted\"), (0)::numeric)")) @db.Decimal(18, 2)
+  cashOverAmount            Decimal?                    @default(dbgenerated("GREATEST((\"cashCounted\" - \"cashExpected\"), (0)::numeric)")) @db.Decimal(18, 2)
+  chequeTotal               Decimal                     @default(0) @db.Decimal(18, 2)
+  creditTotal               Decimal                     @default(0) @db.Decimal(18, 2)
+  unexplainedShortTotal     Decimal                     @default(0) @db.Decimal(18, 2)
+  unexplainedExcessTotal    Decimal                     @default(0) @db.Decimal(18, 2)
+  stockVarianceLines        Int                         @default(0)
+  stockVarianceValue        Decimal                     @default(0) @db.Decimal(18, 2)
+  status                    String                      @default("OPEN")
+  returnTransferId          String?                     @db.Uuid
+  journalEntryId            String?                     @db.Uuid
+  postedAt                  DateTime?                   @db.Timestamptz(6)
+  postedByUserId            String?                     @db.Uuid
+  remarks                   String?
+  createdAt                 DateTime                    @default(now()) @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  updatedAt                 DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedBy                 String?                     @db.Uuid
+  rowVersion                Int                         @default(0)
+
+  @@unique([tenantId, deliveryRunId])
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model RouteSettlementLines {
+  id                     String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String                   @db.Uuid
+  runSettlementId        String                   @db.Uuid
+  lineNo                 Int                      @db.SmallInt
+  invoiceId              String                   @db.Uuid
+  customerId             String                   @db.Uuid
+  invoiceAmount          Decimal                  @db.Decimal(18, 2)
+  returnAmount           Decimal                  @default(0) @db.Decimal(18, 2)
+  netAmount              Decimal?                 @default(dbgenerated("GREATEST((\"invoiceAmount\" - \"returnAmount\"), (0)::numeric)")) @db.Decimal(18, 2)
+  deliveryState          String                   @default("FULL")
+  nonDeliveryReason      String?
+  cashAmount             Decimal                  @default(0) @db.Decimal(18, 2)
+  chequeAmount           Decimal                  @default(0) @db.Decimal(18, 2)
+  creditAmount           Decimal                  @default(0) @db.Decimal(18, 2)
+  differenceAmount       Decimal?                 @default(dbgenerated("(((GREATEST((\"invoiceAmount\" - \"returnAmount\"), (0)::numeric) - \"cashAmount\") - \"chequeAmount\") - \"creditAmount\")")) @db.Decimal(18, 2)
+  receiptId              String?                  @db.Uuid
+  salesReturnId          String?                  @db.Uuid
+  createdAt              DateTime                 @default(now()) @db.Timestamptz(6)
+  createdBy              String?                  @db.Uuid
+  updatedAt              DateTime                 @default(now()) @db.Timestamptz(6)
+  updatedBy              String?                  @db.Uuid
+  rowVersion             Int                      @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, id, runSettlementId])
+  @@unique([tenantId, runSettlementId, invoiceId])
+  @@unique([tenantId, runSettlementId, lineNo])
+  @@schema("Distribution")
+}
+
+model RouteSettlementCashCounts {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String           @db.Uuid
+  runSettlementId  String           @db.Uuid
+  denomination     Int
+  noteCount        Int              @default(0)
+  amount           Decimal?         @default(dbgenerated("((denomination)::numeric * (\"noteCount\")::numeric)")) @db.Decimal(18, 2)
+  createdAt        DateTime         @default(now()) @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  updatedAt        DateTime         @default(now()) @db.Timestamptz(6)
+  updatedBy        String?          @db.Uuid
+  rowVersion       Int              @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, runSettlementId, denomination])
+  @@schema("Distribution")
+}
+
+model RouteSettlementCheques {
+  id                   String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String               @db.Uuid
+  runSettlementId      String               @db.Uuid
+  settlementLineId     String               @db.Uuid
+  chequeNo             String
+  bankId               String?              @db.Uuid
+  bankName             String
+  chequeDate           DateTime             @db.Date
+  amount               Decimal              @db.Decimal(18, 2)
+  chequeId             String?              @db.Uuid
+  createdAt            DateTime             @default(now()) @db.Timestamptz(6)
+  createdBy            String?              @db.Uuid
+  updatedAt            DateTime             @default(now()) @db.Timestamptz(6)
+  updatedBy            String?              @db.Uuid
+  rowVersion           Int                  @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, settlementLineId, chequeNo])
+  @@schema("Distribution")
+}
+
+model RouteSettlementReturns {
+  id                   String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String               @db.Uuid
+  runSettlementId      String               @db.Uuid
+  settlementLineId     String               @db.Uuid
+  invoiceLineId        String               @db.Uuid
+  itemId               String               @db.Uuid
+  batchId              String?              @db.Uuid
+  suppliedQty          Decimal              @db.Decimal(18, 3)
+  returnQty            Decimal              @db.Decimal(18, 3)
+  unitPrice            Decimal              @db.Decimal(18, 4)
+  returnValue          Decimal?             @default(dbgenerated("round((\"returnQty\" * \"unitPrice\"), 2)")) @db.Decimal(18, 2)
+  unitCost             Decimal              @db.Decimal(18, 4)
+  costValue            Decimal?             @default(dbgenerated("round((\"returnQty\" * \"unitCost\"), 2)")) @db.Decimal(18, 2)
+  reason               String
+  createdAt            DateTime             @default(now()) @db.Timestamptz(6)
+  createdBy            String?              @db.Uuid
+  updatedAt            DateTime             @default(now()) @db.Timestamptz(6)
+  updatedBy            String?              @db.Uuid
+  rowVersion           Int                  @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, settlementLineId, invoiceLineId])
+  @@schema("Distribution")
+}
+
+model RecoverySheets {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String               @db.Uuid
+  branchId           String?              @db.Uuid
+  docNo              String
+  docDate            DateTime             @db.Date
+  salesmanEmployeeId String?              @db.Uuid
+  routeId            String?              @db.Uuid
+  shopCount          Int                  @default(0)
+  targetAmount       Decimal              @default(0) @db.Decimal(18, 2)
+  outstandingTotal   Decimal              @default(0) @db.Decimal(18, 2)
+  collectedTotal     Decimal              @default(0) @db.Decimal(18, 2)
+  postedTotal        Decimal              @default(0) @db.Decimal(18, 2)
+  status             String               @default("OPEN")
+  printedAt          DateTime?            @db.Timestamptz(6)
+  createdAt          DateTime             @default(now()) @db.Timestamptz(6)
+  createdBy          String?              @db.Uuid
+  updatedAt          DateTime             @default(now()) @db.Timestamptz(6)
+  updatedBy          String?              @db.Uuid
+  rowVersion         Int                  @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model RecoverySheetLines {
+  id                   String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String            @db.Uuid
+  recoverySheetId      String            @db.Uuid
+  lineNo               Int
+  customerId           String            @db.Uuid
+  outstandingAmount    Decimal           @db.Decimal(18, 2)
+  age030               Decimal           @default(0) @db.Decimal(18, 2)
+  age3160              Decimal           @default(0) @db.Decimal(18, 2)
+  age6190              Decimal           @default(0) @db.Decimal(18, 2)
+  age90Plus            Decimal           @default(0) @db.Decimal(18, 2)
+  creditLimit          Decimal?          @db.Decimal(18, 2)
+  lastPaymentDate      DateTime?         @db.Date
+  lastPaymentAmount    Decimal?          @db.Decimal(18, 2)
+  targetAmount         Decimal           @default(0) @db.Decimal(18, 2)
+  collectedAmount      Decimal           @default(0) @db.Decimal(18, 2)
+  mode                 String            @default("CASH")
+  remarks              String?
+  chequeId             String?           @db.Uuid
+  depositBankAccountId String?           @db.Uuid
+  promiseToPayDate     DateTime?         @db.Date
+  remindedAt           DateTime?         @db.Timestamptz(6)
+  reminderLanguage     String?
+  status               String            @default("PENDING")
+  receiptId            String?           @db.Uuid
+  postedAt             DateTime?         @db.Timestamptz(6)
+  postedByUserId       String?           @db.Uuid
+  createdAt            DateTime          @default(now()) @db.Timestamptz(6)
+  createdBy            String?           @db.Uuid
+  updatedAt            DateTime          @default(now()) @db.Timestamptz(6)
+  updatedBy            String?           @db.Uuid
+  rowVersion           Int               @default(0)
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, recoverySheetId, customerId])
+  @@unique([tenantId, recoverySheetId, lineNo])
+  @@schema("Distribution")
+}
+
+model SalesmanTargets {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String               @db.Uuid
+  employeeId          String               @db.Uuid
+  role                String
+  routeId             String?              @db.Uuid
+  periodStart         DateTime             @db.Date
+  periodEnd           DateTime             @db.Date
+  fiscalPeriodId      String?              @db.Uuid
+  targetAmount        Decimal              @db.Decimal(18, 2)
+  achievedAmount      Decimal              @default(0) @db.Decimal(18, 2)
+  achievementPct      Decimal?             @default(dbgenerated("round(((\"achievedAmount\" * (100)::numeric) / \"targetAmount\"), 4)")) @db.Decimal(9, 4)
+  calls               Int                  @default(0)
+  productiveCalls     Int                  @default(0)
+  status              String               @default("OPEN")
+  createdAt           DateTime             @default(now()) @db.Timestamptz(6)
+  createdBy           String?              @db.Uuid
+  updatedAt           DateTime             @default(now()) @db.Timestamptz(6)
+  updatedBy           String?              @db.Uuid
+  rowVersion          Int                  @default(0)
+
+  @@unique([tenantId, employeeId, role, periodStart])
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model SalesmanCommissions {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String          @db.Uuid
+  employeeId       String          @db.Uuid
+  salesTargetId    String          @db.Uuid
+  periodStart      DateTime        @db.Date
+  periodEnd        DateTime        @db.Date
+  targetAmount     Decimal         @db.Decimal(18, 2)
+  achievedAmount   Decimal         @db.Decimal(18, 2)
+  achievementPct   Decimal         @db.Decimal(9, 4)
+  commissionSlabId String          @db.Uuid
+  ratePct          Decimal         @db.Decimal(7, 4)
+  commissionAmount Decimal         @db.Decimal(18, 2)
+  status           String          @default("DRAFT")
+  approvedByUserId String?         @db.Uuid
+  approvedAt       DateTime?       @db.Timestamptz(6)
+  journalEntryId   String?         @db.Uuid
+  paidAt           DateTime?       @db.Timestamptz(6)
+  createdAt        DateTime        @default(now()) @db.Timestamptz(6)
+  createdBy        String?         @db.Uuid
+  updatedAt        DateTime        @default(now()) @db.Timestamptz(6)
+  updatedBy        String?         @db.Uuid
+  rowVersion       Int             @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model CreditOverrideLogs {
+  id                                                         String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                   String           @db.Uuid
+  customerId                                                 String           @db.Uuid
+  invoiceId                                                  String?          @db.Uuid
+  heldBillId                                                 String?          @db.Uuid
+  creditOverrideId                                           String?          @db.Uuid
+  triggerPoint                                               String
+  creditLimit                                                Decimal          @db.Decimal(18, 2)
+  outstandingAmount                                          Decimal          @db.Decimal(18, 2)
+  billAmount                                                 Decimal          @db.Decimal(18, 2)
+  usedAmount                                                 Decimal?         @default(dbgenerated("(\"outstandingAmount\" + \"billAmount\")")) @db.Decimal(18, 2)
+  overByAmount                                               Decimal?         @default(dbgenerated("GREATEST(((\"outstandingAmount\" + \"billAmount\") - \"creditLimit\"), (0)::numeric)")) @db.Decimal(18, 2)
+  usedPct                                                    Decimal          @db.Decimal(9, 4)
+  overdueDays                                                Int              @default(0)
+  requestedByUserId                                          String?          @db.Uuid
+  approvedByUserId                                           String?          @db.Uuid
+  attempts                                                   Int              @default(0) @db.SmallInt
+  lastPinResult                                              String?
+  outcome                                                    String           @default("PENDING")
+  lockedUntil                                                DateTime?        @db.Timestamptz(6)
+  requestedAt                                                DateTime         @default(now()) @db.Timestamptz(6)
+  resolvedAt                                                 DateTime?        @db.Timestamptz(6)
+  createdAt                                                  DateTime         @default(now()) @db.Timestamptz(6)
+  createdBy                                                  String?          @db.Uuid
+  updatedAt                                                  DateTime         @default(now()) @db.Timestamptz(6)
+  updatedBy                                                  String?          @db.Uuid
+  rowVersion                                                 Int              @default(0)
+
+  @@unique([tenantId, id])
+  @@schema("Distribution")
+}
+
+model CreditOverrides {
+  id                                                                         String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                                                                   String               @db.Uuid
+  docNo                                                                      String
+  customerId                                                                 String               @db.Uuid
+  overrideType                                                               String
+  invoiceId                                                                  String?              @db.Uuid
+  salesOrderId                                                               String?              @db.Uuid
+  documentAmount                                                             Decimal?             @db.Decimal(18, 2)
+  creditLimitSnapshot                                                        Decimal              @db.Decimal(18, 2)
+  balanceSnapshot                                                            Decimal              @db.Decimal(18, 2)
+  exposureAfter                                                              Decimal?             @db.Decimal(18, 2)
+  overdueSnapshot                                                            Decimal              @default(0) @db.Decimal(18, 2)
+  exceedByAmount                                                             Decimal?             @db.Decimal(18, 2)
+  tempLimitAmount                                                            Decimal?             @db.Decimal(18, 2)
+  validUntil                                                                 DateTime?            @db.Date
+  requestReason                                                              String?
+  conditionComments                                                          String?
+  approvalMethod                                                             String               @default("APPROVAL")
+  requestedByUserId                                                          String               @db.Uuid
+  requestedAt                                                                DateTime             @default(now()) @db.Timestamptz(6)
+  approverUserId                                                             String?              @db.Uuid
+  decidedByUserId                                                            String?              @db.Uuid
+  decidedAt                                                                  DateTime?            @db.Timestamptz(6)
+  status                                                                     String               @default("PENDING")
+  createdAt                                                                  DateTime             @default(now()) @db.Timestamptz(6)
+  createdBy                                                                  String?              @db.Uuid
+  updatedAt                                                                  DateTime             @default(now()) @db.Timestamptz(6)
+  updatedBy                                                                  String?              @db.Uuid
+  rowVersion                                                                 Int                  @default(0)
+
+  @@unique([tenantId, docNo])
+  @@unique([tenantId, id])
+  @@schema("Sales")
+}
+

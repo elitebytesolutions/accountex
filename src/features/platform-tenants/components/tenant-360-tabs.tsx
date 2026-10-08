@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  ArrowRight, ArrowUpDown, CalendarPlus, Gauge, History, KeyRound, LogOut, MoreHorizontal, Pencil, Plus, Receipt, Repeat, Rocket, Search, ShieldCheck,
+  ArrowRight, ArrowUpDown, CalendarPlus, Gauge, History, KeyRound, LogOut, MoreHorizontal, Pencil, Plus, Repeat, Rocket, Search, ShieldCheck,
   SlidersHorizontal, UserPlus, UserSearch, VenetianMask, Webhook, XCircle,
 } from "lucide-react";
 import Link from "next/link";
@@ -19,6 +19,7 @@ import { addTenantContact, addTenantNote, endImpersonation, revokeUsageOverride,
 import type { SubscriptionAction } from "./subscription-actions";
 import { asList, Avatar, daysTo, fmt, fmtDate, fmtDateTime, Meter, meterTone, MODULES, relDays, rs, short, StatusBadge, USAGE_METRICS } from "./tenant-ui";
 import { OverrideModal, pivotUsage, RefreshUsageButton, type TenantUsage } from "./usage-metering";
+import { TenantDunningPanel, TenantInvoicesPanel } from "@/features/platform-billing/components/tenant-billing";
 
 type LoadError = { message: string; reference?: string };
 
@@ -308,6 +309,7 @@ export function UsageTab({ tenant, usage, error, reload }: { tenant: TenantDetai
 const MOVE_TONE: Record<string, string> = { NEW: "good", EXPANSION: "good", REACTIVATION: "good", CONTRACTION: "warn", CHURN: "danger", NONE: "neutral" };
 export function BillingTab({ tenant, sub, lookups, onAction, reloadKey }: { tenant: TenantDetail; sub: SubscriptionDetail | null; lookups: LookupsResponse; onAction: (a: SubscriptionAction) => void; reloadKey: number }) {
   const [history, setHistory] = useState(false);
+  const [billingKey, setBillingKey] = useState(0);
   return (
     <div className="split ap-split-wide">
       <div className="stack">
@@ -331,10 +333,8 @@ export function BillingTab({ tenant, sub, lookups, onAction, reloadKey }: { tena
             </table></div>
           )}
         </div>
-        <div className="panel flush">
-          <div className="panel-head"><div><h3>Invoices</h3><p>Platform invoices for {tenant.code.toUpperCase()}</p></div></div>
-          <EmptyState icon={<Receipt />} title="No platform invoices yet" description="Invoicing and dunning cases arrive with platform billing (Phase 41)." />
-        </div>
+        {/* Phase 41: the company's platform invoices (row drawer, payments) */}
+        <TenantInvoicesPanel tenantId={tenant.id} tenantCode={tenant.code} lookups={lookups} hasSubscription={!!sub && sub.status !== "TRIAL"} onChanged={() => setBillingKey((n) => n + 1)} />
       </div>
       <div className="stack">
         <SubscriptionCard sub={sub} tenant={tenant} onAction={onAction} seatsUsed={tenant.users.filter((u) => u.status === "ACTIVE").length} />
@@ -349,6 +349,8 @@ export function BillingTab({ tenant, sub, lookups, onAction, reloadKey }: { tena
             </div>
           </div>
         )}
+        {/* Phase 41: dunning state (policy, stage track, open case) */}
+        <TenantDunningPanel tenantId={tenant.id} reloadKey={`${reloadKey}:${billingKey}`} />
       </div>
       {sub && (
         <Modal open={history} onClose={() => setHistory(false)} title="Subscription history" subtitle={`${sub.planName} · ${tenant.displayName}`} wide>

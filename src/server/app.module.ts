@@ -39,11 +39,22 @@ import { LedgerModule } from './modules/ledger/ledger.module.js';
 import { BankingModule } from './modules/banking/banking.module.js';
 import { CashModule } from './modules/cash/cash.module.js';
 import { PurchasingModule } from './modules/purchasing/purchasing.module.js';
+import { SalesModule } from './modules/sales/sales.module.js';
+import { WholesaleModule } from './modules/wholesale/wholesale.module.js';
+import { InventoryOpsModule } from './modules/inventory-ops/inventory-ops.module.js';
+import { ReceivablesOpsModule } from './modules/receivables-ops/receivables-ops.module.js';
 import { PlatformFlagsModule } from './modules/platform-admin/flags/platform-flags.module.js';
 import { WorkspaceFlagsModule } from './modules/workspace-flags/workspace-flags.module.js';
 import { PlatformTemplatesModule } from './modules/platform-admin/templates/templates.module.js';
 import { PlatformConfigModule } from './modules/platform-admin/config/platform-config.module.js';
 import { PlatformTenantLifecycleModule } from './modules/platform-admin/tenants/tenant-lifecycle.module.js';
+// Phase 42: growth & support (admin) and the workspace's Help & support / platform notices
+import { PlatformGrowthModule } from './modules/platform-admin/growth/growth.module.js';
+import { SupportDeskModule } from './modules/support-desk/support-desk.module.js';
+// Phase 41: platform billing (invoices, payments, dunning cases, reseller payouts, daily billing job)
+import { PlatformBillingModule } from './modules/platform-admin/billing/billing.module.js';
+// Phase 43: platform operations (incidents + status page, flag change requests, privacy requests, entitlement log)
+import { PlatformOperationsModule } from './modules/platform-admin/operations/platform-operations.module.js';
 
 @Module({
   imports: [
@@ -68,9 +79,14 @@ import { PlatformTenantLifecycleModule } from './modules/platform-admin/tenants/
     CashModule,
     TreasuryModule,
     AssetsModule,
+    // before InventoryModule: its /inventory/... routes are matched first
+    InventoryOpsModule,
     InventoryModule,
     PartiesModule,
     PurchasingModule,
+    SalesModule,
+    WholesaleModule,
+    ReceivablesOpsModule,
     SalesSetupModule,
     DistributionModule,
     ReceivablesModule,
@@ -86,6 +102,10 @@ import { PlatformTenantLifecycleModule } from './modules/platform-admin/tenants/
     PlatformTemplatesModule,
     PlatformConfigModule,
     PlatformTenantLifecycleModule,
+    PlatformGrowthModule,
+    SupportDeskModule,
+    PlatformBillingModule,
+    PlatformOperationsModule,
   ],
   controllers: [AppController],
   providers: [

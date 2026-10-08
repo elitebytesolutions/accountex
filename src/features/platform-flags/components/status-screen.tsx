@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/toast";
 import { AdminHistoryTab } from "@/features/admin-history/components/admin-history-tab";
 import { adminErrorMessage, adminFieldErrors } from "@/features/admin-common/errors";
 import { ApiError } from "@/lib/api/errors";
+import { IncidentsSection } from "@/features/platform-ops/components/incidents-section";
 import { cancelMaintenanceWindow, createMaintenanceWindow, listMaintenanceWindows, updateMaintenanceWindow } from "../api";
 
 const TZ = "Asia/Karachi";
@@ -32,7 +33,7 @@ const EMPTY: () => Form = () => ({ title: "Planned maintenance", date: tomorrow(
 
 /**
  * Template admin/status (3A-admin-plus.html, 9B-admin-plus.js ~1950): status banner, public status page and incidents
- * (Phase 43, shown empty), and the maintenance part: "Schedule maintenance" form with banner preview and "Upcoming
+ * (Phase 43: IncidentsSection), and the maintenance part: "Schedule maintenance" form with banner preview and "Upcoming
  * windows". Added: a read-only-mode switch (in the DB, not the template), edit and cancel of a window.
  */
 export function StatusScreen() {
@@ -47,6 +48,7 @@ export function StatusScreen() {
   const [cancelAsk, setCancelAsk] = useState<MaintenanceWindow | null>(null);
   const [history, setHistory] = useState<MaintenanceWindow | null>(null);
   const [now] = useState(() => Date.now());
+  const [declare, setDeclare] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -95,14 +97,10 @@ export function StatusScreen() {
       <PageHead eyebrow="System / Status & Incidents" title="Status & Incidents" description="What tenants see on the status page, live incident updates and planned maintenance."
         actions={<>
           <Link className="btn secondary" href="/admin/system"><HeartPulse />System health</Link>
-          <button type="button" className="btn danger" disabled title="Incidents arrive in Phase 43"><Siren />Declare incident</button>
+          <button type="button" className="btn danger" onClick={() => setDeclare(true)}><Siren />Declare incident</button>
         </>} />
 
-      <div className="ap-status-ban good"><span className="ap-sdot good" /><div><b>No incidents recorded</b><small>Incident tracking and uptime history arrive in Phase 43</small></div><span className="spacer" /><span className="badge good">No open incidents</span></div>
-      <div className="split ap-inc-split">
-        <div className="panel ap-incd"><EmptyState icon={<Siren />} title="No incident selected" description="Declared incidents and their updates appear here (Phase 43)." /></div>
-        <div className="panel"><div className="panel-head"><div><h3>Incidents</h3><p>Last 90 days</p></div></div><EmptyState title="No incidents" description="Nothing declared yet." /></div>
-      </div>
+      <IncidentsSection declareOpen={declare} onDeclareClose={() => setDeclare(false)} />
 
       <div className="grid-2 ap-maint">
         <div className="panel">

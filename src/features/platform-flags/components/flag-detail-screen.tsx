@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Activity, ArrowLeft, Archive, ArchiveRestore, BrushCleaning, CalendarX, Check, ChevronRight, CodeXml, Copy, FileDiff, Flag, GitBranch, History,
+  Activity, ArrowLeft, Archive, ArchiveRestore, BrushCleaning, Check, Clock, GitPullRequest, ChevronRight, CodeXml, Copy, FileDiff, Flag, GitBranch, History,
   Hourglass, Infinity as InfinityIcon, Link2, Link2Off, PencilLine, PencilRuler, Pin, Plus, Power, PowerOff, Rocket, Search, Timer, Trash2, Users, X,
 } from "lucide-react";
 import Link from "next/link";
@@ -17,6 +17,9 @@ import { useToast } from "@/components/ui/toast";
 import { AdminHistoryTab } from "@/features/admin-history/components/admin-history-tab";
 import { adminErrorMessage, adminFieldErrors } from "@/features/admin-common/errors";
 import { useAdminLookups } from "@/features/admin-common/use-admin-lookups";
+import { listChangeRequests } from "@/features/platform-ops/api";
+import { RequestChangeModal } from "@/features/platform-ops/components/request-change-modal";
+import { SchedulePanel } from "@/features/platform-ops/components/schedule-panel";
 import { ApiError } from "@/lib/api/errors";
 import { evaluateFlag, flagAudit, flagServed, getFlag, moveFlagStage, restoreFlag, saveFlagEnvironment, toggleFlag } from "../api";
 import { FlagEditModal } from "./flag-edit-modal";
@@ -85,7 +88,8 @@ const EVENT_ICON: Record<string, [React.ElementType, string]> = {
  * Template admin/features/view (9J-flags.js renderDetail): lifecycle stepper, environment tabs, targeting (on / off,
  * individual targets, rule builder, default rule with rollout slider and 100-bucket grid, off variation),
  * prerequisites, the audit log (FlagAuditLogs with diffs), About / Variations / Tenants served and the save bar.
- * Scheduled changes (Phase 43), evaluation insights and code references (telemetry) are empty.
+ * Phase 43: Production saves become a change request; the Scheduled changes panel plans ramp steps. Evaluation
+ * insights and code references (telemetry) are empty.
  */
 export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: string }) {
   const toast = useToast();
@@ -111,11 +115,15 @@ export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: 
   const [evalTenant, setEvalTenant] = useState("");
   const [evalResult, setEvalResult] = useState<FlagEvaluation | null>(null);
   const options = useFlagOptions(attempt);
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [pendingCr, setPendingCr] = useState<{ id: string; docNo: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([getFlag(id), flagAudit(id), flagServed(id, env)])
-      .then(([f, a, s]) => {
+    Promise.all([getFlag(id), flagAudit(id), flagServed(id, env), listChangeRequests("PENDING", id).catch(() => null)])
+      .then(([f, a, s, crs]) => {
+        const pc = crs?.items.find((c) => c.environment === env);
+        if (!cancelled) setPendingCr(pc ? { id: pc.id, docNo: pc.docNo } : null);
         if (cancelled) return;
         const e = f.environments.find((x) => x.environment === env) ?? f.environments[0]!;
         const d = draftOf(e);
@@ -150,6 +158,7 @@ export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: 
   const setDef = (p: Partial<FlagDefaultRuleInput>) => setDraft({ ...draft, defaultRule: { ...d, ...p } });
 
   const save = async () => {
+    if (env === "PRODUCTION") { setRequestOpen(true); return; }
     setBusy(true);
     try {
       await saveFlagEnvironment(flag.id, env, { envRowVersion: state.rowVersion, isOn: draft.isOn, targets: draft.targets, rules: draft.rules, defaultRule: draft.defaultRule, prerequisites: draft.prerequisites });
@@ -206,6 +215,8 @@ export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: 
 
       {archived && <div className="banner warn ff-banner"><Archive /><div><b>This flag is archived.</b> It is no longer evaluated and serves its off variation. Restore it to change it.</div>
         <button type="button" className="btn sm secondary" disabled={busy} onClick={() => run(() => restoreFlag(flag.id, flag.rowVersion), `${flag.key} restored to Cleanup`)}><ArchiveRestore />Restore</button></div>}
+      {pendingCr && <div className="banner warn ff-banner ff-pendbanner"><Clock /><div><b>{pendingCr.docNo} is waiting for approval in {envLabel(env)}.</b> Production changes apply once it is approved.</div>
+        <Link className="btn sm secondary" href={`/admin/change-requests?open=${pendingCr.id}`}><GitPullRequest />Review</Link></div>}
       {!archived && flag.staleReason && <div className="banner warn ff-banner"><Hourglass /><div><b>This flag looks stale.</b> {flag.staleReason}</div>
         {flag.stage !== "CLEANUP" && <button type="button" className="btn sm secondary" onClick={() => goStage("CLEANUP")}>Move to Cleanup</button>}</div>}
 
@@ -343,8 +354,7 @@ export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: 
             )}
           </div>
 
-          <div className="panel"><div className="panel-head"><div><h3>Scheduled changes</h3><p>A ramp plan. Each step opens a change request on its date.</p></div></div>
-            <div className="ff-rules-empty"><CalendarX />Scheduled ramps arrive with change requests (Phase 43).</div></div>
+          <SchedulePanel key={`${flag.id}-${env}-${flag.rowVersion}`} flag={flag} env={env} />
           <div className="panel"><div className="panel-head"><div><h3>Evaluation insights</h3><p>Evaluations per day in {envLabel(env)}, last 14 days</p></div></div>
             <div className="empty-state ff-empty"><span className="icon-well lg"><Activity /></span><b>No evaluation telemetry yet</b><small>SDK evaluation counts are not collected yet.</small></div></div>
 
@@ -406,13 +416,16 @@ export function FlagDetailScreen({ id, initialEnv }: { id: string; initialEnv?: 
       {dirty && !archived && (
         <div className="ff-savebar ff-sb-in">
           <span className="ff-sb-ic"><PencilLine /></span>
-          <div><b>Unsaved changes</b><small>Applies to {envLabel(env)} immediately{env === "PRODUCTION" ? " (approvals arrive in Phase 43)" : ""}</small></div>
+          <div><b>Unsaved changes</b><small>{env === "PRODUCTION" ? "Production is protected: saving opens a change request for a second approver" : `Applies to ${envLabel(env)} immediately`}</small></div>
           <span className="spacer" />
           <button type="button" className="btn ghost" onClick={() => { setDraft(JSON.parse(base) as Draft); setErrors({}); toast("Changes discarded", { tone: "info", ms: 1800 }); }}>Discard</button>
-          <button type="button" className={cn("btn", env === "PRODUCTION" ? "primary" : "lime")} disabled={busy} onClick={save}><Check />{busy ? "Saving…" : "Save changes"}</button>
+          <button type="button" className={cn("btn", env === "PRODUCTION" ? "primary" : "lime")} disabled={busy} onClick={save}>{env === "PRODUCTION" ? <><GitPullRequest />Request change</> : <><Check />{busy ? "Saving…" : "Save changes"}</>}</button>
         </div>
       )}
 
+      {requestOpen && <RequestChangeModal flag={flag} env={env} summary="Targeting change (diff on the request)"
+        change={{ kind: "TARGETING", input: { envRowVersion: state.rowVersion, isOn: draft.isOn, targets: draft.targets, rules: draft.rules, defaultRule: draft.defaultRule, prerequisites: draft.prerequisites } }}
+        onClose={() => setRequestOpen(false)} onDone={() => { setRequestOpen(false); reload(); }} />}
       {edit && <FlagEditModal flag={flag} options={options} onClose={() => setEdit(false)} onSaved={() => { setEdit(false); reload(); }} />}
       <Modal open={history} onClose={() => setHistory(false)} title="Flag history" subtitle={flag.key} wide>
         <AdminHistoryTab table="FeatureFlags" id={flag.id} reloadKey={attempt} labels={{ FlagEnvironments: "Environment", FlagVariations: "Variation", FlagRules: "Rule", FlagTargets: "Target", FlagPrerequisites: "Prerequisite", FlagDefaultRules: "Default rule" }} />

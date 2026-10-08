@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  CircleAlert, CircleCheck, Copy, FileKey, Globe, KeyRound, LogOut, Network, Plus, Scale, ScrollText, Shield, ShieldCheck, Smartphone, Timer, Unlock, Upload, UserCog, X,
+  CircleAlert, CircleCheck, Copy, FileKey, Globe, KeyRound, LogOut, Network, Plus, ScrollText, Shield, ShieldCheck, Smartphone, Timer, Unlock, Upload, UserCog, X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -12,6 +12,7 @@ import { PageHead } from "@/components/ui/page";
 import { Banner, EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { adminErrorMessage, adminFieldErrors } from "@/features/admin-common/errors";
+import { PrivacyPanel } from "@/features/platform-ops/components/privacy-panel";
 import { addAllowedIp, getSecuritySettings, listAllowedIps, removeAllowedIp, saveSecuritySettings } from "../api";
 import { copyText, useLoad } from "./config-ui";
 
@@ -47,7 +48,7 @@ function Ring({ score }: { score: number }) {
 /**
  * Super Admin › System › Security & Privacy (template admin/security, 3A-admin-plus.html:131 + 9B-admin-plus.js 1788+).
  * Enforced now on the Super Admin sign-in: the IP allow-list, lockout and password policy. SSO and two-factor are stored
- * and switch on with Phase 29. Admin sessions have no backing table yet; privacy requests are Phase 43.
+ * and switch on with Phase 29. Admin sessions have no backing table yet; privacy requests: PrivacyPanel (Phase 43).
  */
 export function SecurityScreen() {
   const toast = useToast();
@@ -265,11 +266,7 @@ export function SecurityScreen() {
           <div className="panel-actions"><button type="button" className="btn danger sm" disabled title="Console sessions are not tracked yet"><LogOut />Revoke all others</button></div></div>
         <EmptyState icon={<ScrollText />} title="Sessions are not tracked yet" description="The console uses a signed cookie with no session table; per-device sessions and revoke arrive with platform staff sign-in." />
       </div>
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Privacy requests</h3><p>Tenant data export and deletion. Statutory deadline: 30 days. Deletion needs two approvers.</p></div>
-          <div className="panel-actions"><span className="pill"><Scale />PECA 2016 · PDPB 2023 draft</span></div></div>
-        <EmptyState icon={<Scale />} title="No privacy requests" description="Export and deletion requests arrive with Phase 43." />
-      </div>
+      <PrivacyPanel />{/* Phase 43 */}
       {enforceRisk && <Banner tone="danger" title="Enforcing would lock you out">Your IP is outside the active ranges; the save will be refused until you add it.</Banner>}
     </>
   );

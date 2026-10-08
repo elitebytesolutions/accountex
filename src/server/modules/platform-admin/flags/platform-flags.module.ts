@@ -34,6 +34,7 @@ import { SdkKeysController } from './presentation/sdk-keys.controller.js';
     UsageAlertRulesService, { provide: UsageAlertRuleStore, useClass: PrismaUsageAlertRuleStore },
     AuditAlertRulesService, { provide: AuditAlertRuleStore, useClass: PrismaAuditAlertRuleStore },
   ],
-  exports: [FlagEvaluationService],
+  // FlagsService: Phase 43 change requests preview and apply Production changes through it.
+  exports: [FlagEvaluationService, FlagsService],
 })
 export class PlatformFlagsModule {}

@@ -1,0 +1,109 @@
+/* Phase 32: payroll overview (template app/hr/payroll, 19-dash.css) — the fd-* pieces not already ported by src/features/hr/attendance.css. Reveal animations are dropped (shown static). */
+.fd-sel{position:relative;display:inline-flex;align-items:center}
+.fd-sel select{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;font-size:13px;font-weight:500;color:var(--ink);padding:5px 22px 5px 8px;border-radius:var(--r-sm);cursor:pointer;box-shadow:none;min-height:0;height:auto;width:auto}
+.fd-sel select:hover{background:var(--surface-2)}
+.fd-sel select:focus-visible{outline:none;box-shadow:var(--ring)}
+.fd-sel select option{background:var(--surface);color:var(--ink)}
+.fd-sel svg{position:absolute;right:4px;width:15px;height:15px;pointer-events:none;color:var(--ink)}
+
+/* big numbers */
+.fd-big{display:block;font-size:clamp(26px,9.2cqi,46px);font-weight:600;letter-spacing:-.04em;line-height:1.05;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.fd-big .dec{color:var(--muted-2);font-weight:500}
+.fd-big.sm{font-size:clamp(22px,8.5cqi,32px)}
+.fd-r4 .fd-big{font-size:clamp(22px,10.5cqi,34px)}
+.fd-pct{display:block;font-size:64px;font-weight:600;letter-spacing:-.05em;line-height:1;color:var(--ink);margin-bottom:12px}
+.fd-pct .dec{font-size:.5em;color:var(--muted-2);font-weight:500;margin-left:2px}
+
+/* pills */
+.fd-pills{display:flex;flex-wrap:wrap;gap:8px}
+.fd-screen .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--line);font-size:12px;color:var(--ink-2);white-space:nowrap;font-weight:500}
+.fd-screen .pill svg{width:14px;height:14px;color:var(--ink-2)}
+.fd-screen .pill b{font-weight:600;color:var(--ink)}
+.fd-screen .pill b.up,.fd-up{color:var(--good)!important}
+.fd-screen .pill b.down{color:var(--danger)!important}
+.fd-legend{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--ink-2);flex-wrap:wrap}
+.fd-legend span{display:inline-flex;align-items:center;gap:6px}
+.fd-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.fd-k-a{background:var(--fd-forest)}.fd-k-b{background:var(--fd-lime)}
+.fd-k-s{background-color:var(--fd-track);background-image:var(--hatch);border:1px solid var(--line)}
+.fd-tile{position:relative;border-radius:12px;padding:12px 12px;display:flex;flex-direction:column;gap:2px;overflow:hidden;min-width:0}
+.fd-tile b{font-size:26px;font-weight:600;letter-spacing:-.04em;line-height:1.05}
+.fd-tile b small{font-size:.55em;font-weight:500;opacity:.75;margin-left:1px}
+.fd-tile span{font-size:12px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd-tile-foot{display:flex;justify-content:space-between;gap:8px;margin-top:auto;font-size:11px;opacity:.85}
+.fd-tile-bar{height:4px;border-radius:var(--r-pill);background:color-mix(in srgb,currentColor 22%,transparent);margin-top:5px}
+.fd-tile-bar i{display:block;height:100%;border-radius:inherit;background:currentColor}
+.t-forest{background:var(--fd-forest);color:var(--fd-on-forest)}
+.t-forest2{background:var(--fd-forest-2);color:var(--fd-on-forest)}
+.t-lime{background:var(--fd-lime);color:var(--fd-on-lime)}
+.t-lime2{background:color-mix(in srgb,var(--lime) 55%,var(--surface));color:var(--ink)}
+.t-mint{background:var(--fd-mint);color:var(--fd-on-lime)}
+.t-soft{background:var(--fd-h1);color:var(--ink)}
+.t-hatch{background-color:var(--fd-track);background-image:var(--hatch);color:var(--ink);border:1px solid var(--line)}
+
+/* treemap grids */
+.fd-tree{display:grid;gap:6px;margin-top:auto}
+.fd-tree-plan{grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:1fr 1fr;grid-template-areas:"a b b" "a c d";height:210px}
+.fd-tree-dept{grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);grid-template-areas:"s s o o i" "s s o o a" "w f p h a";flex:1;min-height:280px;margin-top:4px}
+.fd-tree-dept .fd-tile b{font-size:22px}
+.fd-tbl th{white-space:nowrap}
+.fd-sorti{width:12px!important;height:12px!important;opacity:.45;vertical-align:-1px;margin-left:2px}
+.fd-tbl td small{display:block;font-size:11.5px;color:var(--muted)}
+.fd-party{display:flex;align-items:center;gap:10px}
+.fd-party b{font-weight:600;color:var(--ink)}
+.fd-logo{display:inline-grid;place-items:center;flex:none;width:32px;height:32px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.l-forest{background:var(--fd-forest);color:var(--fd-on-forest)}
+.l-lime{background:var(--fd-lime);color:var(--fd-on-lime)}
+.l-orange{background:var(--orange-soft);color:var(--orange)}
+.l-blue{background:var(--blue-soft);color:var(--blue)}
+.l-violet{background:var(--violet-soft);color:var(--violet)}
+.l-red{background:var(--danger-soft);color:var(--danger)}
+.fd-method{display:inline-flex;align-items:center;gap:8px;color:var(--ink);white-space:nowrap}
+.fd-method svg{width:26px;height:26px;padding:6px;border-radius:8px;background:var(--night);color:var(--lime);box-sizing:border-box}
+.fd-amt{font-weight:600;color:var(--ink);white-space:nowrap}
+.fd-amt .dec{color:var(--muted-2);font-weight:500}
+.fd-amt.in{color:var(--good)}
+.fd-hbar{display:flex;gap:4px;height:34px;margin-top:auto}
+.fd-hbar i{width:var(--w);border-radius:9px;background:var(--c);transform-origin:left;transform:none;transition:transform .6s var(--ease);transition-delay:calc(var(--i) * 110ms + 200ms)}
+.fd-hbar i.ded,.fd-hbar-legend i.ded{background-color:var(--danger-soft);background-image:var(--hatch);border:1px solid color-mix(in srgb,var(--danger) 35%,transparent)}
+.fd-grown .fd-hbar i{transform:scaleX(1)}
+.fd-hbar-legend{display:grid;grid-template-columns:1fr;gap:9px;font-size:12px;color:var(--muted)}
+.fd-hbar-legend>span{display:flex;align-items:center;gap:6px}
+.fd-hbar-legend i{width:10px;height:10px;border-radius:3px;flex:none}
+.fd-hbar-legend b{margin-left:auto;white-space:nowrap;color:var(--ink);font-weight:600}
+.fd-hbar-legend .dec,.fd-dl .dec{color:var(--muted-2);font-weight:500}
+.fd-hbar-legend b.neg,.fd-dl b.neg{color:var(--danger)}
+.fd-dl{display:flex;flex-direction:column;margin-top:4px}
+.fd-dl>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.fd-dl span{color:var(--ink-2)}
+.fd-dl b{font-weight:600;white-space:nowrap}
+.fd-dl .tot{border-bottom:1px solid var(--line)}
+.fd-dl .tot span,.fd-dl .tot b{color:var(--ink);font-weight:700}
+.fd-dl>div:last-child{border-bottom:0}
+
+/* ---------------------------------------------------------- payroll timeline */
+.fd-tl{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column}
+.fd-tl li{position:relative;padding:0 0 14px 28px;display:flex;flex-direction:column}
+.fd-tl li::before{content:"";position:absolute;left:5px;top:3px;width:12px;height:12px;border-radius:50%;border:2px solid var(--line-2);background:var(--surface);box-sizing:border-box}
+.fd-tl li::after{content:"";position:absolute;left:10px;top:17px;bottom:0;width:2px;background:var(--line)}
+.fd-tl li:last-child::after{display:none}
+.fd-tl li.done::before{background:var(--fd-forest);border-color:var(--fd-forest)}
+.fd-tl li.done::after{background:var(--fd-forest)}
+.fd-tl li.now::before{background:var(--fd-lime);border-color:var(--fd-lime);box-shadow:0 0 0 5px color-mix(in srgb,var(--lime) 30%,transparent)}
+.fd-tl b{font-size:13.5px;font-weight:600}
+.fd-tl small{font-size:12px;color:var(--muted)}
+.fd-full{width:100%;justify-content:center;margin-top:auto}
+
+/* Phase 32 additions: the cost bars (stacked salaries / allowances, as the template's "stack" mode, drawn statically) and
+   a department treemap that adapts to any number of departments (the template's areas are fixed to eight). */
+.pr-cost{flex:1;min-height:300px;display:flex;align-items:flex-end;gap:10px;padding-top:12px}
+.pr-cost-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;height:100%}
+.pr-cost-bar{flex:1;width:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;border-radius:12px;background-color:var(--fd-track);background-image:var(--hatch);position:relative}
+.pr-cost-bar i{display:block;width:100%}
+.pr-cost-bar i.a{background:var(--fd-forest);border-radius:4px 4px 11px 11px}
+.pr-cost-bar i.b{background:var(--fd-lime);border-radius:11px 11px 4px 4px}
+.pr-cost-col.hot .pr-cost-bar{outline:2px solid color-mix(in srgb,var(--fd-forest) 40%,transparent);outline-offset:2px}
+.pr-cost-col small{font-size:11px;color:var(--muted);white-space:nowrap}
+.pr-dept{display:grid;gap:6px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:minmax(92px,auto);flex:1;margin-top:4px}
+.pr-dept .fd-tile.big{grid-column:span 2;grid-row:span 2}
+.pr-dept .fd-tile b{font-size:22px}

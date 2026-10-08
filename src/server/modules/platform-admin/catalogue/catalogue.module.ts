@@ -27,5 +27,7 @@ import { PlansController } from './plans/presentation/plans.controller.js';
     AddonsService, { provide: AddonStore, useClass: PrismaAddonStore },
     CouponsService, { provide: CouponStore, useClass: PrismaCouponStore },
   ],
+  // Phase 43: the entitlements save (one change set + its EntitlementChangeLogs rows) runs these in one transaction.
+  exports: [PlansService, ModulesService, AddonsService],
 })
 export class PlatformCatalogueModule {}

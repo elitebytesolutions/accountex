@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleUser } from "lucide-react";
+import { CircleUser, LifeBuoy } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, type ReactNode } from "react";
@@ -11,6 +11,7 @@ import { crumbsFor, navFor, navPathFor } from "@/features/workspace-nav/nav";
 import { setCompanyTimeZone } from "@/lib/company-time";
 import { ShellFrame } from "./shell-frame";
 import { SupportAccessBanner } from "./support-access-banner";
+import { PlatformNoticeBanner, PlatformNoticesBell } from "./platform-notice-banner";
 
 /** Template shell (20-shell-open.html) for the company workspace: NAV.app sidebar, TOP.app top bar. */
 export function AppShell({ user, children }: { user: SessionUser; children: ReactNode }) {
@@ -41,11 +42,20 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
         rootLabel: "Workspace",
         crumbsFor,
         signOut: { run: logout, then: "/login" },
+        // Phase 42: Accountex announcements and in-app messages
+        actions: <PlatformNoticesBell />,
         menuItems: (close) => (
-          <Link className="pop-item" role="menuitem" href="/profile" onClick={close}>
-            <span className="tone-violet"><CircleUser /></span>
-            <div><b>My Profile</b><small>My day, leave, pay &amp; requests</small></div>
-          </Link>
+          <>
+            <Link className="pop-item" role="menuitem" href="/profile" onClick={close}>
+              <span className="tone-violet"><CircleUser /></span>
+              <div><b>My Profile</b><small>My day, leave, pay &amp; requests</small></div>
+            </Link>
+            {/* Phase 42: platform support tickets */}
+            <Link className="pop-item" role="menuitem" href="/support" onClick={close}>
+              <span className="tone-blue"><LifeBuoy /></span>
+              <div><b>Help &amp; support</b><small>Ask Accountex for help</small></div>
+            </Link>
+          </>
         ),
       }}
       footer={
@@ -59,6 +69,7 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
       }
     >
       <SupportAccessBanner />
+      <PlatformNoticeBanner />
       {children}
     </ShellFrame>
   );

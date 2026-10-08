@@ -4,6 +4,7 @@ import {
   BadgeCheck, ChevronLeft, CircleCheck, CreditCard, Hourglass, KeyRound, Mail, Megaphone, MessageCircle, MessageSquareText, PartyPopper, Plus, RadioTower,
   ReceiptText, Save, Send, Settings2, Wrench, type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { COMM_CHANNELS, COMM_SAMPLE, COMM_VARIABLES, commSmsSegments, renderTemplate, type CommTemplate } from "@/shared";
 import { Field, FormGrid, Check } from "@/components/ui/form";
@@ -13,6 +14,8 @@ import { useToast } from "@/components/ui/toast";
 import { AdminRecordModal } from "@/features/admin-common/components/admin-record-modal";
 import { adminErrorMessage, adminFieldErrors } from "@/features/admin-common/errors";
 import { ApiError } from "@/lib/api/errors";
+import { BroadcastModal } from "@/features/platform-growth/components/broadcast-modal";
+import { DeliveryLog } from "@/features/platform-growth/components/delivery-log";
 import { createCommTemplate, deleteCommTemplate, listCommTemplates, updateCommTemplate } from "../api";
 
 export const COMM_ICONS: Record<string, LucideIcon> = {
@@ -33,7 +36,7 @@ function Filled({ text, lang, oneLine }: { text: string; lang: Lang; oneLine?: b
 /**
  * Template admin/comms (9B-admin-plus.js): template list, English / Urdu editor with SMS segment count and
  * {{variable}} chips, live Email / SMS / WhatsApp preview. "Send a test" waits for email/SMS delivery (Phase 29); the
- * delivery log and Broadcast arrive with Phase 42.
+ * delivery log and Broadcast are Phase 42 (features/platform-growth).
  */
 export function CommsScreen() {
   const toast = useToast();
@@ -47,6 +50,8 @@ export function CommsScreen() {
   const [busy, setBusy] = useState(false);
   const [settings, setSettings] = useState<{ template: CommTemplate | null } | null>(null);
   const [attempt, setAttempt] = useState(0);
+  const [broadcast, setBroadcast] = useState(false);
+  const [sent, setSent] = useState(0);
   const subjRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
@@ -102,8 +107,8 @@ export function CommsScreen() {
     <div className="page-head">
       <div><div className="eyebrow">Support / Communications</div><h1>Communications</h1><p>Lifecycle templates in English and Urdu across email, SMS and WhatsApp, with delivery tracking.</p></div>
       <div className="head-actions">
-        <button type="button" className="btn secondary" disabled title="Announcements arrive with Phase 42"><Megaphone />Announcements</button>
-        <button type="button" className="btn primary" disabled title="Broadcasts arrive with Phase 42"><RadioTower />Broadcast</button>
+        <Link className="btn secondary" href="/admin/announcements"><Megaphone />Announcements</Link>
+        <button type="button" className="btn primary" onClick={() => setBroadcast(true)}><RadioTower />Broadcast</button>
       </div>
     </div>
   );
@@ -178,10 +183,8 @@ export function CommsScreen() {
         </div>
       </div>
 
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Delivery log</h3><p>Last 24 hours · all channels</p></div><div className="panel-actions"><div className="chips"><button type="button" className="active">All</button><button type="button" disabled>Delivered</button><button type="button" disabled>Failed</button></div></div></div>
-        <EmptyState icon={<Send />} title="No messages sent yet" description="Delivery tracking starts when email and SMS sending is switched on (Phase 29); broadcasts arrive with Phase 42." />
-      </div>
+      <DeliveryLog reloadKey={sent} />
+      {broadcast && <BroadcastModal onClose={() => setBroadcast(false)} onSent={() => { setSent((n) => n + 1); reload(); }} />}
 
       {settings && (
         <TemplateSettings template={settings.template} onClose={() => setSettings(null)}

@@ -17,11 +17,12 @@ import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treas
 import { ApiError } from "@/lib/api/errors";
 import { createOvertimePolicy, deleteOvertimePolicy, listOvertimePolicies, overtimeGrades, setOvertimePolicyActive, updateOvertimePolicy } from "../api";
 import { approveOvertime, attendanceOptions, cancelOvertime, listOvertimeClaims, logOvertime, overtimeRate, rejectOvertime } from "../attendance-api";
+import { pushOvertime } from "@/features/payroll/pay-api";
 import { fmtNum, localToday, monthLabel, Person, shiftMonth, StatusBadge } from "./attendance-ui";
 import { RecordModal } from "./record-modal";
 
 type Grade = { id: string; code: string; name: string };
-type Can = { create: boolean; edit: boolean; remove: boolean; approve?: boolean };
+type Can = { create: boolean; edit: boolean; remove: boolean; approve?: boolean; push?: boolean };
 const x = (n: number) => `${Number.isInteger(n) ? n.toFixed(1) : n}×`;
 const DAY_TYPE: Record<string, string> = { WEEKDAY: "Weekday", WEEKLY_OFF: "Weekly off", PUBLIC_HOLIDAY: "Public holiday" };
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -32,7 +33,7 @@ const span = (c: OvertimeClaim) => {
 };
 const blankLog = { employeeId: "", dateFrom: "", dayType: "WEEKDAY", timeFrom: "18:00", timeTo: "21:00", hourlyRate: "", reason: "", isCompOff: false };
 
-/** Template app/hr/overtime (50-hr-core.html): claims (log, approve / reject / cancel), the policy panel and its modal; push to payroll arrives with Phase 32. */
+/** Template app/hr/overtime (50-hr-core.html): claims (log, approve / reject / cancel), the policy panel and its modal; "Push to payroll" moves the month's approved claims into its open payroll run (Phase 32). */
 export function OvertimeScreen({ can, initialId }: { can: Can; initialId?: string }) {
   const toast = useToast();
   const lookups = useLookups(["HourlyRateBasis", "Rounding"]);
@@ -124,7 +125,7 @@ export function OvertimeScreen({ can, initialId }: { can: Can; initialId?: strin
       <PageHead eyebrow="HR / Attendance" title="Overtime" description={`Overtime claims, approvals and payroll posting · ${monthLabel(month)} cycle.`}
         actions={<>
           <button className="btn secondary" type="button" disabled={!active && !can.create} onClick={() => (active ? open(active) : open(null))}><Settings2 />OT policy</button>
-          <button className="btn secondary" type="button" disabled title="Approved overtime is pushed with payroll runs (Phase 32)"><Send />Push to payroll</button>
+          <button className="btn secondary" type="button" disabled={!can.push || busy} title={can.push ? `Add ${monthLabel(month)}'s approved overtime to its open payroll run` : "Needs payroll edit rights"} onClick={async () => { setBusy(true); try { const r = await pushOvertime(month); toast(r.pushed ? `${r.pushed} approved claim${r.pushed === 1 ? "" : "s"} pushed into ${r.docNo}` : `No approved overtime left to push into ${r.docNo}`, { tone: r.pushed ? "good" : "info" }); reload(); } catch (e) { toast(apiMessage(e, "Could not push overtime to payroll"), { tone: "danger" }); } finally { setBusy(false); } }}><Send />Push to payroll</button>
           {can.create && <button className="btn primary" type="button" disabled={!active} title={active ? undefined : "Activate an overtime policy first"} onClick={() => { setErrs({}); setLog({ ...blankLog, dateFrom: localToday() }); if (!opts) void attendanceOptions().then(setOpts); }}><Plus />Log overtime</button>}
         </>} />
 

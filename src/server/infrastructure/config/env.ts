@@ -19,6 +19,8 @@ const EnvSchema = z.object({
   APP_ENCRYPTION_KEY: z.string().refine((v) => Buffer.from(v, 'base64').length === 32, 'APP_ENCRYPTION_KEY must be 32 bytes, base64-encoded'),
   // Phase 38: on-demand backups (Super Admin › System Health). A relative BACKUP_DIR is under the project root.
   BACKUP_DIR: z.string().min(1).default('./backups'),
+  // Phase 32: uploaded files (Company.Attachments rows point here). A relative UPLOAD_DIR is under the project root.
+  UPLOAD_DIR: z.string().min(1).default('./uploads'),
   PG_DUMP_PATH: z.string().min(1).default(process.platform === 'win32' ? 'C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe' : 'pg_dump'),
 });
 

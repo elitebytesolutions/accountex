@@ -19,8 +19,8 @@ export class PrismaBackupStore extends BackupStore {
     return r ? (await this.map([r]))[0]! : null;
   }
 
-  running() {
-    return this.prisma.db().backupRuns.findMany({ where: { status: 'RUNNING' }, select: { id: true, startedAt: true } });
+  running(backupType?: 'FULL' | 'TENANT_EXPORT') {
+    return this.prisma.db().backupRuns.findMany({ where: { status: 'RUNNING', ...(backupType && { backupType }) }, select: { id: true, startedAt: true } });
   }
 
   async start(data: { code: string; location: string; requestedByStaffId: string | null; retentionUntil: Date }) {
@@ -30,6 +30,15 @@ export class PrismaBackupStore extends BackupStore {
         // A plain pg_dump file: not encrypted, not verified (honest values, not the column defaults).
         encryption: 'NONE', verification: 'NONE', notifyOwner: false,
       },
+      select: { id: true },
+    });
+    return row.id;
+  }
+
+  /** Phase 43: a tenant export (JSON, not encrypted, not verified). */
+  async startExport(data: { code: string; location: string; tenantId: string; requestedByStaffId: string | null; retentionUntil: Date }) {
+    const row = await this.prisma.db().backupRuns.create({
+      data: { ...data, backupType: 'TENANT_EXPORT', exportFormat: 'JSON', status: 'RUNNING', encryption: 'NONE', verification: 'NONE', notifyOwner: false },
       select: { id: true },
     });
     return row.id;

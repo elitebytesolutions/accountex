@@ -4,9 +4,11 @@ import {
   type AdminSession,
   type FlagCreate,
   type FlagDetail,
+  type ChangeRequestPatch,
   type FlagDuplicate,
   type FlagEnvironment,
   type FlagEnvironmentInput,
+  type FlagEnvironmentState,
   type FlagListQuery,
   type FlagStageInput,
   type FlagToggleInput,
@@ -26,7 +28,15 @@ import {
   variationEditError,
 } from '../domain/flag-rules.js';
 import { FlagStore, type FlagAuditWrite, type PrerequisiteRow } from './flag-store.js';
-import { envLabel, targetingSnapshot, targetingSummary } from './targeting-snapshot.js';
+import { envLabel, targetingSnapshot, targetingSummary, type TargetingSnapshot } from './targeting-snapshot.js';
+
+/** Phase 43: the change a Production request carries (TOGGLE / TARGETING from the pages, ROLLOUT from a scheduled step). */
+export type FlagChangePlan = { before: TargetingSnapshot; after: TargetingSnapshot; summary: string; patch: ChangeRequestPatch };
+/** Stable JSON (sorted keys): snapshots stored as jsonb come back with their keys reordered. */
+const stableJson = (v: unknown): string =>
+  Array.isArray(v) ? `[${v.map(stableJson).join(',')}]`
+  : v && typeof v === 'object' ? `{${Object.keys(v).sort().map((k) => `${JSON.stringify(k)}:${stableJson((v as Record<string, unknown>)[k])}`).join(',')}}`
+  : JSON.stringify(v ?? null);
 
 /**
  * Feature flags (Phase 39): one UnitOfWork.run(adminActorContext) per save, writing the row changes (platform history
@@ -193,19 +203,21 @@ export class FlagsService {
   }
 
   /**
-   * On / off in one environment, applied directly (the change-request path is Phase 43). A kill switch needs its key
-   * typed (`confirmKey`); flipping one in Production is logged as an emergency change.
+   * On / off in one environment. A kill switch needs its key typed (`confirmKey`); flipping one in Production is
+   * applied at once and logged as an emergency change. Phase 43: any other Production toggle goes through a change
+   * request (POST /api/admin/change-requests), so it is refused here.
    */
   async toggle(admin: AdminSession, meta: RequestMeta, id: string, env: FlagEnvironment, input: FlagToggleInput): Promise<FlagDetail> {
     const cur = await this.editable(id);
     const kill = isKillSwitch(cur);
+    if (env === 'PRODUCTION' && !kill) throw changeRequestRequired();
     if (kill && input.confirmKey !== cur.key) throw killConfirm();
     const state = envOf(cur, env);
     if (state.isOn === input.isOn) return cur;
     const before = targetingSnapshot(cur, state);
     const after = { ...before, on: input.isOn };
     await this.unitOfWork.run(adminActorContext(admin, meta), async () => {
-      await this.store.save({ id, environments: cur.environments.map((e) => ({ id: e.id, ...(e.environment === env ? { isOn: input.isOn } : {}) })) });
+      await this.writeToggle(cur, env, input.isOn);
       await this.store.writeAudit(kill
         ? { flagId: id, environment: env, eventKind: 'KILL_SWITCH', summary: `Kill switch ${input.isOn ? 'restored' : 'flipped OFF'} in ${envLabel(env)}`, before, after, isEmergency: env === 'PRODUCTION' }
         : { flagId: id, environment: env, eventKind: 'TOGGLED', summary: `Targeting turned ${input.isOn ? 'ON' : 'OFF'} in ${envLabel(env)}`, before, after });
@@ -213,12 +225,115 @@ export class FlagsService {
     return this.get(id);
   }
 
-  /** PUT one environment's whole targeting: on / off, prerequisites, individual targets, rules, default rule, off variation. */
+  /**
+   * PUT one environment's whole targeting: on / off, prerequisites, individual targets, rules, default rule, off variation.
+   * Phase 43: Production targeting is changed through a change request (refused here).
+   */
   async saveEnvironment(admin: AdminSession, meta: RequestMeta, id: string, env: FlagEnvironment, input: FlagEnvironmentInput): Promise<FlagDetail> {
     const cur = await this.editable(id);
+    if (env === 'PRODUCTION') throw changeRequestRequired();
     const state = envOf(cur, env);
     if (input.envRowVersion !== state.rowVersion) throw stale();
+    await this.checkEnvironment(cur, id, env, input);
 
+    const isOn = input.isOn ?? state.isOn;
+    const kill = isKillSwitch(cur);
+    if (kill && isOn !== state.isOn && input.confirmKey !== cur.key) throw killConfirm();
+
+    const before = targetingSnapshot(cur, state);
+    await this.unitOfWork.run(adminActorContext(admin, meta), async () => {
+      const after = await this.writeEnvironment(id, env, state, input, isOn);
+      const entry: FlagAuditWrite = kill && isOn !== state.isOn
+        ? { flagId: id, environment: env, eventKind: 'KILL_SWITCH', summary: `Kill switch ${isOn ? 'restored' : 'flipped OFF'} in ${envLabel(env)} · ${targetingSummary(before, after)}`, before, after }
+        : { flagId: id, environment: env, eventKind: 'TARGETING', summary: `${targetingSummary(before, after)} (${envLabel(env)})`, before, after };
+      await this.store.writeAudit(entry);
+    });
+    return this.get(id);
+  }
+
+  /**
+   * Phase 43: validates a change for a change request without applying it and returns the before / after snapshots
+   * (the request's diff), its one-line summary and the patch an approval applies.
+   */
+  async previewChange(id: string, env: FlagEnvironment, change: ChangeRequestPatch): Promise<FlagChangePlan> {
+    const cur = await this.editable(id);
+    const state = envOf(cur, env);
+    const before = targetingSnapshot(cur, state);
+    if (change.kind === 'TOGGLE') {
+      const after = { ...before, on: change.isOn };
+      return { before, after, summary: `Turn targeting ${change.isOn ? 'ON' : 'OFF'}`, patch: { kind: 'TOGGLE', isOn: change.isOn } };
+    }
+    if (change.kind === 'ROLLOUT' && !state.defaultRule) throw new ValidationError('This environment has no default rule to ramp', undefined, { code: 'SCHEDULE_INVALID' });
+    const input = change.kind === 'TARGETING' ? change.input : this.rolloutInput(state, change.rolloutPct);
+    if (change.kind === 'TARGETING' && input.envRowVersion !== state.rowVersion) throw stale();
+    await this.checkEnvironment(cur, id, env, input);
+    const after = targetingSnapshot(cur, await this.synthesise(state, input, input.isOn ?? state.isOn));
+    const summary = change.kind === 'ROLLOUT' ? `Scheduled step: rollout ${state.defaultRule?.rolloutPct ?? 0}% → ${change.rolloutPct}%` : targetingSummary(before, after);
+    const patch: ChangeRequestPatch = change.kind === 'ROLLOUT' ? { kind: 'ROLLOUT', rolloutPct: change.rolloutPct } : { kind: 'TARGETING', input: { ...input, confirmKey: undefined } };
+    return { before, after, summary, patch };
+  }
+
+  /**
+   * Phase 43: applies an approved change request's patch. Runs inside the caller's transaction (the change request
+   * service writes the CR_APPLIED audit row). Refused when the environment changed since the request (its before
+   * snapshot no longer matches).
+   */
+  async applyChange(id: string, env: FlagEnvironment, patch: ChangeRequestPatch, expectedBefore: unknown): Promise<{ before: TargetingSnapshot; after: TargetingSnapshot; summary: string }> {
+    const cur = await this.editable(id);
+    const state = envOf(cur, env);
+    const before = targetingSnapshot(cur, state);
+    if (stableJson(before) !== stableJson(expectedBefore)) {
+      throw new ConflictError('The flag changed since this request was made. Reject it and request the change again.', undefined, { code: 'CR_STALE' });
+    }
+    if (patch.kind === 'TOGGLE') {
+      if (state.isOn !== patch.isOn) await this.writeToggle(cur, env, patch.isOn);
+      const after = { ...before, on: patch.isOn };
+      return { before, after, summary: `Targeting turned ${patch.isOn ? 'ON' : 'OFF'} in ${envLabel(env)}` };
+    }
+    const input = patch.kind === 'TARGETING' ? { ...patch.input, envRowVersion: state.rowVersion } : this.rolloutInput(state, patch.rolloutPct);
+    await this.checkEnvironment(cur, id, env, input);
+    const after = await this.writeEnvironment(id, env, state, input, input.isOn ?? state.isOn);
+    return { before, after, summary: `${targetingSummary(before, after)} (${envLabel(env)})` };
+  }
+
+  /** The environment's targeting as an input, with the default rule turned into a rollout at `pct` (scheduled steps). */
+  private rolloutInput(state: FlagEnvironmentState, pct: number): FlagEnvironmentInput {
+    const d = state.defaultRule;
+    return {
+      envRowVersion: state.rowVersion, isOn: state.isOn,
+      targets: state.targets.map((t) => ({ tenantId: t.tenantId, variationIdx: t.variationIdx })),
+      rules: state.rules.map((r) => ({ attribute: r.attribute as FlagEnvironmentInput['rules'][number]['attribute'], operator: r.operator as FlagEnvironmentInput['rules'][number]['operator'], ruleValues: r.ruleValues, serveVariationIdx: r.serveVariationIdx })),
+      defaultRule: {
+        defaultRule: 'ROLLOUT', defaultVariationIdx: null, rolloutPct: pct, rolloutVariationIdx: d?.rolloutVariationIdx ?? 0,
+        rolloutRestVariationIdx: d?.rolloutRestVariationIdx ?? 1, offVariationIdx: d?.offVariationIdx ?? 1, bucketBy: d?.bucketBy === 'TENANT_ID' ? 'TENANT_ID' : 'TENANT_CODE',
+      },
+      prerequisites: state.prerequisites.map((p) => (p.prerequisiteModuleId ? { prerequisiteModuleId: p.prerequisiteModuleId } : { prerequisiteFlagId: p.prerequisiteFlagId!, requiredVariationIdx: p.requiredVariationIdx ?? 0 })),
+    };
+  }
+
+  /** The environment state an input would produce (keys and codes from the options), for the request's diff. */
+  private async synthesise(state: FlagEnvironmentState, input: FlagEnvironmentInput, isOn: boolean): Promise<FlagEnvironmentState> {
+    const o = await this.store.options();
+    const d = input.defaultRule;
+    return {
+      ...state, isOn,
+      prerequisites: input.prerequisites.map((p) => ('prerequisiteFlagId' in p
+        ? { prerequisiteFlagId: p.prerequisiteFlagId, prerequisiteFlagKey: o.flags.find((f) => f.id === p.prerequisiteFlagId)?.key ?? null, requiredVariationIdx: p.requiredVariationIdx, prerequisiteModuleId: null, prerequisiteModuleKey: null }
+        : { prerequisiteFlagId: null, prerequisiteFlagKey: null, requiredVariationIdx: null, prerequisiteModuleId: p.prerequisiteModuleId, prerequisiteModuleKey: o.modules.find((m) => m.id === p.prerequisiteModuleId)?.key ?? null })),
+      targets: input.targets.map((t) => {
+        const tn = o.tenants.find((x) => x.id === t.tenantId);
+        return { tenantId: t.tenantId, tenantCode: tn?.code ?? t.tenantId, tenantName: tn?.name ?? t.tenantId, variationIdx: t.variationIdx };
+      }),
+      rules: input.rules.map((r) => ({ attribute: r.attribute, operator: r.operator, ruleValues: r.ruleValues, serveVariationIdx: r.serveVariationIdx })),
+      defaultRule: {
+        defaultRule: d.defaultRule, defaultVariationIdx: d.defaultRule === 'VARIATION' ? d.defaultVariationIdx : null, rolloutPct: d.defaultRule === 'ROLLOUT' ? d.rolloutPct : null,
+        rolloutVariationIdx: d.rolloutVariationIdx, rolloutRestVariationIdx: d.rolloutRestVariationIdx, offVariationIdx: d.offVariationIdx, bucketBy: d.bucketBy,
+      },
+    };
+  }
+
+  /** Validation of one environment's targeting (indexes, duplicate targets, prerequisites and their cycles). */
+  private async checkEnvironment(cur: FlagDetail, id: string, env: FlagEnvironment, input: FlagEnvironmentInput) {
     const details = targetingIndexErrors(input, cur.variations.length);
     const seen = new Set<string>();
     input.targets.forEach((t, i) => {
@@ -246,40 +361,36 @@ export class FlagsService {
       const keys = await this.keysOf(cycle);
       throw new ConflictError(`Prerequisite loop: ${keys.join(' → ')}`, { prerequisites: [`Prerequisite loop: ${keys.join(' → ')}`] }, { code: 'FLAG_PREREQUISITE_CYCLE', log: { cycle } });
     }
+  }
 
-    const isOn = input.isOn ?? state.isOn;
-    const kill = isKillSwitch(cur);
-    if (kill && isOn !== state.isOn && input.confirmKey !== cur.key) throw killConfirm();
+  /** Writes one environment's targeting (inside the caller's transaction) and returns the snapshot after it. */
+  private async writeEnvironment(id: string, env: FlagEnvironment, state: FlagEnvironmentState, input: FlagEnvironmentInput, isOn: boolean): Promise<TargetingSnapshot> {
+    if (!(await this.store.touchEnvironment(state.id, state.rowVersion, isOn))) throw stale();
 
-    const before = targetingSnapshot(cur, state);
-    await this.unitOfWork.run(adminActorContext(admin, meta), async () => {
-      if (!(await this.store.touchEnvironment(state.id, input.envRowVersion, isOn))) throw stale();
+    const existing = await this.store.prerequisiteRows(id);
+    const mine = existing.filter((r) => r.flagEnvironmentId === state.id);
+    const rows: PrerequisiteRow[] = [
+      ...existing.filter((r) => r.flagEnvironmentId !== state.id).map((r) => ({ ...r })),
+      ...input.prerequisites.map((p): PrerequisiteRow => {
+        const flagId = 'prerequisiteFlagId' in p ? p.prerequisiteFlagId : null;
+        const moduleId = 'prerequisiteModuleId' in p ? p.prerequisiteModuleId : null;
+        const keep = mine.find((r) => (flagId ? r.prerequisiteFlagId === flagId : r.prerequisiteModuleId === moduleId));
+        return {
+          ...(keep ? { id: keep.id } : {}), flagEnvironmentId: state.id, prerequisiteFlagId: flagId,
+          requiredVariationIdx: 'requiredVariationIdx' in p ? p.requiredVariationIdx : null, prerequisiteModuleId: moduleId,
+        };
+      }),
+    ];
+    await this.store.save({ id, prerequisites: rows });
+    await this.store.writeTargeting(id, state.id, { rules: input.rules, targets: input.targets, defaultRule: input.defaultRule });
 
-      const existing = await this.store.prerequisiteRows(id);
-      const mine = existing.filter((r) => r.flagEnvironmentId === state.id);
-      const rows: PrerequisiteRow[] = [
-        ...existing.filter((r) => r.flagEnvironmentId !== state.id).map((r) => ({ ...r })),
-        ...input.prerequisites.map((p): PrerequisiteRow => {
-          const flagId = 'prerequisiteFlagId' in p ? p.prerequisiteFlagId : null;
-          const moduleId = 'prerequisiteModuleId' in p ? p.prerequisiteModuleId : null;
-          const keep = mine.find((r) => (flagId ? r.prerequisiteFlagId === flagId : r.prerequisiteModuleId === moduleId));
-          return {
-            ...(keep ? { id: keep.id } : {}), flagEnvironmentId: state.id, prerequisiteFlagId: flagId,
-            requiredVariationIdx: 'requiredVariationIdx' in p ? p.requiredVariationIdx : null, prerequisiteModuleId: moduleId,
-          };
-        }),
-      ];
-      await this.store.save({ id, prerequisites: rows });
-      await this.store.writeTargeting(id, state.id, { rules: input.rules, targets: input.targets, defaultRule: input.defaultRule });
+    const now = await this.store.detail(id);
+    return targetingSnapshot(now!, envOf(now!, env));
+  }
 
-      const now = await this.store.detail(id);
-      const after = targetingSnapshot(now!, envOf(now!, env));
-      const entry: FlagAuditWrite = kill && isOn !== state.isOn
-        ? { flagId: id, environment: env, eventKind: 'KILL_SWITCH', summary: `Kill switch ${isOn ? 'restored' : 'flipped OFF'} in ${envLabel(env)} · ${targetingSummary(before, after)}`, before, after, isEmergency: env === 'PRODUCTION' }
-        : { flagId: id, environment: env, eventKind: 'TARGETING', summary: `${targetingSummary(before, after)} (${envLabel(env)})`, before, after };
-      await this.store.writeAudit(entry);
-    });
-    return this.get(id);
+  /** On / off of one environment (inside the caller's transaction). */
+  private async writeToggle(cur: FlagDetail, env: FlagEnvironment, isOn: boolean) {
+    await this.store.save({ id: cur.id, environments: cur.environments.map((e) => ({ id: e.id, ...(e.environment === env ? { isOn } : {}) })) });
   }
 
   private async editable(id: string): Promise<FlagDetail> {
@@ -299,6 +410,8 @@ export class FlagsService {
 const label = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
 const stale = () => new ConcurrencyError('Someone else changed this flag. Reload and try again.');
 const killConfirm = () => new ValidationError('Type the flag key to confirm flipping a kill switch', { confirmKey: ['Type the flag key to confirm'] }, { code: 'FLAG_KILL_CONFIRM_REQUIRED' });
+/** Phase 43: Production toggles (other than kill switches) and targeting saves go through a change request. */
+const changeRequestRequired = () => new ConflictError('Production changes go through a change request. Submit one for approval.', undefined, { code: 'FLAG_CHANGE_REQUEST_REQUIRED' });
 
 function envOf(f: FlagDetail, env: string) {
   const e = f.environments.find((x) => x.environment === env);

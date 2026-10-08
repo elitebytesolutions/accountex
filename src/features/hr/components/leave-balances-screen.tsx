@@ -149,7 +149,7 @@ export function LeaveBalancesScreen({ can }: { can: { edit: boolean; approve: bo
           <button className="btn primary" type="button" disabled={busy || !ye || !!ye.closed || !ye.rows.length} onClick={() => ye && run(() => closeYear(ye.closingYearStart, yeForm), (r) => `Carry forward completed for ${r.closed?.employeesCount ?? 0} employees`, setYe)}>Run carry forward</button></>}>
         {!ye ? <Skeleton style={{ height: 220 }} /> : <>
           {ye.closed ? <div className="banner info mb"><CalendarSync /><div><b>Leave year {fyLabel(ye.closingYearStart)} is closed</b><p>Closed {stamp(ye.closed.completedAt)}{ye.closed.completedBy ? ` by ${ye.closed.completedBy.name}` : ""}: {days(ye.closed.daysCarried)} carried, {days(ye.closed.daysEncashed)} encashed, {days(ye.closed.daysLapsed)} lapsed.</p></div></div>
-            : <div className="banner warn mb"><TriangleAlert /><div><b>This posts to {ye.employees} employee ledger{ye.employees === 1 ? "" : "s"}</b><p>Encashment amounts go to payroll as &quot;Leave encashment&quot; earnings (Phase 32).</p></div></div>}
+            : <div className="banner warn mb"><TriangleAlert /><div><b>This posts to {ye.employees} employee ledger{ye.employees === 1 ? "" : "s"}</b><p>Encashment amounts are paid through payroll: add them to the run as one-time earnings (Run payroll › Inputs).</p></div></div>}
           <div className="table-wrap"><table className="tbl">
             <thead><tr><th>Leave type</th><th className="num">Unused days</th><th>Rule</th><th className="num">Carried fwd</th><th className="num">Encashed</th><th className="num">Lapsed</th><th className="num">Encash amount (Rs)</th></tr></thead>
             <tbody>

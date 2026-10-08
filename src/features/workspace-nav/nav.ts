@@ -4,6 +4,7 @@ import { Route as RouteIcon } from "lucide-react";
 import { ChartPie, HeartHandshake } from "lucide-react";
 import { ChartColumn, Inbox, ReceiptText } from "lucide-react";
 import { ShoppingBag } from "lucide-react";
+import { Zap } from "lucide-react";
 
 /**
  * Workspace sidebar (template NAV.app in template/src/90-nav.js). Only screens that exist are listed;
@@ -113,9 +114,20 @@ export const GROUPS: NavGroup[] = [
       {
         label: "Sales",
         desc: "Quotes, orders and invoicing",
-        href: "/sales/price-lists",
+        href: "/sales/invoices",
         icon: ShoppingCart,
-        children: [{ label: "Price Lists & Schemes", href: "/sales/price-lists", permission: "quo:view" }],
+        children: [
+          { label: "Quotations", href: "/sales/quotations", permission: "quo:view" },
+          { label: "Sales Orders", href: "/sales/orders", permission: "quo:view" },
+          { label: "Delivery Challans", href: "/sales/challans", permission: "sinv:view" },
+          { label: "Sales Invoices", href: "/sales/invoices", permission: "sinv:view" },
+          { label: "Sales Voucher", href: "/sales/voucher", permission: "sinv:create" },
+          { label: "Sales Returns", href: "/sales/returns", permission: "sinv:view" },
+          { label: "Credit Notes", href: "/sales/credit-notes", permission: "sinv:view" },
+          { label: "Recurring Invoices", href: "/sales/recurring", permission: "sinv:view" },
+          { label: "Point of Sale", href: "/sales/pos", permission: "pos:create" },
+          { label: "Price Lists & Schemes", href: "/sales/price-lists", permission: "quo:view" },
+        ],
       },
       {
         label: "Receivables",
@@ -124,6 +136,8 @@ export const GROUPS: NavGroup[] = [
         icon: HandCoins,
         children: [
           { label: "Customers", href: "/customers", permission: "cust:view" },
+          { label: "Customer Receipts", href: "/receivables/receipts", permission: "rcpt:view" },
+          { label: "AR Ageing & Statements", href: "/receivables/ageing", permission: "rcpt:view" },
           { label: "Payment Reminders", href: "/receivables/reminders", permission: "rcpt:view" },
         ],
       },
@@ -184,7 +198,15 @@ export const GROUPS: NavGroup[] = [
         href: "/inventory/batches",
         icon: Boxes,
         children: [
+          { label: "Stock In / Out", href: "/inventory/stock-in-out", permission: "adj:view" },
+          { label: "Stock Transfers", href: "/inventory/transfer", permission: "xfer:view" },
+          { label: "Stock Count", href: "/inventory/count", permission: "cnt:view" },
           { label: "Batches & Expiry", href: "/inventory/batches", permission: "item:view" },
+          { label: "Stock Adjustments", href: "/inventory/adjustments", permission: "adj:view" },
+          { label: "Stock Vouchers", href: "/inventory/stock-vouchers", permission: "adj:view" },
+          { label: "Assembly Vouchers", href: "/inventory/assembly", permission: "adj:view" },
+          { label: "Principal Claims", href: "/inventory/principal-claims", permission: "item:view" },
+          { label: "Bulk Price Updates", href: "/inventory/price-updates", permission: "item:view" },
           { label: "Demand & Reorder", href: "/inventory/demand", permission: "item:view" },
           { label: "Movement Reasons", href: "/inventory/reasons", permission: "adj:view" },
         ],
@@ -195,6 +217,18 @@ export const GROUPS: NavGroup[] = [
   {
     title: "Wholesale & Distribution",
     modules: [
+      {
+        label: "Wholesale",
+        desc: "Bulk entry & bookings",
+        href: "/wholesale/entry",
+        icon: Zap,
+        children: [
+          { label: "Quick Wholesale Entry", href: "/wholesale/entry", permission: "wsentry:view" },
+          { label: "Bulk Invoicing", href: "/wholesale/bulk", permission: "bulkinv:view" },
+          { label: "Order Bookings", href: "/wholesale/bookings", permission: "booking:view" },
+          { label: "Back-orders", href: "/wholesale/backorders", permission: "backord:view" },
+        ],
+      },
       {
         label: "Distribution",
         desc: "Routes, vans & recovery",
@@ -251,7 +285,13 @@ export const GROUPS: NavGroup[] = [
         desc: "Salaries, payslips & loans",
         href: "/hr/payroll/structures",
         icon: Wallet,
-        children: [{ label: "Salary Structures", href: "/hr/payroll/structures", permission: "prun:view" }],
+        children: [
+          { label: "Overview", href: "/hr/payroll", permission: "prun:view" }, // Phase 32
+          { label: "Run Payroll", href: "/hr/payroll/run", permission: "prun:view" },
+          { label: "Payslips", href: "/hr/payroll/payslips", permission: "prun:view" },
+          { label: "Loans & Advances", href: "/hr/loans", permission: "loan:view" },
+          { label: "Salary Structures", href: "/hr/payroll/structures", permission: "prun:view" },
+        ],
       },
       {
         label: "Talent",
@@ -341,14 +381,15 @@ export function navFor(permissions: string[]) {
 const OTHER_PAGES: Record<string, { trail: string[]; title: string }> = {
   "/states": { trail: ["System"], title: "UI States" },
   "/unauthorized": { trail: [], title: "No access" },
+  "/support": { trail: [], title: "Help & support" }, // Phase 42 (user menu)
 };
 
 /** Detail pages under a sidebar page (/customers/<id>): their title; the trail ends with the list page. */
-const DETAIL_TITLES: Record<string, string> = { "/accounting/vouchers": "Voucher Detail", "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile", "/purchases/bills": "Vendor Bill" };
+const DETAIL_TITLES: Record<string, string> = { "/hr/payroll/runs": "Payroll Run", "/accounting/vouchers": "Voucher Detail", "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile", "/purchases/bills": "Vendor Bill", "/sales/invoices": "Sales Invoice" };
 /** Edit pages (<list>/<id>/edit): their title. */
 const EDIT_TITLES: Record<string, string> = { "/accounting/vouchers": "Edit Voucher" };
 /** Detail pages whose parent path is not the list page's path. */
-const DETAIL_LIST: Record<string, string> = { "/inventory/products": "/inventory/items" };
+const DETAIL_LIST: Record<string, string> = { "/hr/payroll/runs": "/hr/payroll/run", "/inventory/products": "/inventory/items" };
 
 /** The sidebar path a page belongs to: a detail page whose parent isn't its list maps to the list (/inventory/products/<id> → /inventory/items). */
 export function navPathFor(pathname: string): string {

@@ -189,6 +189,8 @@ export class SubscriptionsService {
       subscriptionId: s.id, tenantId: s.tenantId, eventType: trial ? 'TRIAL_CONVERTED' : 'RENEWED', toPlanId: s.planId, mrrBefore: before, mrrAfter: after,
       movement: mrrMovement(before, after), staffUserId: admin.staffId, note: note ?? `Period ${start} – ${end}`,
     });
+    // Phase 41: the renewed (or converted) period is invoiced in the same transaction.
+    await this.store.invoicePeriod(s.tenantId, start);
     return trial;
   }
 

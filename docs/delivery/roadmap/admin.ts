@@ -117,7 +117,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 41, title: "Platform billing", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 41, title: "Platform billing", portal: "admin", kind: "TRANSACTIONAL", status: "done",
     objective: "Platform invoices and payments, dunning, and reseller payouts.",
     entities: [
       E("platform-invoices", "Platform Invoices", ["Platform.PlatformInvoices", "Platform.PlatformInvoiceLines"], {
@@ -140,7 +140,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 42, title: "Growth & support", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 42, title: "Growth & support", portal: "admin", kind: "TRANSACTIONAL", status: "done",
     objective: "Leads, support tickets, announcements/broadcasts and the communication log.",
     entities: [
       E("leads", "Leads", ["Platform.PlatformLeads", "Platform.PlatformLeadActivities"], {
@@ -151,7 +151,7 @@ export const admin: Phase[] = [
         tpl: ["admin/support"], api: "admin/support-tickets", perm: [],
         x: ["POST /admin/support-tickets/:id/messages", "POST /admin/support-tickets/:id/assign|resolve|reopen"], deps: ["tenants"],
       }),
-      E("announcements-admin", "Announcements & Broadcasts", ["Platform.Announcements", "Platform.AnnouncementTargets", "Platform.TenantBroadcasts"], {
+      E("announcements-admin", "Announcements & Broadcasts", ["Platform.Announcements", "Platform.AnnouncementTargets", "Platform.TenantBroadcasts", "Platform.AnnouncementReceipts"], {
         tpl: ["admin/announcements"], api: "admin/announcements", perm: [],
         x: ["POST /admin/announcements/:id/publish|schedule", "POST /admin/broadcasts"], deps: ["tenant-segments"],
       }),
@@ -163,7 +163,7 @@ export const admin: Phase[] = [
     ],
   },
   {
-    no: 43, title: "Platform operations", portal: "admin", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 43, title: "Platform operations", portal: "admin", kind: "TRANSACTIONAL", status: "done",
     objective: "Incidents and status, flag change requests, privacy requests and the entitlement change log.",
     reports: ["System Health", "Platform Audit Log"],
     entities: [

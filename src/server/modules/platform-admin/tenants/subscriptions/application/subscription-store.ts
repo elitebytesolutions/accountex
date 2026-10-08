@@ -32,4 +32,6 @@ export abstract class SubscriptionStore {
   /** Live subscriptions whose period (or trial) ends on or before `today`. */
   abstract due(today: string): Promise<Subscription[]>;
   abstract movement(since: string): Promise<{ movement: string; amount: number; count: number }[]>;
+  /** Phase 41: bills the period that starts on `periodStart` (Platform.platformInvoiceGenerate + Issue); returns the invoice id. */
+  abstract invoicePeriod(tenantId: string, periodStart: string): Promise<string>;
 }

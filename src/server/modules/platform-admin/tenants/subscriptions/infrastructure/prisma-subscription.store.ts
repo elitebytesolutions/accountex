@@ -139,4 +139,14 @@ export class PrismaSubscriptionStore extends SubscriptionStore {
         from "Platform"."SubscriptionEvents" where "effectiveOn" >= ${since}::date and movement <> 'NONE' group by movement`;
     return rows.map((r) => ({ movement: r.movement, amount: Number(r.amount), count: Number(r.count) }));
   }
+
+  // Phase 41: renewal → invoice. Generates (idempotent per period) and issues the period's subscription invoice.
+  async invoicePeriod(tenantId: string, periodStart: string) {
+    const rows = await this.prisma.db().$queryRaw<{ id: string }[]>`
+      select "Platform"."platformInvoiceGenerate"(${tenantId}::uuid, ${periodStart}::date)::text as id`;
+    const id = rows[0]!.id;
+    await this.prisma.db().$queryRaw`
+      select "Platform"."platformInvoiceIssue"(i.id) from "Platform"."PlatformInvoices" i where i.id = ${id}::uuid and i.status = 'DRAFT'`;
+    return id;
+  }
 }

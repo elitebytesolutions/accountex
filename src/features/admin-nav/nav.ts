@@ -40,7 +40,7 @@ export const ADMIN_GROUPS: NavGroup[] = [
     title: "Growth",
     modules: [
       { label: "SaaS Analytics", desc: "MRR, churn & cohorts", href: "", icon: ChartLine },
-      { label: "Leads CRM", desc: "Lead to trial to paid", href: "", icon: Kanban },
+      { label: "Leads CRM", desc: "Lead to trial to paid", href: "/admin/leads", icon: Kanban }, // Phase 42
       // Phase 36: the Coupons tab (Phase 38 adds the Resellers tab to the same page)
       { label: "Partners & Coupons", desc: "Resellers & discounts", href: "/admin/partners", icon: Handshake },
     ],
@@ -57,6 +57,7 @@ export const ADMIN_GROUPS: NavGroup[] = [
           // template order: Plans & Pricing, Subscriptions, Platform Invoices, Dunning & Collections, Usage & Quotas
           { label: "Plans & Pricing", href: "/admin/plans" }, // Phase 36
           { label: "Subscriptions", href: "/admin/subscriptions" }, // Phase 40
+          { label: "Platform Invoices", href: "/admin/invoices" }, // Phase 41
           { label: "Dunning & Collections", href: "/admin/dunning" }, // Phase 38: dunning policy (cases are Phase 41)
           { label: "Usage & Quotas", href: "/admin/usage" }, // Phase 39: alert rules (meters are Phase 40)
         ],
@@ -71,6 +72,7 @@ export const ADMIN_GROUPS: NavGroup[] = [
           { label: "Feature Flags", href: "/admin/features" }, // Phase 39
           { label: "Segments", href: "/admin/segments" }, // Phase 38
           { label: "Plan Entitlements", href: "/admin/entitlements" }, // Phase 36
+          { label: "Change Requests", href: "/admin/change-requests" }, // Phase 43
         ],
       },
     ],
@@ -85,6 +87,8 @@ export const ADMIN_GROUPS: NavGroup[] = [
         icon: LifeBuoy,
         // template order: Support Tickets, Announcements, Communications
         children: [
+          { label: "Support Tickets", href: "/admin/support" }, // Phase 42
+          { label: "Announcements", href: "/admin/announcements" }, // Phase 42
           { label: "Communications", href: "/admin/comms" }, // Phase 37
         ],
       },
@@ -127,6 +131,7 @@ const ADMIN_OTHER_PAGES: Record<string, { trail: string[]; title: string }> = {}
 const ADMIN_DETAIL_TITLES: Record<string, string> = {
   "/admin/features": "Flag Detail", // Phase 39
   "/admin/tenants": "Tenant 360", // Phase 40
+  "/admin/security": "Privacy Certificate", // Phase 43: /admin/security/<privacy request id>, a print view
 };
 
 /** A built sidebar leaf (e.g. /admin/tenants/new), which is never treated as a detail page of its parent. */

@@ -136,7 +136,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 21, title: "Stock operations", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 21, title: "Stock operations", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Manual stock in/out, transfers, adjustments and stock counts. The stock ledger (StockMovements, StockBalances, StockReservations) is produced by posting.",
     reports: ["Whole Stock", "Stock In View", "Stock Movements"],
     entities: [
@@ -161,7 +161,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 22, title: "Stock vouchers & demand", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 22, title: "Stock vouchers & demand", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Stock vouchers, assembly, demand planning, principal claims/targets and bulk price updates.",
     reports: ["Inventory Reports"],
     entities: [
@@ -172,52 +172,52 @@ export const transactions: Phase[] = [
       E("assembly-vouchers", "Assembly Vouchers", ["Inventory.AssemblyVouchers", "Inventory.AssemblyVoucherLines"], {
         tpl: [], api: "inventory/assembly-vouchers", perm: ["adj"],
         x: ["POST /inventory/assembly-vouchers/:id/post|reverse (consume components, produce kit)"],
-        rules: POST_RULES, deps: ["kits"], open: ["No template for assembly vouchers: needs design"],
+        rules: POST_RULES, deps: ["kits"], open: ["No template for assembly vouchers: built in template style (decided 2026-10-08)"],
       }),
       E("goods-demands", "Goods Demands", ["Inventory.GoodsDemands", "Inventory.GoodsDemandLines"], {
         tpl: ["app/inventory/demand"], api: "inventory/demands", perm: ["item"],
         x: ["POST /inventory/demands/generate (from reorder rules)", "POST /inventory/demands/:id/convert-to-po"],
-        deps: ["reorder-rules", "purchase-orders"],
+        rules: ["Convert to PO creates a draft purchase order for the demand's vendor (decided 2026-10-08)"], deps: ["reorder-rules", "purchase-orders"],
       }),
       E("principal-claims", "Principal Claims & Targets", ["Inventory.PrincipalClaims", "Inventory.PrincipalTargets"], {
         tpl: [], api: "inventory/principal-claims", perm: ["item"],
         x: ["POST /inventory/principal-claims/:id/submit|settle"], deps: ["brands"],
-        open: ["No template for principal claims/targets: needs design"],
+        open: ["No template for principal claims/targets: built in template style (decided 2026-10-08)"],
       }),
       E("bulk-price-updates", "Bulk Price Updates", ["Inventory.BulkPriceUpdates", "Inventory.BulkPriceUpdateLines"], {
         tpl: [], api: "inventory/bulk-price-updates", perm: ["item"],
         x: ["POST /inventory/bulk-price-updates/:id/preview|apply (writes ProductPriceLogs)"],
-        deps: ["products", "price-lists"], open: ["No template for bulk price updates: needs design"],
+        deps: ["products", "price-lists"], open: ["No template for bulk price updates: built in template style (decided 2026-10-08)"],
       }),
     ],
   },
   {
-    no: 23, title: "Sales documents", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 23, title: "Sales documents", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Quotation → order → delivery challan → invoice, with FBR submission on posting.",
     entities: [
       E("quotations", "Quotations", ["Sales.Quotations", "Sales.QuotationLines"], {
         tpl: ["app/sales/quotations"], api: "sales/quotations", perm: ["quo"],
-        x: ["POST /sales/quotations/:id/send|accept|reject|convert-to-order", "GET /sales/quotations/:id/pdf"],
+        x: ["POST /sales/quotations/:id/send|accept|reject|revise|convert-to-order", "Print from the browser (no server PDF; decided 2026-10-08)"],
         deps: ["customers", "products", "price-lists", "sales-schemes", "approvals"],
       }),
       E("sales-orders", "Sales Orders", ["Sales.SalesOrders", "Sales.SalesOrderLines"], {
         tpl: ["app/sales/orders"], api: "sales/orders", perm: ["quo"],
         x: ["POST /sales/orders/:id/submit|approve|close|cancel", "POST /sales/orders/:id/reserve-stock"],
-        rules: ["Credit limit checked on approval (override needs permission)", "Stock reservation via StockReservations"], deps: ["quotations", "approvals"],
+        rules: ["Credit limit checked on approval (override needs permission)", "Stock reservation via StockReservations", "Over limit / on hold → 409 unless the approver holds crovr:approve and overrides; the credit override workflow is Phase 26 (decided 2026-10-08)"], deps: ["quotations", "approvals"],
       }),
       E("delivery-challans", "Delivery Challans", ["Sales.DeliveryChallans", "Sales.DeliveryChallanLines"], {
         tpl: ["app/sales/challans"], api: "sales/challans", perm: ["sinv"],
-        x: ["POST /sales/challans/:id/post (stock out)|reverse", "GET /sales/challans/:id/pdf"], rules: POST_RULES, deps: ["sales-orders", "warehouses"],
+        x: ["POST /sales/challans/:id/dispatch (stock out at cost, Dr GDNI / Cr inventory)|deliver|cancel"], rules: [...POST_RULES, "Packed → dispatched → delivered → invoiced"], deps: ["sales-orders", "warehouses"],
       }),
       E("sales-invoices", "Sales Invoices", ["Sales.SalesInvoices", "Sales.SalesInvoiceLines"], {
         tpl: ["app/sales/invoices", "app/sales/invoices/new", "app/sales/invoices/view", "app/sales/voucher"], api: "sales/invoices", perm: ["sinv"],
-        x: ["POST /sales/invoices/:id/submit|approve|post|void", "POST /sales/invoices/from-challan/:id", "GET /sales/invoices/:id/pdf", "Posting submits to FBR when enabled (FbrInvoiceSubmissions; retries in Phase 28)"],
+        x: ["POST /sales/invoices/:id/submit|approve|post|void", "POST /sales/invoices/from-challan/:id", "POST /sales/vouchers (counter sale, posted on account; receipts in Phase 24)", "Print from the browser (no server PDF)", "Posting queues the FBR submission (FbrInvoiceSubmissions PENDING); the FBR client, retries and IRN/QR are Phase 28 (decided 2026-10-08)"],
         rules: [...POST_RULES, "Tax from tax codes; scheme free items as zero-price lines"], deps: ["delivery-challans", "tax-codes", "fbr-settings", "approvals"],
       }),
     ],
   },
   {
-    no: 24, title: "Sales completion", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 24, title: "Sales completion", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Returns, credit notes, customer receipts with allocation, recurring invoices and POS.",
     reports: ["AR Ageing", "Customer Statement"],
     entities: [
@@ -232,21 +232,21 @@ export const transactions: Phase[] = [
       E("customer-receipts", "Customer Receipts", ["Sales.CustomerReceipts", "Sales.CustomerReceiptAllocations", "BankCash.ChequeAllocations"], {
         tpl: ["app/receivables/receipts"], api: "receivables/receipts", perm: ["rcpt"],
         x: ["POST /receivables/receipts/:id/post|void", "PUT /receivables/receipts/:id/allocations", "GET /receivables/open-items?customer="],
-        rules: [...POST_RULES, "Allocations ≤ open invoice amounts", "Cheque allocations to invoices / bills and Raast-IBFT invoice matching moved here from Phase 17 (decided 2026-10-07)"], deps: ["sales-invoices", "bank-accounts", "cash-accounts", "cheques"],
+        rules: [...POST_RULES, "Allocations ≤ open invoice amounts", "Customer cheques go to Cheques in hand; cleared in the cheque register; a bounce reverses the settlement (decided 2026-10-08)", "No approval engine: rcpt:post posts (decided 2026-10-08)", "Cheque allocations to invoices / bills and Raast-IBFT invoice matching moved here from Phase 17 (decided 2026-10-07)"], deps: ["sales-invoices", "bank-accounts", "cash-accounts", "cheques"],
       }),
       E("recurring-invoices", "Recurring Invoices", ["Sales.RecurringInvoices", "Sales.RecurringInvoiceLines"], {
         tpl: ["app/sales/recurring"], api: "sales/recurring-invoices", perm: ["sinv"],
-        x: ["POST /sales/recurring-invoices/:id/run-now|pause|resume", "Scheduled job (actor = SERVICE)"], deps: ["sales-invoices"],
+        x: ["POST /sales/recurring-invoices/:id/run-now|pause|resume", "Scheduled job (actor = SERVICE)"], rules: ["Hourly scheduled job + Run now / pause / resume; each template posts or keeps drafts (decided 2026-10-08)"], deps: ["sales-invoices"],
       }),
       E("pos", "POS Shifts & Payments", ["Sales.PosShifts", "Sales.PosShiftDenominations", "Sales.PosPayments"], {
         tpl: ["app/sales/pos"], api: "sales/pos", perm: ["pos"],
         x: ["POST /sales/pos/shifts/open|:id/close", "POST /sales/pos/sales (invoice + payment in one transaction)", "POST /sales/pos/sales/:id/hold|resume"],
-        rules: ["One open shift per terminal/user", "Shift close reconciles denominations"], deps: ["sales-invoices", "cash-accounts"],
+        rules: ["One open shift per terminal/user", "Shift close reconciles denominations", "Full POS: shift open/close with cash count, sale = invoice + payment (cash / card / wallet / split), hold / resume, shift report (decided 2026-10-08)"], deps: ["sales-invoices", "cash-accounts"],
       }),
     ],
   },
   {
-    no: 25, title: "Wholesale", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 25, title: "Wholesale", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Order bookings from the field, quick wholesale entry, bulk invoicing and back-orders.",
     entities: [
       E("order-bookings", "Order Bookings", ["Distribution.OrderBookings", "Distribution.OrderBookingLines"], {
@@ -274,18 +274,18 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 26, title: "Distribution", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 26, title: "Distribution", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Load sheets and delivery, route settlement, recovery, salesman targets/commissions and credit control.",
     entities: [
       E("load-sheets", "Load Sheets & Delivery", ["Distribution.LoadSheets", "Distribution.LoadSheetLines", "Distribution.LoadSheetInvoices", "Distribution.VanStockCounts"], {
         tpl: ["app/wholesale/load-sheet"], api: "distribution/load-sheets", perm: ["loadsht", "delivery"],
         x: ["POST /distribution/load-sheets/:id/approve|post (stock to van)", "GET /distribution/load-sheets/:id/pick-list", "PATCH /distribution/load-sheets/:id/invoices/:invoiceId/delivery (delivered|returned; Deliveryman)"],
-        rules: [...POST_RULES, "Deliveryman updates delivery status only on own load sheets"], deps: ["sales-invoices", "vans", "routes"],
+        rules: [...POST_RULES, "Deliveryman updates delivery status only on own load sheets", "Paperwork only: invoices issue stock at posting; no van stock / transfer / count; route returns via sales returns (decided 2026-10-08)"], deps: ["sales-invoices", "vans", "routes"],
       }),
       E("route-settlements", "Route Settlements", ["Distribution.RouteSettlements", "Distribution.RouteSettlementLines", "Distribution.RouteSettlementCashCounts", "Distribution.RouteSettlementCheques", "Distribution.RouteSettlementReturns"], {
         tpl: ["app/wholesale/settlement"], api: "distribution/settlements", perm: ["settle"],
         x: ["POST /distribution/settlements/:id/count-cash (Cashier)|submit|approve|post"],
-        rules: [...POST_RULES, "Cash short/excess posted to mapped accounts"], deps: ["load-sheets", "customer-receipts", "cheques"],
+        rules: [...POST_RULES, "Cash short/excess posted to mapped accounts", "Receipts and returns through the Phase 24 services; approval by settle:approve, no engine (decided 2026-10-08)"], deps: ["load-sheets", "customer-receipts", "cheques"],
       }),
       E("recovery-sheets", "Recovery Sheets", ["Distribution.RecoverySheets", "Distribution.RecoverySheetLines"], {
         tpl: ["app/wholesale/recovery"], api: "distribution/recovery-sheets", perm: ["recov"],
@@ -295,17 +295,17 @@ export const transactions: Phase[] = [
       E("salesman-targets", "Salesman Targets & Commissions", ["Distribution.SalesmanTargets", "Distribution.SalesmanCommissions"], {
         tpl: ["app/wholesale/routes"], api: "distribution/targets", perm: ["target"],
         x: ["POST /distribution/commissions/calculate?period", "POST /distribution/commissions/:id/approve|post (to payroll adjustments)"],
-        deps: ["commission-slabs", "sales-invoices"],
+        rules: ["Post = JV commission expense / payable (ACCRUED); Send to payroll adds a COMMISSION adjustment to the draft payroll run of the month (decided 2026-10-08)"], deps: ["commission-slabs", "sales-invoices"],
       }),
       E("credit-control", "Credit Control", ["Sales.CreditOverrides", "Sales.CreditHoldEvents", "Distribution.CreditOverrideLogs"], {
         tpl: ["app/receivables/credit"], api: "receivables/credit", perm: ["crovr", "rcpt"],
         x: ["POST /receivables/credit/holds/:customerId/place|release", "POST /receivables/credit/overrides/:id/approve|reject"],
-        rules: ["Every override is logged with its approver"], deps: ["customers", "approvals"],
+        rules: ["Every override is logged with its approver", "Approved by crovr:approve (not the requester), no engine (decided 2026-10-08)"], deps: ["customers", "approvals"],
       }),
     ],
   },
   {
-    no: 27, title: "Assets & budgets", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 27, title: "Assets & budgets", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Fixed asset register, depreciation, transfers/disposals and budgets.",
     reports: ["Budget vs Actual", "Asset Register report"],
     entities: [
@@ -434,7 +434,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 32, title: "Payroll", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 32, title: "Payroll", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Payroll runs end to end, adjustments, loans, payslips/payments and tax declarations; also My Profile › Payslips/Tax/Loans.",
     reports: ["Payroll Overview", "Statutory Reports"],
     entities: [

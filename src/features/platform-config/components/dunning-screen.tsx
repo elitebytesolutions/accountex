@@ -1,16 +1,21 @@
 "use client";
 
-import { AlarmClock, BadgeCheck, CalendarClock, Check, Clock, History, Mail, MessageCircle, MessageSquareText, PartyPopper, Percent, Plus, ReceiptText, RefreshCw, Save, ShieldCheck, Sparkles, Trash2, Zap } from "lucide-react";
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { CalendarClock, Check, Clock, History, Mail, MessageCircle, MessageSquareText, Plus, ReceiptText, RefreshCw, Save, Sparkles, Trash2, Zap } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { DUNNING_OFFSETS, RETRY_METHOD_LABELS, RETRY_METHODS, type DunningPolicy, type DunningPolicyCreate, type RetryStep } from "@/shared";
 import { cn } from "@/components/ui/cn";
 import { Field, FormGrid } from "@/components/ui/form";
 import { ConfirmDialog, Modal } from "@/components/ui/overlay";
 import { PageHead } from "@/components/ui/page";
-import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
+import { ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { adminErrorMessage, adminFieldErrors } from "@/features/admin-common/errors";
 import { AdminHistoryTab } from "@/features/admin-history/components/admin-history-tab";
+import { useAdminLookups } from "@/features/admin-common/use-admin-lookups";
+import { runDunning } from "@/features/platform-billing/api";
+import { BILLING_LOOKUPS } from "@/features/platform-billing/components/billing-ui";
+import { DunningCollections } from "@/features/platform-billing/components/dunning-collections";
 import { activateDunningPolicy, createDunningPolicy, deleteDunningPolicy, listDunningPolicies, updateDunningPolicy } from "../api";
 import { useLoad } from "./config-ui";
 
@@ -48,7 +53,8 @@ const dayLabel = (d: number) => `D${d < 0 ? "−" + Math.abs(d) : d === 0 ? "0" 
 /**
  * Super Admin › Billing › Dunning & Collections (template admin/dunning, 3A-admin-plus.html:61 + 9B-admin-plus.js 1004+).
  * Phase 38 builds the "Dunning policy" and "Reminder channels" panels (saved with Save policy) and, template-style,
- * the retry schedule and salary-day rows. KPIs, the collections queue and promises to pay come with dunning cases (Phase 41).
+ * the retry schedule and salary-day rows. Phase 41 adds the KPIs, the collections queue and promises to pay
+ * (platform-billing DunningCollections) and "Retry all due".
  */
 export function DunningScreen() {
   const toast = useToast();
@@ -63,6 +69,22 @@ export function DunningScreen() {
   const [newName, setNewName] = useState("");
   const [removing, setRemoving] = useState(false);
   const [history, setHistory] = useState(false);
+  // Phase 41: dunning cases (collections queue) and "Retry all due".
+  const lookups = useAdminLookups(BILLING_LOOKUPS);
+  const [runKey, setRunKey] = useState(0);
+  const [running, setRunning] = useState(false);
+  const runDue = async () => {
+    setRunning(true);
+    try {
+      const r = await runDunning();
+      toast(`Dunning run · ${r.casesOpened} cases opened, ${r.casesAdvanced} moved, ${r.casesRecovered} recovered${r.errors.length ? ` · ${r.errors[0]!.message}` : ""}`, { tone: r.errors.length ? "warn" : "good" });
+      setRunKey((n) => n + 1);
+    } catch (e) {
+      toast(adminErrorMessage(e, "Could not run dunning"), { tone: "danger" });
+    } finally {
+      setRunning(false);
+    }
+  };
 
   const sel = policies?.find((p) => p.id === selId) ?? policies?.find((p) => p.isActive) ?? policies?.[0] ?? null;
   // Load the chosen policy into the form when it (or its saved version) changes.
@@ -146,24 +168,13 @@ export function DunningScreen() {
       <PageHead eyebrow="Billing / Dunning & Collections" title="Dunning & Collections"
         description="Failed payments, smart retries across JazzCash, Easypaisa, Raast and cards, and the grace to read-only to suspend policy."
         actions={<>
-          <button type="button" className="btn secondary" disabled title="Platform invoices arrive with billing (Phase 41)"><ReceiptText />Platform invoices</button>
-          <button type="button" className="btn primary" disabled title="Dunning cases arrive with billing (Phase 41)"><RefreshCw />Retry all due</button>
+          <Link className="btn secondary" href="/admin/invoices"><ReceiptText />Platform invoices</Link>
+          {/* Phase 41: opens cases for overdue invoices and advances every case by the active policy (no payment gateway yet). */}
+          <button type="button" className="btn primary" disabled={running} title="Open cases for overdue invoices and move every case by the policy" onClick={runDue}><RefreshCw />{running ? "Running…" : "Retry all due"}</button>
         </>} />
 
-      <div className="kpi-grid">
-        <Kpi label="Recovered this month" icon={<BadgeCheck />} />
-        <Kpi label="Recovery rate" icon={<Percent />} tone="teal" />
-        <Kpi label="In dunning" icon={<AlarmClock />} tone="yellow" />
-        <Kpi label="Churn saved" icon={<ShieldCheck />} tone="violet" />
-      </div>
-
-      <div className="split ap-dun-split">
-        <div className="panel flush">
-          <div className="panel-head"><div><h3>Collections queue</h3><p>Click a row to see its retry plan</p></div></div>
-          <EmptyState icon={<PartyPopper />} title="No failed payments yet" description="Tenants whose payments fail appear here once platform billing and dunning cases go live (Phase 41)." />
-        </div>
-        <div className="panel ap-rt-panel">
-          <div className="panel-head"><div><h3>Retry plan</h3><p>{form ? `${form.retrySchedule.length} scheduled retries · ${String(form.retryHour).padStart(2, "0")}:00 PKT` : "Loading…"}</p></div></div>
+      {/* Phase 41: KPIs, collections queue and the selected case's retry timeline; the policy's plan shows when no case is selected. */}
+      <DunningCollections lookups={lookups} reloadKey={runKey} planFallback={<>
           <div className="ap-rt">
             {form?.retrySchedule.map((s, i) => (
               <div key={i} className="ap-rt-step next" style={{ ["--i" as string]: i }}>
@@ -174,8 +185,7 @@ export function DunningScreen() {
           </div>
           <div className="ap-insight"><Sparkles /><div><b>Smart retry</b>
             <p>Retries land at {form ? String(form.retryHour).padStart(2, "0") : "10"}:00 on salary-credit days ({form?.salaryRetryDays.length ? form.salaryRetryDays.map((d) => ordinal(d)).join(" and ") : "none set"}). Edit the steps in <b>Retry schedule</b> below.</p></div></div>
-        </div>
-      </div>
+      </>} />
 
       {error && <ErrorState message={error.message} reference={error.reference} onRetry={reload} />}
       {!form ? (
@@ -334,14 +344,6 @@ export function DunningScreen() {
 
 const ordinal = (d: number) => `${d}${d % 10 === 1 && d !== 11 ? "st" : d % 10 === 2 && d !== 12 ? "nd" : d % 10 === 3 && d !== 13 ? "rd" : "th"}`;
 
-function Kpi({ label, icon, tone }: { label: string; icon: ReactNode; tone?: string }) {
-  return (
-    <div className={cn("kpi", tone)}>
-      <div className="kpi-top"><span>{label}</span><span className="icon-well">{icon}</span></div>
-      <strong>—</strong><small>With dunning cases (Phase 41)</small>
-    </div>
-  );
-}
 
 function DayInput({ label, value, lim, onChange, error }: { label: string; value: number; lim: readonly [number, number]; onChange: (v: number) => void; error?: string }) {
   return (
