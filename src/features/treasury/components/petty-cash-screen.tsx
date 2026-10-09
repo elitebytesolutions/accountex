@@ -2,7 +2,7 @@
 
 import { Coins, History, Plus, Receipt, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import type { CashAccount, PettyCashFund } from "@/shared";
+import type { CashAccount, CashOptions, PettyCashFund, PettyVoucher, PettyVoucherList } from "@/shared";
 import { Badge, type Tone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, FormGrid } from "@/components/ui/form";
@@ -13,13 +13,15 @@ import { useToast } from "@/components/ui/toast";
 import { HistoryTab } from "@/features/history/components/history-tab";
 import { dateLabel } from "@/features/finance/components/finance-ui";
 import { labelOf, useLookups } from "@/features/settings/use-lookups";
+import { cashOptions } from "@/features/cash/api";
 import { ApiError } from "@/lib/api/errors";
 import {
   createPettyFund, deletePettyFund, listBranchOptions, listCashAccounts, listCustodians, listPettyFunds, setPettyFundClosed, updatePettyFund, type BranchOption,
 } from "../api";
+import { PettyExpenseModal, PettyExpensesPanel, PettyTopupModal, PettyTopups, SpendByCategory } from "./petty-expenses";
 import { apiFieldErrors, apiMessage } from "./treasury-ui";
 
-type Can = { create: boolean; edit: boolean; remove: boolean };
+type Can = { create: boolean; edit: boolean; remove: boolean; post?: boolean };
 type Form = { name: string; branchId: string; custodianUserId: string; imprestAmount: string; lowPct: string; criticalPct: string; cashAccountId: string };
 const LOOKUPS = ["PettyCashFundStatus"];
 const TONE: Record<string, Tone> = { HEALTHY: "good", TOPPED_UP: "good", LOW: "warn", CRITICAL: "danger", CLOSED: "neutral" };
@@ -30,8 +32,9 @@ const levelOf = (f: PettyCashFund) => {
   return pct <= f.criticalPct ? "CRITICAL" : pct <= f.lowPct ? "LOW" : f.status === "TOPPED_UP" ? "TOPPED_UP" : "HEALTHY";
 };
 const rs = (n: number) => `Rs ${Math.round(n).toLocaleString("en-US")}`;
+const spentOf = (f: PettyCashFund) => Math.max(0, Math.round((f.imprestAmount - f.balance) * 100) / 100);
 
-/** Template app/cash/petty (40-acc-core.html): fund cards and the imprest position. Top-ups and expense vouchers arrive with Cash (Phase 18). */
+/** Template app/cash/petty (40-acc-core.html): fund cards, expense vouchers, top-ups, the imprest position and spend by category. */
 export function PettyCashScreen({ can }: { can: Can }) {
   const toast = useToast();
   const lookups = useLookups(LOOKUPS);
@@ -47,13 +50,19 @@ export function PettyCashScreen({ can }: { can: Can }) {
   const [busy, setBusy] = useState(false);
   const [history, setHistory] = useState(false);
   const [confirm, setConfirm] = useState<{ title: string; body: string; label: string; danger?: boolean; run: () => Promise<unknown>; done: string } | null>(null);
+  const [options, setOptions] = useState<CashOptions | null>(null);
+  const [vouchers, setVouchers] = useState<PettyVoucherList | null>(null);
+  const [expense, setExpense] = useState<{ voucher: PettyVoucher | null; fundId?: string } | null>(null);
+  const [topup, setTopup] = useState<{ fundId: string | null } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listPettyFunds(), listBranchOptions(), listCustodians(), listCashAccounts()])
-      .then(([f, b, u, c]) => {
+    Promise.all([listPettyFunds(), listBranchOptions(), listCustodians(), listCashAccounts(), cashOptions().catch(() => null)])
+      .then(([f, b, u, c, o]) => {
         if (cancelled) return;
-        setFunds(f);
+        // cash on hand = the fund's cash account less its unreplenished vouchers (the money already paid out of the box)
+        setFunds(o ? f.map((x) => ({ ...x, balance: o.pettyFunds.find((p) => p.id === x.id)?.cashOnHand ?? x.balance })) : f);
+        setOptions(o);
         setBranches(b);
         setUsers(u);
         // Petty / imprest accounts without a fund can be linked to a new fund.
@@ -122,8 +131,14 @@ export function PettyCashScreen({ can }: { can: Can }) {
       <PageHead
         eyebrow="Cash / Petty Cash"
         title="Petty Cash"
-        description="Imprest funds by branch with custodians. Top-ups and small expense vouchers arrive with Cash (Phase 18)."
-        actions={can.create && <Button variant="primary" icon={<Plus />} onClick={() => open("new")}>New fund</Button>}
+        description="Imprest funds by branch with custodians, top-ups and small expense vouchers."
+        actions={
+          <>
+            {can.create && live.length > 0 && <Button icon={<Receipt />} onClick={() => setExpense({ voucher: null })}>Record expense</Button>}
+            {can.post && live.length > 0 && <Button variant="primary" icon={<Plus />} onClick={() => setTopup({ fundId: null })}>Top-up fund</Button>}
+            {can.create && <Button variant={live.length ? "ghost" : "primary"} icon={<Plus />} onClick={() => open("new")}>New fund</Button>}
+          </>
+        }
       />
 
       {!funds && <div className="card-grid mb">{[0, 1, 2].map((i) => <div key={i} className="card"><Skeleton style={{ height: 120 }} /></div>)}</div>}
@@ -143,27 +158,33 @@ export function PettyCashScreen({ can }: { can: Can }) {
               <h2 style={{ margin: "12px 0 2px" }}>{rs(f.balance)}</h2>
               <small className="muted">of {rs(f.imprestAmount)} imprest</small>
               <div className={`progress mt${level === "LOW" ? " warn" : level === "CRITICAL" ? " danger" : ""}`}><i style={{ width: `${Math.min(100, Math.round((f.balance / f.imprestAmount) * 100))}%` }} /></div>
-              <div className="row small mt"><span className="muted">{f.branch.name} · {f.cashAccount.code}</span><span className="spacer" /><span className="muted">{f.cycleStartedOn ? `Since ${dateLabel(f.cycleStartedOn).slice(0, 6)}` : ""}</span></div>
+              <div className="row small mt">
+                <span className="muted">{spentOf(f) > 0 ? `Spent this cycle ${rs(spentOf(f))}` : `${f.branch.name} · ${f.cashAccount.code}`}</span>
+                <span className="spacer" />
+                {(level === "LOW" || level === "CRITICAL") && can.post
+                  ? <button type="button" className="btn sm secondary" onClick={(e) => { e.stopPropagation(); setTopup({ fundId: f.id }); }}>Top-up</button>
+                  : <span className="muted">{f.cycleStartedOn ? `Since ${dateLabel(f.cycleStartedOn).slice(0, 6)}` : ""}</span>}
+              </div>
             </div>
           ); })}
         </div>
       )}
 
       <div className="split">
-        <Panel flush title="Petty cash expenses" description="Current replenishment cycle">
-          <EmptyState icon={<Receipt />} title="No expense vouchers yet" description="Small expenses paid from a fund are recorded here once Cash vouchers arrive (Phase 18)." />
-        </Panel>
+        <PettyExpensesPanel options={options} can={{ edit: can.edit }} reloadKey={attempt} onEdit={(v) => setExpense({ voucher: v })} onChanged={reload} onList={setVouchers} />
         <div className="stack">
           <div className="panel">
             <div className="panel-head"><div><h3>Imprest position</h3><p>All open funds</p></div></div>
             <div className="dl">
               <div><span>Total imprest</span><b>{rs(imprest)}</b></div>
               <div><span>Cash on hand</span><b>{rs(onHand)}</b></div>
-              <div><span>Vouchers pending replenishment</span><b>{rs(0)}</b></div>
+              <div><span>Vouchers pending replenishment</span><b>{rs(vouchers?.pending.total ?? 0)}</b></div>
             </div>
             <div className="progress mt"><i style={{ width: `${pct}%` }} /></div>
             <small className="muted">{pct}% of imprest available across {new Set(live.map((f) => f.branch.id)).size} branch{new Set(live.map((f) => f.branch.id)).size === 1 ? "" : "es"}</small>
           </div>
+          <SpendByCategory list={vouchers} />
+          <PettyTopups reloadKey={attempt} can={{ post: !!can.post }} onChanged={reload} />
         </div>
       </div>
 
@@ -210,6 +231,8 @@ export function PettyCashScreen({ can }: { can: Can }) {
           </FormGrid>
         )}
       </Drawer>
+      <PettyExpenseModal key={expense ? (expense.voucher?.id ?? `new-${expense.fundId ?? ""}`) : "expense-closed"} open={!!expense} voucher={expense?.voucher ?? null} options={options} defaultFundId={expense?.fundId} onClose={() => setExpense(null)} onSaved={() => { setExpense(null); reload(); }} />
+      <PettyTopupModal key={topup ? `t-${topup.fundId ?? ""}` : "topup-closed"} open={!!topup} fund={options?.pettyFunds.find((x) => x.id === topup?.fundId) ?? null} options={options} onClose={() => setTopup(null)} onDone={() => { setTopup(null); reload(); }} />
       <ConfirmDialog open={!!confirm} onClose={() => setConfirm(null)} title={confirm?.title ?? ""} confirmLabel={confirm?.label} danger={confirm?.danger} busy={busy} onConfirm={runConfirm}>{confirm?.body}</ConfirmDialog>
     </>
   );

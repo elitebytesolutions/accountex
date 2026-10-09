@@ -92,13 +92,38 @@ import { OffboardingStore } from './offboardings/application/offboarding-store.j
 import { OffboardingsService } from './offboardings/application/offboardings.service.js';
 import { PrismaOffboardingStore } from './offboardings/infrastructure/prisma-offboarding.store.js';
 import { OffboardingsController } from './offboardings/presentation/offboardings.controller.js';
+// Phase 33 (talent): recruitment, performance, training
+import { RecruitmentStore } from './recruitment/application/recruitment-store.js';
+import { RecruitmentService } from './recruitment/application/recruitment.service.js';
+import { PrismaRecruitmentStore } from './recruitment/infrastructure/prisma-recruitment.store.js';
+import { CandidatesController, JobOpeningsController, RecruitmentController } from './recruitment/presentation/recruitment.controller.js';
+import { PerformanceStore } from './performance/application/performance-store.js';
+import { PerformanceService } from './performance/application/performance.service.js';
+import { PrismaPerformanceStore } from './performance/infrastructure/prisma-performance.store.js';
+import { MyGoalsController, PerformanceController } from './performance/presentation/performance.controller.js';
+import { TrainingStore } from './training/application/training-store.js';
+import { TrainingService } from './training/application/training.service.js';
+import { PrismaTrainingStore } from './training/infrastructure/prisma-training.store.js';
+import { TrainingController, TrainingSessionsController } from './training/presentation/training.controller.js';
+// Phase 33 (exits): employee letters (PDF) and assets
+import { AttachmentsModule } from '../attachments/attachments.module.js';
+import { PdfRenderer } from '../../core/application/ports/pdf-renderer.js';
+import { PdfkitRenderer } from '../../infrastructure/pdf/pdfkit-renderer.js';
+import { EmployeeLetterStore } from './letters/application/letter-store.js';
+import { EmployeeLettersService } from './letters/application/letters.service.js';
+import { PrismaEmployeeLetterStore } from './letters/infrastructure/prisma-letter.store.js';
+import { EmployeeLettersController, LetterVerificationController } from './letters/presentation/letters.controller.js';
+import { EmployeeAssetStore } from './assets/application/asset-store.js';
+import { EmployeeAssetsService } from './assets/application/assets.service.js';
+import { PrismaEmployeeAssetStore } from './assets/infrastructure/prisma-asset.store.js';
+import { EmployeeAssetsController } from './assets/presentation/assets.controller.js';
 
 /**
  * HR: organisation (Phase 10: departments, designations, grades, work shifts, holidays, org chart) and policies & people
  * (Phase 11: employees, leave types, overtime policy, biometric devices, branch HR settings).
  */
 @Module({
-  imports: [ApprovalsModule],
+  imports: [ApprovalsModule, AttachmentsModule /* Phase 33 exits */],
   controllers: [
     OrgController, DepartmentsController, DesignationsController, GradesController, ShiftsController, HolidaysController,
     EmployeesController, LeaveTypesController, OvertimeController, DevicesController,
@@ -107,6 +132,8 @@ import { OffboardingsController } from './offboardings/presentation/offboardings
     RostersController, ShiftSwapsController, OpenShiftsController, MyShiftsController, OvertimeClaimsController,
     LeaveRequestsController, MyLeaveController, LeaveBalancesController, LeaveAdjustmentsController, LeaveYearEndController, // Phase 31
     OnboardingsController, MyOnboardingController, OffboardingsController,
+    RecruitmentController, JobOpeningsController, CandidatesController, PerformanceController, MyGoalsController, TrainingController, TrainingSessionsController, // Phase 33 talent
+    EmployeeLettersController, LetterVerificationController, EmployeeAssetsController, // Phase 33 exits
   ],
   providers: [
     DepartmentsService, { provide: DepartmentStore, useClass: PrismaDepartmentStore },
@@ -131,6 +158,13 @@ import { OffboardingsController } from './offboardings/presentation/offboardings
     LeaveBalancesService, { provide: LeaveBalanceStore, useClass: PrismaLeaveBalanceStore },
     OnboardingsService, { provide: OnboardingStore, useClass: PrismaOnboardingStore },
     OffboardingsService, { provide: OffboardingStore, useClass: PrismaOffboardingStore },
+    RecruitmentService, { provide: RecruitmentStore, useClass: PrismaRecruitmentStore }, // Phase 33 talent
+    PerformanceService, { provide: PerformanceStore, useClass: PrismaPerformanceStore },
+    TrainingService, { provide: TrainingStore, useClass: PrismaTrainingStore },
+    EmployeeLettersService, { provide: EmployeeLetterStore, useClass: PrismaEmployeeLetterStore }, { provide: PdfRenderer, useClass: PdfkitRenderer }, // Phase 33 exits
+    EmployeeAssetsService, { provide: EmployeeAssetStore, useClass: PrismaEmployeeAssetStore },
   ],
+  // Phase 33 exits: other modules issue employee letters through EmployeeLettersService.issueLetter / issueLetterInTransaction
+  exports: [EmployeeLettersService],
 })
 export class HrModule {}

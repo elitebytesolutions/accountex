@@ -1,0 +1,3 @@
+/* Asset Disposals: small additions to the template (42-acc-reports.html app/assets/disposals). */
+.dsp-row{cursor:pointer}
+.dsp-row:hover td{background:var(--surface-2)}

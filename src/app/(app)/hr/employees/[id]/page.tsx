@@ -10,7 +10,7 @@ export default async function EmployeeProfilePage({ params }: { params: Promise<
   const has = (p: string) => user.permissions.includes(p);
   return (
     <Screen route="app/hr/employees/view">
-      <EmployeeProfileScreen id={id} can={{ edit: has("emp:edit"), remove: has("emp:delete") }} />
+      <EmployeeProfileScreen id={id} can={{ edit: has("emp:edit"), remove: has("emp:delete"), salaryView: has("prun:view"), salaryApprove: has("prun:approve") }} />
     </Screen>
   );
 }

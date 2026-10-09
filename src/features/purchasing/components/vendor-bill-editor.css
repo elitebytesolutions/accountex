@@ -1,0 +1,37 @@
+/* Vendor bill editor (template app/purchases/bills/new): line grid extras, tabs, advance-tax input. */
+.vb-ed .vb-lines td{vertical-align:top}
+.vb-ed .vb-lines .vb-desc{margin-top:6px}
+.vb-ed .vb-lines .vb-sub{display:block;margin-top:4px;color:var(--muted);font-size:11.5px}
+.vb-ed .vb-lines .vb-batch{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.vb-ed .vb-lines .vb-wht{display:grid;grid-template-columns:1fr 64px;gap:6px}
+.vb-ed .vb-lines .vb-acc{display:flex;align-items:center;min-height:38px;color:var(--ink-2);font-size:12.5px}
+.vb-ed .vb-lines td.num small{display:block;color:var(--muted);font-size:11px}
+.vb-ed .vb-lines .actions{white-space:nowrap}
+.vb-ed .vb-lines .actions .badge{margin-right:4px}
+.vb-ed .vb-bad,.vb-ed .tbl.lines .vb-bad{border-color:var(--danger)!important;background:var(--danger-soft,var(--surface-2))}
+.vb-ed .vb-under{padding:10px 14px;align-items:center}
+.vb-ed .vb-tabs{display:flex;gap:4px;padding:0 14px;border-bottom:1px solid var(--line)}
+.vb-ed .vb-tabs button{border:0;background:none;padding:10px 12px;font-weight:600;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer}
+.vb-ed .vb-tabs button.on{color:var(--ink);border-bottom-color:var(--primary)}
+.vb-ed .vb-tabs button i{font-style:normal;margin-left:4px;font-size:11px;padding:1px 6px;border-radius:99px;background:var(--surface-2)}
+.vb-ed .vb-hist{padding:14px}
+.vb-ed .vb-adv{max-width:140px;height:34px;text-align:right}
+.vb-ed .vb-off{opacity:.6}
+.vb-ed .panel-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+.vb-ed .vb-lines input,.vb-ed .vb-lines select{min-width:0}
+.vb-ed .vb-prev .tbl{min-width:0}
+.vb-ed .vb-prev td,.vb-ed .vb-prev th{padding-left:10px;padding-right:10px}
+.vb-ed .vb-prev td:first-child{white-space:normal}
+.vb-ed .vb-prev td.num{white-space:nowrap}
+/* template layout: full-width cards, then Totals · Posting preview · Approval route side by side */
+.vb-ed .vb-main{margin-bottom:16px}
+.vb-ed .vb-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.vb-ed .vb-sum>.panel{min-width:0;margin:0}
+@media (max-width:1100px){.vb-ed .vb-sum{grid-template-columns:minmax(0,1fr)}}
+.vb-ed .panel-head{flex-wrap:nowrap}
+.vb-ed .panel-actions{flex-wrap:nowrap;white-space:nowrap}
+@media (max-width:700px){.vb-ed .panel-head{flex-wrap:wrap}.vb-ed .panel-actions{flex-wrap:wrap}}
+.vb-ed .vb-lines{table-layout:fixed;width:100%;min-width:1185px}
+.vb-ed .vb-lines input,.vb-ed .vb-lines select{box-sizing:border-box;max-width:100%}
+.vb-ed .vb-lines td,.vb-ed .vb-lines th{overflow:hidden}

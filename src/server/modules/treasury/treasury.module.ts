@@ -27,6 +27,9 @@ import { TaxCodeStore } from './tax-codes/application/tax-code-store.js';
 import { TaxCodesService } from './tax-codes/application/tax-codes.service.js';
 import { PrismaTaxCodeStore } from './tax-codes/infrastructure/prisma-tax-code.store.js';
 import { TaxCodesController } from './tax-codes/presentation/tax-codes.controller.js';
+import { TaxMasterImportService, TaxMasterSource } from './tax-codes/application/tax-master-import.service.js';
+import { PrismaTaxMasterSource } from './tax-codes/infrastructure/prisma-tax-master-source.js';
+import { TaxMasterImportController } from './tax-codes/presentation/tax-master-import.controller.js';
 
 /**
  * Tax & treasury masters. Phase 4: tax codes, banks & bank accounts, cheque books, cash accounts & categories, expense
@@ -34,10 +37,13 @@ import { TaxCodesController } from './tax-codes/presentation/tax-codes.controlle
  */
 @Module({
   // PettyCashController before CashController: /cash/petty-funds/... must win over CashController's /cash/:resource/:id routes.
-  controllers: [TaxCodesController, BanksController, PettyCashController, CashController, BankRulesController, FbrController],
+  controllers: [TaxCodesController, BanksController, PettyCashController, CashController, BankRulesController, FbrController, TaxMasterImportController],
   providers: [
     GlLinks,
     TaxCodesService,
+    // Phase 37: "Import from Tax Master"
+    TaxMasterImportService,
+    { provide: TaxMasterSource, useClass: PrismaTaxMasterSource },
     BanksService,
     ChequeBooksService,
     CashService,
@@ -52,6 +58,6 @@ import { TaxCodesController } from './tax-codes/presentation/tax-codes.controlle
     { provide: BankStore, useClass: PrismaBankStore },
     { provide: CashStore, useClass: PrismaCashStore },
   ],
-  exports: [GlLinks],
+  exports: [GlLinks, FbrService],
 })
 export class TreasuryModule {}

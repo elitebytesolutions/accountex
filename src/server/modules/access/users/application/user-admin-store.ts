@@ -1,4 +1,4 @@
-import type { UserActivity, UserDetail, UserListItem } from '../../../../../shared/index.js';
+import type { PendingInvite, UserActivity, UserDetail, UserListItem } from '../../../../../shared/index.js';
 
 /** Account fields an admin edits (identity, access and security). */
 export type UserFields = {
@@ -38,4 +38,16 @@ export abstract class UserAdminStore {
   abstract setPassword(id: string, rowVersion: number, passwordHash: string, mustChangePassword: boolean): Promise<void>;
   /** The user's latest actions (audit entries they authored). */
   abstract activity(tenantId: string, userId: string, limit: number): Promise<UserActivity[]>;
+
+  // ---------------------------------------------------------------- Phase 44: invites and sign-in links
+  /** Creates the user INVITED, without a password (they set it from the link). */
+  abstract createInvited(user: UserFields & { roleIds: string[]; branchIds: string[]; invitedByUserId: string }): Promise<string>;
+  /** Company.passwordResetIssue: stores the token's hash; earlier unused links of the same purpose stop working. */
+  abstract issueToken(tenantId: string, userId: string, purpose: 'INVITE' | 'ADMIN_RESET', channel: string, hash: Buffer, expiresAt: Date, requestedBy: string, ip: string | null): Promise<string>;
+  abstract saveInvite(data: Record<string, unknown>): Promise<string>;
+  abstract invites(tenantId: string, includeClosed: boolean): Promise<PendingInvite[]>;
+  abstract invite(tenantId: string, id: string): Promise<(PendingInvite & { passwordResetId: string | null }) | null>;
+  abstract pendingInviteFor(tenantId: string, email: string): Promise<string | null>;
+  /** Voids a token now (revoke). */
+  abstract voidToken(tenantId: string, resetId: string): Promise<void>;
 }

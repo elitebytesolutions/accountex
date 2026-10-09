@@ -26,8 +26,9 @@ import { RouteMap } from "./route-map";
 import { RouteSheet, type RouteCan } from "./route-sheet";
 import { periodLabel, SlabEditor } from "./slab-editor";
 import { VAN_STATUS_LABEL, VanModal, type VanCan } from "./van-modal";
+import { TargetsLeaderboard, TargetsManager, TargetsPeople, type TargetsCan } from "@/features/distribution-ops/components/targets-panel";
 
-export type RoutesCan = { route: RouteCan; van: VanCan & { view: boolean }; target: { view: boolean; edit: boolean } };
+export type RoutesCan = { route: RouteCan; van: VanCan & { view: boolean }; target: { view: boolean; edit: boolean; create?: boolean; approve?: boolean; post?: boolean } };
 type DraftStop = { customerId: string; name: string; area: string | null; priceTier: string; weekday: Weekday | null; plannedEta: string };
 type Shop = { customerId: string; name: string; code: string; area: string | null; tier: string; profile: ShopProfile | null };
 
@@ -211,6 +212,7 @@ export function RoutesScreen({ can }: { can: RoutesCan }) {
   const mapStops = draft ?? route?.stops.map((s) => ({ ...s, plannedEta: s.plannedEta ?? "" })) ?? [];
 
   const current = slabs?.periods.find((p) => p.effectiveFrom === slabs.current) ?? null;
+  const targetCan: TargetsCan = { view: can.target.view, create: !!can.target.create, edit: can.target.edit, approve: !!can.target.approve, post: !!can.target.post };
   const freeShops: Shop[] = free.map((f) => ({ customerId: f.customerId, name: f.name, code: f.code, area: f.customerArea ?? f.city, tier: "", profile: null }));
 
   return (
@@ -374,10 +376,10 @@ export function RoutesScreen({ can }: { can: RoutesCan }) {
       )}
 
       <div className="ds-people-head"><h3>Bookers &amp; salesmen</h3><span className="muted small">Month to date</span></div>
-      <div className="panel"><EmptyState icon={<Users />} title="Targets and achievement arrive with salesman targets" description="Booker and salesman cards (target, strike rate, productive calls, commission) fill in once targets and invoicing are live (Phase 26)." /></div>
+      {can.target.view ? <TargetsPeople can={targetCan} /> : <div className="panel"><EmptyState icon={<Users />} title="Targets are not shared with you" description="Booker and salesman cards need the targets permission." /></div>}
       <div className="ds-pp-bottom">
-        <div className="panel"><div className="panel-head"><div><h3>Leaderboard</h3><p>Ranked by achievement against target.</p></div><span className="icon-well yellow"><Trophy /></span></div>
-          <EmptyState icon={<UserRound />} title="No targets yet" description="The leaderboard ranks bookers and salesmen once targets are live (Phase 26)." /></div>
+        {can.target.view ? <TargetsLeaderboard can={targetCan} /> : <div className="panel"><div className="panel-head"><div><h3>Leaderboard</h3><p>Ranked by achievement against target.</p></div><span className="icon-well yellow"><Trophy /></span></div>
+          <EmptyState icon={<UserRound />} title="No targets yet" description="The leaderboard needs the targets permission." /></div>}
         {can.target.view && (
           <div className="panel flush"><div className="panel-head"><div><h3>Commission slabs</h3><p>{current ? `Paid on achieved sales, by target achievement band · ${periodLabel(current)}.` : "Paid on achieved sales, by target achievement band."}</p></div>
             {can.target.edit && slabs && <button type="button" className="btn secondary sm" onClick={() => setSlabOpen(true)}><Pencil />{slabs.periods.length ? "Edit bands" : "Set up bands"}</button>}</div>
@@ -388,6 +390,7 @@ export function RoutesScreen({ can }: { can: RoutesCan }) {
           </div>
         )}
       </div>
+      {can.target.view && <div style={{ marginTop: 16 }}><TargetsManager can={targetCan} /></div>}
 
       {sheet && <RouteSheet route={sheet.route} nextCode={nextCodeOf(routes)} options={options} can={can.route} onClose={() => setSheet(null)}
         onSaved={(r, created) => { setSheet(null); if (created) setSel(r.id); reload(); }} onDeleted={() => { setSheet(null); reload(); }} />}

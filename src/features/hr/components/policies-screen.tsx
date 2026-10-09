@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, CopyPlus, FileText, Flag, Paperclip, Plus, Search, Send } from "lucide-react";
+import { Archive, CopyPlus, FileText, Flag, Paperclip, Plus, Search, Send, ShieldCheck } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import type { CompanyPolicy } from "@/shared";
 import { cn } from "@/components/ui/cn";
@@ -9,6 +9,7 @@ import { PageHead } from "@/components/ui/page";
 import { ConfirmDialog } from "@/components/ui/overlay";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
+import { PolicyAcknowledgementsDrawer } from "@/features/ess-requests/policy-acks/components/policy-acknowledgements";
 import { dateLabel } from "@/features/finance/components/finance-ui";
 import { labelOf, lookupOptions, toneOf, useLookups } from "@/features/settings/use-lookups";
 import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treasury-ui";
@@ -52,6 +53,7 @@ export function PoliciesScreen({ can }: { can: Can }) {
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [confirm, setConfirm] = useState<Action | null>(null);
+  const [acks, setAcks] = useState<CompanyPolicy | null>(null);
 
   useEffect(() => { const t = setTimeout(() => { setSearch(q); setPage(1); }, 300); return () => clearTimeout(t); }, [q]);
   useEffect(() => {
@@ -171,11 +173,14 @@ export function PoliciesScreen({ can }: { can: Can }) {
               <span className="spacer" />
               {row.status === "DRAFT" && can.edit && <button type="button" className="btn secondary sm" disabled={busy} onClick={() => setConfirm("publish")}><Send />Publish</button>}
               {row.status !== "DRAFT" && can.create && <button type="button" className="btn secondary sm" disabled={busy} onClick={() => setConfirm("new-version")}><CopyPlus />New version</button>}
+              {row.status !== "DRAFT" && <button type="button" className="btn ghost sm" onClick={() => setAcks(row)}><ShieldCheck />Acknowledgements</button>}
               {row.status === "PUBLISHED" && can.edit && <button type="button" className="btn ghost sm" disabled={busy} onClick={() => setConfirm("retire")}><Archive />Retire</button>}
             </div>
           )}
         </RecordModal>
       )}
+
+      <PolicyAcknowledgementsDrawer policyId={acks?.id ?? null} title={acks?.title ?? ""} onClose={() => setAcks(null)} />
     </>
   );
 }

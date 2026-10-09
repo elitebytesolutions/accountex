@@ -4,11 +4,25 @@ import { AssetCategoriesService } from './categories/application/asset-categorie
 import { AssetCategoryStore } from './categories/application/asset-category-store.js';
 import { PrismaAssetCategoryStore } from './categories/infrastructure/prisma-asset-category.store.js';
 import { AssetCategoriesController } from './categories/presentation/asset-categories.controller.js';
+import { DepreciationRunsService } from './depreciation/application/depreciation-runs.service.js';
+import { AssetMovementsService } from './movements/application/asset-movements.service.js';
+import { FixedAssetStore } from './register/application/fixed-asset-store.js';
+import { FixedAssetsService } from './register/application/fixed-assets.service.js';
+import { PrismaFixedAssetStore } from './register/infrastructure/prisma-fixed-asset.store.js';
+import {
+  AssetDisposalsController, AssetTransfersController, DepreciationRunsController, FixedAssetsController,
+} from './register/presentation/fixed-assets.controller.js';
 
-/** Fixed assets masters (Phase 5: asset categories). The register and depreciation arrive in Phase 27. */
+/**
+ * Fixed assets: categories (Phase 5); the register with capitalisation, monthly depreciation runs, transfers and
+ * disposals (Phase 27). Controllers under /assets/<word> are listed before the register's /assets/:id routes.
+ */
 @Module({
   imports: [TreasuryModule],
-  controllers: [AssetCategoriesController],
-  providers: [AssetCategoriesService, { provide: AssetCategoryStore, useClass: PrismaAssetCategoryStore }],
+  controllers: [AssetCategoriesController, DepreciationRunsController, AssetTransfersController, AssetDisposalsController, FixedAssetsController],
+  providers: [
+    AssetCategoriesService, { provide: AssetCategoryStore, useClass: PrismaAssetCategoryStore },
+    { provide: FixedAssetStore, useClass: PrismaFixedAssetStore }, FixedAssetsService, AssetMovementsService, DepreciationRunsService,
+  ],
 })
 export class AssetsModule {}

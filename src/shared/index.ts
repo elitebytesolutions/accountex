@@ -41,7 +41,13 @@ export * from './assets/category.ts';
 // Phase 27: fixed asset register, depreciation, transfers, disposals; budgets
 export * from './assets/register.ts';
 export * from './finance/budget.ts';
+// Phase 35: data imports, integrations, backups, report runs; collaboration
+export * from './system/data-ops.ts';
+export * from './system/collaboration.ts';
 export * from './tax/fbr.ts';
+export * from './tax/compliance.ts';
+// Phase 44: work queue, notifications, dashboard, sign-in recovery
+export * from './work/work.ts';
 export * from './access/sod-rule.ts';
 export * from './inventory/unit.ts';
 export * from './inventory/company.ts';
@@ -132,3 +138,13 @@ export * from './platform/entitlement-log.ts';
 export * from './sales/receivables.ts';
 // Phase 26: distribution (load sheets, route settlements, recovery, targets & commissions, credit control)
 export * from './sales/distribution-ops.ts';
+// Phase 33 (talent): recruitment, performance, training
+export * from './hr/recruitment.ts';
+export * from './hr/performance.ts';
+export * from './hr/training.ts';
+// Phase 33 (exits): final settlements, employee letters and assets
+export * from './hr/settlement.ts';
+export * from './hr/letter.ts';
+export * from './hr/asset.ts';
+// Phase 29: period close (reopen requests, year-end close, reminder runs, financial statements)
+export * from './finance/period-close.ts';

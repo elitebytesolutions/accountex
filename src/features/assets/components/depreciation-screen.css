@@ -1,0 +1,7 @@
+/* Run Depreciation: small additions to the template (42-acc-reports.html app/assets/depreciation). */
+.dep-params-foot{gap:8px;flex-wrap:wrap;align-items:center}
+.dep-hist-item{width:100%;background:none;border:0;border-bottom:1px solid var(--line);text-align:left;cursor:pointer;font:inherit;color:inherit}
+.dep-hist-item:last-child{border-bottom:0}
+.dep-hist-item:hover b,.dep-hist-item.on b{color:var(--primary)}
+.dep-click{cursor:pointer}
+.dep-click:hover td{background:var(--surface-2)}

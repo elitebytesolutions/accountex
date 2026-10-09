@@ -1,0 +1,26 @@
+/* Settings › Data Import — additions to template app/import (4A-company-plus.html + 1A-company-plus.css; the cp- rules are global in finsoft-company.css). */
+.screen[data-route="app/import"] .cp-im-ent.off{cursor:not-allowed;background:var(--surface-2)}
+.screen[data-route="app/import"] .cp-im-ent.off:hover{transform:none;box-shadow:none;border-color:var(--line)}
+.screen[data-route="app/import"] .cp-im-ent.off>*:not(.im-soon){opacity:.55}
+.screen[data-route="app/import"] .im-soon{position:absolute;right:14px;top:14px;font-size:10.5px;padding:1px 8px}
+.screen[data-route="app/import"] .cp-val-sum.im-two{grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.4fr)}
+.screen[data-route="app/import"] .cp-im-tbl td.num,.screen[data-route="app/import"] .cp-im-tbl th.num{text-align:left}
+.screen[data-route="app/import"] .cp-bad .im-why{display:block;font-size:10.5px;color:var(--danger);margin-top:3px;white-space:normal;max-width:220px}
+.screen[data-route="app/import"] .im-more{font-size:11.5px;color:var(--muted)}
+.screen[data-route="app/import"] .im-checking{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.screen[data-route="app/import"] .im-spin{position:absolute;inset:0;animation:imSpin 1.4s linear infinite}
+.screen[data-route="app/import"] .im-indet{overflow:hidden}
+.screen[data-route="app/import"] .im-indet>i{width:35%!important;animation:imSlide 1.3s ease-in-out infinite}
+.screen[data-route="app/import"] .cp-done .badge{vertical-align:middle}
+@keyframes imSpin{to{transform:rotate(360deg)}}
+@keyframes imSlide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+@media(max-width:1440px){.screen[data-route="app/import"] .cp-val-sum.im-two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:780px){.screen[data-route="app/import"] .cp-val-sum.im-two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.screen[data-route="app/import"] .im-spin,.screen[data-route="app/import"] .im-indet>i{animation:none}}
+
+/* history drawer (portal, outside the screen) */
+.im-hist .tl-item{cursor:pointer;border-radius:12px;padding:6px 8px 16px;margin:0 -8px;transition:background-color .15s}
+.im-hist .tl-item:hover,.im-hist .tl-item:focus-visible{background:var(--surface-2);outline:0}
+.im-hist .tl-item:not(:last-child)::before{left:14px;top:22px}
+.im-hist .tl-item>div{flex:1;min-width:0}
+.im-hist .tl-item .badge{margin-top:6px}

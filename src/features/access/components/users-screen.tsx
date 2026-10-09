@@ -1,11 +1,15 @@
 "use client";
 
-import { Download, MailCheck, MapPin, Search, Shield, ShieldOff, UserPlus, Users, UserSearch } from "lucide-react";
+import { Download, MailCheck, MapPin, Search, Send, Shield, ShieldOff, UserPlus, Users, UserSearch, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { Role, UserListItem } from "@/shared";
+import type { PendingInvite, Role, SignInLink, UserListItem } from "@/shared";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/cn";
+import { ConfirmDialog } from "@/components/ui/overlay";
 import { ErrorState, Skeleton } from "@/components/ui/states";
+import { useToast } from "@/components/ui/toast";
+import { listInvites, resendInvite, revokeInvite } from "@/features/work/api";
+import { LinkModal } from "@/features/work/components/link-modal";
 import { initialsOf } from "@/features/auth/initials";
 import { ApiError } from "@/lib/api/errors";
 import { listBranches } from "@/features/settings/api";
@@ -18,7 +22,11 @@ type Branch = { id: string; code: string; name: string };
 type StatusFilter = "all" | "ACTIVE" | "SUSPENDED";
 
 /** Template app/settings/users (9E-cash-users.js usersMount). */
-export function UsersScreen({ me, companyName, can }: { me: string; companyName: string; can: { create: boolean; edit: boolean; remove: boolean; export: boolean } }) {
+export function UsersScreen({ me, myName, companyName, can }: { me: string; myName?: string; companyName: string; can: { create: boolean; edit: boolean; remove: boolean; export: boolean } }) {
+  const toast = useToast();
+  const [invites, setInvites] = useState<PendingInvite[]>([]);
+  const [shownLink, setShownLink] = useState<{ link: SignInLink; name: string; phone: string | null } | null>(null);
+  const [revoking, setRevoking] = useState<PendingInvite | null>(null);
   const [users, setUsers] = useState<UserListItem[] | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -34,10 +42,11 @@ export function UsersScreen({ me, companyName, can }: { me: string; companyName:
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listUsers(), listRoles(), listBranches({ page: 1, pageSize: 100, sort: "code" })])
-      .then(([u, r, b]) => {
+    Promise.all([listUsers(), listRoles(), listBranches({ page: 1, pageSize: 100, sort: "code" }), listInvites().catch(() => [] as PendingInvite[])])
+      .then(([u, r, b, inv]) => {
         if (cancelled) return;
         setUsers(u);
+        setInvites(inv);
         setRoles(r.filter((x) => x.systemKey !== "EMPLOYEE"));
         setBranches(b.items.filter((x) => x.status === "ACTIVE"));
         setError(null);
@@ -109,7 +118,7 @@ export function UsersScreen({ me, companyName, can }: { me: string; companyName:
         <>
           <div className="cu-ukpis">
             <div className="cu-uk"><span className="icon-tile"><Users /></span><div><small>Active users</small><b>{active.length}</b><em>{counts.SUSPENDED} suspended · {all.filter((u) => u.isExternal).length} external</em></div></div>
-            <div className="cu-uk"><span className="icon-tile blue"><MailCheck /></span><div><small>Pending invites</small><b>0</b><em>Email invites arrive in Phase 15</em></div></div>
+            <div className="cu-uk"><span className="icon-tile blue"><MailCheck /></span><div><small>Pending invites</small><b>{invites.filter((i) => i.status === "PENDING").length}</b><em>{invites.filter((i) => i.status === "EXPIRED").length ? `${invites.filter((i) => i.status === "EXPIRED").length} expired · resend them` : "Invitations expire after 7 days"}</em></div></div>
             <div className="cu-uk"><span className="cu-ring low" style={{ ["--p" as string]: 0 }}><svg viewBox="0 0 44 44"><circle r="18" cx="22" cy="22" /><circle className="v" r="18" cx="22" cy="22" pathLength="100" /></svg><Shield /></span><div><small>MFA coverage</small><b>0%</b><em>Two-step sign-in arrives in Phase 15</em></div></div>
             <div className="cu-uk"><span className="icon-tile violet"><UserPlus /></span><div><small>Total users</small><b>{all.length}</b><em>Seats and plans arrive with billing</em></div></div>
           </div>
@@ -185,9 +194,23 @@ export function UsersScreen({ me, companyName, can }: { me: string; companyName:
 
           <div className="cu-ugrid">
             <div className="panel cu-invp">
-              <div className="panel-head"><div><h3>Pending invites</h3><p>Invitations by email or WhatsApp</p></div><span className="badge info">Phase 15</span></div>
+              <div className="panel-head"><div><h3>Pending invites</h3><p>Invitations expire after 7 days</p></div><span className="badge info">{invites.length} pending</span></div>
               <div className="cu-invs">
-                <div className="empty-state cu-inv-empty"><span className="icon-well lg"><MailCheck /></span><h4>No invites yet</h4><p>Invites need email delivery, which arrives in Phase 15. Use Add User to create an account with a temporary password.</p></div>
+                {invites.length ? invites.map((iv) => (
+                  <div key={iv.id} className="cu-inv">
+                    <span className={cn("avatar sm", avatarClass(iv.email))}>{initialsOf(iv.fullName ?? iv.email)}</span>
+                    <div className="cu-inv-t"><b>{iv.email}</b><small>{[iv.role, `via ${iv.channels.map((c) => (c === "WHATSAPP" ? "WhatsApp" : "email")).join(" & ")}`, iv.invitedBy && `by ${iv.invitedBy.name}`, whenLabel(iv.sentAt)].filter(Boolean).join(" · ")}</small></div>
+                    <span className={cn("badge", iv.status === "EXPIRED" ? "danger" : "warn")}>{iv.status === "EXPIRED" ? "Expired" : `Expires ${new Date(iv.expiresAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}`}</span>
+                    {can.create && (
+                      <div className="cu-inv-act">
+                        <button type="button" className="btn ghost sm" title="Make a new link (the old one stops working)" onClick={() => void resendInvite(iv.id, iv.rowVersion).then((r) => { setShownLink({ link: r.link, name: iv.fullName ?? iv.email, phone: iv.phone }); reload(); }).catch((e: unknown) => toast(e instanceof ApiError ? e.message : "Could not resend", { tone: "danger" }))}><Send />Resend</button>
+                        {can.edit && <button type="button" className="icon-btn-sm cu-x-btn" title="Revoke invite" aria-label="Revoke invite" onClick={() => setRevoking(iv)}><X /></button>}
+                      </div>
+                    )}
+                  </div>
+                )) : (
+                  <div className="empty-state cu-inv-empty"><span className="icon-well lg"><MailCheck /></span><h4>No pending invites</h4><p>{can.create ? "Use Add User and choose Invite: they set their own password from a one-time link." : "Everyone invited has joined."}</p></div>
+                )}
               </div>
             </div>
             <div className="panel cu-post">
@@ -214,9 +237,16 @@ export function UsersScreen({ me, companyName, can }: { me: string; companyName:
         onClose={() => setOpenId(null)}
         onEdit={(id) => { setOpenId(null); setWizard({ editId: id }); }}
         onChanged={reload}
+        onLink={(link, name, phone) => setShownLink({ link, name, phone })}
       />
+      <LinkModal link={shownLink?.link ?? null} name={shownLink?.name ?? ""} phone={shownLink?.phone ?? null} companyName={companyName} onClose={() => setShownLink(null)} />
+      <ConfirmDialog open={!!revoking} onClose={() => setRevoking(null)} danger confirmLabel="Revoke invite" title={`Revoke the invitation for ${revoking?.email ?? ""}?`}
+        onConfirm={() => revoking && void revokeInvite(revoking.id, revoking.rowVersion).then(() => { toast("Invitation revoked", { tone: "good" }); setRevoking(null); reload(); }).catch((e: unknown) => toast(e instanceof ApiError ? e.message : "Could not revoke", { tone: "danger" }))}>
+        The link stops working and the invited account is removed.
+      </ConfirmDialog>
       {wizard && (
-        <UserWizard editId={wizard.editId} roles={roles} branches={branches} onClose={() => setWizard(null)} onSaved={afterSave} />
+        <UserWizard editId={wizard.editId} roles={roles} branches={branches} onClose={() => setWizard(null)} onSaved={afterSave} inviterName={myName} companyName={companyName}
+          onInvited={(r) => setShownLink({ link: r.link, name: r.user.name, phone: r.user.phone })} />
       )}
     </>
   );

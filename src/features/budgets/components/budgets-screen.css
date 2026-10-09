@@ -1,0 +1,13 @@
+/* Budgeting › Budgets — additions to template app/budgets (42-acc-reports.html). */
+.screen[data-route="app/budgets"] .bud-row{cursor:pointer}
+.screen[data-route="app/budgets"] .bud-row.selected td{background:var(--primary-soft)}
+.screen[data-route="app/budgets"] .bud-grid td.bud-acc{min-width:220px;white-space:normal;line-height:1.35}
+.screen[data-route="app/budgets"] .bud-grid td.bud-acc small{display:block;margin-top:3px}
+.screen[data-route="app/budgets"] .bud-grid select.bud-cc{height:28px;margin-top:4px;font-size:12px;border-radius:8px;padding:0 6px;max-width:220px}
+.screen[data-route="app/budgets"] .bud-grid .cell-input{min-width:84px}
+.screen[data-route="app/budgets"] .bud-grid .cell-input[readonly]{background:transparent;cursor:default}
+.screen[data-route="app/budgets"] .bud-grid .cell-input.bud-bad{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface))}
+.screen[data-route="app/budgets"] .bud-grid tr.bud-focus td:first-child{box-shadow:inset 3px 0 0 var(--primary)}
+.screen[data-route="app/budgets"] .bud-grid tr.bud-add select{max-width:360px}
+.screen[data-route="app/budgets"] .bud-grid tr.total td.neg{color:var(--neg)}
+.screen[data-route="app/budgets"] .row.small svg{width:15px;height:15px;flex:none}

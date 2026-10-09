@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { LoginSchema, type LoginInput } from "@/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -65,7 +66,7 @@ export function LoginForm() {
         {isSubmitting ? "Signing in…" : "Sign in"}
         <ArrowRight />
       </button>
-      <p className="small muted mt">Forgot your password? Ask your company administrator to reset it.</p>
+      <p className="small muted mt">Forgot your password? <Link className="link" href="/login/forgot">Reset it</Link></p>
     </form>
   );
 }

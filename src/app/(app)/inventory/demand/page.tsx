@@ -5,10 +5,11 @@ import { requirePermission } from "@/lib/session";
 export const metadata = { title: "Demand & Reorder" };
 
 export default async function DemandPage() {
-  await requirePermission("item:view");
+  const user = await requirePermission("item:view");
+  const has = (p: string) => user.permissions.includes(p);
   return (
     <Screen route="app/inventory/demand" className="so-scr">
-      <DemandScreen />
+      <DemandScreen can={{ edit: has("item:edit"), po: has("po:create") }} />
     </Screen>
   );
 }

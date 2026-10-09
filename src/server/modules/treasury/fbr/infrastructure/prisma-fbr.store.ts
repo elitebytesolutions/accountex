@@ -23,7 +23,7 @@ export class PrismaFbrStore extends FbrStore {
       out[r.authority] = {
         authority: r.authority as FbrAuthority, id: r.id, environment: r.environment, posId: r.posId, ntn: r.ntn, strn: r.strn,
         hasToken: !!r.apiTokenSecretRef, tokenHint: r.apiTokenHint, tokenExpiresOn: day(r.tokenExpiresOn), reportOnPosting: r.reportOnPosting,
-        printQr: r.printQr, blockIfUnreachable: r.blockIfUnreachable, syncIntervalMinutes: r.syncIntervalMinutes, connectionStatus: r.connectionStatus,
+        printQr: r.printQr, blockIfUnreachable: r.blockIfUnreachable, sendingEnabled: r.sendingEnabled, syncIntervalMinutes: r.syncIntervalMinutes, connectionStatus: r.connectionStatus,
         lastHealthCheckAt: r.lastHealthCheckAt?.toISOString() ?? null, lastSyncAt: r.lastSyncAt?.toISOString() ?? null, isActive: r.isActive,
         mappings: maps.filter((m) => m.fbrConfigId === r.id).map((m) => ({
           id: m.id, branchId: m.branchId, branchName: m.branchId ? (branches.find((b) => b.id === m.branchId)?.name ?? null) : null, posId: m.posId, isActive: m.isActive,
@@ -46,6 +46,10 @@ export class PrismaFbrStore extends FbrStore {
 
   save(data: Record<string, unknown>) {
     return addUpdate(this.prisma, 'fbrSettingAddUpdate', data);
+  }
+
+  async setSending(tenantId: string, authority: FbrAuthority, on: boolean) {
+    await this.prisma.db().fbrSettings.updateMany({ where: { tenantId, authority, sendingEnabled: !on }, data: { sendingEnabled: on } });
   }
 
   async putSecret(tenantId: string, purpose: string, sealed: Sealed) {

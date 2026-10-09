@@ -1,0 +1,18 @@
+/* Activity (template 1A-company-plus.css "10. ACTIVITY" is global via finsoft-company.css); live-data additions only. */
+.cp-af-more{display:flex;justify-content:center;padding:4px 0 12px}
+.cp-af-none{margin:0;padding:4px 8px;font-size:12.5px}
+.cp-af-del{border:0;background:transparent;color:var(--muted);width:26px;height:26px;border-radius:8px;display:inline-grid;place-items:center;padding:0;cursor:pointer;margin-left:2px}
+.cp-af-del:hover{background:var(--danger-soft);color:var(--danger)}
+.cp-af-del svg{width:14px;height:14px}
+.cp-af-del.sm{float:right;width:22px;height:22px;margin:-2px -4px 0 0}
+.cp-af-del.sm svg{width:12px;height:12px}
+.cp-af-files{display:flex;flex-wrap:wrap;gap:6px}
+.cp-af-files a.cp-file{text-decoration:none;color:inherit;transition:border-color .2s}
+.cp-af-files a.cp-file:hover{border-color:var(--line-2)}
+.cp-rp .cp-af-files{margin-top:6px}
+.cp-af-cre{display:flex;gap:4px;margin-top:6px}
+.cp-af-cre .cp-re{height:24px;padding:0 7px}
+.cp-af-cre .cp-re span{font-size:12px}
+.cp-post.cp-post-skel{animation:none}
+.cp-post.cp-post-skel .cp-post-b{display:flex;flex-direction:column}
+.cp-rin .btn.icon{width:32px;padding:0;justify-content:center}

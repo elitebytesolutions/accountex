@@ -1,0 +1,108 @@
+/* Reports Centre (template 16-studio.css .rpc-*, ported verbatim) + live-data additions at the end. */
+.rpc-page{color:var(--ink);padding-bottom:24px;container-type:inline-size;container-name:rpc}
+.rpc-hero{position:relative;padding:6px 4px 20px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;isolation:isolate}
+.rpc-hero::before{content:'';position:absolute;inset:-28px -28px 0 auto;width:60%;z-index:-1;pointer-events:none;background:radial-gradient(100% 140% at 100% 0,var(--primary-soft) 0,transparent 60%)}
+.rpc-eyebrow{display:block;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--primary);font-weight:700;margin-bottom:6px}
+.rpc-hero h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-.6px;color:var(--ink);line-height:1.1}
+.rpc-hero p{margin:8px 0 0;max-width:540px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.rpc-hero-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;padding-top:46px}
+.rpc-search{height:44px;width:340px;max-width:100%;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-input);display:flex;align-items:center;gap:10px;padding:0 8px 0 14px;
+  transition:border-color var(--dur),box-shadow var(--dur)}
+.rpc-search:hover{border-color:var(--primary)}
+.rpc-search:focus-within{border-color:var(--primary);box-shadow:var(--ring)}
+.rpc-search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.rpc-page .rpc-search input{border:0!important;outline:0;background:transparent!important;width:100%;height:100%!important;padding:0!important;box-shadow:none!important;font:inherit;font-size:13.5px;color:var(--ink)}
+.rpc-page .rpc-search input:focus{border-color:transparent!important;box-shadow:none}
+.rpc-search input::placeholder{color:var(--muted-2)}
+.rpc-search kbd{font:inherit;font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:3px 7px;white-space:nowrap}
+.rpc-hero-actions .btn{height:44px}
+.rpc-tagline{position:absolute;right:24px;top:-6px;display:flex;align-items:flex-start;gap:4px;font-family:var(--font-hand);font-size:23px;line-height:1.05;color:var(--primary);transform:rotate(-5deg);pointer-events:none;text-align:right}
+.rpc-tagline svg{width:46px;height:34px;color:var(--primary);margin-top:-6px}
+.rpc-tagline path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+.rpc-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.rpc-kpi{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;
+  transition:transform var(--dur) var(--ease),box-shadow var(--dur),border-color var(--dur)}
+.rpc-kpi:hover{transform:translateY(-2px);box-shadow:var(--shadow-1);border-color:var(--line-2)}
+.rpc-kpi>div{min-width:0}
+.rpc-kpi small{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.rpc-kpi b{display:block;font-size:20px;font-weight:800;margin:3px 0 4px;letter-spacing:-.5px;white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums}
+.rpc-kpi b .dec{color:var(--muted-2);font-weight:600}
+.rpc-kpi em{font-style:normal;font-size:11.5px;font-weight:700;white-space:nowrap}
+.rpc-kpi em.up{color:var(--good)}.rpc-kpi em.down{color:var(--danger)}.rpc-kpi em.warn{color:var(--warn)}
+.rpc-kpi em span{color:var(--muted);font-weight:500}
+.rpc-spark{position:absolute;right:16px;top:20px;width:76px;height:30px;overflow:visible}
+.rpc-spark path{fill:none;stroke:var(--primary);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:140;stroke-dashoffset:140;animation:rpc-draw 1.2s var(--ease) .2s forwards}
+.rpc-spark path.area{stroke:none;fill:var(--primary-soft);stroke-dasharray:none;stroke-dashoffset:0;animation:rpc-fade .8s .6s both}
+.rpc-kpi.status{background:linear-gradient(135deg,var(--primary-soft),var(--surface) 70%)}
+.rpc-kpi.status b{font-size:15px;display:flex;align-items:center;gap:8px}
+.rpc-kpi.status b i{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 var(--good);animation:rpc-ping 2s infinite}
+.rpc-kpi.status em{color:var(--muted);font-weight:500;white-space:normal;display:block;line-height:1.4}
+
+.rpc-section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:26px 0 12px}
+.rpc-section-head h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.3px}
+.rpc-cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.rpc-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:18px 16px 16px;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;gap:6px;min-height:168px;
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+.rpc-card[hidden]{display:none}
+.rpc-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-2);border-color:var(--primary)}
+.rpc-card:active{transform:translateY(-1px)}
+.rpc-card:focus-visible{outline:none;box-shadow:var(--ring)}
+.rpc-card.featured{border:2px solid var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.rpc-card .icon-tile{margin-bottom:8px}
+.rpc-card b{font-size:15px;font-weight:700;color:var(--ink)}
+.rpc-card p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45;padding-right:40px}
+.rpc-card .pill{align-self:flex-start;margin-top:auto}
+.rpc-go{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center;transition:background .3s,color .3s,transform .3s var(--ease)}
+.rpc-go svg{width:16px;height:16px}
+.rpc-card:hover .rpc-go{background:var(--primary);color:var(--primary-ink);transform:translateX(2px) rotate(-45deg)}
+.rpc-noresult{grid-column:1/-1;text-align:center;color:var(--muted);padding:28px;border:1px dashed var(--line-2);border-radius:var(--r-card)}
+.rpc-work{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:14px;margin-top:22px;align-items:start}
+.rpc-recent{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 4px;border-top:1px solid var(--line);text-decoration:none;color:inherit;border-radius:10px;transition:background var(--dur)}
+.rpc-recent:first-of-type{border-top:0}
+.rpc-recent:hover{background:var(--surface-2)}
+.rpc-recent>span{width:32px;height:32px;border-radius:9px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
+.rpc-recent>span svg{width:16px;height:16px}
+.rpc-recent b{display:block;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpc-recent small{display:block;color:var(--muted);font-size:11.5px}
+.rpc-page.rpc-in .rpc-hero,.rpc-page.rpc-in .rpc-kpi,.rpc-page.rpc-in .rpc-card,.rpc-page.rpc-in .rpc-work>*{animation:rst-up .5s var(--ease) backwards}
+.rpc-page .rpc-kpi:nth-child(2),.rpc-page .rpc-card:nth-child(2){animation-delay:.04s}
+.rpc-page .rpc-kpi:nth-child(3),.rpc-page .rpc-card:nth-child(3){animation-delay:.08s}
+.rpc-page .rpc-kpi:nth-child(4),.rpc-page .rpc-card:nth-child(4){animation-delay:.12s}
+.rpc-page .rpc-kpi:nth-child(5),.rpc-page .rpc-card:nth-child(5){animation-delay:.16s}
+.rpc-page .rpc-card:nth-child(n+6){animation-delay:.2s}
+@keyframes rpc-draw{to{stroke-dashoffset:0}}
+@keyframes rpc-fade{from{opacity:0}}
+@keyframes rpc-ping{0%{box-shadow:0 0 0 0 var(--good)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@container rpc (max-width:1400px){.rpc-cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@container rpc (max-width:1180px){.rpc-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.rpc-cards{grid-template-columns:repeat(3,minmax(0,1fr))}.rpc-work{grid-template-columns:1fr}}
+@container rpc (max-width:1100px){.rpc-tagline{display:none}.rpc-hero-actions{padding-top:0}.rpc-hero{flex-direction:column;align-items:stretch}.rpc-hero-actions{justify-content:flex-start}}
+@media(max-width:900px){.rpc-search{width:100%}.rpc-kpis,.rpc-cards{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.rpc-kpis,.rpc-cards{grid-template-columns:1fr}}
+.rpc-chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rpc-chips button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 13px;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink-2);display:inline-flex;gap:7px;align-items:center;cursor:pointer;transition:background var(--dur),border-color var(--dur),color var(--dur),transform .18s var(--ease)}
+.rpc-chips button:hover{border-color:var(--line-2);color:var(--ink)}
+.rpc-chips button:active{transform:scale(.96)}
+.rpc-chips button i{font-style:normal;background:var(--surface-3);color:var(--ink-2);border-radius:999px;padding:0 7px;font-size:11px;font-weight:700}
+.rpc-chips button.active{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.rpc-chips button.active i{background:var(--lime);color:var(--lime-ink)}
+@keyframes rst-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* --- Accountex additions --- */
+.rpc-kpis.rpc-kpis-live{grid-template-columns:repeat(4,minmax(0,1fr))}
+.rpc-kpi .rpc-kpi-txt{font-size:15px;overflow:hidden;text-overflow:ellipsis}
+.rpc-card.soon{cursor:default;opacity:.62}
+.rpc-card.soon:hover{transform:none;box-shadow:none;border-color:var(--line)}
+.rpc-card.soon .pill{border-style:dashed}
+.rpc-run{grid-template-columns:32px minmax(0,1fr) auto}
+.rpc-run-r{display:flex;align-items:center;gap:6px}
+.rpc-run-err{color:var(--danger)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpc-skel{display:flex;flex-direction:column;gap:8px}
+.rpc-skel.pad,.rpc-pad{padding:0 18px 18px}
+.rpc-flush-head{padding:18px 18px 4px}
+.rpc-row-acts{display:flex;gap:4px;justify-content:flex-end}
+.rpc-fav{width:13px;height:13px;color:var(--warn);fill:var(--warn);margin-right:5px;vertical-align:-1px}
+@container rpc (max-width:1180px){.rpc-kpis.rpc-kpis-live{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.rpc-kpis.rpc-kpis-live{grid-template-columns:1fr}}
+.rpc-run:first-of-type{border-top:1px solid var(--line)}.panel-head+.rpc-run{border-top:0}

@@ -1,0 +1,6 @@
+/* Phase 27 asset detail additions to template app/assets/view. */
+.fa-chart-labels{justify-content:space-between;flex-wrap:nowrap;gap:6px}
+.fa-chart-labels>span{min-width:0;white-space:nowrap}
+.fa-tr-actions{gap:6px;justify-content:flex-end;flex-wrap:nowrap}
+.fa-history .seg{flex-wrap:nowrap}
+.fa-history .seg button{white-space:nowrap}

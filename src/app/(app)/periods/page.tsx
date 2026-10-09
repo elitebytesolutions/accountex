@@ -5,5 +5,11 @@ export const metadata = { title: "Fiscal Periods" };
 
 export default async function PeriodsPage() {
   const user = await requirePermission("close:view");
-  return <PeriodsScreen canManage={user.permissions.includes("close:approve")} />;
+  return (
+    <PeriodsScreen
+      canManage={user.permissions.includes("close:approve")}
+      canRequest={user.permissions.includes("close:post")}
+      userId={user.id}
+    />
+  );
 }

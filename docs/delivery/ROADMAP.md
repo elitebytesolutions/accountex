@@ -3,7 +3,7 @@
 > Generated from `docs/delivery/roadmap/*.ts` by `npm run delivery:roadmap`. Edit the data files, not this document.
 > Phase progress is the `status` of each phase in the data files (planned / in-progress / done), updated when a phase is accepted.
 
-**44 phases** · **186 entities** (82 masters, 104 transactional) · 424 tables assigned · 21 tables deliberately not entities · checked against the live DB and `template/src`.
+**45 phases** · **187 entities** (82 masters, 105 transactional) · 424 tables assigned · 21 tables deliberately not entities · checked against the live DB and `template/src`.
 
 Say **"next phase"** to plan the next pending phase (skill `next-phase`). Nothing is implemented without approval of that phase's plan.
 
@@ -69,16 +69,17 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 23 | Sales documents | Transactions | workspace | done | Quotations · Sales Orders · Delivery Challans · Sales Invoices |
 | 24 | Sales completion | Transactions | workspace | done | Sales Returns · Credit Notes · Customer Receipts · Recurring Invoices · POS Shifts & Payments |
 | 25 | Wholesale | Transactions | workspace | done | Order Bookings · Order Templates · Quick Wholesale Entry (Held Bills) · Bulk Invoice Runs · Back-orders |
-| 26 | Distribution | Transactions | workspace | in-progress | Load Sheets & Delivery · Route Settlements · Recovery Sheets · Salesman Targets & Commissions · Credit Control |
-| 27 | Assets & budgets | Transactions | workspace | in-progress | Fixed Asset Register · Depreciation · Asset Transfers & Disposals · Budgets |
-| 28 | Tax compliance | Transactions | workspace | planned | Sales Tax Returns · WHT Deductions & Challans · WHT Certificates & Statements · FBR Submissions |
-| 29 | Period close & work queue | Transactions | workspace | planned | Period Reopen Requests · Year-End Close · Payment Reminder Runs · Tasks & Notifications · Sign-in Recovery & MFA |
+| 26 | Distribution | Transactions | workspace | done | Load Sheets & Delivery · Route Settlements · Recovery Sheets · Salesman Targets & Commissions · Credit Control |
+| 27 | Assets & budgets | Transactions | workspace | done | Fixed Asset Register · Depreciation · Asset Transfers & Disposals · Budgets |
+| 28 | Tax compliance | Transactions | workspace | done | Sales Tax Returns · WHT Deductions & Challans · WHT Certificates & Statements · FBR Submissions |
+| 29 | Period close | Transactions | workspace | done | Period Reopen Requests · Year-End Close · Payment Reminder Runs |
 | 30 | Time & attendance | Transactions | workspace | done | Attendance · Regularisation Requests · Rosters & Shift Swaps · Overtime Claims |
 | 31 | Leave & lifecycle | Transactions | workspace | done | Leave Requests · Leave Balances · Onboardings · Offboardings |
 | 32 | Payroll | Transactions | workspace | done | Payroll Runs · Payroll Adjustments · Loans & Advances · Payslips & Salary Payments · Tax Declarations |
-| 33 | Talent & exits | Transactions | workspace | planned | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
-| 34 | Self-service requests | Transactions | workspace | planned | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
-| 35 | Data & collaboration | Transactions | workspace | planned | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
+| 33 | Talent & exits | Transactions | workspace | in-progress | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
+| 34 | Self-service requests | Transactions | workspace | done | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
+| 35 | Data & collaboration | Transactions | workspace | in-progress | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
+| 44 | Work queue & sign-in recovery | Transactions | workspace | in-progress | Tasks & Today's Work · Notifications & Preferences · Sign-in Recovery & MFA |
 | 36 | Plans & catalogue | Masters | admin | done | Subscription Plans · Platform Modules · Add-ons · Coupons |
 | 37 | Seed templates & tax master | Masters | admin | done | COA Templates · Tenant Seed Templates · Tax Master · Communication Templates |
 | 38 | Platform configuration | Masters | admin | done | Dunning Policies · Tenant Segments · Resellers · Platform Security & Backups |
@@ -2436,9 +2437,9 @@ Read-only reports delivered with this phase: Budget vs Actual, Asset Register re
   - `DELETE /api/tax/sales-tax-returns/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/tax/sales-tax-returns/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/tax/sales-tax-returns/prepare?period
-  - POST /api/tax/sales-tax-returns/:id/approve|file
-  - GET /api/tax/sales-tax-returns/:id/annex-c.xlsx
-- **Business rules:** A filed return locks the period's tax documents.
+  - POST /api/tax/sales-tax-returns/:id/approve|file|pay
+  - GET /api/tax/sales-tax-returns/:id/annex-c.csv|annex-a.csv (IRIS CSV, no xlsx library; decided 2026-10-08)
+- **Business rules:** A filed return locks the period's tax documents; Annex-A lines default MATCHED; the user flags UNMATCHED (no FBR supplier feed; decided 2026-10-08); Pay posts a BPV: Dr OUTPUT_GST + FURTHER_TAX_PAYABLE, Cr INPUT_GST + bank.
 - **Depends on:** `sales-invoices` (phase 23), `vendor-bills` (phase 19)
 
 ### 28.2 WHT Deductions & Challans `wht`
@@ -2455,9 +2456,9 @@ Read-only reports delivered with this phase: Budget vs Actual, Asset Register re
   - `PATCH /api/tax/wht/:id`: update with rowVersion (409 when stale); drafts only
   - `DELETE /api/tax/wht/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/tax/wht/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/tax/wht/challans (pay selected deductions)
-  - POST /api/tax/wht/challans/:id/post
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit.
+  - POST /api/tax/wht/challans (pay a period's sections)
+  - POST /api/tax/wht/challans/:id/post|cancel
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; Register filled by posting triggers: vendor payments / purchase vouchers (DEDUCTED), receipts (SUFFERED), invoice advance tax (COLLECTED); payroll 149 via Tax.whtRegister from Phase 32 (decided 2026-10-08).
 - **Depends on:** `vendor-payments` (phase 20)
 
 ### 28.3 WHT Certificates & Statements `wht-certificates`
@@ -2475,14 +2476,14 @@ Read-only reports delivered with this phase: Budget vs Actual, Asset Register re
   - `DELETE /api/tax/wht/certificates/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/tax/wht/certificates/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/tax/wht/certificates/generate
-  - GET /api/tax/wht/certificates/:id/pdf
+  - GET /api/tax/wht/certificates/:id/print (browser print, no server PDF)
   - POST /api/tax/wht/statements/prepare?period
 - **Depends on:** `wht` (phase 28)
 
 ### 28.4 FBR Submissions `fbr-submissions`
 
 - **Tables:** `Tax.FbrInvoiceSubmissions`, `Tax.FbrConnectionEvents`
-- **Audit trigger:** missing on `Tax.FbrConnectionEvents`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/tax/fbr` — `template/src/42-acc-reports.html`
 - **Pages:** `/tax/fbr` (list/screen)
 - **Permissions:** `tax`: view, create, edit, approve, post, export
@@ -2496,14 +2497,14 @@ Read-only reports delivered with this phase: Budget vs Actual, Asset Register re
   - POST /api/tax/fbr/submissions/:id/retry
   - GET /api/tax/fbr/connection-events
   - POST /api/tax/fbr/test-connection and Sync now (moved from Phase 5)
-- **Business rules:** Submissions are append-only; retries create new attempts.
+- **Business rules:** One submission row per document; each retry increments attempts and the audit trail keeps every attempt; Sending OFF by default (FbrSettings.sendingEnabled); simulator only for FBR_SIMULATE_TENANTS; going live offers send backlog or mark NOT_REPORTED (decided 2026-10-08, rev 2).
 - **Depends on:** `sales-invoices` (phase 23), `fbr-settings` (phase 5)
 
-## Phase 29: Period close & work queue
+## Phase 29: Period close
 
-**Transactions** · workspace · 5 entities. Period reopen, year-end close, reminder runs, tasks and notifications; completes the financial statements.
+**Transactions** · workspace · 3 entities. Period reopen, year-end close and payment reminder runs; completes the financial statements. Tasks, notifications, sign-in recovery and the dashboard moved to Phase 44 (decided 2026-10-08).
 
-Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash Flow, Workspace Dashboard.
+Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash Flow.
 
 ### 29.1 Period Reopen Requests `period-reopen`
 
@@ -2520,7 +2521,7 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
   - `DELETE /api/accounting/period-reopen-requests/:id`: drafts only; posted documents are reversed, never deleted
   - `GET /api/accounting/period-reopen-requests/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/accounting/period-reopen-requests/:id/approve|reject
-- **Business rules:** Reopen always needs approval; auto-relock after the window.
+- **Business rules:** Reopen always needs approval; auto-relock after the window; Approved by close:approve, never the requester, no engine; locked periods need MFA (later phase), so only closed periods reopen (decided 2026-10-08).
 - **Depends on:** `fiscal-periods` (phase 3), `approvals` (phase 16)
 
 ### 29.2 Year-End Close `year-end`
@@ -2539,13 +2540,13 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
   - `GET /api/accounting/year-end/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/accounting/year-end/:fiscalYearId/checklist
   - POST /api/accounting/year-end/:fiscalYearId/close (retained earnings transfer)
-- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; All periods locked and checklist complete before close.
+- **Business rules:** Draft → submitted → approved → posted; posted documents are immutable; Corrections only by reversal (reverse/void), never edit or delete; Posting is one transaction: document + GL/stock effects + audit; All periods locked and checklist complete before close; Dry run stores the figures; final close (close:approve) posts the closing JE and locks every period; cancel reverses (decided 2026-10-08).
 - **Depends on:** `vouchers` (phase 16), `fiscal-periods` (phase 3)
 
 ### 29.3 Payment Reminder Runs `reminder-runs`
 
 - **Tables:** `Sales.PaymentReminderLogs`
-- **Audit trigger:** missing on `Sales.PaymentReminderLogs`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/receivables/reminders` — `template/src/4A-company-plus.html`
 - **Pages:** `/receivables/reminders` (list/screen)
 - **Permissions:** `rcpt`: view, create, edit, approve, post, delete, export
@@ -2558,48 +2559,8 @@ Read-only reports delivered with this phase: Profit & Loss, Balance Sheet, Cash 
   - `GET /api/receivables/reminder-runs/:id/history`: audit trail (Company.AuditTrailEntries)
   - POST /api/receivables/reminder-runs (run rules now)
   - Scheduled job (actor = SERVICE)
+- **Business rules:** Outbox only: messages are rendered and logged as QUEUED; an email/SMS provider plugs in later (decided 2026-10-08).
 - **Depends on:** `reminder-setup` (phase 9), `sales-invoices` (phase 23)
-
-### 29.4 Tasks & Notifications `tasks-notifications`
-
-- **Tables:** `Company.Tasks`, `Company.Notifications`, `Company.NotificationPreferences`
-- **Audit trigger:** missing on `Company.Tasks`, `Company.Notifications`, `Company.NotificationPreferences`; add it in this phase
-- **Template:** `app/today` — `template/src/40-acc-core.html`; `app/notifications` — `template/src/40-acc-core.html`
-- **Pages:** `/today` (list/screen), `/notifications` (list/screen)
-- **Permissions:** none: own data or Super Admin (portal-wide)
-- **API:**
-  - `GET /api/work?search&status&page&pageSize&sort`: list → { items, total }
-  - `GET /api/work/:id`: detail
-  - `POST /api/work`: create (draft)
-  - `PATCH /api/work/:id`: update with rowVersion (409 when stale); drafts only
-  - `DELETE /api/work/:id`: drafts only; posted documents are reversed, never deleted
-  - `GET /api/work/:id/history`: audit trail (Company.AuditTrailEntries)
-  - GET /api/work/today (Company.getTodayDueItems, getTodayKpis)
-  - CRUD /api/work/tasks
-  - GET /api/me/notifications, POST /api/me/notifications/read-all
-- **Business rules:** Own tasks/notifications only unless assigned.
-- **Depends on:** `users` (phase 2)
-
-### 29.5 Sign-in Recovery & MFA `sign-in-recovery`
-
-- **Tables:** `Company.UserInvites`, `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`
-- **Audit trigger:** missing on `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`; add it in this phase
-- **Template:** `login/mfa` — `template/src/30-entry-admin.html`; `login/forgot` — `template/src/30-entry-admin.html`
-- **Pages:** `/login/mfa` (list/screen), `/login/forgot` (list/screen)
-- **Permissions:** none: own data or Super Admin (portal-wide)
-- **API:**
-  - `GET /api/me/mfa?search&status&page&pageSize&sort`: list → { items, total }
-  - `GET /api/me/mfa/:id`: detail
-  - `POST /api/me/mfa`: create (draft)
-  - `PATCH /api/me/mfa/:id`: update with rowVersion (409 when stale); drafts only
-  - `DELETE /api/me/mfa/:id`: drafts only; posted documents are reversed, never deleted
-  - `GET /api/me/mfa/:id/history`: audit trail (Company.AuditTrailEntries)
-  - POST /api/settings/users/invite (email/WhatsApp link) + accept page
-  - POST /api/me/mfa/enrol|verify|disable
-  - DELETE /api/me/trusted-devices/:id
-  - POST /api/auth/forgot, POST /api/auth/reset
-- **Business rules:** Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs in this phase); Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
-- **Depends on:** `users` (phase 2), `account-security` (phase 2)
 
 ## Phase 30: Time & attendance
 
@@ -2885,7 +2846,7 @@ Read-only reports delivered with this phase: HR Reports.
 ### 33.2 Recruitment `recruitment`
 
 - **Tables:** `HumanResources.JobOpenings`, `HumanResources.Candidates`, `HumanResources.CandidateActivities`
-- **Audit trigger:** missing on `HumanResources.JobOpenings`, `HumanResources.Candidates`, `HumanResources.CandidateActivities`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/recruitment` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/recruitment` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -2903,7 +2864,7 @@ Read-only reports delivered with this phase: HR Reports.
 ### 33.3 Performance `performance`
 
 - **Tables:** `HumanResources.PerformanceReviews`, `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`
-- **Audit trigger:** missing on `HumanResources.Goals`, `HumanResources.PerformanceFeedback`, `HumanResources.OneOnOneMeetings`, `HumanResources.CompetencyRatings`, `HumanResources.KeyResults`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/performance` — `template/src/51-hr-pay-talent.html`; `app/profile/goals` — `template/src/6A-ess.html`
 - **Pages:** `/hr/performance` (list/screen), `/profile/goals` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export; `mygoal`: view, edit
@@ -2921,7 +2882,7 @@ Read-only reports delivered with this phase: HR Reports.
 ### 33.4 Training `training`
 
 - **Tables:** `HumanResources.TrainingSessions`, `HumanResources.TrainingEnrolments`, `HumanResources.Certifications`
-- **Audit trigger:** missing on `HumanResources.TrainingSessions`, `HumanResources.TrainingEnrolments`, `HumanResources.Certifications`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/training` — `template/src/51-hr-pay-talent.html`
 - **Pages:** `/hr/training` (list/screen)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -2938,7 +2899,7 @@ Read-only reports delivered with this phase: HR Reports.
 ### 33.5 Employee Letters & Assets `employee-letters-assets`
 
 - **Tables:** `HumanResources.EmployeeLetters`, `HumanResources.EmployeeAssets`
-- **Audit trigger:** missing on `HumanResources.EmployeeAssets`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/hr/employees/view` — `template/src/50-hr-core.html`
 - **Pages:** `/hr/employees/[id]` (detail)
 - **Permissions:** `emp`: view, create, edit, delete, export
@@ -2999,7 +2960,7 @@ Read-only reports delivered with this phase: My Day (getMyDay), My Team (getMyTe
 ### 34.3 Helpdesk Tickets `helpdesk-tickets`
 
 - **Tables:** `EmployeeSelfService.HelpdeskTickets`, `EmployeeSelfService.HelpdeskTicketMessages`
-- **Audit trigger:** missing on `EmployeeSelfService.HelpdeskTicketMessages`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/profile/helpdesk` — `template/src/6A-ess.html`
 - **Pages:** `/profile/helpdesk` (list/screen)
 - **Permissions:** `myhelp`: view, create
@@ -3017,7 +2978,7 @@ Read-only reports delivered with this phase: My Day (getMyDay), My Team (getMyTe
 ### 34.4 Kudos, Survey Responses, Reads & Presence `engagement`
 
 - **Tables:** `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`
-- **Audit trigger:** missing on `EmployeeSelfService.Kudos`, `EmployeeSelfService.KudosReactions`, `EmployeeSelfService.PollVotes`, `EmployeeSelfService.PulseSurveyResponses`, `EmployeeSelfService.CompanyAnnouncementReads`, `EmployeeSelfService.PresenceStatuses`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/profile/kudos` — `template/src/6A-ess.html`; `app/profile/directory` — `template/src/6A-ess.html`
 - **Pages:** `/profile/kudos` (list/screen), `/profile/directory` (list/screen)
 - **Permissions:** `mykudos`: view, create; `dir`: view
@@ -3063,7 +3024,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 35.1 Data Imports `data-imports`
 
 - **Tables:** `Company.DataImports`, `Company.DataImportErrors`
-- **Audit trigger:** missing on `Company.DataImportErrors`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/import` — `template/src/4A-company-plus.html`
 - **Pages:** `/import` (list/screen)
 - **Permissions:** `bak`: view, create, export
@@ -3101,7 +3062,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 35.3 Backup & Restore `backups`
 
 - **Tables:** `Company.Backups`, `Company.BackupSettings`, `Company.BackupRestoreRequests`
-- **Audit trigger:** missing on `Company.Backups`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/settings/backup` — `template/src/60-settings-ess.html`
 - **Pages:** `/settings/backup` (list/screen)
 - **Permissions:** `bak`: view, create, export
@@ -3118,7 +3079,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 35.4 Report Runs `report-runs`
 
 - **Tables:** `Reports.ReportRuns`
-- **Audit trigger:** missing on `Reports.ReportRuns`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/reports` — `template/src/45-studios.html`; `app/reports/studio` — `template/src/42-acc-reports.html`
 - **Pages:** `/reports` (list/screen), `/reports/studio` (list/screen)
 - **Permissions:** `rpt`: view, create, edit, delete, export
@@ -3136,7 +3097,7 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
 ### 35.5 Activity, Comments & Attachments `collaboration`
 
 - **Tables:** `Company.ActivityEvents`, `Company.Comments`, `Company.Mentions`, `Company.Reactions`, `Company.Attachments`, `Company.Tags`, `Company.TaggedRecords`
-- **Audit trigger:** missing on `Company.ActivityEvents`, `Company.Comments`, `Company.Mentions`, `Company.Reactions`, `Company.Attachments`, `Company.Tags`, `Company.TaggedRecords`; add it in this phase
+- **Audit trigger:** present on all tables
 - **Template:** `app/activity` — `template/src/4A-company-plus.html`
 - **Pages:** `/activity` (list/screen)
 - **Permissions:** none: own data or Super Admin (portal-wide)
@@ -3152,6 +3113,71 @@ Read-only reports delivered with this phase: Audit Trail, Reports Hub.
   - PUT /api/collaboration/tags/:recordType/:recordId
 - **Business rules:** Visibility follows the target record's permission.
 - **Depends on:** `users` (phase 2)
+
+## Phase 44: Work queue & sign-in recovery
+
+**Transactions** · workspace · 3 entities. Tasks and notifications, user invites and password reset, and the workspace dashboard (split from Phase 29, decided 2026-10-08).
+
+Read-only reports delivered with this phase: Workspace Dashboard.
+
+### 44.1 Tasks & Today's Work `tasks`
+
+- **Tables:** `Company.Tasks`
+- **Audit trigger:** present on all tables
+- **Template:** `app/today` — `template/src/40-acc-core.html`
+- **Pages:** `/today` (list/screen)
+- **Permissions:** none: own data or Super Admin (portal-wide)
+- **API:**
+  - `GET /api/work?search&status&page&pageSize&sort`: list → { items, total }
+  - `GET /api/work/:id`: detail
+  - `POST /api/work`: create (draft)
+  - `PATCH /api/work/:id`: update with rowVersion (409 when stale); drafts only
+  - `DELETE /api/work/:id`: drafts only; posted documents are reversed, never deleted
+  - `GET /api/work/:id/history`: audit trail (Company.AuditTrailEntries)
+  - GET /api/work/today (Company.getTodayDueItems, getTodayKpis)
+  - CRUD /api/work/tasks
+- **Business rules:** Own tasks only unless assigned.
+- **Depends on:** `users` (phase 2)
+
+### 44.2 Notifications & Preferences `notifications`
+
+- **Tables:** `Company.Notifications`, `Company.NotificationPreferences`
+- **Audit trigger:** present on all tables
+- **Template:** `app/notifications` — `template/src/40-acc-core.html`
+- **Pages:** `/notifications` (list/screen)
+- **Permissions:** none: own data or Super Admin (portal-wide)
+- **API:**
+  - `GET /api/me/notifications?search&status&page&pageSize&sort`: list → { items, total }
+  - `GET /api/me/notifications/:id`: detail
+  - `POST /api/me/notifications`: create (draft)
+  - `PATCH /api/me/notifications/:id`: update with rowVersion (409 when stale); drafts only
+  - `DELETE /api/me/notifications/:id`: drafts only; posted documents are reversed, never deleted
+  - `GET /api/me/notifications/:id/history`: audit trail (Company.AuditTrailEntries)
+  - GET /api/me/notifications, POST /api/me/notifications/read-all
+  - PUT /api/me/notification-preferences
+- **Business rules:** Own notifications only.
+- **Depends on:** `users` (phase 2)
+
+### 44.3 Sign-in Recovery & MFA `sign-in-recovery`
+
+- **Tables:** `Company.UserInvites`, `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`
+- **Audit trigger:** missing on `Company.UserMfaMethods`, `Company.TrustedDevices`, `Company.PasswordResets`; add it in this phase
+- **Template:** `login/mfa` — `template/src/30-entry-admin.html`; `login/forgot` — `template/src/30-entry-admin.html`
+- **Pages:** `/login/mfa` (list/screen), `/login/forgot` (list/screen)
+- **Permissions:** none: own data or Super Admin (portal-wide)
+- **API:**
+  - `GET /api/me/mfa?search&status&page&pageSize&sort`: list → { items, total }
+  - `GET /api/me/mfa/:id`: detail
+  - `POST /api/me/mfa`: create (draft)
+  - `PATCH /api/me/mfa/:id`: update with rowVersion (409 when stale); drafts only
+  - `DELETE /api/me/mfa/:id`: drafts only; posted documents are reversed, never deleted
+  - `GET /api/me/mfa/:id/history`: audit trail (Company.AuditTrailEntries)
+  - POST /api/settings/users/invite (email/WhatsApp link) + accept page
+  - POST /api/me/mfa/enrol|verify|disable
+  - DELETE /api/me/trusted-devices/:id
+  - POST /api/auth/forgot, POST /api/auth/reset
+- **Business rules:** Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs); Invites and password reset only (outbox links); MFA / trusted devices in a later phase (decided 2026-10-08); Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
+- **Depends on:** `users` (phase 2), `account-security` (phase 2)
 
 ## Phase 36: Plans & catalogue
 

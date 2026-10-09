@@ -5,7 +5,7 @@ import {
   PencilLine, RefreshCw, Send, Shield, Smartphone, Timer, UserPlus, UserRound, Warehouse,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
-import { SESSION_TIMEOUTS, USER_MODULES, type Role, type UserDetail } from "@/shared";
+import { SESSION_TIMEOUTS, USER_MODULES, type Role, type UserDetail, type UserInviteResult } from "@/shared";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/cn";
 import { Drawer } from "@/components/ui/overlay";
@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { initialsOf } from "@/features/auth/initials";
 import { ApiError } from "@/lib/api/errors";
+import { inviteUser } from "@/features/work/api";
 import { createUser, getUser, updateUser } from "../api";
 import { avatarClass, generatePassword, passwordScore, RoleIcon, RolePill, rs } from "./access-ui";
 
@@ -29,12 +30,15 @@ type W = {
   roleIds: string[]; branchIds: string[]; moduleAccess: string[]; approvalLimit: number; dataScope: string;
   ipRestricted: boolean; ipAllowlist: string; sessionTimeoutMin: number; loginHours: string; loginFrom: string; loginTo: string;
   password: string; mustChangePassword: boolean; showPassword: boolean;
+  /** Phase 44: invite (one-time link) or create now (temporary password). */
+  method: "invite" | "create"; chEmail: boolean; chWa: boolean;
 };
 const blank = (branches: Branch[]): W => ({
   fullName: "", email: "", phone: "", department: "", jobTitle: "", isExternal: false, externalOrg: "",
   roleIds: [], branchIds: branches.slice(0, 1).map((b) => b.id), moduleAccess: [...USER_MODULES], approvalLimit: 0, dataScope: "BRANCH",
   ipRestricted: false, ipAllowlist: "", sessionTimeoutMin: 60, loginHours: "ANY", loginFrom: "09:00", loginTo: "19:00",
   password: generatePassword(), mustChangePassword: true, showPassword: false,
+  method: "invite", chEmail: true, chWa: false,
 });
 const fromUser = (u: UserDetail): W => ({
   fullName: u.name, email: u.email, phone: u.phone ?? "", department: u.department ?? "", jobTitle: u.jobTitle ?? "", isExternal: u.isExternal,
@@ -42,17 +46,22 @@ const fromUser = (u: UserDetail): W => ({
   approvalLimit: u.approvalLimit, dataScope: u.dataScope, ipRestricted: u.ipRestricted, ipAllowlist: u.ipAllowlist.join("\n"),
   sessionTimeoutMin: u.sessionTimeoutMin, loginHours: u.loginHours, loginFrom: u.loginFrom ?? "09:00", loginTo: u.loginTo ?? "19:00",
   password: "", mustChangePassword: false, showPassword: false,
+  method: "create", chEmail: false, chWa: false,
 });
 /** Which wizard step owns a server field error. */
 const STEP_OF: Record<string, number> = { temporaryPassword: 1, fullName: 2, email: 2, phone: 2, externalOrg: 2, roleIds: 3, branchIds: 4, ipAllowlist: 5, loginTo: 5 };
 
 /** Template Add / edit user wizard (9E-cash-users.js openWizard): six steps in a wide drawer. */
-export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
+export function UserWizard({ editId, roles, branches, onClose, onSaved, onInvited, inviterName, companyName }: {
   editId: string | null;
   roles: Role[];
   branches: Branch[];
   onClose: () => void;
   onSaved: (id: string) => void;
+  /** Phase 44: the invitation was created; the one-time link is shown once. */
+  onInvited?: (r: UserInviteResult) => void;
+  inviterName?: string;
+  companyName?: string;
 }) {
   const toast = useToast();
   const [w, setW] = useState<W | null>(editId ? null : blank(branches));
@@ -76,11 +85,13 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
   const validate = (s: number): boolean => {
     if (!w) return false;
     const e: Record<string, string> = {};
-    if (s === 1 && !editId && w.password.length < 10) e.password = "At least 10 characters with letters and numbers";
+    if (s === 1 && !editId && w.method === "create" && w.password.length < 10) e.password = "At least 10 characters with letters and numbers";
+    if (s === 1 && !editId && w.method === "invite" && !w.chEmail && !w.chWa) e.channels = "Choose email or WhatsApp";
     if (s === 2) {
       if (w.fullName.trim().length < 2) e.fullName = "Name is required";
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(w.email.trim())) e.email = w.email ? "Enter a valid email" : "Email is required";
       if (w.isExternal && !w.externalOrg.trim()) e.externalOrg = "Organisation is required";
+      if (!editId && w.method === "invite" && w.chWa && !w.phone.trim()) e.phone = "Mobile is needed for WhatsApp";
     }
     if (s === 3 && !w.roleIds.length) e.roleIds = "Choose at least one role";
     if (s === 4 && !w.branchIds.length) e.branchIds = "Pick at least one branch";
@@ -104,6 +115,13 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
       loginHours: w.loginHours, loginFrom: w.loginHours === "CUSTOM" ? w.loginFrom : null, loginTo: w.loginHours === "CUSTOM" ? w.loginTo : null,
     };
     try {
+      if (!editId && w.method === "invite") {
+        const r = await inviteUser({ ...body, channels: [...(w.chEmail ? ["EMAIL"] : []), ...(w.chWa ? ["WHATSAPP"] : [])] });
+        toast(`${r.user.name} invited`, { tone: "good" });
+        setOpen(false);
+        setTimeout(() => { onInvited?.(r); onSaved(r.user.id); }, 200);
+        return;
+      }
       const saved = editId
         ? await updateUser(editId, { ...body, rowVersion })
         : await createUser({ ...body, temporaryPassword: w.password, mustChangePassword: w.mustChangePassword });
@@ -116,7 +134,7 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
         setErrs(Object.fromEntries(fields));
         const target = Math.min(...Object.keys(e.details).map((f) => STEP_OF[f] ?? STEPS.length));
         if (target < STEPS.length) setStep(target);
-      } else if (e instanceof ApiError && e.code === "DB_UNIQUE_VIOLATION") {
+      } else if (e instanceof ApiError && (e.code === "DB_UNIQUE_VIOLATION" || e.code === "INVITE_PENDING_EXISTS")) {
         setErrs({ email: "This email already has access" });
         setStep(2);
       }
@@ -129,7 +147,7 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
   const err = (k: string) => (errs[k] ? <small className="cu-err">{errs[k]}</small> : null);
   const score = w ? passwordScore(w.password) : 0;
   const pickedRoles = roles.filter((r) => w?.roleIds.includes(r.id));
-  const fin = editId ? <><Check />Save changes</> : <><UserPlus />Create user</>;
+  const fin = editId ? <><Check />Save changes</> : w?.method === "invite" ? <><Send />Send invite</> : <><UserPlus />Create user</>;
 
   return (
     <Drawer
@@ -170,15 +188,27 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
                   <h3 className="cu-wz-h">How should they get access?</h3>
                   <p className="cu-wz-p">They sign in with the company code and their work email.</p>
                   <div className="cu-mcards">
-                    <button type="button" className="cu-mcard" disabled aria-disabled title="Email and WhatsApp invites arrive in Phase 15">
+                    <button type="button" className={cn("cu-mcard", w.method === "invite" && "on")} onClick={() => set("method", "invite")}>
                       <span className="icon-tile blue"><MailPlus /></span><b>Invite by email / WhatsApp</b><small>They set their own password from a secure one-time link.</small>
-                      <span className="cu-mcard-tags"><em>Available in Phase 15</em></span><i className="cu-radio" />
+                      <span className="cu-mcard-tags"><em>Recommended</em><em>Link valid 7 days</em></span><i className="cu-radio" />
                     </button>
-                    <button type="button" className="cu-mcard on">
+                    <button type="button" className={cn("cu-mcard", w.method === "create" && "on")} onClick={() => set("method", "create")}>
                       <span className="icon-tile orange"><KeyRound /></span><b>Create account now</b><small>Set a temporary password and share it with them securely.</small>
                       <span className="cu-mcard-tags"><em>Instant access</em></span><i className="cu-radio" />
                     </button>
                   </div>
+                  {w.method === "invite" ? (
+                    <div className="cu-wz-box">
+                      <span className="lbl">Send invite via</span>
+                      <div className="cu-chan">
+                        <label className="cu-chk"><input type="checkbox" checked={w.chEmail} onChange={(e) => set("chEmail", e.target.checked)} /><span><MailPlus />Email</span></label>
+                        <label className="cu-chk"><input type="checkbox" checked={w.chWa} onChange={(e) => set("chWa", e.target.checked)} /><span><Smartphone />WhatsApp</span></label>
+                      </div>
+                      {err("channels")}
+                      <div className="cu-bubble"><small>Preview</small><p><b>{inviterName ?? "You"}</b> invited you to join <b>{companyName ?? "the company"}</b> on Accountex as <b>{roles.find((r) => r.id === w.roleIds[0])?.name ?? "…"}</b>. Accept within 7 days: <u>one-time link</u></p></div>
+                      <small className="muted">No email provider is connected yet: after sending you get the link to copy or share on WhatsApp.</small>
+                    </div>
+                  ) : (
                   <div className="cu-wz-box">
                     <span className="lbl">Temporary password</span>
                     <div className="cu-pwd">
@@ -190,6 +220,7 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
                     {err("password")}
                     <label className="cu-chk inline"><input type="checkbox" checked={w.mustChangePassword} onChange={(e) => set("mustChangePassword", e.target.checked)} /><span>Require a new password at first sign-in</span></label>
                   </div>
+                  )}
                 </>
               ))}
 
@@ -311,7 +342,7 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
                   </div>
                   <div className="cu-rev">
                     <div className="dl">
-                      <Row k="Method" v={editId ? "Existing account" : `Temporary password${w.mustChangePassword ? " · must change at first sign-in" : ""}`} go={editId ? undefined : () => setStep(1)} />
+                      <Row k="Method" v={editId ? "Existing account" : w.method === "invite" ? `Invite by ${[w.chEmail && "email", w.chWa && "WhatsApp"].filter(Boolean).join(" and ")} · link valid 7 days` : `Temporary password${w.mustChangePassword ? " · must change at first sign-in" : ""}`} go={editId ? undefined : () => setStep(1)} />
                       <Row k="Identity" v={`${w.jobTitle || "—"} · ${w.department || "—"}${w.isExternal ? ` · ${w.externalOrg}` : ""}`} go={() => setStep(2)} />
                       <Row k="Roles" v={pickedRoles.map((r) => r.name).join(", ")} go={() => setStep(3)} />
                       <Row k="Branches" v={w.branchIds.length === branches.length ? "All branches" : branches.filter((b) => w.branchIds.includes(b.id)).map((b) => b.name).join(", ")} go={() => setStep(4)} />
@@ -329,7 +360,7 @@ export function UserWizard({ editId, roles, branches, onClose, onSaved }: {
                       {editId ? (
                         <><li><RefreshCw />Changes apply at their next page load</li><li><ListChecks />Recorded in the user&apos;s history</li></>
                       ) : (
-                        <><li><KeyRound />Share the temporary password with them securely</li><li><UserRound />They sign in with company code, email and that password{w.mustChangePassword ? ", then choose their own" : ""}</li><li><ListChecks />Recorded in the user&apos;s history</li></>
+                        w.method === "invite" ? <><li><Send />You get a one-time link to copy or share on WhatsApp</li><li><UserRound />They open it within 7 days and choose their password</li><li><ListChecks />You are notified when they join</li></> : <><li><KeyRound />Share the temporary password with them securely</li><li><UserRound />They sign in with company code, email and that password{w.mustChangePassword ? ", then choose their own" : ""}</li><li><ListChecks />Recorded in the user&apos;s history</li></>
                       )}
                     </ul>
                   </div>

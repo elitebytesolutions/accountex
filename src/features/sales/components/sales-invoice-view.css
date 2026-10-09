@@ -1,0 +1,22 @@
+/* Sales invoice view (template app/sales/invoices/view): the printed paper and its side panels. */
+.siv .page-head h1 .badge{font-size:12px;letter-spacing:0;vertical-align:middle;margin-left:6px}
+.siv .siv-paper{position:relative}
+.siv .siv-paper .tbl td small{display:block;color:var(--muted);font-size:11.5px;font-weight:500}
+.siv .siv-paper .table-wrap{border:0;box-shadow:none;background:transparent}
+.siv .siv-qr{display:inline-grid;place-items:center;width:84px;height:84px;border:1px dashed var(--line-2);border-radius:6px;margin-top:6px;align-content:center;gap:2px}
+.siv .siv-qr svg{width:22px;height:22px}
+.siv .siv-sign{height:40px;border-bottom:1px solid var(--line-2);margin-bottom:4px}
+.siv .siv-pre{white-space:pre-line}
+.siv .siv-note{text-align:center;margin-top:12px;width:100%}
+.siv .paper-foot{display:block}
+.siv .siv-wide{width:100%}
+.siv .siv-void{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;font-size:110px;font-weight:800;letter-spacing:.12em;color:var(--danger);opacity:.08;transform:rotate(-18deg)}
+.siv .siv-hist .timeline{max-height:420px;overflow:auto}
+
+/* Print / PDF: only the paper. The app shell is hidden by the global print rules. */
+@media print{
+  .siv .page-head,.siv>.banner,.siv .split>.stack{display:none!important}
+  .siv .split{display:block}
+  .siv .siv-paper{border:0;box-shadow:none;padding:0;margin:0;overflow:visible}
+  .siv .siv-paper .table-wrap{overflow:visible}
+}

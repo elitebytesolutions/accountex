@@ -283,9 +283,10 @@
 }
 
 
-/* payslip print view: only the paper prints */
+/* payslip print view: only the paper prints - scoped to pages that contain the paper, because this stylesheet stays
+   loaded after client-side navigation and must not blank other pages' printouts */
 @media print{
-  body *{visibility:hidden}
+  body:has(.pay-print) *{visibility:hidden}
   .pay-print,.pay-print *{visibility:visible}
   .pay-print{position:absolute;left:0;top:0;width:100%;box-shadow:none;border:0;margin:0}
   .no-print{display:none!important}

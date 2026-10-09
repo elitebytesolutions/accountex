@@ -1,0 +1,5 @@
+/* Budgeting › Budget vs Actual — additions to template app/budgets/variance (42-acc-reports.html). */
+.screen[data-route="app/budgets/variance"] .bva-dept{cursor:pointer}
+.screen[data-route="app/budgets/variance"] .bva-dept .progress{margin:6px 0 4px}
+.screen[data-route="app/budgets/variance"] .bars.dual .bar.bva-out i{opacity:.45}
+.screen[data-route="app/budgets/variance"] .toolbar .chips{flex-wrap:wrap}

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { UserActivity, UserDetail, UserListItem } from '../../../../../shared/index.js';
+import type { PendingInvite, UserActivity, UserDetail, UserListItem } from '../../../../../shared/index.js';
 import { ConcurrencyError } from '../../../../core/domain/errors.js';
 import { addUpdate } from '../../../../infrastructure/prisma/add-update.js';
 import { PrismaService } from '../../../../infrastructure/prisma/prisma.service.js';
@@ -190,5 +190,72 @@ export class PrismaUserAdminStore extends UserAdminStore {
         createdAt: r.createdAt.toISOString(),
       };
     });
+  }
+
+  // ---------------------------------------------------------------- Phase 44: invites and sign-in links
+  async createInvited(u: UserFields & { roleIds: string[]; branchIds: string[]; invitedByUserId: string }) {
+    const { roleIds, branchIds, loginFrom, loginTo, invitedByUserId, ...fields } = u;
+    const id = await addUpdate(this.prisma, 'userAddUpdate', {
+      ...fields, loginFrom: time(loginFrom), loginTo: time(loginTo), status: 'INVITED', mustChangePassword: false,
+      invitedByUserId, invitedAt: new Date().toISOString(), branches: branchIds.map((branchId) => ({ branchId })),
+    });
+    const user = await this.prisma.db().users.findUniqueOrThrow({ where: { id }, select: { tenantId: true, rowVersion: true } });
+    await this.update(user.tenantId, id, user.rowVersion, {}, roleIds);
+    return id;
+  }
+
+  async issueToken(tenantId: string, userId: string, purpose: 'INVITE' | 'ADMIN_RESET', channel: string, hash: Buffer, expiresAt: Date, requestedBy: string, ip: string | null) {
+    const rows = await this.prisma.db().$queryRawUnsafe<{ id: string }[]>(
+      'select "Company"."passwordResetIssue"($1::uuid, $2::uuid, $3, $4, $5::bytea, $6::timestamptz, $7::uuid, $8::inet)::text as id',
+      tenantId, userId, purpose, channel, hash, expiresAt, requestedBy, ip,
+    );
+    return rows[0]!.id;
+  }
+
+  saveInvite(data: Record<string, unknown>) {
+    return addUpdate(this.prisma, 'userInviteAddUpdate', data);
+  }
+
+  private async mapInvites(tenantId: string, rows: Awaited<ReturnType<PrismaService['userInvites']['findMany']>>) {
+    const db = this.prisma.db();
+    const userIds = [...new Set(rows.map((r) => r.invitedByUserId))];
+    const roleIds = [...new Set(rows.map((r) => r.roleId))];
+    const [users, roles] = await Promise.all([
+      userIds.length ? db.users.findMany({ where: { tenantId, id: { in: userIds } }, select: { id: true, fullName: true, email: true } }) : [],
+      roleIds.length ? db.roles.findMany({ where: { tenantId, id: { in: roleIds } }, select: { id: true, name: true } }) : [],
+    ]);
+    const now = Date.now();
+    return rows.map((r) => {
+      const by = users.find((u) => u.id === r.invitedByUserId);
+      return {
+        id: r.id, userId: r.userId, email: r.email, fullName: r.fullName, phone: r.phone, role: roles.find((x) => x.id === r.roleId)?.name ?? null, channels: r.channels,
+        invitedBy: by ? { id: by.id, name: by.fullName ?? by.email } : null, sentAt: (r.lastResentAt ?? r.sentAt).toISOString(), expiresAt: r.expiresAt.toISOString(),
+        resendCount: r.resendCount, status: r.status === 'PENDING' && r.expiresAt.getTime() <= now ? 'EXPIRED' : r.status, rowVersion: r.rowVersion,
+        passwordResetId: r.passwordResetId,
+      };
+    });
+  }
+
+  async invites(tenantId: string, includeClosed: boolean): Promise<PendingInvite[]> {
+    const rows = await this.prisma.db().userInvites.findMany({
+      where: { tenantId, ...(includeClosed ? {} : { status: 'PENDING' }) }, orderBy: { sentAt: 'desc' }, take: 200,
+    });
+    return (await this.mapInvites(tenantId, rows)).map(({ passwordResetId, ...i }) => { void passwordResetId; return i; });
+  }
+
+  async invite(tenantId: string, id: string) {
+    const row = await this.prisma.db().userInvites.findFirst({ where: { tenantId, id } });
+    return row ? (await this.mapInvites(tenantId, [row]))[0]! : null;
+  }
+
+  async pendingInviteFor(tenantId: string, email: string) {
+    return (await this.prisma.db().userInvites.findFirst({ where: { tenantId, email: { equals: email, mode: 'insensitive' }, status: 'PENDING' }, select: { id: true } }))?.id ?? null;
+  }
+
+  async voidToken(tenantId: string, resetId: string) {
+    await this.prisma.db().$executeRawUnsafe(
+      `update "Company"."PasswordResets" set "expiresAt" = greatest("createdAt" + interval '1 second', now()) where "tenantId" = $1::uuid and id = $2::uuid and "usedAt" is null and "expiresAt" > now()`,
+      tenantId, resetId,
+    );
   }
 }

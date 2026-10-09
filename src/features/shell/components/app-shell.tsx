@@ -11,7 +11,8 @@ import { crumbsFor, navFor, navPathFor } from "@/features/workspace-nav/nav";
 import { setCompanyTimeZone } from "@/lib/company-time";
 import { ShellFrame } from "./shell-frame";
 import { SupportAccessBanner } from "./support-access-banner";
-import { PlatformNoticeBanner, PlatformNoticesBell } from "./platform-notice-banner";
+import { WorkspaceBell } from "@/features/work/components/workspace-bell";
+import { PlatformNoticeBanner } from "./platform-notice-banner";
 
 /** Template shell (20-shell-open.html) for the company workspace: NAV.app sidebar, TOP.app top bar. */
 export function AppShell({ user, children }: { user: SessionUser; children: ReactNode }) {
@@ -42,8 +43,8 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
         rootLabel: "Workspace",
         crumbsFor,
         signOut: { run: logout, then: "/login" },
-        // Phase 42: Accountex announcements and in-app messages
-        actions: <PlatformNoticesBell />,
+        // Phase 44: my notifications (incl. Accountex broadcasts, Phase 42) and announcements
+        actions: <WorkspaceBell />,
         menuItems: (close) => (
           <>
             <Link className="pop-item" role="menuitem" href="/profile" onClick={close}>

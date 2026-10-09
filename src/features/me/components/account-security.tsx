@@ -283,7 +283,7 @@ function PreferencesTab() {
           {NOTIFY_EVENTS.map((e) => <Switch key={e.code} checked={prefs.notifyEvents.includes(e.code)} onChange={() => toggleEvent(e.code)} label={e.label} />)}
           <Switch checked={prefs.notifyWhatsapp} onChange={(e) => set("notifyWhatsapp", e.target.checked)} label="WhatsApp alerts" />
         </div>
-        <p className="small muted mt">Notifications are delivered once the work queue arrives (Phase 29); your choices are kept until then.</p>
+        <p className="small muted mt">In-app notifications and per-event choices are set in the <a className="link" href="/notifications">Notification Centre</a> (Preferences). Email and WhatsApp delivery start when a provider is connected.</p>
         <FormActions><Button variant="primary" onClick={save} disabled={saving}>{saving ? "Saving…" : "Save preferences"}</Button></FormActions>
       </Panel>
     </div>

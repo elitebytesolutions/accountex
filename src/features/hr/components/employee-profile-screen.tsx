@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  AlertTriangle, ArrowLeft, ArrowRightLeft, BadgeCheck, CalendarDays, Clock, FileSignature, FileText, GraduationCap, IdCard, Image as ImageIcon, KeyRound, Laptop, Layers,
+  AlertTriangle, ArrowLeft, ArrowRightLeft, BadgeCheck, CalendarDays, Clock, FileSignature, FileText, GraduationCap, IdCard, Image as ImageIcon, KeyRound, Layers,
   LogOut, Pencil, Plane, RotateCcw, ShieldCheck, Upload, UserCog, Wallet,
 } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +15,10 @@ import { dateLabel } from "@/features/finance/components/finance-ui";
 import { HistoryTab } from "@/features/history/components/history-tab";
 import { labelOf, toneOf, useLookups } from "@/features/settings/use-lookups";
 import { ApiError } from "@/lib/api/errors";
+import { grossKpi, SalaryTab, useSalary } from "@/features/payroll/components/salary-tab";
 import { employeeOptions, getEmployee } from "../api";
+import { EmployeeAssetsPane } from "./employee-assets";
+import { EmployeeLettersPanel, GenerateLetterModal } from "./employee-letters";
 import { BankModal, DocumentsModal, EditEmployeeModal, LinkUserModal, PositionModal, StatusModal, StatutoryModal, type ModalKind } from "./employee-modals";
 import { age, initials, tenure } from "./people-ui";
 
@@ -26,7 +29,7 @@ const EVENT_DOT: Record<string, string> = { JOINED: "good", CONFIRMED: "", PROMO
 const v = (x: string | number | null | undefined) => (x === null || x === undefined || x === "" ? "—" : x);
 
 /** Template app/hr/employees/view (50-hr-core.html): hero, KPIs and the profile tabs. Payroll, attendance, leave and assets wait for their phases. */
-export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: boolean; remove: boolean } }) {
+export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: boolean; remove: boolean; salaryView: boolean; salaryApprove: boolean } }) {
   const router = useRouter();
   const lookups = useLookups(["EmployeeStatus", "EmploymentType", "EmployeeGender", "MaritalStatus", "Religion", "BloodGroup", "GuardianRelation", "WeeklyOff", "WorkPattern", "PayGroup",
     "ExitType", "PositionChangeEventType", "EmployeeBankAccountPaymentMode", "EmployeeStatutoryDetailAtlStatus", "EmployeeStatutoryDetailSocialSecurityScheme", "EmployeeDocumentCategory", "EmployeeDocumentStatus"]);
@@ -37,6 +40,9 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
   const [tab, setTab] = useState<Tab>("personal");
   const [modal, setModal] = useState<ModalKind | null>(null);
   const [historyOf, setHistoryOf] = useState("");
+  const salary = useSalary(id, can.salaryView);
+  const [letterOpen, setLetterOpen] = useState(false);
+  const [lettersKey, setLettersKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -75,7 +81,8 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
     return t;
   };
   const eventNote = (h: Employee["history"][number]) => {
-    const parts = (["department", "designation", "grade", "branch", "manager"] as const).filter((k) => h.from[k] || h.to[k]).map((k) => (h.eventType === "JOINED" ? h.to[k] : `${k} ${v(h.from[k])} → ${v(h.to[k])}`)).filter(Boolean);
+    if (h.eventType === "JOINED") return [dateLabel(h.effectiveDate), h.to.department, h.to.branch, L("EmploymentType", h.to.employmentType), h.reason].filter((x) => x && x !== "—").join(" · ");
+    const parts = (["department", "designation", "grade", "branch", "manager"] as const).filter((k) => h.from[k] || h.to[k]).map((k) => `${k} ${v(h.from[k])} → ${v(h.to[k])}`);
     if (h.from.employmentType !== h.to.employmentType && h.to.employmentType) parts.push(`type ${L("EmploymentType", h.from.employmentType)} → ${L("EmploymentType", h.to.employmentType)}`);
     return [dateLabel(h.effectiveDate), ...parts, h.reason].filter(Boolean).join(" · ");
   };
@@ -102,9 +109,7 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
           </div>
           <div className="head-actions">
             {can.edit && <button className="btn secondary" type="button" onClick={() => setModal("edit")}><Pencil />Edit</button>}
-            {can.edit && !exited && <button className="btn secondary" type="button" onClick={() => setModal("position")}><ArrowRightLeft />Change position</button>}
-            {can.edit && e.status === "PROBATION" && <button className="btn secondary" type="button" onClick={() => setModal("confirm")}><BadgeCheck />Confirm</button>}
-            <button className="btn secondary" type="button" disabled title="HR letters arrive in a later phase"><FileText />Generate letter</button>
+            {can.edit && <button className="btn secondary" type="button" onClick={() => setLetterOpen(true)}><FileText />Generate letter</button>}
             {can.edit && (exited ? <button className="btn secondary" type="button" onClick={() => setModal("rejoin")}><RotateCcw />Rejoin</button>
               : <button className="btn danger" type="button" onClick={() => setModal("exit")}><LogOut />Offboard</button>)}
           </div>
@@ -113,7 +118,7 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
 
       <div className="kpi-grid mb">
         <div className="kpi"><div className="kpi-top"><span>Tenure</span><span className="icon-well"><CalendarDays /></span></div><strong>{tenure(e.joiningDate, e.exitDate ?? undefined)}</strong><small>Joined {dateLabel(e.joiningDate)}{e.exitDate && ` · left ${dateLabel(e.exitDate)}`}</small></div>
-        <div className="kpi teal"><div className="kpi-top"><span>Gross Salary</span><span className="icon-well"><Wallet /></span></div><strong>—</strong><small>Set up in Payroll (Phase 12)</small></div>
+        {(() => { const k = can.salaryView ? grossKpi(salary.data) : { value: "—", note: "Visible to payroll users", up: false }; return <div className="kpi teal"><div className="kpi-top"><span>Gross Salary</span><span className="icon-well"><Wallet /></span></div><strong>{k.value}</strong>{k.up ? <small className="up">{k.note}</small> : <small>{k.note}</small>}</div>; })()}
         <div className="kpi blue"><div className="kpi-top"><span>Attendance</span><span className="icon-well"><Clock /></span></div><strong>—</strong><small>With attendance (biometric punches)</small></div>
         <div className="kpi yellow"><div className="kpi-top"><span>Leave Balance</span><span className="icon-well"><Plane /></span></div><strong>—</strong><small>With leave requests &amp; balances</small></div>
       </div>
@@ -161,7 +166,11 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
         <div className="split">
           <div className="panel">
             <div className="panel-head"><div><h3>Employment</h3><p>Current position and organisation</p></div>
-              {can.edit && !exited && <div className="panel-actions"><button className="btn ghost sm" type="button" onClick={() => setModal("status")}><UserCog />Change status</button></div>}</div>
+              {can.edit && !exited && <div className="panel-actions">
+                {e.status === "PROBATION" && <button className="btn ghost sm" type="button" onClick={() => setModal("confirm")}><BadgeCheck />Confirm</button>}
+                <button className="btn ghost sm" type="button" onClick={() => setModal("status")}><UserCog />Status</button>
+                <button className="btn secondary sm" type="button" onClick={() => setModal("position")}><ArrowRightLeft />Change position</button>
+              </div>}</div>
             {dl([
               ["Designation", e.designation.title],
               ["Grade", e.grade ? `${e.grade.code} (${e.grade.name}) · band Rs ${e.grade.minSalary.toLocaleString("en-US")} – ${e.grade.maxSalary.toLocaleString("en-US")}` : "—"],
@@ -191,7 +200,9 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
         </div>
       )}
 
-      {tab === "salary" && placeholder(<Layers />, "Salary is set up in Payroll (Phase 12)", "Salary structure, employer contributions and payslips appear here once payroll setup is done.")}
+      {tab === "salary" && (can.salaryView
+        ? <SalaryTab employee={{ id: e.id, name: e.name, exited }} gradeId={e.grade?.id ?? null} joiningDate={e.joiningDate} view={salary.data} error={salary.error} reload={salary.reload} onChanged={salary.setData} can={{ approve: can.salaryApprove }} />
+        : placeholder(<Layers />, "Salary is visible to payroll users", "Ask for payroll access (prun:view) to see salaries."))}
       {tab === "attendance" && placeholder(<Clock />, "Attendance arrives with biometric punches", "The month grid and summary fill in once devices sync and attendance is processed.")}
       {tab === "leave" && placeholder(<Plane />, "Leave history and balances arrive with leave requests", "Leave types and their entitlements are set on Leave Policies.")}
 
@@ -216,7 +227,9 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
         </div>
       )}
 
-      {tab === "assets" && placeholder(<Laptop />, "No assets assigned", "Assigning company assets (laptops, phones, cards) arrives with fixed assets and onboarding.")}
+      {tab === "documents" && <EmployeeLettersPanel employeeId={e.id} canEdit={can.edit} refreshKey={lettersKey} />}
+
+      {tab === "assets" && <EmployeeAssetsPane employeeId={e.id} canEdit={can.edit} exited={exited} />}
 
       {tab === "timeline" && (
         <div className="panel">
@@ -240,6 +253,7 @@ export function EmployeeProfileScreen({ id, can }: { id: string; can: { edit: bo
       {modal === "link" && <LinkUserModal e={e} opts={opts} lookups={lookups} onClose={() => setModal(null)} onSaved={saved} />}
       {modal === "bank" && <BankModal e={e} opts={opts} lookups={lookups} onClose={() => setModal(null)} onSaved={saved} />}
       {modal === "statutory" && <StatutoryModal e={e} opts={opts} lookups={lookups} onClose={() => setModal(null)} onSaved={saved} />}
+      <GenerateLetterModal open={letterOpen} employee={{ id: e.id, name: e.name, code: e.code }} onClose={() => setLetterOpen(false)} onGenerated={() => { setLettersKey((n) => n + 1); setTab("documents"); }} />
       {modal === "documents" && <DocumentsModal e={e} opts={opts} lookups={lookups} onClose={() => setModal(null)} onSaved={saved} />}
     </>
   );

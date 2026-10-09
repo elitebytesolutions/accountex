@@ -1,0 +1,60 @@
+/* Template 1C-ess.css (app/profile/directory): the people grid, presence dots and person drawer. */
+.es-dr-bar{gap:12px;transition:opacity .25s}
+.es-dr-bar.dim .es-dr-chips,.es-dr-bar.dim .es-dr-tools{opacity:.45;pointer-events:none}
+.es-dr-tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.es-dr-sw{flex:1;min-width:220px}
+.es-dr-search{width:100%;max-width:none}
+.es-dr-chips{gap:6px}
+.es-dr-view{display:none}
+.es-dr-view.on{display:block;animation:fadeUp .35s var(--ease) both}
+.es-dr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.es-dr-card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:20px 14px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);cursor:pointer;min-width:0;transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .25s}
+.es-dr-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-1);border-color:var(--line-2)}
+.es-dr-card:focus-visible{outline:0;box-shadow:var(--ring)}
+.es-dr-card.me{background:linear-gradient(180deg,var(--es-tint),var(--surface) 60%);border-color:color-mix(in srgb,var(--lime) 50%,var(--line))}
+.es-dr-you{position:absolute;left:12px;top:12px;font-size:10.5px;font-weight:800;background:var(--lime);color:var(--lime-ink);border-radius:99px;padding:2px 8px}
+.es-dr-avw{position:relative;margin-bottom:8px}
+.es-dr-avw .avatar.lg{width:58px;height:58px;font-size:18px}
+.es-dr-dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid var(--surface);background:var(--muted-2);flex:none}
+.es-dr-avw .es-dr-dot{position:absolute;right:1px;bottom:2px}
+.es-dr-dot.on{background:var(--good)}.es-dr-dot.busy{background:var(--danger)}.es-dr-dot.field{background:var(--blue)}.es-dr-dot.off{background:var(--muted-2)}
+.es-dr-card>b{font-size:14px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.es-dr-role{font-size:12px;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.es-dr-tags{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.es-dr-tags span{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:2px 8px}
+.es-dr-tags svg{width:11px;height:11px}
+.es-dr-st{font-size:11.5px;color:var(--muted);margin:6px 0 12px;display:inline-flex;align-items:center;gap:6px}
+.es-dr-st.on{color:var(--good)}.es-dr-st.busy{color:var(--danger)}.es-dr-st.field{color:var(--blue)}
+.es-dr-acts{display:flex;gap:8px;margin-top:auto;padding-top:12px;border-top:1px solid var(--line);width:100%;justify-content:center}
+.es-dr-acts button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);display:grid;place-items:center;cursor:pointer;transition:.2s var(--ease)}
+.es-dr-acts button svg{width:16px;height:16px}
+.es-dr-acts button:hover{background:var(--primary);border-color:var(--primary);color:var(--primary-ink);transform:translateY(-2px)}
+.es-dr-acts button.wa:hover{background:var(--good);border-color:var(--good)}
+/* drawer */
+.es-dr-dhead{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+.es-dr-dhead h3{margin:0;font-size:20px;letter-spacing:-.02em}
+.es-dr-dhead p{margin:2px 0 6px;color:var(--muted);font-size:13px}
+.es-dr-dacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.es-dr-dl{margin-bottom:4px}
+.es-dr-path{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;border-radius:var(--r-md);background:var(--hatch),var(--surface-2);border:1px solid var(--line)}
+.es-dr-oc{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:99px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;color:var(--ink);transition:.2s var(--ease);max-width:100%}
+.es-dr-oc:hover{border-color:var(--primary);transform:translateY(-1px)}
+.es-dr-oc b{display:block;font-size:12.5px}.es-dr-oc small{display:block;font-size:11px;color:var(--muted)}
+.es-dr-oc.self{border-color:var(--primary);box-shadow:var(--ring);background:var(--primary-soft)}
+.es-dr-arrow{color:var(--muted-2);display:grid;place-items:center}
+.es-dr-arrow svg{width:16px;height:16px}
+.es-dr-reps{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.es-dr-norep{font-size:12px;margin-top:4px}
+/* Template 1C-ess.css: form fields and the colleague autocomplete (ES.autocomplete). */
+.es-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.es-field>span{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.es-ac{position:relative}
+.es-ac-list{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--shadow-2);padding:5px;display:none;max-height:260px;overflow:auto}
+.es-ac-list.on{display:block;animation:fadeUp .2s var(--ease) both}
+.es-ac-list button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;border-radius:9px;padding:7px 9px;text-align:left;cursor:pointer;color:var(--ink)}
+.es-ac-list button.hi,.es-ac-list button:hover{background:var(--surface-2)}
+.es-ac-list b{display:block;font-size:13px;font-weight:600}
+.es-ac-list small{display:block;font-size:11.5px;color:var(--muted)}
+.es-ac-list mark{background:var(--lime-soft);color:inherit;border-radius:3px;padding:0 1px}
+.es-ac-none{padding:10px;font-size:12.5px;color:var(--muted)}
+.es-ac-list .avatar{flex:none}

@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import type {
+  PendingInvite,
   ResetPassword,
+  SignInLink,
   SessionUser,
   UserActivity,
   UserCreate,
   UserDetail,
+  UserInviteInput,
+  UserInviteResult,
   UserListItem,
   UserSession,
   UserSummary,
@@ -15,6 +19,7 @@ import { PasswordHasher } from '../../../../core/application/ports/password-hash
 import { SessionStore, type RevokeReason } from '../../../../core/application/ports/session-store.js';
 import { UnitOfWork, type RequestMeta } from '../../../../core/application/ports/unit-of-work.js';
 import { ConcurrencyError, ConflictError, NotFoundError, ValidationError } from '../../../../core/domain/errors.js';
+import { ADMIN_RESET_HOURS, INVITE_DAYS, newSignInToken, signInPath } from '../../../auth/application/sign-in-tokens.js';
 import { passwordProblem } from '../../../auth/domain/sign-in-policy.js';
 import { UserAdminStore, type UserFields } from './user-admin-store.js';
 
@@ -123,6 +128,83 @@ export class UsersService {
   async activity(user: SessionUser, id: string): Promise<UserActivity[]> {
     await this.get(user, id);
     return this.store.activity(user.tenantId, id, 20);
+  }
+
+  // ---------------------------------------------------------------- Phase 44: invites and sign-in links
+  /**
+   * Invites a person: the user is created INVITED (no password) with their roles and branches, and a one-time link
+   * (7 days) is returned once for the admin to copy or share on WhatsApp. Accepting it sets their password and activates them.
+   */
+  async invite(user: SessionUser, meta: RequestMeta, input: UserInviteInput): Promise<UserInviteResult> {
+    await this.checkRefs(user, input.roleIds, input.branchIds);
+    if (await this.store.pendingInviteFor(user.tenantId, input.email)) {
+      throw new ConflictError('This person already has a pending invitation. Resend it instead.', { email: ['Invitation pending'] }, { code: 'INVITE_PENDING_EXISTS' });
+    }
+    const { roleIds, branchIds, channels, ...fields } = input;
+    const { token, hash } = newSignInToken();
+    const expiresAt = new Date(Date.now() + INVITE_DAYS * 86_400_000);
+    const id = await this.unitOfWork.run(actorContext(user, meta), async () => {
+      const userId = await this.store.createInvited({ ...fields, roleIds, branchIds, invitedByUserId: user.id });
+      const resetId = await this.store.issueToken(user.tenantId, userId, 'INVITE', channels[0] ?? 'EMAIL', hash, expiresAt, user.id, meta.clientIp ?? null);
+      await this.store.saveInvite({
+        userId, email: fields.email, fullName: fields.fullName, phone: fields.phone, roleId: roleIds[0], branchId: branchIds[0] ?? null, channels,
+        passwordResetId: resetId, invitedByUserId: user.id, expiresAt: expiresAt.toISOString(), status: 'PENDING',
+      });
+      return userId;
+    });
+    return { user: await this.get(user, id), link: { path: signInPath(token), expiresAt: expiresAt.toISOString(), purpose: 'INVITE' } };
+  }
+
+  invites(user: SessionUser, includeClosed: boolean): Promise<PendingInvite[]> {
+    return this.store.invites(user.tenantId, includeClosed);
+  }
+
+  /** A new link (the previous one stops working); the invitation's 7 days start again. */
+  async resendInvite(user: SessionUser, meta: RequestMeta, id: string, rowVersion: number): Promise<{ invite: PendingInvite; link: SignInLink }> {
+    const inv = await this.openInvite(user, id, rowVersion, true);
+    const { token, hash } = newSignInToken();
+    const expiresAt = new Date(Date.now() + INVITE_DAYS * 86_400_000);
+    await this.unitOfWork.run(actorContext(user, meta), async () => {
+      const resetId = await this.store.issueToken(user.tenantId, inv.userId, 'INVITE', inv.channels[0] ?? 'EMAIL', hash, expiresAt, user.id, meta.clientIp ?? null);
+      await this.store.saveInvite({ id, rowVersion, passwordResetId: resetId, expiresAt: expiresAt.toISOString(), resendCount: inv.resendCount + 1, lastResentAt: new Date().toISOString(), status: 'PENDING' });
+    });
+    return { invite: (await this.store.invite(user.tenantId, id))!, link: { path: signInPath(token), expiresAt: expiresAt.toISOString(), purpose: 'INVITE' } };
+  }
+
+  /** Withdraws the invitation: the link stops working and the invited account is removed. */
+  async revokeInvite(user: SessionUser, meta: RequestMeta, id: string, rowVersion: number) {
+    const inv = await this.openInvite(user, id, rowVersion, true);
+    const target = await this.get(user, inv.userId);
+    await this.unitOfWork.run(actorContext(user, meta), async () => {
+      if (inv.passwordResetId) await this.store.voidToken(user.tenantId, inv.passwordResetId);
+      await this.store.saveInvite({ id, rowVersion, status: 'REVOKED', revokedAt: new Date().toISOString(), revokedByUserId: user.id });
+      if (target.status === 'INVITED') await this.store.setStatus(inv.userId, target.rowVersion, 'REMOVED');
+    });
+    return (await this.store.invite(user.tenantId, id))!;
+  }
+
+  /**
+   * A one-time link (24 hours) with which the user sets a new password; shown once to the admin to share. Their
+   * sessions end when they use it. Next to the temporary-password reset.
+   */
+  async resetLink(user: SessionUser, meta: RequestMeta, id: string): Promise<SignInLink> {
+    this.notSelf(user, id);
+    const target = await this.get(user, id);
+    if (target.status !== 'ACTIVE') throw new ConflictError('Only an active user can get a password link.', undefined, { code: 'USER_NOT_INVITABLE' });
+    const { token, hash } = newSignInToken();
+    const expiresAt = new Date(Date.now() + ADMIN_RESET_HOURS * 3_600_000);
+    await this.unitOfWork.run(actorContext(user, meta), () => this.store.issueToken(user.tenantId, id, 'ADMIN_RESET', 'WHATSAPP', hash, expiresAt, user.id, meta.clientIp ?? null));
+    return { path: signInPath(token), expiresAt: expiresAt.toISOString(), purpose: 'ADMIN_RESET' };
+  }
+
+  private async openInvite(user: SessionUser, id: string, rowVersion: number, allowExpired: boolean) {
+    const inv = await this.store.invite(user.tenantId, id);
+    if (!inv) throw new NotFoundError('Invitation not found');
+    if (inv.rowVersion !== rowVersion) throw new ConcurrencyError('This invitation was changed. Reload and try again.');
+    if (inv.status !== 'PENDING' && !(allowExpired && inv.status === 'EXPIRED')) {
+      throw new ConflictError('This invitation was already accepted, revoked or has expired.', undefined, { code: 'INVITE_NOT_PENDING' });
+    }
+    return inv;
   }
 
   private async current(user: SessionUser, id: string, rowVersion: number) {

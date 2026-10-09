@@ -57,5 +57,7 @@ import { WarehousesController } from './warehouses/presentation/warehouses.contr
     LabelsService, { provide: LabelStore, useClass: PrismaLabelStore },
     ReorderService, { provide: ReorderStore, useClass: PrismaReorderStore },
   ],
+  /** Phase 35 data imports create items through the products use case. */
+  exports: [ProductsService],
 })
 export class InventoryModule {}

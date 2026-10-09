@@ -28,6 +28,8 @@ export const SYSTEM_ROLE_GRANTS: Record<string, Grants | { '*': Action[] }> = {
     ...grant(['item', 'irep'], ['view']),
     rpt: READ,
     ...grant(['settle', 'recov'], ['view', 'approve', 'post', 'export']),
+    // Step 2 of the default payroll-run and final-settlement workflows (Phases 32/33); HR prepares, finance approves and posts.
+    ...grant(['prun', 'fs'], ['view', 'approve', 'post', 'export']),
     bulkinv: ['view', 'create', 'approve', 'post', 'export'],
     wsentry: ['view', 'create', 'edit', 'export'],
     crovr: ['view', 'approve', 'export'],

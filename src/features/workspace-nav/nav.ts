@@ -5,6 +5,9 @@ import { ChartPie, HeartHandshake } from "lucide-react";
 import { ChartColumn, Inbox, ReceiptText } from "lucide-react";
 import { ShoppingBag } from "lucide-react";
 import { Zap } from "lucide-react";
+import { Target } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
+import { Bell, ListChecks } from "lucide-react";
 
 /**
  * Workspace sidebar (template NAV.app in template/src/90-nav.js). Only screens that exist are listed;
@@ -16,7 +19,11 @@ export type NavModule = NavLeaf & { icon: LucideIcon; desc?: string; children?: 
 export type NavGroup = { title: string; modules: NavModule[] };
 
 /** Template "Menu" section (tiles). */
-export const MENU: NavModule[] = [{ label: "Dashboard", href: "/dashboard", icon: LayoutGrid }];
+export const MENU: NavModule[] = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutGrid },
+  // Phase 44: tasks and everything due today
+  { label: "Today's Work", desc: "Tasks & activities", href: "/today", icon: ListChecks },
+];
 
 /** Template groups (Workspace, Finance, Sales & Receivables, …), added phase by phase. */
 export const GROUPS: NavGroup[] = [
@@ -24,6 +31,7 @@ export const GROUPS: NavGroup[] = [
     title: "Workspace",
     modules: [
       { label: "Approvals Inbox", desc: "Everything waiting on you", href: "/approvals", icon: Inbox },
+      { label: "Activity", desc: "Posts, mentions & comments", href: "/activity", icon: MessagesSquare },
       { label: "Setup Guide", desc: "Finish onboarding", href: "/setup", icon: Rocket, permission: "comp:view" },
     ],
   },
@@ -85,9 +93,24 @@ export const GROUPS: NavGroup[] = [
       {
         label: "Fixed Assets",
         desc: "Register & depreciation",
-        href: "/assets/categories",
+        href: "/assets",
         icon: Warehouse,
-        children: [{ label: "Asset Categories", href: "/assets/categories", permission: "fa:view" }],
+        children: [
+          { label: "Asset Register", href: "/assets", permission: "fa:view" },
+          { label: "Run Depreciation", href: "/assets/depreciation", permission: "fa:view" },
+          { label: "Disposals", href: "/assets/disposals", permission: "fa:view" },
+          { label: "Asset Categories", href: "/assets/categories", permission: "fa:view" },
+        ],
+      },
+      {
+        label: "Budgeting",
+        desc: "Plan and compare",
+        href: "/budgets",
+        icon: Target,
+        children: [
+          { label: "Budgets", href: "/budgets", permission: "bud:view" },
+          { label: "Budget vs Actual", href: "/budgets/variance", permission: "bud:view" },
+        ],
       },
       {
         label: "Tax & Compliance",
@@ -96,6 +119,8 @@ export const GROUPS: NavGroup[] = [
         icon: Percent,
         children: [
           { label: "Tax Codes", href: "/tax/codes", permission: "tax:view" },
+          { label: "Sales Tax Return", href: "/tax/sales-tax", permission: "tax:view" },
+          { label: "Withholding Tax", href: "/tax/wht", permission: "tax:view" },
           { label: "FBR Integration", href: "/tax/fbr", permission: "tax:view" },
         ],
       },
@@ -104,7 +129,10 @@ export const GROUPS: NavGroup[] = [
         desc: "Fiscal years & closing",
         href: "/periods",
         icon: CalendarCheck,
-        children: [{ label: "Fiscal Periods", href: "/periods", permission: "close:view" }],
+        children: [
+          { label: "Fiscal Periods", href: "/periods", permission: "close:view" },
+          { label: "Year-end Close", href: "/periods/close", permission: "close:view" },
+        ],
       },
     ],
   },
@@ -138,6 +166,7 @@ export const GROUPS: NavGroup[] = [
           { label: "Customers", href: "/customers", permission: "cust:view" },
           { label: "Customer Receipts", href: "/receivables/receipts", permission: "rcpt:view" },
           { label: "AR Ageing & Statements", href: "/receivables/ageing", permission: "rcpt:view" },
+          { label: "Credit Control", href: "/receivables/credit", permission: "crovr:view" },
           { label: "Payment Reminders", href: "/receivables/reminders", permission: "rcpt:view" },
         ],
       },
@@ -234,7 +263,12 @@ export const GROUPS: NavGroup[] = [
         desc: "Routes, vans & recovery",
         href: "/wholesale/routes",
         icon: RouteIcon,
-        children: [{ label: "Routes & Salesmen", href: "/wholesale/routes", permission: "route:view" }],
+        children: [
+          { label: "Routes & Salesmen", href: "/wholesale/routes", permission: "route:view" },
+          { label: "Load Sheets", href: "/wholesale/load-sheet", permission: "loadsht:view" },
+          { label: "Route Settlement", href: "/wholesale/settlement", permission: "settle:view" },
+          { label: "Recovery Sheets", href: "/wholesale/recovery", permission: "recov:view" },
+        ],
       },
     ],
   },
@@ -290,6 +324,7 @@ export const GROUPS: NavGroup[] = [
           { label: "Run Payroll", href: "/hr/payroll/run", permission: "prun:view" },
           { label: "Payslips", href: "/hr/payroll/payslips", permission: "prun:view" },
           { label: "Loans & Advances", href: "/hr/loans", permission: "loan:view" },
+          { label: "Final Settlement", href: "/hr/settlements", permission: "fs:view" }, // Phase 33 exits
           { label: "Salary Structures", href: "/hr/payroll/structures", permission: "prun:view" },
         ],
       },
@@ -299,6 +334,7 @@ export const GROUPS: NavGroup[] = [
         href: "/hr/onboarding",
         icon: Sparkles,
         children: [
+          { label: "Recruitment", href: "/hr/recruitment", permission: "emp:view" }, // Phase 33
           { label: "Onboarding", href: "/hr/onboarding", permission: "emp:view" },
           { label: "Offboarding", href: "/hr/offboarding", permission: "emp:view" }, // Phase 31
           { label: "Performance", href: "/hr/performance", permission: "emp:view" },
@@ -331,6 +367,9 @@ export const GROUPS: NavGroup[] = [
           { label: "Trial Balance", href: "/reports/trial-balance", permission: "vch:view" },
           { label: "General Ledger", href: "/reports/gl", permission: "vch:view" },
           { label: "Day Book", href: "/reports/day-book", permission: "vch:view" },
+          { label: "Profit & Loss", href: "/reports/pnl", permission: "frep:view" },
+          { label: "Balance Sheet", href: "/reports/balance-sheet", permission: "frep:view" },
+          { label: "Cash Flow", href: "/reports/cash-flow", permission: "frep:view" },
         ],
       },
       {
@@ -338,7 +377,10 @@ export const GROUPS: NavGroup[] = [
         desc: "HR reports & report studio",
         href: "/reports/studio",
         icon: ChartPie,
-        children: [{ label: "Report Studio", href: "/reports/studio", permission: "rpt:view" }],
+        children: [
+          { label: "Reports Centre", href: "/reports", permission: "rpt:view" },
+          { label: "Report Studio", href: "/reports/studio", permission: "rpt:view" },
+        ],
       },
     ],
   },
@@ -356,8 +398,13 @@ export const GROUPS: NavGroup[] = [
           { label: "Roles & Permissions", href: "/settings/roles", permission: "rol:view" },
           { label: "Approval Workflows", href: "/settings/approvals", permission: "wf:view" },
           { label: "Document Templates", href: "/settings/templates", permission: "comp:view" },
+          { label: "Integrations", href: "/settings/integrations", permission: "intg:view" },
+          { label: "Backup & Restore", href: "/settings/backup", permission: "bak:view" },
+          { label: "Data Import", href: "/import", permission: "bak:view" },
         ],
       },
+      // Phase 44: Notification Centre (own notifications, every user)
+      { label: "Notifications", desc: "Alerts & activity", href: "/notifications", icon: Bell },
     ],
   },
 ];
@@ -385,7 +432,7 @@ const OTHER_PAGES: Record<string, { trail: string[]; title: string }> = {
 };
 
 /** Detail pages under a sidebar page (/customers/<id>): their title; the trail ends with the list page. */
-const DETAIL_TITLES: Record<string, string> = { "/hr/payroll/runs": "Payroll Run", "/accounting/vouchers": "Voucher Detail", "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile", "/purchases/bills": "Vendor Bill", "/sales/invoices": "Sales Invoice" };
+const DETAIL_TITLES: Record<string, string> = { "/hr/payroll/runs": "Payroll Run", "/accounting/vouchers": "Voucher Detail", "/customers": "Customer Detail", "/vendors": "Vendor Detail", "/inventory/products": "Product Detail", "/hr/employees": "Employee Profile", "/purchases/bills": "Vendor Bill", "/sales/invoices": "Sales Invoice", "/assets": "Asset Detail", "/hr/settlements": "Final Settlement" };
 /** Edit pages (<list>/<id>/edit): their title. */
 const EDIT_TITLES: Record<string, string> = { "/accounting/vouchers": "Edit Voucher" };
 /** Detail pages whose parent path is not the list page's path. */

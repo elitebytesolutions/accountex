@@ -58,18 +58,10 @@ export class FiscalService {
     return this.list(user);
   }
 
-  /** Reopens the chosen modules (all when none given) of a closed period. */
-  async reopen(user: SessionUser, meta: RequestMeta, id: string, input: PeriodAction): Promise<FiscalYear[]> {
-    const p = await this.current(user, id, input.rowVersion);
-    if (p.status === 'LOCKED') {
-      throw new ConflictError('A locked period can only be reopened through an approved reopen request (Phase 29).', undefined, { code: 'PERIOD_LOCKED' });
-    }
-    const modules = input.modules?.length ? input.modules : [...PERIOD_MODULES];
-    await this.unitOfWork.run(actorContext(user, meta), async () => {
-      await this.store.setModules(user.tenantId, id, modules, 'OPEN', user.id);
-      if (p.status !== 'OPEN') await this.store.setPeriodStatus(user.tenantId, id, p.rowVersion, 'OPEN');
-    });
-    return this.list(user);
+  /** Phase 29: closed periods and modules reopen only through an approved reopen request (/accounting/period-reopen-requests). */
+  async reopen(user: SessionUser, _meta: RequestMeta, id: string, input: PeriodAction): Promise<FiscalYear[]> {
+    await this.current(user, id, input.rowVersion);
+    throw new ConflictError('Reopening a closed period needs an approved reopen request.', undefined, { code: 'REOPEN_NEEDS_REQUEST' });
   }
 
   private async current(user: SessionUser, id: string, rowVersion: number) {

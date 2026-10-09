@@ -37,6 +37,11 @@ export function OrgChartScreen({ companyName }: { companyName: string }) {
     return () => { cancelled = true; };
   }, [view, attempt]);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
+  // A wide tree opens centred on its root rather than scrolled to the left edge.
+  useEffect(() => {
+    const p = panel.current;
+    if (p && chart && loadedView === view) p.scrollLeft = (p.scrollWidth - p.clientWidth) / 2;
+  }, [chart, loadedView, view, zoom]);
   if (error) return <ErrorState message={error.message} reference={error.reference} onRetry={reload} />;
 
   const qq = q.trim().toLowerCase();

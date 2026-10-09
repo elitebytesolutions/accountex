@@ -11,7 +11,7 @@ export default async function RoutesPage() {
   const can = {
     route: { create: has("route:create"), edit: has("route:edit"), remove: has("route:delete") },
     van: { view: has("van:view"), create: has("van:create"), edit: has("van:edit"), remove: has("van:delete") },
-    target: { view: has("target:view"), edit: has("target:edit") },
+    target: { view: has("target:view"), edit: has("target:edit"), create: has("target:create"), approve: has("target:approve"), post: has("target:post") },
   };
   return (
     <Screen route="app/wholesale/routes" className="ds-screen">

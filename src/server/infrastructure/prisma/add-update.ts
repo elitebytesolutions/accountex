@@ -180,6 +180,11 @@ const FUNCTIONS = {
   shiftRosterEntryAddUpdate: 'HumanResources',
   shiftSwapRequestAddUpdate: 'EmployeeSelfService',
   openShiftAddUpdate: 'EmployeeSelfService',
+  // Phase 34: self-service requests
+  letterRequestAddUpdate: 'EmployeeSelfService',
+  profileChangeRequestAddUpdate: 'EmployeeSelfService',
+  helpdeskTicketAddUpdate: 'EmployeeSelfService',
+  kudosAddUpdate: 'EmployeeSelfService',
   // Phase 31: leave & lifecycle
   leaveRequestAddUpdate: 'HumanResources',
   leaveAdjustmentAdd: 'HumanResources',
@@ -219,6 +224,23 @@ const FUNCTIONS = {
   salesmanTargetAddUpdate: 'Distribution',
   salesmanCommissionAddUpdate: 'Distribution',
   creditOverrideAddUpdate: 'Sales',
+  // Phase 29: period close
+  periodReopenRequestAddUpdate: 'Accounting',
+  yearEndCloseAddUpdate: 'Accounting',
+  // Phase 28: tax compliance (returns / certificates / statements use their own Tax.* functions)
+  whtChallanAddUpdate: 'Tax',
+  // Phase 44: work queue & sign-in recovery
+  taskAddUpdate: 'Company',
+  notificationPreferenceAddUpdate: 'Company',
+  userInviteAddUpdate: 'Company',
+  // Phase 33 (talent): stage / status moves use their own functions (candidateMove / Hire, performanceReview*, trainingEnrolment*)
+  jobOpeningAddUpdate: 'HumanResources',
+  candidateAddUpdate: 'HumanResources',
+  goalAddUpdate: 'HumanResources',
+  performanceFeedbackAddUpdate: 'HumanResources',
+  oneOnOneMeetingAddUpdate: 'HumanResources',
+  trainingSessionAddUpdate: 'HumanResources',
+  trainingEnrolmentAddUpdate: 'HumanResources',
 } as const;
 export type AddUpdateFunction = keyof typeof FUNCTIONS;
 

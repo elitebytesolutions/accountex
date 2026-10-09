@@ -27,5 +27,7 @@ import { VendorsController } from './vendors/presentation/vendors.controller.js'
     VendorCategoriesService, { provide: VendorCategoryStore, useClass: PrismaVendorCategoryStore },
     VendorsService, { provide: VendorStore, useClass: PrismaVendorStore },
   ],
+  /** Phase 35 data imports create customers / vendors through these use cases. */
+  exports: [CustomersService, VendorsService],
 })
 export class PartiesModule {}

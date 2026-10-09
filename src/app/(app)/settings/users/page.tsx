@@ -9,6 +9,7 @@ export default async function UsersPage() {
   return (
     <UsersScreen
       me={user.id}
+      myName={user.name}
       companyName={user.tenantName}
       can={{ create: has("usr:create"), edit: has("usr:edit"), remove: has("usr:delete"), export: has("usr:export") }}
     />

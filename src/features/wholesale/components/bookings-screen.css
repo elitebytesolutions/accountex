@@ -1,0 +1,116 @@
+/* Wholesale › Order Bookings (Phase 25). Ported from template/src/1H-wholesale.css ("shared" + "ORDER BOOKINGS" + its
+   responsive rules), followed by the template-style additions for the New / Edit booking drawer. Prefix: ws2-. */
+@layer components {
+/* ---------- shared ---------- */
+.ws2-head{display:flex;align-items:center;gap:16px;margin:2px 0 18px;flex-wrap:wrap}
+.ws2-head-ic{width:54px;height:54px;border-radius:16px;background:var(--primary);color:var(--primary-ink);display:grid;place-items:center;flex:none;box-shadow:0 14px 26px -14px var(--primary)}
+.ws2-head-ic svg{width:26px;height:26px}
+.ws2-head-t{min-width:0;flex:1 1 380px}
+.ws2-head-t .eyebrow{margin-bottom:2px}
+.ws2-head-t h1{margin:0;font-size:27px;letter-spacing:-.04em;font-weight:700;line-height:1.15;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ws2-head-t h1 .badge{font-size:12px;letter-spacing:0}
+.ws2-head-t p{margin:4px 0 0;color:var(--muted);font-size:13.5px;max-width:760px}
+.ws2-head-btns{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.ws2-head-btns .btn{min-height:42px}
+.ws2-muted{color:var(--muted)}
+.ws2-good{color:var(--good)!important}
+.ws2-bad{color:var(--danger);font-weight:700}
+.ws2-dash{color:var(--muted-2)}
+code.ws2-code{font-family:inherit;font-size:11.5px;font-weight:700;color:var(--ink-2);background:var(--surface-3);border-radius:6px;padding:2px 6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+a code.ws2-code{color:var(--primary)}
+.ws2-chk{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.ws2-chk input,.ws2-c-cb input{width:17px;height:17px;accent-color:var(--primary);cursor:pointer;flex:none}
+.ws2-c-cb input:disabled{cursor:not-allowed;opacity:.45}
+.ws2-spin{width:15px;height:15px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--primary);display:inline-block;animation:ws2Spin .7s linear infinite;flex:none}
+.ws2-paste-empty{padding:22px 14px;text-align:center;color:var(--muted);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.ws2-paste-empty svg{width:26px;height:26px;color:var(--muted-2);margin-bottom:4px}
+.ws2-paste-empty b{color:var(--ink-2)}
+@keyframes ws2Spin{to{transform:rotate(360deg)}}
+@keyframes ws2Fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ws2-progress-btn{position:relative;overflow:hidden}
+.ws2-progress-btn em{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--lime);transform:scaleX(0);transform-origin:left;pointer-events:none;font-style:normal}
+.btn.ws2-busy{cursor:progress;opacity:1!important}
+.btn.ws2-busy em{animation:ws2Fill var(--ws2-ms,1s) linear forwards}
+.btn.ws2-busy>svg:first-child{animation:ws2Spin .8s linear infinite}
+
+/* ---------- order bookings ---------- */
+.ws2-o-panel{margin-bottom:16px}
+.ws2-o-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 16px}
+.ws2-o-filters select{height:36px!important;width:auto;min-width:140px;max-width:200px;font-size:13px;border-radius:10px!important}
+.ws2-o-actbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-2);transition:background-color .25s}
+.ws2-o-actbar.on{background:var(--primary-soft)}
+.ws2-o-actbar .btn.sm{min-height:34px}
+.ws2-sw{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.ws2-o-wrap{overflow-x:auto}
+.ws2-o-tbl{width:100%;min-width:1100px}
+.ws2-o-tbl th,.ws2-o-tbl td{padding-left:8px!important;padding-right:8px!important}
+.ws2-o-tbl td{vertical-align:middle;font-size:12.5px}
+.ws2-o-tbl td small{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+.ws2-o-tbl tbody tr{cursor:pointer;transition:background-color .15s}
+.ws2-o-tbl tbody tr:hover td{background:var(--surface-2)}
+.ws2-o-tbl tbody tr.sel td{background:color-mix(in srgb,var(--primary-soft) 70%,transparent)}
+.ws2-o-tbl tbody tr.st-converted td,.ws2-o-tbl tbody tr.st-cancelled td{color:var(--muted)}
+.ws2-o-tbl tbody tr.st-converted b,.ws2-o-tbl tbody tr.st-cancelled b{color:var(--ink-2)}
+.ws2-o-tbl tbody tr.ws2-run td{background:color-mix(in srgb,var(--lime-soft) 70%,transparent)}
+.ws2-stag tr{animation:fadeUp .35s var(--ease) both;animation-delay:calc(var(--i,0) * 30ms)}
+.ws2-c-cb{width:40px;text-align:center}
+.ws2-ono{font-variant-numeric:tabular-nums;font-size:13px}
+.ws2-who{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ws2-note{display:inline-flex;align-items:center;gap:3px;color:var(--info);font-weight:600}
+.ws2-note svg{width:11px;height:11px}
+.ws2-rt{display:inline-flex;height:22px;align-items:center;padding:0 8px;border-radius:7px;background:var(--surface-3);font-weight:800;font-size:11.5px;color:var(--ink-2)}
+.ws2-gps{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.ws2-gps svg{width:12px;height:12px}
+.ws2-gps.ok{background:var(--good-soft);color:var(--good)}
+.ws2-gps.warn{background:var(--warn-soft);color:var(--warn)}
+.ws2-c-stk{min-width:150px}
+.ws2-stk{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;white-space:nowrap}
+.ws2-stk svg{width:14px;height:14px}
+.ws2-stk.ok{color:var(--good)}
+.ws2-stk.bad{color:var(--warn)}
+.ws2-stk-l small{display:block;font-size:11px;color:var(--muted);white-space:nowrap}
+.ws2-stk-l b{color:var(--danger)}
+.ws2-nc{display:inline-flex;align-items:center;gap:5px;font-size:12px}
+.ws2-nc svg{width:13px;height:13px}
+.ws2-c-st{white-space:nowrap}
+.ws2-c-st small{margin-top:3px}
+.ws2-c-st code.ws2-code{font-size:10.5px;padding:1px 5px}
+/* booking drawer */
+.ws2-bd-hero{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.ws2-bd-hero h3{margin:0;font-size:18px;letter-spacing:-.02em}
+.ws2-bd-hero p{margin:2px 0 6px;font-size:12.5px;color:var(--muted)}
+.ws2-bd-hero .row{gap:6px}
+.ws2-bd-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.ws2-bd-meta>div{background:var(--surface);padding:10px 12px}
+.ws2-bd-meta small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.ws2-bd-meta b{font-size:14px;font-variant-numeric:tabular-nums}
+.ws2-bd-note{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--info-soft);color:var(--ink-2);font-size:13px;margin-bottom:14px}
+.ws2-bd-note svg{width:15px;height:15px;color:var(--info);flex:none}
+.ws2-bd-tbl td small{display:block;font-size:11px;color:var(--muted)}
+.ws2-bd-tbl td{vertical-align:middle;font-size:12.5px}
+.ws2-bd-map{display:flex;align-items:center;gap:12px;margin-top:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);background-image:var(--hatch)}
+.ws2-bd-map b{display:block;font-size:13px}.ws2-bd-map small{font-size:12px;color:var(--muted)}
+.ws2-bd-pin{width:40px;height:40px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:var(--primary);color:var(--primary-ink);display:grid;place-items:center;flex:none}
+.ws2-bd-pin svg{transform:rotate(45deg);width:18px;height:18px}
+
+/* ---------- new / edit booking drawer (template-style addition: the template has no booking form) ---------- */
+.ws2-bf-tier{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-4px 0 12px;font-size:12.5px;color:var(--muted)}
+.ws2-bf-tbl{width:100%}
+.ws2-bf-tbl td{vertical-align:top;font-size:12.5px;padding-top:6px!important;padding-bottom:6px!important}
+.ws2-bf-tbl select,.ws2-bf-tbl input{height:36px!important;font-size:13px;border-radius:10px!important;width:100%}
+.ws2-bf-tbl input.num{text-align:right;width:72px}
+.ws2-bf-tbl td.num{padding-top:14px!important;font-variant-numeric:tabular-nums}
+.ws2-bf-tbl td small.text-danger{display:block;font-size:11px;margin-top:3px}
+.ws2-bf-tbl tr.total td{font-weight:800;padding-top:10px!important}
+.ws2-bf-add{margin-top:8px}
+
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  .ws2-head-btns{width:100%;justify-content:flex-start}
+  .ws2-bd-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ws2-o-filters select{flex:1 1 140px;min-width:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .ws2-screen *{animation:none!important;transition:none!important}
+}
+}

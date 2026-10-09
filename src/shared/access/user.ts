@@ -143,3 +143,38 @@ export const UserSessionSchema = z.object({
   current: z.boolean(),
 });
 export type UserSession = z.infer<typeof UserSessionSchema>;
+
+// ---------------------------------------------------------------- Phase 44: invites and sign-in links
+/**
+ * POST /settings/users/invite: the wizard's fields without a password. The user is created INVITED and sets their own
+ * password from a one-time link (7 days) the admin copies or shares on WhatsApp (no email provider yet).
+ */
+export const UserInviteSchema = accessRules(
+  z.object({
+    ...UserAccessFields,
+    channels: z.array(z.enum(['EMAIL', 'WHATSAPP'])).min(1).default(['EMAIL']),
+  }),
+);
+export type UserInviteInput = z.infer<typeof UserInviteSchema>;
+export type UserInviteFields = z.input<typeof UserInviteSchema>;
+
+/** A one-time sign-in link: shown once, never stored (only its hash is). `path` is relative to the app's origin. */
+export type SignInLink = { path: string; expiresAt: string; purpose: 'INVITE' | 'ADMIN_RESET' };
+
+export type PendingInvite = {
+  id: string;
+  userId: string;
+  email: string;
+  fullName: string | null;
+  phone: string | null;
+  role: string | null;
+  channels: string[];
+  invitedBy: { id: string; name: string } | null;
+  sentAt: string;
+  expiresAt: string;
+  resendCount: number;
+  /** PENDING, or EXPIRED once the link's time has passed. */
+  status: string;
+  rowVersion: number;
+};
+export type UserInviteResult = { user: UserDetail; link: SignInLink };

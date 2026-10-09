@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  Activity, Check, Copy, History, KeyRound, Laptop, LogOut, Pencil, RefreshCw, ShieldCheck, ShieldOff, ShieldX, Trash2, UserCheck, UserRound, UserX,
+  Activity, Check, Copy, History, KeyRound, Laptop, Link2, LogOut, Pencil, RefreshCw, ShieldCheck, ShieldOff, ShieldX, Trash2, UserCheck, UserRound, UserX,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { PERMISSION_ACTIONS, type PermissionModule, type UserActivity, type UserDetail, type UserSession } from "@/shared";
+import { PERMISSION_ACTIONS, type PermissionModule, type SignInLink, type UserActivity, type UserDetail, type UserSession } from "@/shared";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/components/ui/cn";
 import { ConfirmDialog, Drawer } from "@/components/ui/overlay";
@@ -12,6 +12,7 @@ import { Banner, ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { HistoryTab } from "@/features/history/components/history-tab";
 import { initialsOf } from "@/features/auth/initials";
+import { userResetLink } from "@/features/work/api";
 import { ApiError } from "@/lib/api/errors";
 import { getPermissionCatalogue, getRole, getUser, listUserActivity, listUserSessions, removeUser, resetUserPassword, revokeUserSessions, userAction } from "../api";
 import { avatarClass, generatePassword, RolePill, rs, StatusBadge, whenLabel } from "./access-ui";
@@ -28,13 +29,15 @@ const VERB: Record<string, string> = { INSERT: "Created", UPDATE: "Updated", DEL
 const tableLabel = (t: string) => t.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
 
 /** Template user detail drawer (9E-cash-users.js openUser). */
-export function UserDrawer({ userId, me, can, onClose, onEdit, onChanged }: {
+export function UserDrawer({ userId, me, can, onClose, onEdit, onChanged, onLink }: {
   userId: string | null;
   me: string;
   can: { edit: boolean; remove: boolean };
   onClose: () => void;
   onEdit: (id: string) => void;
   onChanged: () => void;
+  /** Phase 44: a one-time password link was made; show it once. */
+  onLink?: (link: SignInLink, name: string, phone: string | null) => void;
 }) {
   const toast = useToast();
   const [user, setUser] = useState<UserDetail | null>(null);
@@ -130,6 +133,7 @@ export function UserDrawer({ userId, me, can, onClose, onEdit, onChanged }: {
     <>
       {can.remove && !self && !locked && <Button variant="ghost" className="text-danger" icon={<Trash2 />} onClick={() => setConfirm("remove")}>Remove</Button>}
       {!self && <Button variant="ghost" icon={<KeyRound />} onClick={() => { setTempPassword(generatePassword()); setConfirm("reset"); }}>Reset password</Button>}
+      {!self && user.status === "ACTIVE" && onLink && <Button variant="ghost" icon={<Link2 />} title="A one-time link (24 h) for them to choose a new password" onClick={() => void userResetLink(user.id).then((l) => onLink(l, user.name, user.phone)).catch((e: unknown) => toast(e instanceof ApiError ? e.message : "Could not make a link", { tone: "danger" }))}>Send reset link</Button>}
       <span className="spacer" />
       {!self && !locked && (
         user.status === "SUSPENDED"

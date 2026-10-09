@@ -1,22 +1,24 @@
 "use client";
 
 import {
-  BadgeCheck, BadgeDollarSign, BellRing, CheckCheck, ChevronLeft, FileText, Hourglass, Mail, MessageCircle, MessageSquareText, Mic, Paperclip, Pencil, Phone, Plus,
-  Search, Send, ShieldCheck, Siren,
+  BadgeCheck, BellRing, CheckCheck, ChevronLeft, FileText, Hourglass, Mail, MessageCircle, MessageSquareText, Mic, Paperclip, Pencil, Phone, Plus,
+  Send, ShieldCheck, Siren,
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { offsetLabel, type ReminderPreview, type ReminderRule, type ReminderTemplate } from "@/shared";
+import { offsetLabel, type ReminderPreview, type ReminderRule, type ReminderRunsOverview, type ReminderTemplate } from "@/shared";
 import { cn } from "@/components/ui/cn";
 import { PageHead } from "@/components/ui/page";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
+import { reminderRuns, runReminders } from "@/features/finance/period-close-api";
 import { customerOptions, listCustomers } from "@/features/parties/api";
 import { useLookups } from "@/features/settings/use-lookups";
 import { apiMessage } from "@/features/treasury/components/treasury-ui";
 import { ApiError } from "@/lib/api/errors";
 import { listReminderRules, listReminderTemplates, previewReminder, setReminderRuleActive, updateReminderRule } from "../api";
 import { RuleDrawer, TemplatesDrawer } from "./reminder-drawers";
+import { groupDue, OverdueCustomersPanel, SentLogPanel } from "./reminder-runs-panels";
 
 type Can = { edit: boolean; remove: boolean };
 type Chan = "wa" | "sms" | "email";
@@ -31,7 +33,8 @@ const time12 = (t: string) => { const [h, m] = t.split(":").map(Number); return 
 
 /**
  * Template app/receivables/reminders (4A-company-plus.html + 9A-company-plus.js §6): the reminder schedule and the live phone
- * preview. Overdue customers, the sent log, the KPIs and sending arrive with invoices and receivables (later phases).
+ * preview. Phase 29: the KPIs, overdue customers, "Send now" / "Send due reminders" and the sent log come from the reminder
+ * runs (outbox only — no email / SMS provider yet, so queued reminders are recorded, not sent).
  */
 export function RemindersScreen({ can, hasCust }: { can: Can; hasCust: boolean }) {
   const toast = useToast();
@@ -50,6 +53,8 @@ export function RemindersScreen({ can, hasCust }: { can: Can; hasCust: boolean }
   const [ruleEdit, setRuleEdit] = useState<ReminderRule | "new" | null>(null);
   const [tplOpen, setTplOpen] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
+  const [runs, setRuns] = useState<ReminderRunsOverview | null>(null);
+  const [sending, setSending] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -65,7 +70,26 @@ export function RemindersScreen({ can, hasCust }: { can: Can; hasCust: boolean }
       .then(([o, c]) => { if (!cancelled) { setUsers(o.salesReps); setCustomers(c.items.map((x) => ({ id: x.id, name: x.name }))); } }).catch(() => undefined);
     return () => { cancelled = true; };
   }, [hasCust]);
+  useEffect(() => {
+    let cancelled = false;
+    reminderRuns().then((r) => !cancelled && setRuns(r)).catch(() => !cancelled && setRuns({ kpis: { overdueCustomers: 0, overdueAmount: 0, dueNow: 0, queuedToday: 0 }, due: [], log: [], outboxOnly: true }));
+    return () => { cancelled = true; };
+  }, [attempt]);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
+  const overdue = runs ? groupDue(runs.due) : null;
+  /** Queues reminders into the outbox: one customer, or every reminder due now. */
+  const send = async (customerId: string | null) => {
+    const name = customerId ? overdue?.find((c) => c.id === customerId)?.name : null;
+    setSending(customerId ?? "all");
+    try {
+      const r = await runReminders(customerId ? { customerId } : {});
+      setRuns(r.overview);
+      toast(`${r.queued} reminder${r.queued === 1 ? "" : "s"} queued${name ? ` for ${name}` : ""}${r.skipped ? `, ${r.skipped} skipped (no mobile / email)` : ""}`, { tone: r.queued ? "good" : "warn", ms: 3200 });
+    } catch (e) {
+      if (e instanceof ApiError && e.code === "REMINDER_NOTHING_DUE") toast(name ? `No reminder is due for ${name} right now` : "No reminder is due right now — the schedule sends them on their day", { tone: "info", ms: 3200 });
+      else toast(apiMessage(e, "Could not queue the reminders"), { tone: "danger" });
+    } finally { setSending(null); }
+  };
 
   const rule = rules?.find((r) => r.id === sel) ?? null;
   const avail = rule ? (Object.keys(CH) as Chan[]).filter((k) => rule[CH[k][3]]) : [];
@@ -116,15 +140,17 @@ export function RemindersScreen({ can, hasCust }: { can: Can; hasCust: boolean }
         description="Polite, persistent and automatic. Nudge customers on WhatsApp, SMS and email before and after the due date, in English or Urdu."
         actions={<>
           <span className="tagline">get paid faster</span>
-          <button className="btn secondary" type="button" disabled title="AR ageing arrives with receivables"><Hourglass />AR ageing</button>
-          <button className="btn primary" type="button" disabled title="Sending starts once invoices exist (Phase 21)"><Send />Send due reminders</button>
+          <Link className="btn secondary" href="/receivables/ageing"><Hourglass />AR ageing</Link>
+          <button className="btn primary" type="button" disabled={!can.edit || !!sending || !runs} title={can.edit ? "Queue every reminder that is due now" : "You can't send reminders"} onClick={() => void send(null)}>
+            {sending === "all" ? <span className="cp-spin" /> : <Send />}Send due reminders
+          </button>
         </>}
       />
       <div className="kpi-grid">
-        <div className="kpi red"><div className="kpi-top"><span>Overdue receivables</span><span className="icon-well"><Hourglass /></span></div><strong>Rs 0</strong><small>Invoices arrive in Phase 21</small></div>
-        <div className="kpi"><div className="kpi-top"><span>Reminders sent</span><span className="icon-well"><Send /></span></div><strong>{sent}</strong><small>{(rules ?? []).filter((r) => r.isActive).length} active rules</small></div>
-        <div className="kpi blue"><div className="kpi-top"><span>Read rate on WhatsApp</span><span className="icon-well"><CheckCheck /></span></div><strong>—</strong><small>From delivery receipts once sending starts</small></div>
-        <div className="kpi yellow"><div className="kpi-top"><span>Paid within 3 days of reminder</span><span className="icon-well"><BadgeDollarSign /></span></div><strong>—</strong><small>Measured from receipts</small></div>
+        <div className="kpi red"><div className="kpi-top"><span>Overdue receivables</span><span className="icon-well"><Hourglass /></span></div><strong>Rs {(runs?.kpis.overdueAmount ?? 0).toLocaleString("en-PK", { maximumFractionDigits: 0 })}</strong><small>{runs?.kpis.overdueCustomers ?? 0} customers past due</small></div>
+        <div className="kpi"><div className="kpi-top"><span>Reminders sent</span><span className="icon-well"><Send /></span></div><strong>{Math.max(sent, runs?.log.length ?? 0)}</strong><small>{(rules ?? []).filter((r) => r.isActive).length} active rules · {runs?.kpis.queuedToday ?? 0} queued today</small></div>
+        <div className="kpi blue"><div className="kpi-top"><span>Due now</span><span className="icon-well"><BellRing /></span></div><strong>{runs?.kpis.dueNow ?? 0}</strong><small>Reminders the schedule sends next</small></div>
+        <div className="kpi yellow"><div className="kpi-top"><span>Read rate on WhatsApp</span><span className="icon-well"><CheckCheck /></span></div><strong>—</strong><small>From delivery receipts once a provider is connected</small></div>
       </div>
       <div className="split cp-rm-split">
         <div className="panel cp-rm-sched">
@@ -212,14 +238,11 @@ export function RemindersScreen({ can, hasCust }: { can: Can; hasCust: boolean }
         </div>
       </div>
 
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Overdue customers</h3><p>Send a reminder right now with the rule that matches their age</p></div><div className="panel-actions"><button className="btn secondary sm" type="button" disabled title="Sending starts once invoices exist"><Send />Send to all 0</button></div></div>
-        <EmptyState icon={<Hourglass />} title="No overdue invoices" description={<>Customers with overdue invoices appear here once sales invoices exist (Phase 21). Meanwhile, see <Link href="/customers">Customers</Link>.</>} />
-      </div>
-      <div className="panel flush">
-        <div className="panel-head"><div><h3>Sent log</h3><p>Delivery receipts from WhatsApp Business API, SMS gateway and email</p></div><div className="panel-actions"><label className="search-field cp-sf"><Search /><input placeholder="Search log…" disabled /></label></div></div>
-        <EmptyState icon={<Send />} title="Nothing sent yet" description="Every reminder sent by the schedule or by hand is logged here with its delivery status." />
-      </div>
+      {runs?.outboxOnly && (
+        <div className="banner info mb" role="note"><Send /><div><b>Outbox:</b> no email / SMS / WhatsApp provider is connected yet — reminders are recorded here and sent once a provider is set up.</div></div>
+      )}
+      <OverdueCustomersPanel rows={overdue} canSend={can.edit} busy={sending} onSend={(id) => void send(id)} onSendAll={() => void send(null)} />
+      <SentLogPanel rows={runs?.log ?? null} />
 
       {ruleEdit && <RuleDrawer key={ruleEdit === "new" ? "new" : ruleEdit.id} rule={ruleEdit === "new" ? null : ruleEdit} templates={templates} users={users} lookups={lookups} can={can}
         onClose={() => setRuleEdit(null)} onSaved={() => { setRuleEdit(null); reload(); }} />}

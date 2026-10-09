@@ -1,0 +1,54 @@
+/* Ported from template/src/14-purchase-docs.css (Stock Vouchers: folder tabs, type card, items, totals). Shared .pd- rules come from purchase-voucher.css. */
+.pd-folder{display:flex;gap:4px;padding:0 6px;position:relative;z-index:1;overflow-x:auto;scrollbar-width:none}
+.pd-folder::-webkit-scrollbar{display:none}
+.pd-folder button{position:relative;display:flex;align-items:center;gap:9px;padding:13px 22px 14px;border:1px solid var(--line);border-bottom:0;border-radius:16px 16px 0 0;background:var(--surface-2);color:var(--muted);font-weight:700;font-size:13.5px;white-space:nowrap;transition:color .2s,background-color .25s,transform .25s var(--ease);margin-bottom:-1px;transform:translateY(4px)}
+.pd-folder button span{font-weight:500;color:var(--muted-2)}
+.pd-folder button svg{width:18px;height:18px}
+.pd-folder button:hover{color:var(--ink);transform:translateY(1px)}
+.pd-folder button.on{background:var(--surface);color:var(--primary);transform:none;z-index:2}
+.pd-folder button.on::after{content:"";position:absolute;left:22px;right:22px;bottom:7px;height:2.5px;border-radius:2px;background:var(--primary);animation:growX .35s var(--ease)}
+.pd-folder button.on span{color:var(--ink-2)}
+.pd-folder-body{border-top-left-radius:6px;margin-bottom:18px}
+.pd-sv-top{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;align-items:start;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid var(--line)}
+.pd-sv-details{min-width:0}
+.pd-typecard{border-radius:18px;padding:18px;background:var(--surface-2);border:1px solid var(--line);transition:background-color .3s}
+.pd-tc-top{display:flex;gap:14px;align-items:flex-start;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.pd-tc-top small{font-size:11.5px;color:var(--primary);font-weight:700}
+.pd-tc-top b{display:block;font-size:18px;letter-spacing:-.03em;color:var(--ink)}
+.pd-tc-top p{margin:4px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.pd-tc-ic{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;flex:none;animation:pdPop .5s var(--ease-spring)}
+.pd-tc-ic svg{width:30px;height:30px}
+.pd-tc-ic.red{background:var(--danger-soft);color:var(--danger)}
+.pd-tc-ic.green{background:var(--primary-soft);color:var(--primary)}
+.pd-tc-ic.blue{background:var(--blue-soft);color:var(--blue)}
+.pd-tc-ic.orange{background:var(--orange-soft);color:var(--orange)}
+.pd-tpill{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.pd-tpill svg{width:13px;height:13px}
+.pd-tpill.brk{background:var(--danger-soft);color:var(--danger)}
+.pd-tpill.gft{background:var(--primary-soft);color:var(--primary)}
+.pd-tpill.smp{background:var(--blue-soft);color:var(--blue)}
+.pd-tpill.int{background:var(--orange-soft);color:var(--orange)}
+.pd-sv-items .pd-sec-h{margin-bottom:12px}
+.pd-sv-under{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-top:14px;flex-wrap:wrap}
+.pd-sv-totals{width:min(380px,100%);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.pd-sv-totals>div{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+.pd-sv-totals span{color:var(--ink-2);font-weight:700;display:inline-flex;align-items:center;gap:7px}
+.pd-sv-totals span svg{width:15px;height:15px;color:var(--primary)}
+.pd-sv-totals b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pd-sv-totals .after{margin-top:4px;padding:9px 11px;border-radius:11px;background:color-mix(in srgb,var(--mint) 14%,var(--surface))}
+.pd-sv-totals .after b{color:var(--primary);font-size:12.5px}
+.pd-after{display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:70px}
+.pd-after b{font-size:12.5px;color:var(--ink)}
+.pd-after i{display:block;width:64px;height:4px;border-radius:4px;background:linear-gradient(var(--primary),var(--primary)) 0 0/var(--w) 100% no-repeat,var(--surface-3);transition:background-size .4s var(--ease)}
+.pd-after.neg b{color:var(--danger)}
+.pd-after.neg i{background:var(--danger-soft)}
+.pd-sv-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.pd-attach{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+.pd-attach>b{font-size:13px}
+.pd-attach .pill{height:24px;font-size:11.5px}
+.pd-sv-filt select{width:auto;min-width:150px;height:40px}
+.pd-sv-filt .search-field{min-width:230px}
+.pd-range{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--line-2);border-radius:12px;font-size:12.5px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.pd-range svg{width:15px;height:15px;color:var(--muted)}
+.pd-sv-prev td{white-space:nowrap}
+

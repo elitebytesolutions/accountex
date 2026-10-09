@@ -1,0 +1,7 @@
+/* Phase 27 asset form / capitalise modal additions (no template equivalent). */
+.fa-more-toggle{grid-column:1/-1;display:flex;align-items:center;gap:6px;border:0;background:none;padding:6px 0;font-weight:700;font-size:13px;color:var(--ink);cursor:pointer;text-align:left}
+.fa-more-toggle svg{width:16px;height:16px}
+.fa-more-toggle small{font-weight:500;color:var(--muted);font-size:12px}
+.fa-cap-search{margin-bottom:12px;max-width:none}
+.fa-cap-lines{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:14px}
+.fa-cap-note{margin-top:10px}

@@ -1,5 +1,5 @@
 import { Screen } from "@/components/ui/screen";
-import { FbrScreen } from "@/features/treasury/components/fbr-screen";
+import { FbrScreen } from "@/features/tax/components/fbr-screen";
 import { requirePermission } from "@/lib/session";
 
 export const metadata = { title: "FBR Integration" };

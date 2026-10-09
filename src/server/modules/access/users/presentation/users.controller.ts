@@ -83,6 +83,14 @@ export class UsersController {
     return this.users.resetPassword(user, meta, id, body);
   }
 
+  /** Phase 44: a one-time link (24 h) for the user to set a new password; shown once to the admin. */
+  @Post(':id/reset-link')
+  @HttpCode(200)
+  @RequirePermission('usr:edit')
+  resetLink(@CurrentUser() user: SessionUser, @ReqMeta() meta: RequestMeta, @Param('id', uuid) id: string) {
+    return this.users.resetLink(user, meta, id);
+  }
+
   @Get(':id/sessions')
   @RequirePermission('usr:view')
   sessions(@CurrentUser() user: SessionUser, @Req() req: Request & { sessionId?: string }, @Param('id', uuid) id: string) {

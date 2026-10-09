@@ -10,8 +10,8 @@ const PURPOSE: Record<FbrAuthority, string> = { FBR: 'FBR_API_TOKEN', PRA: 'PRA_
 
 /**
  * FBR / PRA integration settings. The API token is sealed with SecretBox (AES-256-GCM, key outside the database) in
- * Company.TenantSecrets; the API only ever returns whether one is saved and its last 4 characters. Connection tests
- * and invoice sync arrive with FBR Submissions (Phase 28), so the status stays "Not configured" here.
+ * Company.TenantSecrets; the API only ever returns whether one is saved and its last 4 characters. Sending to FBR
+ * (Phase 28) is a separate switch, off by default, that needs the POS ID and token.
  */
 @Injectable()
 export class FbrService {
@@ -25,7 +25,7 @@ export class FbrService {
     const [saved, ids] = await Promise.all([this.store.settings(user.tenantId), this.store.companyTaxIds(user.tenantId)]);
     return FBR_AUTHORITIES.map((authority) => saved[authority] ?? {
       authority, id: null, environment: 'SANDBOX', posId: '', ntn: ids.ntn ?? '', strn: ids.strn, hasToken: false, tokenHint: null, tokenExpiresOn: null,
-      reportOnPosting: true, printQr: true, blockIfUnreachable: false, syncIntervalMinutes: 5, connectionStatus: 'NOT_CONFIGURED',
+      reportOnPosting: true, printQr: true, blockIfUnreachable: false, sendingEnabled: false, syncIntervalMinutes: 5, connectionStatus: 'NOT_CONFIGURED',
       lastHealthCheckAt: null, lastSyncAt: null, isActive: false, mappings: [], rowVersion: null,
     });
   }
@@ -39,6 +39,10 @@ export class FbrService {
     const active = await this.store.activeBranchIds(user.tenantId, branchIds);
     if (branchIds.some((b) => !active.includes(b))) throw new ValidationError('Choose active branches', { mappings: ['Unknown or inactive branch'] });
     const known = new Set(current?.mappings.map((m) => m.id) ?? []);
+    const willHaveToken = input.apiToken ? true : input.clearToken ? false : !!current?.hasToken;
+    if (input.sendingEnabled && (!input.posId || !willHaveToken)) {
+      throw new ValidationError('Enter the POS ID and API token before switching sending on.', { sendingEnabled: ['Credentials missing'] }, { code: 'FBR_NOT_CONFIGURED' });
+    }
     if (input.mappings.some((m) => m.id && !known.has(m.id))) throw new ValidationError('Unknown mapping row', { mappings: ['Reload and try again'] });
 
     await this.unitOfWork.run(actorContext(user, meta), async () => {
@@ -60,6 +64,7 @@ export class FbrService {
         // Mappings are replaced by id: rows with an id are kept, missing ones removed, new ones inserted.
         branchMappings: input.mappings.map((m) => ({ ...(m.id && { id: m.id }), branchId: m.branchId, posId: m.posId, isActive: m.isActive })),
       });
+      await this.store.setSending(user.tenantId, authority, input.sendingEnabled);
     });
     return (await this.get(user)).find((s) => s.authority === authority)!;
   }

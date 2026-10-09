@@ -19,7 +19,8 @@ export type AttachmentInfo = { id: string; fileName: string; contentType: string
 export type AttachmentAccessCheck = (user: SessionUser, attachment: { id: string; entityType: string | null; entityId: string | null }) => Promise<boolean>;
 
 const DEFAULT_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
-const EXT: Record<string, string> = { 'application/pdf': '.pdf', 'image/jpeg': '.jpg', 'image/png': '.png' };
+// Phase 35: CSV for report outputs and import files (no signature to check)
+const EXT: Record<string, string> = { 'application/pdf': '.pdf', 'image/jpeg': '.jpg', 'image/png': '.png', 'text/csv': '.csv' };
 /** The first bytes each allowed type must start with (the declared type alone is not trusted). */
 const MAGIC: Record<string, number[][]> = { 'application/pdf': [[0x25, 0x50, 0x44, 0x46]], 'image/png': [[0x89, 0x50, 0x4e, 0x47]], 'image/jpeg': [[0xff, 0xd8, 0xff]] };
 

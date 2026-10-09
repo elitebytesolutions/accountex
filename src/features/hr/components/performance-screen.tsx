@@ -1,23 +1,29 @@
 "use client";
 
-import { Bell, ChevronRight, ClipboardCheck, Download, Grid3x3, Lock, Play, Plus, Settings, Star, Target, UserCheck } from "lucide-react";
+import { Bell, ChevronRight, ClipboardCheck, Download, Grid3x3, Lock, MessageSquare, Play, Plus, Search, Settings, Star, Target, UserCheck, Users } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { CYCLE_STAGES, type PerformanceCycle } from "@/shared";
+import { CYCLE_STAGES, PERF_NINE_BOX, type PerfBoard, type PerfGoal, type PerformanceCycle } from "@/shared";
 import { cn } from "@/components/ui/cn";
 import { Check, Field, FormGrid } from "@/components/ui/form";
 import { PageHead } from "@/components/ui/page";
-import { ConfirmDialog } from "@/components/ui/overlay";
+import { ConfirmDialog, Drawer } from "@/components/ui/overlay";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
 import { useToast } from "@/components/ui/toast";
 import { labelOf, lookupOptions, toneOf, useLookups } from "@/features/settings/use-lookups";
 import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treasury-ui";
 import { ApiError } from "@/lib/api/errors";
 import { createPerformanceCycle, deletePerformanceCycle, listPerformanceCycles, performanceCycleAction, updatePerformanceCycle } from "../talent-api";
+import { generateReviews, getPerfBoard, listPerfGoals } from "../talent-ops-api";
+import { PerfGoalLines, PerfGoalModal, PerfReviewDrawer } from "./performance-review-drawer";
 import { RecordModal } from "./record-modal";
+import { TableFoot } from "./people-ui";
+import { tInitials, tNum } from "./talent-ui";
 
 type Can = { create: boolean; edit: boolean; remove: boolean };
 type Form = Record<string, string | boolean>;
-const LOOKUPS = ["CycleType", "PerformanceCycleStage", "PerformanceCycleStatus"];
+const LOOKUPS = ["CycleType", "PerformanceCycleStage", "PerformanceCycleStatus", "PerformanceReviewStage", "PerformanceBand", "PotentialBand", "RatingLabel"];
+const PAGE = 10;
+const NINE_TONE: Record<string, string> = { ENIGMA: "warn", GROWTH_EMPLOYEE: "info", FUTURE_LEADER: "good", INCONSISTENT_PLAYER: "warn", CORE_PLAYER: "neutral", HIGH_PERFORMER: "good", RISK: "danger", EFFECTIVE_EMPLOYEE: "neutral", TRUSTED_PROFESSIONAL: "info" };
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTH = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const STEP_LABEL: Record<string, string> = { GOAL_SETTING: "Goal setting", SELF_REVIEW: "Self review", MANAGER_REVIEW: "Manager review", CALIBRATION: "Calibration", SIGN_OFF: "Sign-off & letters" };
@@ -32,8 +38,8 @@ const fromCycle = (c: PerformanceCycle): Form => ({
 });
 
 /** The hero's second line, in the template's words: eligibility · manager review · calibration · increments. */
-function heroLine(c: PerformanceCycle) {
-  const parts = [`Eligible employees are counted once reviews start (Phase 33)${c.excludeProbation ? " · excludes staff on probation" : ""}`];
+function heroLine(c: PerformanceCycle, eligible: number | null) {
+  const parts = [`${eligible ? `${eligible} eligible employee${eligible === 1 ? "" : "s"}` : "Reviews not started yet"}${c.excludeProbation ? " (excludes staff on probation)" : ""}`];
   if (c.managerReviewDue) parts.push(`Manager review closes ${dm(c.managerReviewDue)}`);
   if (c.calibrationStart && c.calibrationEnd) parts.push(`Calibration ${c.calibrationStart.slice(5, 7) === c.calibrationEnd.slice(5, 7) ? `${c.calibrationStart.slice(8, 10)}–${dm(c.calibrationEnd)}` : `${dm(c.calibrationStart)} – ${dm(c.calibrationEnd)}`}`);
   if (c.incrementsEffectiveMonth) parts.push(`Increments effective ${MONTH[Number(c.incrementsEffectiveMonth.slice(5, 7)) - 1]} ${c.incrementsEffectiveMonth.slice(0, 4)} payroll`);
@@ -42,8 +48,10 @@ function heroLine(c: PerformanceCycle) {
 
 /**
  * Template app/hr/performance (51-hr-pay-talent.html): the cycle hero and the 5-step stepper driven by the cycle's stage.
- * KPIs, the review table, goals and the 9-box grid stay empty until Phase 33. Added in template style: the cycle settings
- * modal, the cycle switcher / list and the Open, Advance stage and Close actions.
+ * KPIs, the review table (search, department, stage chips), the Goals & KRAs panel of the picked employee and the 9-box
+ * grid come from the cycle's reviews (Phase 33). Added in template style: the cycle settings modal, the cycle switcher /
+ * list, Open / Advance stage / Close, Start reviews, the review drawer (manager review, calibration, sign-off, goals,
+ * feedback, 1:1s, History) and the calibration board.
  */
 export function PerformanceScreen({ can }: { can: Can }) {
   const toast = useToast();
@@ -57,6 +65,17 @@ export function PerformanceScreen({ can }: { can: Can }) {
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [confirm, setConfirm] = useState<"open" | "advance" | "close" | null>(null);
+  const [board, setBoard] = useState<PerfBoard | null>(null);
+  const [q, setQ] = useState("");
+  const [search, setSearch] = useState("");
+  const [dept, setDept] = useState("");
+  const [stage, setStage] = useState("");
+  const [page, setPage] = useState(1);
+  const [focus, setFocus] = useState<{ employeeId: string; name: string; managerComment: string | null; manager: string | null; score: number | null; label: string | null } | null>(null);
+  const [goals, setGoals] = useState<PerfGoal[] | null>(null);
+  const [goalEdit, setGoalEdit] = useState<PerfGoal | "new" | null>(null);
+  const [review, setReview] = useState<string | null>(null);
+  const [calib, setCalib] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -64,6 +83,20 @@ export function PerformanceScreen({ can }: { can: Can }) {
       .catch((e: unknown) => !cancelled && setError(e instanceof ApiError ? { message: e.message, reference: e.correlationId } : { message: "Could not load appraisal cycles" }));
     return () => { cancelled = true; };
   }, [attempt]);
+  const cycleId = picked ?? rows?.[0]?.id ?? null;
+  useEffect(() => { const t = setTimeout(() => { setSearch(q); setPage(1); }, 300); return () => clearTimeout(t); }, [q]);
+  useEffect(() => {
+    if (!cycleId) return;
+    let cancelled = false;
+    getPerfBoard({ cycle: cycleId, search, departmentId: dept, stage, page, pageSize: PAGE }).then((b) => !cancelled && setBoard(b)).catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [cycleId, search, dept, stage, page, attempt]);
+  useEffect(() => {
+    if (!focus || !cycleId) return;
+    let cancelled = false;
+    listPerfGoals({ employeeId: focus.employeeId, cycleId }).then((g) => !cancelled && setGoals(g)).catch(() => !cancelled && setGoals([]));
+    return () => { cancelled = true; };
+  }, [focus, cycleId, attempt]);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
   if (error) return <ErrorState message={error.message} reference={error.reference} onRetry={reload} />;
 
@@ -87,6 +120,12 @@ export function PerformanceScreen({ can }: { can: Can }) {
     const next = CYCLE_STAGES[CYCLE_STAGES.indexOf(c.stage as (typeof CYCLE_STAGES)[number]) + 1];
     return run(() => performanceCycleAction(c.id, a, c.rowVersion), a === "open" ? `${c.name} is open` : a === "close" ? `${c.name} closed` : `Moved to ${STEP_LABEL[next ?? ""] ?? "the next stage"}`);
   };
+  const kp = board?.cycle?.id === c?.id ? board?.kpis ?? null : null;
+  const startReviews = async (cy: PerformanceCycle) => {
+    setBusy(true);
+    try { const r = await generateReviews(cy.id); toast(r.added ? `${r.added} review${r.added === 1 ? "" : "s"} started` : "Every eligible employee already has a review", { tone: "good" }); reload(); }
+    catch (e) { toast(apiMessage(e, "Could not start reviews"), { tone: "danger" }); } finally { setBusy(false); }
+  };
   const at = c ? CYCLE_STAGES.indexOf(c.stage as (typeof CYCLE_STAGES)[number]) : -1;
   const statusWord = c ? (c.status === "ACTIVE" ? "Active cycle" : c.status === "DRAFT" ? "Draft cycle" : "Closed cycle") : "";
   const date = (k: (typeof DATES)[number], label: string, required = false) => (
@@ -97,8 +136,8 @@ export function PerformanceScreen({ can }: { can: Can }) {
     <>
       <PageHead eyebrow="Workforce / Talent / Performance" title="Performance Management" description="Appraisal cycles, goals & KRAs, ratings and calibration."
         actions={<>
-          <button className="btn secondary" type="button" disabled title="The goal library arrives with goals & reviews (Phase 33)"><Target />Goal library</button>
-          <button className="btn primary" type="button" disabled title="Reminders arrive with reviews (Phase 33)"><Bell />Remind managers</button>
+          <button className="btn secondary" type="button" disabled title="A shared goal library is not part of this release; add goals per employee"><Target />Goal library</button>
+          <button className="btn primary" type="button" disabled title="Reminders arrive with notifications (Phase 29)"><Bell />Remind managers</button>
         </>} />
 
       {!rows ? <Skeleton style={{ height: 140, marginBottom: 16 }} /> : !c ? (
@@ -111,11 +150,12 @@ export function PerformanceScreen({ can }: { can: Can }) {
           <div>
             <span className="hero-eyebrow">{statusWord} · {dm(c.periodStart)} – {dmy(c.periodEnd)}</span>
             <h1>{c.name}</h1>
-            <p>{heroLine(c)}</p>
+            <p>{heroLine(c, board?.cycle?.id === c.id ? board.kpis.eligible : null)}</p>
           </div>
           <div className="hero-actions">
             {rows.length > 1 && <select aria-label="Cycle" value={c.id} onChange={(e) => setPicked(e.target.value)}>{rows.map((x) => <option key={x.id} value={x.id}>{x.name} · {labelOf(lookups, "PerformanceCycleStatus", x.status)}</option>)}</select>}
-            <button className="btn secondary" type="button" disabled title="Ratings come with reviews (Phase 33)"><Download />Export ratings</button>
+            <button className="btn secondary" type="button" disabled={!board?.reviews.length} onClick={() => exportRatings(board!, c.name)}><Download />Export ratings</button>
+            {can.create && c.status === "ACTIVE" && <button className="btn secondary" type="button" disabled={busy} onClick={() => void startReviews(c)}><Users />Start reviews</button>}
             <button className="btn secondary" type="button" onClick={() => open(c)}><Settings />Cycle settings</button>
             {can.edit && c.status === "DRAFT" && <button className="btn secondary" type="button" disabled={busy} onClick={() => setConfirm("open")}><Play />Open cycle</button>}
             {can.edit && c.status === "ACTIVE" && at < CYCLE_STAGES.length - 1 && <button className="btn secondary" type="button" disabled={busy} onClick={() => setConfirm("advance")}><ChevronRight />Advance stage</button>}
@@ -131,33 +171,80 @@ export function PerformanceScreen({ can }: { can: Can }) {
             const due = c?.[STEP_DUE[st]!] as string | null | undefined;
             const done = c ? c.status === "CLOSED" || (c.status === "ACTIVE" && i < at) : false;
             const active = c?.status === "ACTIVE" && i === at;
-            return <li key={st} className={cn(done && "done", active && "active")}><b>{i + 1}</b><span title={due ? `Due ${dmy(due)}` : undefined}>{STEP_LABEL[st]}{due && i === at && c?.status !== "CLOSED" ? ` · ${dm(due)}` : ""}</span></li>;
+            return <li key={st} className={cn(done && "done", active && "active")}><b>{i + 1}</b><span title={due ? `Due ${dmy(due)}` : undefined}>{STEP_LABEL[st]}{board?.cycle?.id === c?.id && board?.kpis.eligible && (done || active) ? ` · ${board.stageProgress[st] ?? 0}%` : due && i === at && c?.status !== "CLOSED" ? ` · ${dm(due)}` : ""}</span></li>;
           })}
         </ol>
       </div>
 
       <div className="kpi-grid mb">
-        <div className="kpi"><div className="kpi-top"><span>Self Reviews</span><span className="icon-well"><UserCheck /></span></div><strong>0 / 0</strong><small>Reviews start in Phase 33</small></div>
-        <div className="kpi yellow"><div className="kpi-top"><span>Manager Reviews</span><span className="icon-well"><ClipboardCheck /></span></div><strong>0 / 0</strong><small>{c?.managerReviewDue ? `Closes ${dmy(c.managerReviewDue)}` : "No due date set"}</small></div>
-        <div className="kpi teal"><div className="kpi-top"><span>Avg Rating (so far)</span><span className="icon-well"><Star /></span></div><strong>— / {c?.ratingScaleMax ?? 5}</strong><small>No ratings yet</small></div>
-        <div className="kpi violet"><div className="kpi-top"><span>Goals On Track</span><span className="icon-well"><Target /></span></div><strong>—</strong><small>Goals & KRAs arrive in Phase 33</small></div>
+        <div className="kpi"><div className="kpi-top"><span>Self Reviews</span><span className="icon-well"><UserCheck /></span></div><strong>{kp ? `${kp.selfSubmitted} / ${kp.eligible}` : "0 / 0"}</strong><small className={cn(!!kp?.eligible && "up")}>{kp?.eligible ? `${Math.round((kp.selfSubmitted / kp.eligible) * 100)}% submitted` : "Reviews not started"}</small></div>
+        <div className="kpi yellow"><div className="kpi-top"><span>Manager Reviews</span><span className="icon-well"><ClipboardCheck /></span></div><strong>{kp ? `${kp.managerSubmitted} / ${kp.eligible}` : "0 / 0"}</strong><small>{kp?.eligible ? `${Math.round((kp.managerSubmitted / kp.eligible) * 100)}%` : ""}{c?.managerReviewDue ? `${kp?.eligible ? " · " : ""}Closes ${dmy(c.managerReviewDue)}` : kp?.eligible ? "" : "No due date set"}</small></div>
+        <div className="kpi teal"><div className="kpi-top"><span>Avg Rating (so far)</span><span className="icon-well"><Star /></span></div><strong>{kp?.avgRating != null ? kp.avgRating.toFixed(1) : "—"} / {c?.ratingScaleMax ?? 5}</strong><small>{kp?.previousAvg != null ? `Previous cycle: ${kp.previousAvg.toFixed(1)}` : kp?.avgRating != null ? "From manager and final ratings" : "No ratings yet"}</small></div>
+        <div className="kpi violet"><div className="kpi-top"><span>Goals On Track</span><span className="icon-well"><Target /></span></div><strong>{kp?.goalsTotal ? `${Math.round((kp.goalsOnTrack / kp.goalsTotal) * 100)}%` : "—"}</strong><small>{kp?.goalsTotal ? `${kp.goalsOnTrack} of ${kp.goalsTotal} KRAs` : "No goals set yet"}</small></div>
       </div>
 
       <div className="split mb">
         <div className="panel flush">
-          <div className="panel-head"><div><h3>Review cycle{c ? ` — ${c.name}` : ""}</h3><p>0 reviews in progress</p></div></div>
-          <EmptyState icon={<ClipboardCheck />} title="No reviews yet" description="Each eligible employee gets a review once reviews start (Phase 33)." />
+          <div className="panel-head"><div><h3>Review cycle{c ? ` — ${c.name}` : ""}</h3><p>{board?.cycle ? `${board.kpis.eligible} review${board.kpis.eligible === 1 ? "" : "s"} in progress` : "No cycle"}</p></div></div>
+          <div className="toolbar">
+            <label className="search-field"><Search /><input placeholder="Search employee…" value={q} onChange={(e) => setQ(e.target.value)} /></label>
+            <select aria-label="Department" value={dept} onChange={(e) => { setDept(e.target.value); setPage(1); }}><option value="">All departments</option>{board?.departments.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}</select>
+            <span className="spacer" />
+            <div className="chips">{([["", "All"], ["SELF_PENDING", "Self pending"], ["AWAITING_MANAGER", "Awaiting manager"], ["REVIEWED", "Reviewed"], ["CALIBRATED", "Calibrated"], ["SIGNED_OFF", "Signed off"]] as const).map(([v, l]) => <button key={l} type="button" className={cn(stage === v && "active")} onClick={() => { setStage(v); setPage(1); }}>{l}{v && board?.counts[v] ? <i>{board.counts[v]}</i> : null}</button>)}</div>
+          </div>
+          {!board ? <Skeleton style={{ height: 200 }} /> : !board.reviews.length ? (
+            <EmptyState icon={<ClipboardCheck />} title={board.kpis.eligible ? "No review matches" : "No reviews yet"}
+              description={board.kpis.eligible ? "Try another search, department or stage." : c?.status === "ACTIVE" ? "Start reviews to create one for each eligible employee." : "Open the cycle, then start reviews."}
+              action={!board.kpis.eligible && can.create && c?.status === "ACTIVE" ? <button className="btn primary sm" type="button" disabled={busy} onClick={() => void startReviews(c)}><Users />Start reviews</button> : undefined} />
+          ) : (<>
+            <div className="table-wrap"><table className="tbl">
+              <thead><tr><th>Employee</th><th>Manager</th><th className="num">Goals</th><th className="num">Self</th><th className="num">Manager</th><th>Stage</th></tr></thead>
+              <tbody>{board.reviews.map((r) => (
+                <tr key={r.id} style={{ cursor: "pointer" }} className={cn(focus?.employeeId === r.employee.id && "selected")}
+                  onClick={() => { if (focus?.employeeId !== r.employee.id) setGoals(null); setFocus({ employeeId: r.employee.id, name: r.employee.name, managerComment: r.managerComment, manager: r.manager?.name ?? null, score: r.finalRating ?? r.managerRating, label: r.ratingLabel }); }}
+                  onDoubleClick={() => setReview(r.id)}>
+                  <td><div className="cell-user"><span className="avatar sm">{tInitials(r.employee.name)}</span><div><b>{r.employee.name}</b><small>{r.employee.designation ?? ""}</small></div></div></td>
+                  <td>{r.manager?.name ?? "—"}</td>
+                  <td className={cn("num", r.goalAchievementPct == null && "zero")}>{r.goalAchievementPct != null ? `${r.goalAchievementPct}%` : r.goals ? `${r.goals} set` : "—"}</td>
+                  <td className={cn("num", r.selfRating == null && "zero")}>{tNum(r.selfRating)}</td>
+                  <td className={cn("num", r.managerRating == null && "zero")}>{tNum(r.managerRating)}</td>
+                  <td>{r.pipSuggested && r.stage !== "SELF_PENDING" ? <span className="badge danger">PIP suggested</span> : <span className={cn("badge", r.stage === "AWAITING_MANAGER" ? "warn" : ["REVIEWED", "CALIBRATED", "SIGNED_OFF"].includes(r.stage) ? "good" : "neutral")}>{labelOf(lookups, "PerformanceReviewStage", r.stage)}</span>}</td>
+                </tr>
+              ))}</tbody>
+            </table></div>
+            <TableFoot label={`Showing ${(page - 1) * PAGE + 1}–${(page - 1) * PAGE + board.reviews.length} of ${board.total} · double-click to open`} page={page} pages={Math.max(1, Math.ceil(board.total / PAGE))} go={setPage} />
+          </>)}
         </div>
         <div className="panel">
-          <div className="panel-head"><div><h3>Goals &amp; KRAs</h3><p>Pick an employee to see their goals</p></div></div>
-          <EmptyState icon={<Target />} title="No goals yet" description="Goals and KRAs are set during goal setting (Phase 33)." />
+          <div className="panel-head"><div><h3>Goals &amp; KRAs{focus ? ` — ${focus.name}` : ""}</h3><p>{focus ? (focus.score != null ? `Weighted score ${focus.score.toFixed(1)}${focus.label ? ` · ${labelOf(lookups, "RatingLabel", focus.label)}` : ""}` : "Not rated yet") : "Pick an employee to see their goals"}</p></div>
+            {focus && can.create && c?.status !== "CLOSED" && <div className="panel-actions"><button className="btn ghost sm" type="button" onClick={() => setGoalEdit("new")}><Plus />Goal</button></div>}</div>
+          {!focus ? <EmptyState icon={<Target />} title="No employee picked" description="Click a review to see that employee's goals and KRAs." />
+            : !goals ? <Skeleton style={{ height: 160 }} />
+            : !goals.length ? <EmptyState icon={<Target />} title="No goals yet" description="Goals and KRAs are set during goal setting." />
+            : <PerfGoalLines goals={goals} onPick={can.edit ? (g) => setGoalEdit(g) : undefined} />}
+          {focus?.managerComment && <div className="banner info mt"><MessageSquare /><div><b>Manager comment</b><p>“{focus.managerComment}”{focus.manager ? ` — ${focus.manager}` : ""}</p></div></div>}
         </div>
       </div>
 
       <div className="panel mb">
-        <div className="panel-head"><div><h3>9-Box Talent Grid</h3><p>Performance (x) vs potential (y) · draft before calibration</p></div></div>
-        <EmptyState icon={<Grid3x3 />} title="No ratings to plot" description="The grid fills in from manager ratings and calibration (Phase 33)." />
+        <div className="panel-head"><div><h3>9-Box Talent Grid</h3><p>Performance (x) vs potential (y){kp ? ` · ${kp.eligible} employees` : ""} · {board?.counts.CALIBRATED || board?.counts.SIGNED_OFF ? "calibrated where done" : "draft before calibration"}</p></div>
+          <div className="panel-actions"><button className="btn ghost sm" type="button" disabled={!board?.cycle} onClick={() => setCalib(true)}>Open calibration</button></div></div>
+        {!board?.nineBox.some((b) => b.count) ? <EmptyState icon={<Grid3x3 />} title="No ratings to plot" description="The grid fills in from manager review bands and calibration." /> : (
+          <div className="grid-3">
+            {PERF_NINE_BOX.map(([box, label, desc]) => {
+              const b = board.nineBox.find((x) => x.box === box);
+              return (
+                <div key={box} className="card"><div className="row"><b>{label}</b><span className="spacer" /><span className={cn("badge", NINE_TONE[box])}>{b?.count ?? 0}</span></div>
+                  <small className="muted">{b?.names.length ? `${b.names.join(", ")}${(b.count ?? 0) > b.names.length ? ` +${b.count - b.names.length}` : ""}` : desc}</small></div>
+              );
+            })}
+          </div>
+        )}
       </div>
+
+      {review && <PerfReviewDrawer id={review} can={can} lookups={lookups} ratingMax={c?.ratingScaleMax ?? 5} onClose={() => setReview(null)} onChanged={reload} />}
+      {goalEdit && focus && <PerfGoalModal goal={goalEdit === "new" ? null : goalEdit} employeeId={focus.employeeId} cycleId={cycleId} canDelete={can.remove} onClose={() => setGoalEdit(null)} onSaved={() => { setGoalEdit(null); reload(); }} />}
+      {calib && board?.cycle && <CalibrationBoard cycleId={board.cycle.id} lookups={lookups} onOpen={(id) => { setCalib(false); setReview(id); }} onClose={() => setCalib(false)} />}
 
       <div className="panel flush">
         <div className="panel-head"><div><h3>Appraisal cycles</h3><p>{rows ? `${rows.length} cycle${rows.length === 1 ? "" : "s"} · one can be active at a time` : "Loading…"}</p></div>
@@ -221,5 +308,41 @@ export function PerformanceScreen({ can }: { can: Can }) {
         </RecordModal>
       )}
     </>
+  );
+}
+
+/** Ratings of the shown reviews as a CSV download. */
+function exportRatings(b: PerfBoard, name: string) {
+  const head = ["Employee", "Code", "Manager", "Stage", "Self", "Manager rating", "Final", "Label", "Performance", "Potential", "9-box", "Increment %"];
+  const cell = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = b.reviews.map((r) => [r.employee.name, r.employee.code, r.manager?.name, r.stage, r.selfRating, r.managerRating, r.finalRating, r.ratingLabel, r.performanceBand, r.potentialBand, r.nineBox, r.incrementPctRecommended].map(cell).join(","));
+  const url = URL.createObjectURL(new Blob([[head.join(","), ...lines].join("\n")], { type: "text/csv" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: `${name} ratings.csv` });
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/** Calibration board (template "Open calibration"): reviewed and calibrated reviews of the cycle, opened one by one. */
+function CalibrationBoard({ cycleId, lookups, onOpen, onClose }: { cycleId: string; lookups: ReturnType<typeof useLookups>; onOpen: (id: string) => void; onClose: () => void }) {
+  const [rows, setRows] = useState<PerfBoard["reviews"] | null>(null);
+  useEffect(() => {
+    Promise.all([getPerfBoard({ cycle: cycleId, stage: "REVIEWED", pageSize: 100 }), getPerfBoard({ cycle: cycleId, stage: "CALIBRATED", pageSize: 100 })])
+      .then(([a, b]) => setRows([...a.reviews, ...b.reviews])).catch(() => setRows([]));
+  }, [cycleId]);
+  return (
+    <Drawer open wide onClose={onClose} title="Calibration board" subtitle="Reviews with a manager rating, ready to calibrate or sign off">
+      {!rows ? <Skeleton style={{ height: 200 }} /> : !rows.length ? <EmptyState icon={<Grid3x3 />} title="Nothing to calibrate" description="Reviews appear here once the manager review is submitted." /> : (
+        <div className="table-wrap"><table className="tbl">
+          <thead><tr><th>Employee</th><th className="num">Self</th><th className="num">Manager</th><th className="num">Final</th><th>Bands</th><th>Stage</th></tr></thead>
+          <tbody>{rows.map((r) => (
+            <tr key={r.id} style={{ cursor: "pointer" }} onClick={() => onOpen(r.id)}>
+              <td><b>{r.employee.name}</b><small>{r.employee.department ?? ""}</small></td><td className="num">{tNum(r.selfRating)}</td><td className="num">{tNum(r.managerRating)}</td><td className="num">{tNum(r.finalRating)}</td>
+              <td>{r.performanceBand ? labelOf(lookups, "PerformanceBand", r.performanceBand) : "—"} / {r.potentialBand ? labelOf(lookups, "PotentialBand", r.potentialBand) : "—"}</td>
+              <td><span className="badge neutral">{labelOf(lookups, "PerformanceReviewStage", r.stage)}</span></td>
+            </tr>
+          ))}</tbody>
+        </table></div>
+      )}
+    </Drawer>
   );
 }

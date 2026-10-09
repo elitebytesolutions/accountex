@@ -15,6 +15,7 @@ import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treas
 import { ApiError } from "@/lib/api/errors";
 import { clearItem, completeOffboarding, createOffboarding, getOffboarding, offboardingBoard, offboardingOptions, saveExitInterview, updateOffboarding, withdrawOffboarding } from "../lifecycle-api";
 import { dmy, localToday, stamp } from "./attendance-ui";
+import { OffboardingSettlementButton } from "./offboarding-settlement";
 
 const LOOKUPS = ["ExitType", "OffboardingReasonCategory", "ClearanceArea", "PrimaryReason", "OffboardingStatus"];
 const STATUS: Record<string, [string, string]> = { SERVING_NOTICE: ["Serving notice", "info"], RETENTION_TALK: ["Retention talk", "warn"], SETTLEMENT: ["Settlement", "warn"], CLOSED: ["Closed", "neutral"], WITHDRAWN: ["Withdrawn", "neutral"] };
@@ -93,7 +94,7 @@ export function OffboardingScreen({ can }: { can: { edit: boolean } }) {
         <div className="kpi"><div className="kpi-top"><span>Exits in FY {data ? `${data.fyStart.slice(0, 4)}-${String(Number(data.fyStart.slice(2, 4)) + 1).padStart(2, "0")}` : ""}</span><span className="icon-well"><LogOut /></span></div><strong>{k?.exitsFy ?? "—"}</strong><small>{k ? `${k.voluntaryFy} voluntary` : ""}</small></div>
         <div className="kpi yellow"><div className="kpi-top"><span>Serving Notice</span><span className="icon-well"><Hourglass /></span></div><strong>{k?.servingNotice ?? "—"}</strong><small>{k?.lastDaysNote ?? "Nobody serving notice"}</small></div>
         <div className="kpi red"><div className="kpi-top"><span>Annualised Attrition</span><span className="icon-well"><TrendingDown /></span></div><strong>{k?.attritionPct != null ? `${k.attritionPct}%` : "—"}</strong><small>Exits this FY, annualised</small></div>
-        <div className="kpi teal"><div className="kpi-top"><span>Pending Settlements</span><span className="icon-well"><UserX /></span></div><strong>{k?.pendingSettlements ?? "—"}</strong><small>Final settlement arrives with Phase 33</small></div>
+        <div className="kpi teal"><div className="kpi-top"><span>Pending Settlements</span><span className="icon-well"><UserX /></span></div><strong>{k?.pendingSettlements ?? "—"}</strong><small>Exits at the final settlement stage</small></div>
       </div>
 
       <div className="panel flush mb">
@@ -136,6 +137,7 @@ export function OffboardingScreen({ can }: { can: { edit: boolean } }) {
           <button className="btn ghost" type="button" onClick={() => setTab(tab === "detail" ? "history" : "detail")}><History />{tab === "detail" ? "History" : "Details"}</button>
           {isOpen && can.edit && <button className="btn ghost" type="button" disabled={busy} onClick={() => setConfirm("withdraw")}>Withdraw</button>}
           <span className="spacer" />
+          <OffboardingSettlementButton key={o.id} offboardingId={o.id} canCreate={can.edit} isOpen={isOpen} />
           {isOpen && can.edit && <button className="btn secondary" type="button" onClick={() => openInterview()}><ClipboardPen />{o.interview ? "Edit interview" : "Exit interview"}</button>}
           {isOpen && can.edit && <button className="btn primary" type="button" disabled={busy || pending > 0} title={pending ? "Clear or waive every clearance item first" : undefined} onClick={() => setConfirm("complete")}>Complete exit</button>}
         </>)}>
@@ -215,7 +217,7 @@ export function OffboardingScreen({ can }: { can: { edit: boolean } }) {
       <ConfirmDialog open={!!confirm && !!o} onClose={() => setConfirm(null)} busy={busy} danger={confirm === "withdraw"}
         title={confirm === "complete" ? `Complete ${o?.employee.name}'s exit?` : "Withdraw this exit?"} confirmLabel={confirm === "complete" ? "Complete exit" : "Withdraw"}
         onConfirm={async () => { const c = confirm; setConfirm(null); if (o && c === "complete") await run(() => completeOffboarding(o.id, o.rowVersion), `${o.employee.name} marked exited${o.appUser ? " · login suspended" : ""}`); if (o && c === "withdraw") await run(() => withdrawOffboarding(o.id, o.rowVersion, "Withdrawn by HR"), "Exit withdrawn"); }}>
-        {confirm === "complete" ? `The employee is marked exited on ${o ? dmy(o.lastWorkingDay) : ""}${o?.appUser ? " and their login is suspended (signed out everywhere)" : ""}. Final settlement follows in Phase 33.` : "The employee stays on the payroll; clearance and the interview are kept for the record."}
+        {confirm === "complete" ? `The employee is marked exited on ${o ? dmy(o.lastWorkingDay) : ""}${o?.appUser ? " and their login is suspended (signed out everywhere)" : ""}. The final settlement must be approved first.` : "The employee stays on the payroll; clearance and the interview are kept for the record."}
       </ConfirmDialog>
     </>
   );

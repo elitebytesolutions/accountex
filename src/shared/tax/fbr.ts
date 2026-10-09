@@ -21,6 +21,8 @@ export const FbrSettingSchema = z.object({
   reportOnPosting: z.boolean(),
   printQr: z.boolean(),
   blockIfUnreachable: z.boolean(),
+  /** Phase 28: documents are sent to FBR only while this is on (off by default; switched on at go-live). */
+  sendingEnabled: z.boolean(),
   syncIntervalMinutes: z.number().int(),
   connectionStatus: z.string(),
   lastHealthCheckAt: z.string().nullable(),
@@ -46,6 +48,7 @@ export const FbrSettingSaveSchema = z.object({
   reportOnPosting: z.boolean().default(true),
   printQr: z.boolean().default(true),
   blockIfUnreachable: z.boolean().default(false),
+  sendingEnabled: z.boolean().default(false),
   syncIntervalMinutes: z.coerce.number().int().min(1, '1–1440').max(1440, '1–1440').default(5),
   isActive: z.boolean().default(true),
   mappings: z

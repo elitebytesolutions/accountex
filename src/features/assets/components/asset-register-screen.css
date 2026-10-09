@@ -1,0 +1,4 @@
+/* Phase 27 register additions to template app/assets. */
+.btn.fa-filter-on{border-color:var(--primary);color:var(--primary)}
+.fa-attention .list-item{cursor:pointer}
+.fa-attention .list-item:hover b{color:var(--primary)}

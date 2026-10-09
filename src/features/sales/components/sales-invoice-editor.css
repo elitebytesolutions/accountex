@@ -1,0 +1,29 @@
+/* Sales invoice editor (template app/sales/invoices/new): line grid extras, tabs, posting preview. The 3-up row of
+   Totals · Posting preview · Delivery under the main column comes from the global polish rules for this route. */
+.sie .sie-lines{table-layout:fixed;width:100%;min-width:1040px}
+.sie .sie-lines td{vertical-align:top}
+.sie .sie-lines td.muted{padding-top:15px}
+.sie .sie-lines input,.sie .sie-lines select{box-sizing:border-box;width:100%;max-width:100%;min-width:0}
+.sie .sie-lines td,.sie .sie-lines th{overflow:hidden}
+.sie .sie-lines td.num{padding-top:14px}
+.sie .sie-sub{display:block;margin-top:4px;color:var(--muted);font-size:11.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sie .sie-sub.num{text-align:right}
+.sie .sie-lines .actions{white-space:nowrap}
+.sie .sie-bad,.sie .tbl.lines .sie-bad{border-color:var(--danger)!important;background:var(--danger-soft,var(--surface-2))}
+.sie .sie-under{padding:10px 14px;align-items:center}
+.sie .sie-tabs{display:flex;gap:4px;padding:0 14px;border-bottom:1px solid var(--line)}
+.sie .sie-tabs button{border:0;background:none;padding:10px 12px;font-weight:600;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer}
+.sie .sie-tabs button.on{color:var(--ink);border-bottom-color:var(--primary)}
+.sie .sie-tabs button i{font-style:normal;margin-left:4px;font-size:11px;padding:1px 6px;border-radius:99px;background:var(--surface-2)}
+.sie .sie-hist{padding:14px}
+.sie .sie-prev .tbl{min-width:0}
+.sie .sie-prev td,.sie .sie-prev th{padding-left:10px;padding-right:10px}
+.sie .sie-prev td:first-child{white-space:normal}
+.sie .sie-prev td.num{white-space:nowrap}
+.sie .panel-head{flex-wrap:nowrap}
+.sie .sie-skel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+@media (max-width:1100px){
+  .screen.sie>.split>.stack:last-child{grid-template-columns:minmax(0,1fr)!important}
+  .sie .sie-skel{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:700px){.sie .panel-head{flex-wrap:wrap}}

@@ -13,12 +13,13 @@ import { PrismaSodRuleStore } from './sod-rules/infrastructure/prisma-sod-rule.s
 import { SodRulesController } from './sod-rules/presentation/sod-rules.controller.js';
 import { UserAdminStore } from './users/application/user-admin-store.js';
 import { UsersService } from './users/application/users.service.js';
+import { UserInvitesController } from './users/presentation/user-invites.controller.js';
 import { PrismaUserAdminStore } from './users/infrastructure/prisma-user-admin.store.js';
 import { UsersController } from './users/presentation/users.controller.js';
 
 /** Access administration: users, roles & permissions, approval workflows (Phase 2); segregation-of-duties rules (Phase 5). */
 @Module({
-  controllers: [UsersController, RolesController, ApprovalsController, SodRulesController],
+  controllers: [UserInvitesController, UsersController, RolesController, ApprovalsController, SodRulesController],
   providers: [
     UsersService,
     RolesService,

@@ -9,7 +9,7 @@ export default async function PettyCashPage() {
   const has = (p: string) => user.permissions.includes(p);
   return (
     <Screen route="app/cash/petty">
-      <PettyCashScreen can={{ create: has("cash:create"), edit: has("cash:edit"), remove: has("cash:delete") }} />
+      <PettyCashScreen can={{ create: has("cash:create"), edit: has("cash:edit"), remove: has("cash:delete"), post: has("cash:post") }} />
     </Screen>
   );
 }

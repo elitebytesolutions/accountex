@@ -274,7 +274,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 26, title: "Distribution", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 26, title: "Distribution", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Load sheets and delivery, route settlement, recovery, salesman targets/commissions and credit control.",
     entities: [
       E("load-sheets", "Load Sheets & Delivery", ["Distribution.LoadSheets", "Distribution.LoadSheetLines", "Distribution.LoadSheetInvoices", "Distribution.VanStockCounts"], {
@@ -305,7 +305,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 27, title: "Assets & budgets", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 27, title: "Assets & budgets", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Fixed asset register, depreciation, transfers/disposals and budgets.",
     reports: ["Budget vs Actual", "Asset Register report"],
     entities: [
@@ -331,57 +331,46 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 28, title: "Tax compliance", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 28, title: "Tax compliance", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Sales tax returns, withholding tax lifecycle and FBR invoice submissions.",
     entities: [
       E("sales-tax-returns", "Sales Tax Returns", ["Tax.SalesTaxReturns", "Tax.SalesTaxReturnLines"], {
         tpl: ["app/tax/sales-tax"], api: "tax/sales-tax-returns", perm: ["tax"],
-        x: ["POST /tax/sales-tax-returns/prepare?period", "POST /tax/sales-tax-returns/:id/approve|file", "GET /tax/sales-tax-returns/:id/annex-c.xlsx"],
-        rules: ["A filed return locks the period's tax documents"], deps: ["sales-invoices", "vendor-bills"],
+        x: ["POST /tax/sales-tax-returns/prepare?period", "POST /tax/sales-tax-returns/:id/approve|file|pay", "GET /tax/sales-tax-returns/:id/annex-c.csv|annex-a.csv (IRIS CSV, no xlsx library; decided 2026-10-08)"],
+        rules: ["A filed return locks the period's tax documents", "Annex-A lines default MATCHED; the user flags UNMATCHED (no FBR supplier feed; decided 2026-10-08)", "Pay posts a BPV: Dr OUTPUT_GST + FURTHER_TAX_PAYABLE, Cr INPUT_GST + bank"], deps: ["sales-invoices", "vendor-bills"],
       }),
       E("wht", "WHT Deductions & Challans", ["Tax.WhtDeductions", "Tax.WhtChallans"], {
         tpl: ["app/tax/wht"], api: "tax/wht", perm: ["tax"],
-        x: ["POST /tax/wht/challans (pay selected deductions)", "POST /tax/wht/challans/:id/post"], rules: POST_RULES, deps: ["vendor-payments"],
+        x: ["POST /tax/wht/challans (pay a period's sections)", "POST /tax/wht/challans/:id/post|cancel"], rules: [...POST_RULES, "Register filled by posting triggers: vendor payments / purchase vouchers (DEDUCTED), receipts (SUFFERED), invoice advance tax (COLLECTED); payroll 149 via Tax.whtRegister from Phase 32 (decided 2026-10-08)"], deps: ["vendor-payments"],
       }),
       E("wht-certificates", "WHT Certificates & Statements", ["Tax.WhtCertificates", "Tax.WhtStatements"], {
         tpl: ["app/tax/wht"], api: "tax/wht/certificates", perm: ["tax"],
-        x: ["POST /tax/wht/certificates/generate", "GET /tax/wht/certificates/:id/pdf", "POST /tax/wht/statements/prepare?period"], deps: ["wht"],
+        x: ["POST /tax/wht/certificates/generate", "GET /tax/wht/certificates/:id/print (browser print, no server PDF)", "POST /tax/wht/statements/prepare?period"], deps: ["wht"],
       }),
       E("fbr-submissions", "FBR Submissions", ["Tax.FbrInvoiceSubmissions", "Tax.FbrConnectionEvents"], {
         tpl: ["app/tax/fbr"], api: "tax/fbr/submissions", perm: ["tax"],
         x: ["POST /tax/fbr/submissions/:id/retry", "GET /tax/fbr/connection-events", "POST /tax/fbr/test-connection and Sync now (moved from Phase 5)"],
-        rules: ["Submissions are append-only; retries create new attempts"], deps: ["sales-invoices", "fbr-settings"],
+        rules: ["One submission row per document; each retry increments attempts and the audit trail keeps every attempt", "Sending OFF by default (FbrSettings.sendingEnabled); simulator only for FBR_SIMULATE_TENANTS; going live offers send backlog or mark NOT_REPORTED (decided 2026-10-08, rev 2)"], deps: ["sales-invoices", "fbr-settings"],
       }),
     ],
   },
   {
-    no: 29, title: "Period close & work queue", portal: "workspace", kind: "TRANSACTIONAL",
-    objective: "Period reopen, year-end close, reminder runs, tasks and notifications; completes the financial statements.",
-    reports: ["Profit & Loss", "Balance Sheet", "Cash Flow", "Workspace Dashboard"],
+    no: 29, title: "Period close", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
+    objective: "Period reopen, year-end close and payment reminder runs; completes the financial statements. Tasks, notifications, sign-in recovery and the dashboard moved to Phase 44 (decided 2026-10-08).",
+    reports: ["Profit & Loss", "Balance Sheet", "Cash Flow"],
     entities: [
       E("period-reopen", "Period Reopen Requests", ["Accounting.PeriodReopenRequests"], {
         tpl: ["app/periods"], api: "accounting/period-reopen-requests", perm: ["close"],
-        x: ["POST /accounting/period-reopen-requests/:id/approve|reject"], rules: ["Reopen always needs approval; auto-relock after the window"], deps: ["fiscal-periods", "approvals"],
+        x: ["POST /accounting/period-reopen-requests/:id/approve|reject"], rules: ["Reopen always needs approval; auto-relock after the window", "Approved by close:approve, never the requester, no engine; locked periods need MFA (later phase), so only closed periods reopen (decided 2026-10-08)"], deps: ["fiscal-periods", "approvals"],
       }),
       E("year-end", "Year-End Close", ["Accounting.YearEndAdjustments", "Accounting.YearEndCloses"], {
         tpl: ["app/periods/close"], api: "accounting/year-end", perm: ["close"],
         x: ["POST /accounting/year-end/:fiscalYearId/checklist", "POST /accounting/year-end/:fiscalYearId/close (retained earnings transfer)"],
-        rules: [...POST_RULES, "All periods locked and checklist complete before close"], deps: ["vouchers", "fiscal-periods"],
+        rules: [...POST_RULES, "All periods locked and checklist complete before close", "Dry run stores the figures; final close (close:approve) posts the closing JE and locks every period; cancel reverses (decided 2026-10-08)"], deps: ["vouchers", "fiscal-periods"],
       }),
       E("reminder-runs", "Payment Reminder Runs", ["Sales.PaymentReminderLogs"], {
         tpl: ["app/receivables/reminders"], api: "receivables/reminder-runs", perm: ["rcpt"],
-        x: ["POST /receivables/reminder-runs (run rules now)", "Scheduled job (actor = SERVICE)"], deps: ["reminder-setup", "sales-invoices"],
-      }),
-      E("tasks-notifications", "Tasks & Notifications", ["Company.Tasks", "Company.Notifications", "Company.NotificationPreferences"], {
-        tpl: ["app/today", "app/notifications"], api: "work", perm: [],
-        x: ["GET /work/today (Company.getTodayDueItems, getTodayKpis)", "CRUD /work/tasks", "GET /me/notifications, POST /me/notifications/read-all"],
-        rules: ["Own tasks/notifications only unless assigned"], deps: ["users"],
-      }),
-      E("sign-in-recovery", "Sign-in Recovery & MFA", ["Company.UserInvites", "Company.UserMfaMethods", "Company.TrustedDevices", "Company.PasswordResets"], {
-        tpl: ["login/mfa", "login/forgot"], api: "me/mfa", perm: [],
-        x: ["POST /settings/users/invite (email/WhatsApp link) + accept page", "POST /me/mfa/enrol|verify|disable", "DELETE /me/trusted-devices/:id", "POST /auth/forgot, POST /auth/reset"],
-        rules: ["Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs in this phase)", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
-        deps: ["users", "account-security"],
+        x: ["POST /receivables/reminder-runs (run rules now)", "Scheduled job (actor = SERVICE)"], rules: ["Outbox only: messages are rendered and logged as QUEUED; an email/SMS provider plugs in later (decided 2026-10-08)"], deps: ["reminder-setup", "sales-invoices"],
       }),
     ],
   },
@@ -464,7 +453,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 33, title: "Talent & exits", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 33, title: "Talent & exits", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Final settlements, recruitment, performance, training, employee letters and assets.",
     reports: ["HR Reports"],
     entities: [
@@ -491,7 +480,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 34, title: "Self-service requests", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 34, title: "Self-service requests", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Employee requests and engagement from My Profile.",
     reports: ["My Day (getMyDay)", "My Team (getMyTeamToday)"],
     entities: [
@@ -520,7 +509,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 35, title: "Data & collaboration", portal: "workspace", kind: "TRANSACTIONAL",
+    no: 35, title: "Data & collaboration", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
     objective: "Imports, integrations/API keys, backups, report runs and the cross-cutting activity/comments/attachments layer.",
     reports: ["Audit Trail", "Reports Hub"],
     entities: [
@@ -545,6 +534,29 @@ export const transactions: Phase[] = [
         tpl: ["app/activity"], api: "collaboration", perm: [],
         x: ["GET /collaboration/feed", "POST /collaboration/comments, POST /collaboration/reactions, POST /collaboration/attachments (upload)", "PUT /collaboration/tags/:recordType/:recordId"],
         rules: ["Visibility follows the target record's permission"], deps: ["users"],
+      }),
+    ],
+  },
+  {
+    no: 44, title: "Work queue & sign-in recovery", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    objective: "Tasks and notifications, user invites and password reset, and the workspace dashboard (split from Phase 29, decided 2026-10-08).",
+    reports: ["Workspace Dashboard"],
+    entities: [
+      E("tasks", "Tasks & Today's Work", ["Company.Tasks"], {
+        tpl: ["app/today"], api: "work", perm: [],
+        x: ["GET /work/today (Company.getTodayDueItems, getTodayKpis)", "CRUD /work/tasks"],
+        rules: ["Own tasks only unless assigned"], deps: ["users"],
+      }),
+      E("notifications", "Notifications & Preferences", ["Company.Notifications", "Company.NotificationPreferences"], {
+        tpl: ["app/notifications"], api: "me/notifications", perm: [],
+        x: ["GET /me/notifications, POST /me/notifications/read-all", "PUT /me/notification-preferences"],
+        rules: ["Own notifications only"], deps: ["users"],
+      }),
+      E("sign-in-recovery", "Sign-in Recovery & MFA", ["Company.UserInvites", "Company.UserMfaMethods", "Company.TrustedDevices", "Company.PasswordResets"], {
+        tpl: ["login/mfa", "login/forgot"], api: "me/mfa", perm: [],
+        x: ["POST /settings/users/invite (email/WhatsApp link) + accept page", "POST /me/mfa/enrol|verify|disable", "DELETE /me/trusted-devices/:id", "POST /auth/forgot, POST /auth/reset"],
+        rules: ["Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs)", "Invites and password reset only (outbox links); MFA / trusted devices in a later phase (decided 2026-10-08)", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
+        deps: ["users", "account-security"],
       }),
     ],
   },

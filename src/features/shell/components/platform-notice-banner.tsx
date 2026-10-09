@@ -23,7 +23,7 @@ async function refresh() {
   try { shared.feed = await getPlatformNotices(); } catch { shared.feed = null; }
   for (const l of shared.listeners) l(shared.feed);
 }
-function useNoticeFeed() {
+export function useNoticeFeed() {
   const [feed, setFeed] = useState<PlatformNoticeFeed | null>(shared.feed);
   useEffect(() => {
     shared.listeners.add(setFeed);

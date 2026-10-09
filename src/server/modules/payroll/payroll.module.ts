@@ -37,6 +37,11 @@ import { TaxDeclarationStore } from './tax-declarations/application/tax-declarat
 import { TaxDeclarationsService } from './tax-declarations/application/tax-declarations.service.js';
 import { PrismaTaxDeclarationStore } from './tax-declarations/infrastructure/prisma-tax-declaration.store.js';
 import { MyTaxDeclarationsController, TaxDeclarationsController } from './tax-declarations/presentation/tax-declarations.controller.js';
+// Phase 33 (exits): final settlements
+import { SettlementStore } from './final-settlements/application/settlement-store.js';
+import { FinalSettlementsService } from './final-settlements/application/final-settlements.service.js';
+import { PrismaSettlementStore } from './final-settlements/infrastructure/prisma-settlement.store.js';
+import { FinalSettlementsController } from './final-settlements/presentation/final-settlements.controller.js';
 
 /** Payroll setup (Phase 12): salary components, structures, pay groups, salary tax slabs and employee salaries. */
 @Module({
@@ -45,6 +50,7 @@ import { MyTaxDeclarationsController, TaxDeclarationsController } from './tax-de
     ComponentsController, StructuresController, PayGroupsController, SalariesController, SlabImportController,
     // Phase 32: payroll runs, loans, payslips, tax declarations (+ My Profile)
     RunsController, LoansController, MyLoansController, PayslipsController, MyPayslipsController, TaxDeclarationsController, MyTaxDeclarationsController,
+    FinalSettlementsController, // Phase 33 exits
   ],
   providers: [
     // Phase 32
@@ -58,6 +64,8 @@ import { MyTaxDeclarationsController, TaxDeclarationsController } from './tax-de
     SalariesService, { provide: SalaryStore, useClass: PrismaSalaryStore },
     // Phase 37: "Import from Tax Master" (section 149 slabs)
     SlabImportService, { provide: MasterSlabSource, useClass: PrismaMasterSlabSource },
+    // Phase 33 exits
+    FinalSettlementsService, { provide: SettlementStore, useClass: PrismaSettlementStore },
   ],
 })
 export class PayrollModule {}

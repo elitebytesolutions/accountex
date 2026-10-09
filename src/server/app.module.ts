@@ -18,6 +18,8 @@ import { AuthModule } from './modules/auth/auth.module.js';
 import { FinanceModule } from './modules/finance/finance.module.js';
 import { TreasuryModule } from './modules/treasury/treasury.module.js';
 import { AssetsModule } from './modules/assets/assets.module.js';
+import { TaxModule } from './modules/tax/tax.module.js';
+import { WorkModule } from './modules/work/work.module.js';
 import { InventoryModule } from './modules/inventory/inventory.module.js';
 import { PartiesModule } from './modules/parties/parties.module.js';
 import { HrModule } from './modules/hr/hr.module.js';
@@ -33,6 +35,7 @@ import { PlatformCatalogueModule } from './modules/platform-admin/catalogue/cata
 import { SettingsModule } from './modules/settings/settings.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { SelfServiceModule } from './modules/self-service/self-service.module.js';
+import { EssRequestsModule } from './modules/ess-requests/ess-requests.module.js';
 import { ReportsModule } from './modules/reports/reports.module.js';
 import { ApprovalsModule } from './modules/approvals/approvals.module.js';
 import { LedgerModule } from './modules/ledger/ledger.module.js';
@@ -41,8 +44,13 @@ import { CashModule } from './modules/cash/cash.module.js';
 import { PurchasingModule } from './modules/purchasing/purchasing.module.js';
 import { SalesModule } from './modules/sales/sales.module.js';
 import { WholesaleModule } from './modules/wholesale/wholesale.module.js';
+import { BudgetsModule } from './modules/budgets/budgets.module.js';
+import { DataOpsModule } from './modules/data-ops/data-ops.module.js';
+import { CollaborationModule } from './modules/collaboration/collaboration.module.js';
 import { InventoryOpsModule } from './modules/inventory-ops/inventory-ops.module.js';
 import { ReceivablesOpsModule } from './modules/receivables-ops/receivables-ops.module.js';
+import { DistributionOpsModule } from './modules/distribution-ops/distribution-ops.module.js';
+import { PeriodCloseModule } from './modules/period-close/period-close.module.js';
 import { PlatformFlagsModule } from './modules/platform-admin/flags/platform-flags.module.js';
 import { WorkspaceFlagsModule } from './modules/workspace-flags/workspace-flags.module.js';
 import { PlatformTemplatesModule } from './modules/platform-admin/templates/templates.module.js';
@@ -79,6 +87,8 @@ import { PlatformOperationsModule } from './modules/platform-admin/operations/pl
     CashModule,
     TreasuryModule,
     AssetsModule,
+    TaxModule,
+    WorkModule,
     // before InventoryModule: its /inventory/... routes are matched first
     InventoryOpsModule,
     InventoryModule,
@@ -86,13 +96,19 @@ import { PlatformOperationsModule } from './modules/platform-admin/operations/pl
     PurchasingModule,
     SalesModule,
     WholesaleModule,
+    BudgetsModule,
+    DataOpsModule,
+    CollaborationModule,
     ReceivablesOpsModule,
+    DistributionOpsModule,
+    PeriodCloseModule,
     SalesSetupModule,
     DistributionModule,
     ReceivablesModule,
     HrModule,
     PayrollModule,
     SelfServiceModule,
+    EssRequestsModule,
     ReportsModule,
     ApprovalsModule,
     LedgerModule,

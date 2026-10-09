@@ -1,0 +1,21 @@
+/* Landed cost: the template's rules live in finsoft-company.css (.cp-lc-*, .cp-ship*); these cover the editable parts the template fakes. */
+.lc-dirty{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--warn-soft);color:var(--ink-2);font-size:12.5px;flex-wrap:wrap}
+.lc-dirty>svg{width:16px;height:16px;color:var(--warn);flex:none}
+.cp-lc-doc .cp-lc-dh .btn.sm{height:32px}
+.cp-lc-doc .cp-lc-dh a.badge{text-decoration:none}
+.cp-lc-ctbl .cp-claimb{margin-top:4px;display:inline-flex;gap:4px;align-items:center}
+.cp-lc-ctbl .cp-claimb svg{width:12px;height:12px}
+.cp-lc-ctbl tr td:last-child .icon-btn-sm svg{width:14px;height:14px}
+.lc-editor .lc-h4{display:flex;align-items:center;gap:8px;margin:22px 0 10px;font-size:14px;color:var(--ink)}
+.lc-editor .lc-h4 small{font-weight:500;font-size:12px}
+.lc-editor .form-grid .span-2{grid-column:1/-1}
+.lc-editor .lc-in{width:96px!important;height:32px!important;text-align:right}
+.lc-editor .lc-ch select,.lc-editor .lc-ch input:not([type=checkbox]){height:32px!important;font-size:12.5px!important;min-width:0}
+.lc-editor .lc-ch td{vertical-align:middle;white-space:nowrap}
+@media(max-width:780px){
+  .lc-editor .form-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:780px){
+  .lc-head .head-actions{flex-wrap:wrap;width:100%}
+  .lc-head .head-actions .btn{flex:1 1 auto}
+}

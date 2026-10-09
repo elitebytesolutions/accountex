@@ -2,7 +2,7 @@
 
 import { AlertTriangle, CalendarDays, CalendarPlus, GraduationCap, Plus, Search, Shield, UserPlus, Users, Wallet } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { TRAINING_TRANSITIONS, type Department, type TrainingProgram } from "@/shared";
+import { TRAINING_TRANSITIONS, type Department, type TrainingBoard, type TrainingEnrolmentItem, type TrainingProgram, type TrainingSessionItem } from "@/shared";
 import { cn } from "@/components/ui/cn";
 import { Check, Field, FormGrid } from "@/components/ui/form";
 import { PageHead } from "@/components/ui/page";
@@ -13,12 +13,17 @@ import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treas
 import { ApiError } from "@/lib/api/errors";
 import { listDepartments } from "../api";
 import { createTrainingProgram, deleteTrainingProgram, listTrainingPrograms, setTrainingProgramStatus, updateTrainingProgram } from "../talent-api";
+import { getTrainingBoard } from "../talent-ops-api";
 import { TableFoot } from "./people-ui";
+import { tDmy, tInitials } from "./talent-ui";
+import { EnrolModal, EnrolmentModal, SessionLine, SessionModal } from "./training-ops";
 import { RecordModal } from "./record-modal";
 
 type Can = { create: boolean; edit: boolean; remove: boolean };
 type Form = Record<string, string | boolean>;
-const LOOKUPS = ["TrainingProgramFormat", "TrainingProgramStatus"];
+const LOOKUPS = ["TrainingProgramFormat", "TrainingProgramStatus", "TrainingEnrolmentStatus"];
+const ENROL_CHIPS = [["", "All"], ["IN_PROGRESS", "In progress"], ["COMPLETED", "Completed"], ["NOT_STARTED", "Not started"]] as const;
+const ENROL_PAGE = 10;
 const PAGE = 12;
 const CHIPS = [["", "All"], ["PLANNED", "Planned"], ["IN_PROGRESS", "In progress"], ["COMPLETED", "Completed"], ["CANCELLED", "Cancelled"]] as const;
 const ACTION_LABEL: Record<string, string> = { IN_PROGRESS: "Start program", COMPLETED: "Mark completed", CANCELLED: "Cancel program", PLANNED: "Reinstate as planned" };
@@ -38,8 +43,9 @@ function cardLine(p: TrainingProgram, format: string) {
 
 /**
  * Template app/hr/training (51-hr-pay-talent.html): KPIs, the program card grid and the po-trn-program modal (its five
- * fields first, then the rest of the program and its history). Sessions, enrolments and expiring certifications stay
- * empty until Phase 33.
+ * fields first, then the rest of the program and its history), card progress from completions, upcoming sessions
+ * (#po-trn-session), expiring certifications, enrolments (#po-trn-enrol) and, added in template style, the enrolment
+ * modal (progress, complete → certificate, withdraw, History). "Send reminders" waits for email (Phase 29).
  */
 export function TrainingScreen({ can }: { can: Can }) {
   const toast = useToast();
@@ -57,6 +63,14 @@ export function TrainingScreen({ can }: { can: Can }) {
   const [f, setF] = useState<Form>(blank());
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [board, setBoard] = useState<TrainingBoard | null>(null);
+  const [eq, setEq] = useState("");
+  const [esearch, setEsearch] = useState("");
+  const [estatus, setEstatus] = useState("");
+  const [epage, setEpage] = useState(1);
+  const [session, setSession] = useState<TrainingSessionItem | "new" | null>(null);
+  const [enrol, setEnrol] = useState<string | null>(null);
+  const [enrolment, setEnrolment] = useState<TrainingEnrolmentItem | null>(null);
 
   useEffect(() => { const t = setTimeout(() => { setSearch(q); setPage(1); }, 300); return () => clearTimeout(t); }, [q]);
   useEffect(() => { listDepartments({ status: "ACTIVE" }).then((r) => setDepartments(r.items)).catch(() => undefined); }, []);
@@ -67,12 +81,19 @@ export function TrainingScreen({ can }: { can: Can }) {
       .catch((e: unknown) => !cancelled && setError(e instanceof ApiError ? { message: e.message, reference: e.correlationId } : { message: "Could not load training programs" }));
     return () => { cancelled = true; };
   }, [search, status, page, attempt]);
+  useEffect(() => { const t = setTimeout(() => { setEsearch(eq); setEpage(1); }, 300); return () => clearTimeout(t); }, [eq]);
+  useEffect(() => {
+    let cancelled = false;
+    getTrainingBoard({ search: esearch, status: estatus, page: epage, pageSize: ENROL_PAGE }).then((b) => !cancelled && setBoard(b)).catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [esearch, estatus, epage, attempt]);
   const reload = useCallback(() => setAttempt((n) => n + 1), []);
   if (error) return <ErrorState message={error.message} reference={error.reference} onRetry={reload} />;
 
   const live = all.filter((p) => p.status !== "CANCELLED");
   const budget = live.reduce((t, p) => t + (p.budget ?? 0), 0);
   const running = all.filter((p) => p.status === "IN_PROGRESS").length;
+  const k = board?.kpis;
   const count = (st: string) => (st ? all.filter((p) => p.status === st).length : all.length);
   const row = edit && edit !== "new" ? edit : null;
   const editable = row ? can.edit : can.create;
@@ -101,15 +122,15 @@ export function TrainingScreen({ can }: { can: Can }) {
       <PageHead eyebrow="Workforce / Talent / Training" title="Training & Development"
         description={`Programs, sessions, enrolments and certifications${budget ? ` · budget ${rs(budget)}` : ""}.`}
         actions={<>
-          <button className="btn secondary" type="button" disabled title="Sessions arrive with enrolments (Phase 33)"><CalendarPlus />Schedule session</button>
+          {can.create && <button className="btn secondary" type="button" onClick={() => setSession("new")}><CalendarPlus />Schedule session</button>}
           {can.create && <button className="btn primary" type="button" onClick={() => open("new")}><Plus />New Program</button>}
         </>} />
 
       <div className="kpi-grid mb">
-        <div className="kpi"><div className="kpi-top"><span>Training Hours (FY)</span><span className="icon-well"><GraduationCap /></span></div><strong>0 hrs</strong><small>Logged from sessions (Phase 33)</small></div>
-        <div className="kpi teal"><div className="kpi-top"><span>Budget Utilised</span><span className="icon-well"><Wallet /></span></div><strong>Rs 0</strong><small>{budget ? `0% of ${rs(budget)}` : "No program budgets yet"}</small></div>
-        <div className="kpi blue"><div className="kpi-top"><span>Active Enrolments</span><span className="icon-well"><Users /></span></div><strong>0</strong><small>{running} program{running === 1 ? "" : "s"} running</small></div>
-        <div className="kpi red"><div className="kpi-top"><span>Certifications Expiring</span><span className="icon-well"><AlertTriangle /></span></div><strong>0</strong><small>Next 60 days</small></div>
+        <div className="kpi"><div className="kpi-top"><span>Training Hours (FY)</span><span className="icon-well"><GraduationCap /></span></div><strong>{k ? `${k.hours.toLocaleString("en-PK")} hrs` : "—"}</strong><small>{k?.perEmployee != null ? `${k.perEmployee} hrs per employee` : "Logged from enrolments"}</small></div>
+        <div className="kpi teal"><div className="kpi-top"><span>Budget Utilised</span><span className="icon-well"><Wallet /></span></div><strong>{rs(k?.budgetUsed ?? 0)}</strong><small>{budget ? `${(((k?.budgetUsed ?? 0) / budget) * 100).toFixed(1)}% of ${rs(budget)}` : "No program budgets yet"}</small></div>
+        <div className="kpi blue"><div className="kpi-top"><span>Active Enrolments</span><span className="icon-well"><Users /></span></div><strong>{k?.activeEnrolments ?? 0}</strong><small>{running} program{running === 1 ? "" : "s"} running</small></div>
+        <div className="kpi red"><div className="kpi-top"><span>Certifications Expiring</span><span className="icon-well"><AlertTriangle /></span></div><strong>{k?.expiring ?? 0}</strong><small className={cn(!!k?.expiring && "down")}>Next 60 days</small></div>
       </div>
 
       <div className="toolbar">
@@ -127,12 +148,13 @@ export function TrainingScreen({ can }: { can: Can }) {
           <div className="card-grid mb">
             {data.items.map((p) => {
               const target = p.targetParticipants ?? p.seats;
+              const st = board?.programStats[p.id];
               return (
                 <button key={p.id} type="button" className="card" style={{ textAlign: "left", cursor: "pointer" }} onClick={() => open(p)}>
                   <div className="row"><span className="icon-well">{p.isMandatory ? <Shield /> : <GraduationCap />}</span><b>{p.name}</b></div>
                   <p className="small muted">{cardLine(p, labelOf(lookups, "TrainingProgramFormat", p.format))}</p>
-                  <div className="progress"><i style={{ width: "0%" }} /></div>
-                  <div className="row small mt"><span>{target ? `0 / ${target} completed` : "No enrolments yet"}</span><span className="spacer" /><span className={cn("badge", toneOf(lookups, "TrainingProgramStatus", p.status))}>{labelOf(lookups, "TrainingProgramStatus", p.status)}</span></div>
+                  <div className="progress"><i style={{ width: `${st && (target ?? st.enrolled) ? Math.round((st.completed / (target ?? st.enrolled)) * 100) : 0}%` }} /></div>
+                  <div className="row small mt"><span>{st?.enrolled ? `${st.completed} / ${target ?? st.enrolled} completed` : target ? `0 / ${target} completed` : "No enrolments yet"}</span><span className="spacer" /><span className={cn("badge", toneOf(lookups, "TrainingProgramStatus", p.status))}>{labelOf(lookups, "TrainingProgramStatus", p.status)}</span></div>
                 </button>
               );
             })}
@@ -144,18 +166,49 @@ export function TrainingScreen({ can }: { can: Can }) {
       <div className="grid-2 mb">
         <div className="panel">
           <div className="panel-head"><div><h3>Upcoming Sessions</h3></div></div>
-          <EmptyState icon={<CalendarDays />} title="No sessions scheduled" description="Sessions are scheduled per program from Phase 33." />
+          {!board ? <Skeleton style={{ height: 160 }} /> : !board.sessions.length ? <EmptyState icon={<CalendarDays />} title="No sessions scheduled" description={can.create ? "Schedule a session under a program." : "Sessions HR schedules appear here."} /> : (
+            <div className="list">{board.sessions.map((x) => <SessionLine key={x.id} s={x} onClick={can.edit ? () => setSession(x) : undefined} />)}</div>
+          )}
         </div>
         <div className="panel flush">
-          <div className="panel-head"><div><h3>Certifications Expiring</h3><p>Next 60 days</p></div></div>
-          <EmptyState icon={<AlertTriangle />} title="Nothing expiring" description="Certifications are tracked from completed enrolments (Phase 33)." />
+          <div className="panel-head"><div><h3>Certifications Expiring</h3><p>Next 60 days</p></div><button className="btn ghost sm" type="button" disabled title="Reminders arrive with email (Phase 29)">Send reminders</button></div>
+          {!board ? <Skeleton style={{ height: 160 }} /> : !board.expiring.length ? <EmptyState icon={<AlertTriangle />} title="Nothing expiring" description="Certifications come from completed enrolments." /> : (
+            <div className="table-wrap"><table className="tbl">
+              <thead><tr><th>Employee</th><th>Certification</th><th>Expires</th><th /></tr></thead>
+              <tbody>{board.expiring.map((c) => (
+                <tr key={c.id}><td>{c.employee.name}</td><td>{c.name}</td><td className={cn((c.daysLeft ?? 99) <= 30 && "neg")}>{tDmy(c.expiresOn)}</td>
+                  <td><span className={cn("badge", (c.daysLeft ?? 99) < 0 ? "danger" : (c.daysLeft ?? 99) <= 30 ? "danger" : "warn")}>{(c.daysLeft ?? 0) < 0 ? "Expired" : `${c.daysLeft} day${c.daysLeft === 1 ? "" : "s"}`}</span></td></tr>
+              ))}</tbody>
+            </table></div>
+          )}
         </div>
       </div>
 
       <div className="panel flush">
-        <div className="panel-head"><div><h3>Enrolments</h3><p>Current programs</p></div><div className="panel-actions"><button className="btn secondary sm" type="button" disabled title="Enrolments arrive in Phase 33"><UserPlus />Enrol employees</button></div></div>
-        <EmptyState icon={<Users />} title="No enrolments yet" description="Employees are enrolled in programs from Phase 33." />
+        <div className="panel-head"><div><h3>Enrolments</h3><p>Current programs</p></div><div className="panel-actions">{can.create && <button className="btn secondary sm" type="button" onClick={() => setEnrol("")}><UserPlus />Enrol employees</button>}</div></div>
+        <div className="toolbar"><label className="search-field"><Search /><input placeholder="Search employee or program…" value={eq} onChange={(e) => setEq(e.target.value)} /></label>
+          <div className="chips">{ENROL_CHIPS.map(([v, l]) => <button key={l} type="button" className={cn(estatus === v && "active")} onClick={() => { setEstatus(v); setEpage(1); }}>{l}</button>)}</div></div>
+        {!board ? <Skeleton style={{ height: 160 }} /> : !board.enrolments.length ? <EmptyState icon={<Users />} title={esearch || estatus ? "No enrolment matches" : "No enrolments yet"} description={esearch || estatus ? "Try another search or status." : "Enrol employees in a program to track their progress."} /> : (<>
+          <div className="table-wrap"><table className="tbl">
+            <thead><tr><th>Employee</th><th>Program</th><th>Enrolled</th><th>Progress</th><th className="num">Score</th><th className="num">Cost (Rs)</th><th>Status</th></tr></thead>
+            <tbody>{board.enrolments.map((x) => (
+              <tr key={x.id} style={{ cursor: "pointer" }} onClick={() => setEnrolment(x)}>
+                <td><div className="cell-user"><span className="avatar sm">{tInitials(x.employee.name)}</span><div><b>{x.employee.name}</b><small>{x.employee.department ?? ""}</small></div></div></td>
+                <td>{x.program.name}</td><td>{tDmy(x.enrolledOn)}</td>
+                <td><div className={cn("progress", x.status === "BEHIND" && "warn")}><i style={{ width: `${x.progressPct}%` }} /></div></td>
+                <td className={cn("num", x.scorePct == null && "zero")}>{x.scorePct != null ? `${x.scorePct}%` : "—"}</td>
+                <td className="num">{x.cost.toLocaleString("en-PK")}</td>
+                <td><span className={cn("badge", x.status === "ENROLLED" ? "neutral" : toneOf(lookups, "TrainingEnrolmentStatus", x.status))}>{x.status === "ENROLLED" ? "Not started" : labelOf(lookups, "TrainingEnrolmentStatus", x.status)}</span></td>
+              </tr>
+            ))}</tbody>
+          </table></div>
+          <TableFoot label={`Showing ${(epage - 1) * ENROL_PAGE + 1}–${(epage - 1) * ENROL_PAGE + board.enrolments.length} of ${board.total}`} page={epage} pages={Math.max(1, Math.ceil(board.total / ENROL_PAGE))} go={setEpage} />
+        </>)}
       </div>
+
+      {session && <SessionModal session={session === "new" ? null : session} programs={all.filter((p) => ["PLANNED", "IN_PROGRESS"].includes(p.status))} onClose={() => setSession(null)} onSaved={() => { setSession(null); reload(); }} />}
+      {enrol !== null && <EnrolModal defaultProgramId={enrol || undefined} onClose={() => setEnrol(null)} onSaved={() => { setEnrol(null); reload(); }} />}
+      {enrolment && <EnrolmentModal e={enrolment} canEdit={can.edit} onClose={() => setEnrolment(null)} onSaved={() => { setEnrolment(null); reload(); }} />}
 
       {edit && (
         <RecordModal open wide onClose={() => setEdit(null)} busy={busy} title={row ? row.name : "New training program"} subtitle="Programs hold sessions, enrolments and certifications."

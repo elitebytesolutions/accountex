@@ -9,6 +9,8 @@ export abstract class FbrStore {
   abstract companyTaxIds(tenantId: string): Promise<CompanyTaxIds>;
   abstract activeBranchIds(tenantId: string, ids: string[]): Promise<string[]>;
   abstract save(data: Record<string, unknown>): Promise<string>;
+  /** Phase 28: switches sending to the authority on / off (not part of fbrSettingAddUpdate). */
+  abstract setSending(tenantId: string, authority: FbrAuthority, on: boolean): Promise<void>;
   /** Stores (or replaces) the sealed secret for a purpose and returns its id. */
   abstract putSecret(tenantId: string, purpose: string, sealed: Sealed): Promise<string>;
   abstract deleteSecret(tenantId: string, purpose: string): Promise<void>;

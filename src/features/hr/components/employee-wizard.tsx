@@ -14,6 +14,8 @@ import { dateLabel } from "@/features/finance/components/finance-ui";
 import { labelOf, lookupOptions, useLookups } from "@/features/settings/use-lookups";
 import { apiFieldErrors, apiMessage } from "@/features/treasury/components/treasury-ui";
 import { ApiError } from "@/lib/api/errors";
+import { addSalary } from "@/features/payroll/api";
+import { salarySummary, usePayrollData, WizardSalary, type WizardSalaryValue } from "@/features/payroll/components/wizard-salary";
 import { createEmployee, employeeOptions } from "../api";
 
 const STEPS = ["Personal", "Job & Organisation", "Compensation", "Documents & Bank", "Review"];
@@ -47,7 +49,7 @@ const START: Form = {
 };
 
 /** Template app/hr/employees/new (50-hr-core.html): the 5-step add-employee wizard. */
-export function EmployeeWizard() {
+export function EmployeeWizard({ canSalary }: { canSalary: boolean }) {
   const router = useRouter();
   const toast = useToast();
   const lookups = useLookups(["EmployeeGender", "MaritalStatus", "Religion", "BloodGroup", "GuardianRelation", "EmploymentType", "WeeklyOff", "EmployeeBankAccountPaymentMode", "EmployeeStatutoryDetailAtlStatus", "EmployeeStatutoryDetailSocialSecurityScheme"]);
@@ -59,6 +61,8 @@ export function EmployeeWizard() {
   const [docs, setDocs] = useState<Record<string, boolean>>(Object.fromEntries(DOCS.map((d) => [d.key, true])));
   const [errs, setErrs] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [pay, setPay] = useState<WizardSalaryValue>({ structureId: "", basicAmount: "", payGroupId: "" });
+  const payData = usePayrollData(canSalary);
 
   useEffect(() => {
     employeeOptions().then(setOpts).catch((e: unknown) => setLoadError(e instanceof ApiError ? { message: e.message, reference: e.correlationId } : { message: "Could not load the form" }));
@@ -72,6 +76,7 @@ export function EmployeeWizard() {
   const confirmation = f.confirmationDueOn || (Number(f.probationMonths) > 0 && f.joiningDate ? addMonths(f.joiningDate, Number(f.probationMonths)) : "");
   const bank = opts?.banks.find((b) => b.id === f.bankId);
 
+  const summary = salarySummary(payData, pay, f.gradeId, f.joiningDate);
   if (loadError) return <ErrorState message={loadError.message} reference={loadError.reference} />;
   if (!opts) return <Skeleton style={{ height: 420 }} />;
 
@@ -83,6 +88,7 @@ export function EmployeeWizard() {
     const need: Record<number, [string, string][]> = {
       0: [["firstName", "Enter the first name"], ["lastName", "Enter the last name"], ["guardianName", "Enter the father / husband name"], ["cnic", "Enter the CNIC"], ["dateOfBirth", "Enter the date of birth"], ["gender", "Choose the gender"], ["mobile", "Enter the mobile number"]],
       1: [["departmentId", "Choose the department"], ["designationId", "Choose the designation"], ["branchId", "Choose the branch"], ["employmentType", "Choose the type"], ["joiningDate", "Enter the joining date"]],
+      2: summary.structure && !(Number(pay.basicAmount) > 0) ? [["basicAmount", "Enter the basic salary"]] : [],
       3: f.paymentMode === "BANK" ? [["bankId", "Choose the bank"], ["accountTitle", "Enter the account title"], ["iban", "Enter the IBAN"]] : [],
     };
     const e = Object.fromEntries((need[s] ?? []).filter(([k]) => !v(k)).map(([k, m]) => [k, m]));
@@ -111,6 +117,11 @@ export function EmployeeWizard() {
     try {
       const e = await createEmployee(body);
       toast(`Employee ${e.code} created`, { tone: "good" });
+      if (canSalary && summary.structure && Number(pay.basicAmount) > 0) {
+        try {
+          await addSalary({ employeeId: e.id, structureId: summary.structure.id, basicAmount: pay.basicAmount, payGroupId: pay.payGroupId || null, effectiveFrom: e.joiningDate, revisionType: "JOINING" });
+        } catch (err) { toast(`Employee created, but the salary was not saved: ${apiMessage(err, "error")}. Add it on the Salary tab.`, { tone: "danger" }); }
+      }
       router.push(`/hr/employees/${e.id}`);
     } catch (e) {
       const fe = apiFieldErrors(e);
@@ -218,8 +229,9 @@ export function EmployeeWizard() {
             <div className="wz-pane active">
               <div className="split">
                 <div>
-                  <div className="form-section"><h4>Salary structure</h4><p>Pre-filled from the grade template once payroll is set up.</p></div>
-                  <div className="panel"><EmptyState icon={<Layers />} title="Set up in Payroll (Phase 12)" description="Salary components, structures and each employee's salary arrive with payroll setup. Add the salary on the employee profile then." /></div>
+                  <div className="form-section"><h4>Salary structure</h4><p>Pre-filled from the grade&apos;s structure; adjust the basic if negotiated.</p></div>
+                  {canSalary ? <><WizardSalary data={payData} summary={summary} value={pay} onChange={(v) => { setPay(v); setErrs((x) => ({ ...x, basicAmount: "" })); }} />{errs.basicAmount && <small className="hint text-danger">{errs.basicAmount}</small>}</>
+                    : <div className="panel"><EmptyState icon={<Layers />} title="Set by payroll approvers" description="A user with payroll approval adds the salary on the employee's Salary tab." /></div>}
                 </div>
                 <div>
                   <div className="form-section"><h4>Statutory &amp; benefits</h4></div>
@@ -230,7 +242,9 @@ export function EmployeeWizard() {
                     <Switch label="Group life & health insurance" checked={flags.groupInsurance} onChange={(e) => setFlags((x) => ({ ...x, groupInsurance: e.target.checked }))} />
                     <Switch label="Overtime eligible" checked={flags.overtimeEligible} onChange={(e) => setFlags((x) => ({ ...x, overtimeEligible: e.target.checked }))} />
                   </div>
-                  <div className="banner info mt"><Info /><div><b>Estimated tax u/s 149</b><p>Calculated from the salary and the FY tax slabs once payroll is set up (Phase 12).</p></div></div>
+                  <div className="banner info mt"><Info /><div><b>Estimated tax u/s 149</b><p>{summary.taxMonthly !== null && summary.taxable !== null
+                    ? `Annual taxable Rs ${summary.taxable.toLocaleString("en-US", { maximumFractionDigits: 0 })} → approx. Rs ${summary.taxMonthly.toLocaleString("en-US")} / month (FY ${summary.taxYear} slab).`
+                    : "Shown once a structure and basic are chosen and the tax year's slabs exist."}</p></div></div>
                 </div>
               </div>
               {actions()}
@@ -293,7 +307,8 @@ export function EmployeeWizard() {
                   </div></div>
                 <div className="panel"><div className="panel-head"><div><h3>Pay &amp; bank</h3></div></div>
                   <div className="dl">
-                    <div><span>Salary</span><b className="muted">Payroll (Phase 12)</b></div>
+                    <div><span>Gross</span><b>{summary.gross !== null ? `Rs ${summary.gross.toLocaleString("en-US", { maximumFractionDigits: 0 })} / mo` : "—"}</b></div>
+                    <div><span>Basic</span><b>{Number(pay.basicAmount) > 0 ? `Rs ${Number(pay.basicAmount).toLocaleString("en-US")}` : "—"}</b></div>
                     <div><span>Bank</span><b>{f.paymentMode === "BANK" ? `${bank?.name ?? "—"} · ${f.iban ? `…${normaliseIban(f.iban).slice(-4)}` : ""}` : labelOf(lookups, "EmployeeBankAccountPaymentMode", f.paymentMode)}</b></div>
                     <div><span>EOBI</span><b>{flags.eobiApplicable ? f.eobiNo || "Applicable" : "Not applicable"}</b></div>
                     <div><span>NTN</span><b>{f.ntn || "—"} ({labelOf(lookups, "EmployeeStatutoryDetailAtlStatus", f.atlStatus)})</b></div>

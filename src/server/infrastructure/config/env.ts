@@ -22,6 +22,13 @@ const EnvSchema = z.object({
   // Phase 32: uploaded files (Company.Attachments rows point here). A relative UPLOAD_DIR is under the project root.
   UPLOAD_DIR: z.string().min(1).default('./uploads'),
   PG_DUMP_PATH: z.string().min(1).default(process.platform === 'win32' ? 'C:\\Program Files\\PostgreSQL\\18\\bin\\pg_dump.exe' : 'pg_dump'),
+  // Phase 28: FBR / PRA Digital Invoicing. Sending is per company (FbrSettings.sendingEnabled, off by default).
+  // FBR_SIMULATE_TENANTS: comma-separated company codes that use a local simulator instead of FBR (tests only); the
+  // simulator's invoice numbers start with "SIM-".
+  FBR_DI_URL_PRODUCTION: z.url().default('https://gw.fbr.gov.pk/di_data/v1/di/postinvoicedata'),
+  FBR_DI_URL_SANDBOX: z.url().default('https://gw.fbr.gov.pk/di_data/v1/di/postinvoicedata_sb'),
+  FBR_REFERENCE_URL: z.url().default('https://gw.fbr.gov.pk/pdi/v1/provinces'),
+  FBR_SIMULATE_TENANTS: z.string().default('').transform((v) => v.split(',').map((x) => x.trim().toLowerCase()).filter(Boolean)),
 });
 
 const parsed = EnvSchema.safeParse(process.env);

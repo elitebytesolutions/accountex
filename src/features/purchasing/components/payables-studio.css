@@ -1,0 +1,19 @@
+/* Payables studio: small additions on top of the shared report-studio.css */
+.rst-tabs button.rst-tab{border:0;background:transparent;cursor:pointer;font:inherit}
+.rst-tabs .rst-tab.pst-off,.rst-preset.pst-off{opacity:.45;cursor:not-allowed}
+.rst-tabs .rst-tab.pst-off:hover{background:transparent}
+.rst-preset.pst-off:hover{transform:none;box-shadow:none;border-color:var(--line);background:var(--surface-2)}
+.rst-link:disabled{opacity:.5;cursor:not-allowed}
+.rst-table .pst-sub{display:block;font-size:.86em;color:var(--p-muted,var(--muted));font-weight:400}
+.rst-table td.pst-strong{font-weight:700}
+.rst-table .pst-doc{color:var(--p-acc,var(--primary));text-decoration:none;font-weight:600}
+.rst-table .pst-doc:hover{text-decoration:underline}
+.rst-sheet.pst-note{display:grid;place-items:center;min-height:420px;text-align:center}
+.rst-sheet.pst-note>div{max-width:320px;display:grid;gap:8px;justify-items:center;color:var(--p-muted,var(--muted))}
+.rst-sheet.pst-note svg{width:34px;height:34px;color:var(--p-acc,var(--primary))}
+.rst-sheet.pst-note b{font-size:15px;color:var(--p-ink,var(--ink))}
+.rst-sheet.pst-note p{margin:0;font-size:12.5px}
+.rst-table.pst-tight{font-size:9px}
+.rst-table.pst-tight th{padding:6px 4px;white-space:normal;vertical-align:bottom}
+.rst-table.pst-tight td{padding:4.5px 4px}
+.rst-table.pst-tight td:first-child{word-break:break-word}

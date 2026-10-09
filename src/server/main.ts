@@ -30,6 +30,10 @@ async function bootstrap() {
   // Registered before Nest so Next.js gets untouched requests (Nest's middleware never runs for pages).
   server.use((req, res, nextHandler) => (API_ROUTE.test(req.path) ? nextHandler() : handleWeb(req, res)));
 
+  // Phase 35: data import rows arrive as JSON (up to 10 MB files); everything else keeps the default 100 kB limit.
+  // Wrapped: Nest skips its own global JSON parser when it finds a middleware named `jsonParser` on the app.
+  const importJson = express.json({ limit: '12mb' });
+  server.use('/api/imports', (req, res, nextHandler) => importJson(req, res, nextHandler));
   const api = await NestFactory.create(AppModule, new ExpressAdapter(server));
   api.setGlobalPrefix('api');
   api.use(helmet()); // API only: helmet's default CSP would break Next.js pages
