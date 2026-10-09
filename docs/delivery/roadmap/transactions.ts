@@ -453,7 +453,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 33, title: "Talent & exits", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 33, title: "Talent & exits", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Final settlements, recruitment, performance, training, employee letters and assets.",
     reports: ["HR Reports"],
     entities: [

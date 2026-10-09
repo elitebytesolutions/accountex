@@ -76,7 +76,7 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 30 | Time & attendance | Transactions | workspace | done | Attendance · Regularisation Requests · Rosters & Shift Swaps · Overtime Claims |
 | 31 | Leave & lifecycle | Transactions | workspace | done | Leave Requests · Leave Balances · Onboardings · Offboardings |
 | 32 | Payroll | Transactions | workspace | done | Payroll Runs · Payroll Adjustments · Loans & Advances · Payslips & Salary Payments · Tax Declarations |
-| 33 | Talent & exits | Transactions | workspace | in-progress | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
+| 33 | Talent & exits | Transactions | workspace | done | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
 | 34 | Self-service requests | Transactions | workspace | done | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
 | 35 | Data & collaboration | Transactions | workspace | in-progress | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
 | 44 | Work queue & sign-in recovery | Transactions | workspace | in-progress | Tasks & Today's Work · Notifications & Preferences · Sign-in Recovery & MFA |
