@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpCode, Post, Req, Res } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
 import { LoginSchema, type LoginInput, type SessionUser } from '../../../../shared/index.js';
 import type { CookieOptions, Request, Response } from 'express';
 import { ReqMeta } from '../../../common/context/request-meta.js';
@@ -23,7 +22,7 @@ export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  // Per-route 5/min sign-in limit removed for now; the global limit (app.module) still applies.
   @Post('login')
   @HttpCode(200)
   async login(

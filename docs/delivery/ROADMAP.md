@@ -78,8 +78,8 @@ Next routes mirror the template without `app/` (`#/app/accounting/coa` → `/acc
 | 32 | Payroll | Transactions | workspace | done | Payroll Runs · Payroll Adjustments · Loans & Advances · Payslips & Salary Payments · Tax Declarations |
 | 33 | Talent & exits | Transactions | workspace | done | Final Settlements · Recruitment · Performance · Training · Employee Letters & Assets |
 | 34 | Self-service requests | Transactions | workspace | done | Letter Requests · Profile Change Requests · Helpdesk Tickets · Kudos, Survey Responses, Reads & Presence · Policy Acknowledgements |
-| 35 | Data & collaboration | Transactions | workspace | in-progress | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
-| 44 | Work queue & sign-in recovery | Transactions | workspace | in-progress | Tasks & Today's Work · Notifications & Preferences · Sign-in Recovery & MFA |
+| 35 | Data & collaboration | Transactions | workspace | done | Data Imports · Integrations & API Keys · Backup & Restore · Report Runs · Activity, Comments & Attachments |
+| 44 | Work queue & sign-in recovery | Transactions | workspace | done | Tasks & Today's Work · Notifications & Preferences · Sign-in Recovery & MFA |
 | 36 | Plans & catalogue | Masters | admin | done | Subscription Plans · Platform Modules · Add-ons · Coupons |
 | 37 | Seed templates & tax master | Masters | admin | done | COA Templates · Tenant Seed Templates · Tax Master · Communication Templates |
 | 38 | Platform configuration | Masters | admin | done | Dunning Policies · Tenant Segments · Resellers · Platform Security & Backups |
@@ -3136,7 +3136,7 @@ Read-only reports delivered with this phase: Workspace Dashboard.
   - `GET /api/work/:id/history`: audit trail (Company.AuditTrailEntries)
   - GET /api/work/today (Company.getTodayDueItems, getTodayKpis)
   - CRUD /api/work/tasks
-- **Business rules:** Own tasks only unless assigned.
+- **Business rules:** Own tasks only unless assigned; Repeating tasks create their next occurrence on completion; reminders and due-item notifications by a 5-minute job (decided 2026-10-08).
 - **Depends on:** `users` (phase 2)
 
 ### 44.2 Notifications & Preferences `notifications`
@@ -3155,7 +3155,7 @@ Read-only reports delivered with this phase: Workspace Dashboard.
   - `GET /api/me/notifications/:id/history`: audit trail (Company.AuditTrailEntries)
   - GET /api/me/notifications, POST /api/me/notifications/read-all
   - PUT /api/me/notification-preferences
-- **Business rules:** Own notifications only.
+- **Business rules:** Own notifications only; Company.notify is the one writer (approval engine, tasks, due items, sign-in events); in-app preferences apply, email / SMS / WhatsApp saved until a provider exists (decided 2026-10-08).
 - **Depends on:** `users` (phase 2)
 
 ### 44.3 Sign-in Recovery & MFA `sign-in-recovery`
@@ -3176,7 +3176,7 @@ Read-only reports delivered with this phase: Workspace Dashboard.
   - POST /api/me/mfa/enrol|verify|disable
   - DELETE /api/me/trusted-devices/:id
   - POST /api/auth/forgot, POST /api/auth/reset
-- **Business rules:** Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs); Invites and password reset only (outbox links); MFA / trusted devices in a later phase (decided 2026-10-08); Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
+- **Business rules:** Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs); Invites and password reset only; MFA / trusted devices in a later phase (decided 2026-10-08); No email provider: the admin copies / WhatsApps the one-time link (invite 7 days, admin reset 24 h); forgot-password notifies user admins (decided 2026-10-08); Reset and invite tokens hashed and single-use; MFA secrets encrypted; recovery codes hashed.
 - **Depends on:** `users` (phase 2), `account-security` (phase 2)
 
 ## Phase 36: Plans & catalogue

@@ -7,7 +7,7 @@ import { TokenService } from '../../../core/application/ports/token-service.js';
 import { UnitOfWork, type RequestMeta } from '../../../core/application/ports/unit-of-work.js';
 import { ForbiddenError, UnauthorizedError } from '../../../core/domain/errors.js';
 import { UserRepository } from '../../users/domain/user.repository.js';
-import { deviceLabel, LOCK_AFTER_FAILURES, LOCK_MINUTES, withinLoginHours } from '../domain/sign-in-policy.js';
+import { deviceLabel, LOCK_AFTER_FAILURES, LOCK_MINUTES, LOCKOUT_ENABLED, withinLoginHours } from '../domain/sign-in-policy.js';
 import { toSessionUser } from './session-user.mapper.js';
 import { SignInStore } from './sign-in-store.js';
 
@@ -27,7 +27,7 @@ export class AuthService {
     const candidate = await this.signIn.findCandidate(input.companyCode, input.email);
     const now = new Date();
 
-    if (candidate?.lockedUntil && candidate.lockedUntil > now) {
+    if (LOCKOUT_ENABLED && candidate?.lockedUntil && candidate.lockedUntil > now) {
       throw new ForbiddenError('Too many failed sign-ins', undefined, { code: 'AUTH_ACCOUNT_LOCKED', log: { userId: candidate.id } });
     }
     // Suspended accounts verify against no hash, so they fail exactly like a wrong password.
@@ -36,7 +36,7 @@ export class AuthService {
       // Only active accounts count failures (they drive the lockout); a suspended account's row is left alone.
       if (candidate?.status === 'ACTIVE') {
         // A wrong password on a known account is recorded against that account, authored by the anonymous attempt.
-        const lockUntil = candidate.failedLoginCount + 1 >= LOCK_AFTER_FAILURES ? new Date(now.getTime() + LOCK_MINUTES * 60_000) : null;
+        const lockUntil = LOCKOUT_ENABLED && candidate.failedLoginCount + 1 >= LOCK_AFTER_FAILURES ? new Date(now.getTime() + LOCK_MINUTES * 60_000) : null;
         await this.unitOfWork.run({ ...meta, userId: null, tenantId: candidate.tenantId, actorLabel: 'login attempt' }, () =>
           this.signIn.recordFailedLogin(candidate.id, lockUntil),
         );

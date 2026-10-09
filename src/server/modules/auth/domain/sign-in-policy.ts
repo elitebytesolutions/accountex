@@ -1,5 +1,7 @@
 /** Sign-in rules that need no database: login hours, password strength, lockout, device labels. */
 
+/** Lockout is switched off for now (failures are still counted); set true to lock after LOCK_AFTER_FAILURES. */
+export const LOCKOUT_ENABLED = false;
 export const LOCK_AFTER_FAILURES = 5;
 export const LOCK_MINUTES = 15;
 /** lastActiveAt is refreshed at most this often (ms). */

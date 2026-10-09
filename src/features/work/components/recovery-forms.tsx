@@ -33,7 +33,7 @@ export function ForgotForm() {
   };
   if (sent) {
     return (
-      <div>
+      <div style={{ maxWidth: 400, width: "100%" }}>
         <Link className="link small" href="/login"><ArrowLeft />Back to sign in</Link>
         <span className="icon-well" style={{ marginTop: 24 }}><MailCheck /></span>
         <h2 style={{ marginTop: 14 }}>Request received</h2>
@@ -43,9 +43,10 @@ export function ForgotForm() {
     );
   }
   return (
-    <form onSubmit={submit} noValidate>
+    <form onSubmit={submit} noValidate style={{ maxWidth: 400, width: "100%" }}>
       <Link className="link small" href="/login"><ArrowLeft />Back to sign in</Link>
-      <h2 style={{ marginTop: 18 }}>Forgot your password?</h2>
+      <span className="icon-well" style={{ marginTop: 18 }}><KeyRound /></span>
+      <h2 style={{ marginTop: 14 }}>Forgot your password?</h2>
       <p className="muted">Enter your company code and work email. We&apos;ll ask your administrator to send you a reset link.</p>
       <FormGrid cols={1}>
         <Field label="Company code" required error={errs.companyCode}><input value={f.companyCode} autoComplete="organization" onChange={(e) => setF({ ...f, companyCode: e.target.value })} /></Field>
@@ -94,7 +95,7 @@ export function ResetForm({ token }: { token: string }) {
   if (!info) return <Skeleton style={{ height: 280 }} />;
   if (done) {
     return (
-      <div>
+      <div style={{ maxWidth: 400, width: "100%" }}>
         <span className="icon-well"><ShieldCheck /></span>
         <h2 style={{ marginTop: 14 }}>{info.purpose === "INVITE" ? "You're all set" : "Password changed"}</h2>
         <p className="muted">Sign in to <b>{info.companyName ?? done.companyCode}</b> with company code <b>{done.companyCode}</b> and {done.email}.{info.purpose === "INVITE" ? "" : " You were signed out of your other devices."}</p>
@@ -104,7 +105,7 @@ export function ResetForm({ token }: { token: string }) {
   }
   if (!info.valid) {
     return (
-      <div>
+      <div style={{ maxWidth: 400, width: "100%" }}>
         <Link className="link small" href="/login"><ArrowLeft />Back to sign in</Link>
         <h2 style={{ marginTop: 18 }}>This link doesn&apos;t work any more</h2>
         <p className="muted">Links work once and expire (invitations after 7 days, password links after 24 hours). Ask your company administrator for a new one.</p>
@@ -113,7 +114,7 @@ export function ResetForm({ token }: { token: string }) {
     );
   }
   return (
-    <form onSubmit={submit} noValidate>
+    <form onSubmit={submit} noValidate style={{ maxWidth: 400, width: "100%" }}>
       <span className="icon-well"><KeyRound /></span>
       <h2 style={{ marginTop: 14 }}>{info.purpose === "INVITE" ? `Welcome${info.fullName ? `, ${info.fullName.split(" ")[0]}` : ""}` : "Choose a new password"}</h2>
       <p className="muted">{info.purpose === "INVITE" ? `You've been invited to ${info.companyName ?? info.companyCode}. Choose a password to finish setting up your account.` : `For ${info.email} at ${info.companyName ?? info.companyCode}.`}</p>

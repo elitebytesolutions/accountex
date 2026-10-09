@@ -509,7 +509,7 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 35, title: "Data & collaboration", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 35, title: "Data & collaboration", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Imports, integrations/API keys, backups, report runs and the cross-cutting activity/comments/attachments layer.",
     reports: ["Audit Trail", "Reports Hub"],
     entities: [
@@ -538,24 +538,24 @@ export const transactions: Phase[] = [
     ],
   },
   {
-    no: 44, title: "Work queue & sign-in recovery", portal: "workspace", kind: "TRANSACTIONAL", status: "in-progress",
+    no: 44, title: "Work queue & sign-in recovery", portal: "workspace", kind: "TRANSACTIONAL", status: "done",
     objective: "Tasks and notifications, user invites and password reset, and the workspace dashboard (split from Phase 29, decided 2026-10-08).",
     reports: ["Workspace Dashboard"],
     entities: [
       E("tasks", "Tasks & Today's Work", ["Company.Tasks"], {
         tpl: ["app/today"], api: "work", perm: [],
         x: ["GET /work/today (Company.getTodayDueItems, getTodayKpis)", "CRUD /work/tasks"],
-        rules: ["Own tasks only unless assigned"], deps: ["users"],
+        rules: ["Own tasks only unless assigned", "Repeating tasks create their next occurrence on completion; reminders and due-item notifications by a 5-minute job (decided 2026-10-08)"], deps: ["users"],
       }),
       E("notifications", "Notifications & Preferences", ["Company.Notifications", "Company.NotificationPreferences"], {
         tpl: ["app/notifications"], api: "me/notifications", perm: [],
         x: ["GET /me/notifications, POST /me/notifications/read-all", "PUT /me/notification-preferences"],
-        rules: ["Own notifications only"], deps: ["users"],
+        rules: ["Own notifications only", "Company.notify is the one writer (approval engine, tasks, due items, sign-in events); in-app preferences apply, email / SMS / WhatsApp saved until a provider exists (decided 2026-10-08)"], deps: ["users"],
       }),
       E("sign-in-recovery", "Sign-in Recovery & MFA", ["Company.UserInvites", "Company.UserMfaMethods", "Company.TrustedDevices", "Company.PasswordResets"], {
         tpl: ["login/mfa", "login/forgot"], api: "me/mfa", perm: [],
         x: ["POST /settings/users/invite (email/WhatsApp link) + accept page", "POST /me/mfa/enrol|verify|disable", "DELETE /me/trusted-devices/:id", "POST /auth/forgot, POST /auth/reset"],
-        rules: ["Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs)", "Invites and password reset only (outbox links); MFA / trusted devices in a later phase (decided 2026-10-08)", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
+        rules: ["Deferred from Phase 2 and Phase 15: needs an email/SMS provider (shared with reminder runs)", "Invites and password reset only; MFA / trusted devices in a later phase (decided 2026-10-08)", "No email provider: the admin copies / WhatsApps the one-time link (invite 7 days, admin reset 24 h); forgot-password notifies user admins (decided 2026-10-08)", "Reset and invite tokens hashed and single-use", "MFA secrets encrypted; recovery codes hashed"],
         deps: ["users", "account-security"],
       }),
     ],

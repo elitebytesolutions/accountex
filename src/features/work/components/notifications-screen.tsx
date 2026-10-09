@@ -142,22 +142,22 @@ export function NotificationsScreen() {
           <div className="panel">
             <div className="panel-head"><div><h3>Delivery channels</h3><p>Email, SMS and WhatsApp are saved for when a provider is connected</p></div></div>
             {!prefs ? <Skeleton style={{ height: 120 }} /> : (
-              <>
+              <div className="stack">
                 <Switch label="In-app" checked={prefs.inApp} onChange={(e) => void savePref({ ...prefs, inApp: e.target.checked }, e.target.checked ? "In-app notifications on" : "In-app notifications off")} />
                 <Switch label={`Email digest · daily ${prefs.emailDigest.time}`} checked={prefs.emailDigest.on} onChange={(e) => void savePref({ ...prefs, emailDigest: { ...prefs.emailDigest, on: e.target.checked } }, "Email digest preference saved")} />
                 <Switch label={`SMS for approvals above Rs ${Math.round(prefs.smsApprovalsAbove.amount).toLocaleString("en-US")}`} checked={prefs.smsApprovalsAbove.on} onChange={(e) => void savePref({ ...prefs, smsApprovalsAbove: { ...prefs.smsApprovalsAbove, on: e.target.checked } }, "SMS preference saved")} />
                 <Switch label="WhatsApp cheque maturity alerts" checked={prefs.whatsappCheques} onChange={(e) => void savePref({ ...prefs, whatsappCheques: e.target.checked }, "WhatsApp preference saved")} />
-              </>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       <Drawer open={drawer} onClose={() => setDrawer(false)} title="Notification preferences" subtitle="Choose what reaches you in the app">
-        {!prefs ? <Skeleton style={{ height: 200 }} /> : NOTIFICATION_EVENTS.map((e) => (
+        {!prefs ? <Skeleton style={{ height: 200 }} /> : <div className="stack">{NOTIFICATION_EVENTS.map((e) => (
           <Switch key={e.code} label={e.label} checked={!prefs.mutedEvents.includes(e.code)}
             onChange={(ev) => void savePref({ ...prefs, mutedEvents: ev.target.checked ? prefs.mutedEvents.filter((c) => c !== e.code) : [...prefs.mutedEvents, e.code] }, ev.target.checked ? `${e.label}: on` : `${e.label}: off`)} />
-        ))}
+        ))}</div>}
         <p className="small muted mt">Turning an event off stops new in-app notifications for it; existing ones stay.</p>
       </Drawer>
     </>

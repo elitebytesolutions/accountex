@@ -32,3 +32,6 @@ Thumbs.db
 
 # Phase 32: uploaded files (UPLOAD_DIR)
 /uploads/
+
+# showcase seeder progress
+scripts/seed-showcase/.state.json

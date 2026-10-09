@@ -25,7 +25,7 @@ export class AdminAuthController {
   constructor(private readonly auth: AdminAuthService) {}
 
   @Public()
-  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  // Per-route 5/min sign-in limit removed for now; the global limit (app.module) still applies.
   @Post('login')
   @HttpCode(200)
   async login(

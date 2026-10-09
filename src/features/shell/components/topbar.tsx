@@ -1,11 +1,14 @@
 "use client";
 
-import { ChevronDown, ChevronRight, House, LogOut, Menu, Moon, Sun } from "lucide-react";
+import { Calculator, ChevronDown, ChevronRight, House, LogOut, Menu, Moon, Sun } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/components/ui/cn";
 import { initialsOf } from "@/features/auth/initials";
+import type { NavGroup, NavModule } from "@/features/workspace-nav/nav";
+import { FloatingCalculator } from "@/features/calculator/components/floating-calculator";
+import { CommandPalette, toggleTheme } from "./command-palette";
 
 type Crumbs = { trail: string[]; title: string };
 
@@ -24,10 +27,12 @@ export type TopbarProps = {
   menuItems?: (close: () => void) => ReactNode;
   signOut: { run: () => Promise<unknown>; then: string };
   onMenu: () => void;
+  /** The permission-filtered nav: the screens the "Search anything…" palette jumps to. */
+  nav: { menu: NavModule[]; groups: NavGroup[] };
 };
 
-/** Template top bar (99-app.js renderTopbar): mobile menu, breadcrumbs, theme toggle, user menu. */
-export function Topbar({ name, email, homeHref, homeLabel, rootLabel, crumbsFor, actions, menuItems, signOut, onMenu }: TopbarProps) {
+/** Template top bar (99-app.js renderTopbar): mobile menu, breadcrumbs, search palette, calculator, theme toggle, user menu. */
+export function Topbar({ name, email, homeHref, homeLabel, rootLabel, crumbsFor, actions, menuItems, signOut, onMenu, nav }: TopbarProps) {
   const pathname = usePathname();
   const crumbs = crumbsFor(pathname) ?? fallbackCrumbs(pathname);
 
@@ -44,7 +49,9 @@ export function Topbar({ name, email, homeHref, homeLabel, rootLabel, crumbsFor,
         <b>{crumbs.title}</b>
       </nav>
       <div className="top-actions">
+        <CommandPalette nav={nav} rootLabel={rootLabel} />
         {actions}
+        <CalculatorButton />
         <ThemeButton />
         <UserMenu name={name} email={email} menuItems={menuItems} signOut={signOut} />
       </div>
@@ -58,18 +65,38 @@ function fallbackCrumbs(pathname: string) {
   return { trail: parts.slice(0, -1), title: parts.at(-1) ?? "Dashboard" };
 }
 
+/** Template calculator button (99-app.js #calcBtn) and the C shortcut: opens the floating calculator (9K-calc.js). */
+function CalculatorButton() {
+  const [open, setOpen] = useState(false);
+  const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== "c" || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+      const t = e.target as Element | null;
+      if (t?.closest?.("input, textarea, select, [contenteditable], .cx-float, .overlay")) return;
+      e.preventDefault();
+      setOpen(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  return (
+    <>
+      <button ref={setAnchor} className="round-btn hide-sm" type="button" aria-label="Calculator" title="Calculator (C)" onClick={() => setOpen(true)}>
+        <Calculator />
+      </button>
+      {/* stays mounted: the current sum and pane inputs survive between opens, as in the template */}
+      <FloatingCalculator open={open} onClose={() => setOpen(false)} anchor={anchor} />
+    </>
+  );
+}
+
 /** Light/dark toggle; same storage key and attribute as the template (fs-theme, html[data-theme]). */
 function ThemeButton() {
-  const toggle = () => {
-    const root = document.documentElement;
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("fs-theme", next);
-    } catch {}
-  };
   return (
-    <button className="round-btn theme-btn" type="button" aria-label="Toggle theme" onClick={toggle}>
+    <button className="round-btn theme-btn" type="button" aria-label="Toggle theme" onClick={toggleTheme}>
       <Sun className="ic-sun" />
       <Moon className="ic-moon" />
     </button>

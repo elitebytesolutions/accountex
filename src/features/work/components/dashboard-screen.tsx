@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Coins, CreditCard, FileText, Landmark, Package, Plus, ReceiptText, Sparkles, TrendingDown, TrendingUp, Wallet, Zap } from "lucide-react";
+import { ArrowRight, CalendarDays, ChevronDown, Coins, CreditCard, FileText, Landmark, Package, Plus, ReceiptText, Sparkles, TrendingDown, TrendingUp, Wallet, Zap } from "lucide-react";
 import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import type { WorkspaceDashboard } from "@/shared";
 import { EmptyState, ErrorState, Skeleton } from "@/components/ui/states";
@@ -115,7 +115,8 @@ export function DashboardScreen({ firstName }: { firstName: string }) {
   const hour = new Date().getHours();
   const greet = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   if (error) return <ErrorState message={error.message} reference={error.reference} onRetry={reload} />;
-  const revChange = d && d.revenue.prevTotal ? ((d.revenue.total - d.revenue.prevTotal) / d.revenue.prevTotal) * 100 : null;
+  // a change against a zero or negative month means nothing: shown as "—"
+  const revChange = d && d.revenue.prevTotal > 0 ? ((d.revenue.total - d.revenue.prevTotal) / d.revenue.prevTotal) * 100 : null;
   const splitColors = ["var(--fd-forest)", "var(--fd-lime)", "var(--fd-mint)"];
   const txs = (d?.transactions ?? []).filter((t) => tx === "all" || t.direction === tx);
 
@@ -186,7 +187,7 @@ export function DashboardScreen({ firstName }: { firstName: string }) {
               <div className="fd-head">
                 <h3>Money Flow</h3><span className="spacer" />
                 <div className="fd-legend"><span><i className="fd-k-a" />Income</span><span><i className="fd-k-b" />Expense</span><span><i className="fd-k-s" />Space</span></div>
-                <label className="fd-sel"><select aria-label="Grouping" value={quarterly ? "q" : "m"} onChange={(e) => setQuarterly(e.target.value === "q")}><option value="m">Monthly</option><option value="q">Quarterly</option></select></label>
+                <label className="fd-sel"><select aria-label="Grouping" value={quarterly ? "q" : "m"} onChange={(e) => setQuarterly(e.target.value === "q")}><option value="m">Monthly</option><option value="q">Quarterly</option></select><ChevronDown /></label>
               </div>
               <Flow data={d.flow} quarterly={quarterly} />
             </article>
@@ -224,7 +225,7 @@ export function DashboardScreen({ firstName }: { firstName: string }) {
             <article className="fd-card fd-flush">
               <div className="fd-head fd-pad">
                 <h3>Transaction History</h3><span className="spacer" />
-                <label className="fd-sel"><select aria-label="Type" value={tx} onChange={(e) => setTx(e.target.value as typeof tx)}><option value="all">All transactions</option><option value="IN">Receipts</option><option value="OUT">Payments</option></select></label>
+                <label className="fd-sel"><select aria-label="Type" value={tx} onChange={(e) => setTx(e.target.value as typeof tx)}><option value="all">All transactions</option><option value="IN">Receipts</option><option value="OUT">Payments</option></select><ChevronDown /></label>
               </div>
               {!txs.length ? <EmptyState icon={<Landmark />} title="No receipts or payments yet" /> : (
                 <div className="table-wrap"><table className="tbl fd-tbl">

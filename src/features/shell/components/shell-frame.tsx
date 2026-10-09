@@ -29,7 +29,7 @@ const writeCollapsed = (value: boolean) => {
 
 export type ShellFrameProps = {
   sidebar: Omit<SidebarProps, "onCollapse">;
-  topbar: Omit<TopbarProps, "onMenu">;
+  topbar: Omit<TopbarProps, "onMenu" | "nav">;
   footer: ReactNode;
   children: ReactNode;
 };
@@ -56,7 +56,7 @@ export function ShellFrame({ sidebar, topbar, footer, children }: ShellFrameProp
       <Sidebar {...sidebar} onCollapse={() => writeCollapsed(!collapsed)} />
       <button className="mobile-scrim" type="button" aria-label="Close menu" onClick={() => setMobileOpen(false)} />
       <main className="main">
-        <Topbar {...topbar} onMenu={() => setMobileOpen(true)} />
+        <Topbar {...topbar} nav={sidebar.nav} onMenu={() => setMobileOpen(true)} />
         <div className="content">{children}</div>
       </main>
       <footer className="app-footer">{footer}</footer>

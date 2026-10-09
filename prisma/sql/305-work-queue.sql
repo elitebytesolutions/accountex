@@ -34,7 +34,8 @@ ON CONFLICT (code) DO NOTHING;
 -- 2. Notifications
 -- ---------------------------------------------------------------------------
 -- The one writer of in-app notifications. Skipped (NULL) when the user is the actor, is not an active user, or switched
--- the event (or ALL_EVENTS) off for IN_APP (or set a minimum amount above this one). Same event + document + user within pDedupHours → skipped.
+-- the event (or ALL_EVENTS) off for IN_APP (or set a minimum amount above this one). Same event + document (or, without a
+-- document, the same title) + user within pDedupHours → skipped.
 CREATE OR REPLACE FUNCTION "Company"."notify"(
   "pTenant" uuid, "pUserId" uuid, "pEventCode" text, "pCategory" text, "pTitle" text, "pBody" text DEFAULT NULL,
   "pLinkRoute" text DEFAULT NULL, "pEntityType" text DEFAULT NULL, "pEntityId" uuid DEFAULT NULL, "pAmount" numeric DEFAULT NULL,
@@ -59,9 +60,10 @@ BEGIN
                 AND (NOT p."isEnabled" OR (p."minAmount" IS NOT NULL AND COALESCE("pAmount", 0) < p."minAmount"))) THEN
     RETURN NULL;
   END IF;
-  IF "pDedupHours" IS NOT NULL AND "pEntityId" IS NOT NULL AND EXISTS (
+  IF "pDedupHours" IS NOT NULL AND EXISTS (
        SELECT 1 FROM "Company"."Notifications" n
-        WHERE n."tenantId" = "pTenant" AND n."userId" = "pUserId" AND n."eventCode" = "pEventCode" AND n."entityId" = "pEntityId"
+        WHERE n."tenantId" = "pTenant" AND n."userId" = "pUserId" AND n."eventCode" = "pEventCode"
+          AND (CASE WHEN "vType" IS NOT NULL THEN n."entityId" = "pEntityId" ELSE n.title = left("pTitle", 200) END)
           AND n."createdAt" > now() - make_interval(hours => "pDedupHours")) THEN
     RETURN NULL;
   END IF;
@@ -101,8 +103,8 @@ BEGIN
   RETURN "vN";
 END $function$;
 
--- Daily: overdue sales invoices (to receivables), bills due today (to payables), cheques maturing today (to banking).
--- One notification per document and user per day.
+-- Daily: overdue sales invoices (to receivables, repeated weekly while overdue), bills due today (to payables), cheques
+-- maturing today (to banking). At most one notification per document and user per day (per week for overdue invoices).
 CREATE OR REPLACE FUNCTION "Company"."notifyDueItems"("pTenant" uuid, "pDate" date)
   RETURNS integer
   LANGUAGE plpgsql
@@ -122,7 +124,7 @@ BEGIN
   LOOP
     "vN" := "vN" + "Company"."notifyPermission"("pTenant", 'rcpt:create', 'INVOICE_OVERDUE', 'FINANCE',
       'Invoice overdue · ' || "vR"."docNo", "vR".party || ' · ' || "vR".days || ' day' || CASE WHEN "vR".days = 1 THEN '' ELSE 's' END || ' overdue',
-      '/sales/invoices/' || "vR".id, "vR".dt, "vR".id, "vR".amt, 'DANGER', true, NULL, 20);
+      '/sales/invoices/' || "vR".id, "vR".dt, "vR".id, "vR".amt, 'DANGER', true, NULL, 168);
   END LOOP;
   FOR "vR" IN
     SELECT b.id, b."docNo", v.name AS party, round(b."balanceAmount" * COALESCE(NULLIF(b."fxRate", 0), 1), 2) AS amt,
@@ -140,7 +142,7 @@ BEGIN
      WHERE q."tenantId" = "pTenant" AND q.status IN ('IN_HAND', 'ISSUED') AND COALESCE(q."dueDate", q."chequeDate") = "pDate"
   LOOP
     "vN" := "vN" + "Company"."notifyPermission"("pTenant", 'bank:edit', 'CHEQUE_MATURING', 'FINANCE',
-      'Cheque maturing today · ' || COALESCE("vR"."chequeNo", ''), COALESCE("vR".party, ''), '/bank/cheques', NULL, NULL, "vR".amt, 'INFO', false, NULL, NULL);
+      'Cheque maturing today · ' || COALESCE("vR"."chequeNo", ''), COALESCE("vR".party, ''), '/bank/cheques', NULL, NULL, "vR".amt, 'INFO', false, NULL, 20);
   END LOOP;
   RETURN "vN";
 END $function$;
