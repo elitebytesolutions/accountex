@@ -9,7 +9,8 @@ COPY prisma ./prisma
 ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
 RUN npm ci
 COPY . .
-RUN npm run build
+# next build type-checks the whole repo and exceeds the default ~2 GB Node heap on CI runners.
+RUN NODE_OPTIONS=--max-old-space-size=4096 npm run build
 RUN npm prune --omit=dev
 
 FROM node:24-alpine AS runtime
