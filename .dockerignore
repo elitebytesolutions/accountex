@@ -1,0 +1,12 @@
+node_modules
+dist
+.next
+.git
+.vs
+.claude
+.env
+.env*.local
+backups
+uploads
+template
+*.log

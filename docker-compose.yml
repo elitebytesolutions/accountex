@@ -12,5 +12,23 @@ services:
     volumes:
       - accountex-db:/var/lib/postgresql
 
+  app:
+    build: .
+    image: accountex:latest
+    container_name: accountex-app
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${APP_PORT:-3100}:3000"
+    environment:
+      DATABASE_URL: postgresql://accountex:accountex@db:5432/accountex
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-string}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:-change-me-to-another-long-random-string}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:-YWNjb3VudGV4LWRldi1rZXktMDEyMzQ1Njc4OWFiY2Q=}
+    volumes:
+      - accountex-data:/data
+
 volumes:
   accountex-db:
+  accountex-data:
